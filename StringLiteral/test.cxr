@@ -1,0 +1,5 @@
+// cxr 적용 테스트입니당
+
+#define STR_CXRTEST1 _CXR("Your all bases are belong to us.")
+#define STR_CXRTEST2 _CXR("It's You!")// 디파인 뒤에 주석이 달린 경우를 테스트
+#define STR_CXRTEST3 _CXR("Aye.")		// 디파인 뒤에 공백을 두고 주석이 달린 경우를 테스트

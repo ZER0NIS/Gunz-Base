@@ -1,0 +1,8 @@
+// client
+GameGuard.des
+GunzUSTest.ini  // 현제 알파 테스트 버전이리라 이걸 사용합니다. 나중에는  GunzUS.ini이거 사용.
+
+
+// server
+ggauth.dll
+ggsrvdll.dll

@@ -1,0 +1,279 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="14.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{8D451493-65C2-49C3-ADAE-ACB17E6B0650}</ProjectGuid>
+    <SccProjectName>
+    </SccProjectName>
+    <SccAuxPath>
+    </SccAuxPath>
+    <SccLocalPath>
+    </SccLocalPath>
+    <SccProvider>
+    </SccProvider>
+    <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <UseOfMfc>false</UseOfMfc>
+    <CharacterSet>MultiByte</CharacterSet>
+    <PlatformToolset>v142</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <UseOfMfc>Static</UseOfMfc>
+    <CharacterSet>MultiByte</CharacterSet>
+    <PlatformToolset>v140_xp</PlatformToolset>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup>
+    <_ProjectFileVersion>10.0.40219.1</_ProjectFileVersion>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Lib\</OutDir>
+    <IntDir Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Debug\</IntDir>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">..\Binaries\Lib\$(ProjectName)\</OutDir>
+    <IntDir Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">..\Output\$(ProjectName)\$(Configuration)\</IntDir>
+    <CodeAnalysisRuleSet Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">AllRules.ruleset</CodeAnalysisRuleSet>
+    <CodeAnalysisRules Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" />
+    <CodeAnalysisRuleAssemblies Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" />
+    <CodeAnalysisRuleSet Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">AllRules.ruleset</CodeAnalysisRuleSet>
+    <CodeAnalysisRules Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" />
+    <CodeAnalysisRuleAssemblies Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" />
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <Optimization>Disabled</Optimization>
+      <AdditionalIncludeDirectories>Include;../RealSpace/Include;../../sdk/crypto;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
+      <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <PrecompiledHeaderOutputFile>$(IntDir)$(TargetName).pch</PrecompiledHeaderOutputFile>
+      <AssemblerListingLocation>Debug/</AssemblerListingLocation>
+      <ObjectFileName>$(IntDir)</ObjectFileName>
+      <ProgramDataBaseFileName>$(IntDir)</ProgramDataBaseFileName>
+      <WarningLevel>Level3</WarningLevel>
+      <SuppressStartupBanner>true</SuppressStartupBanner>
+      <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
+    </ClCompile>
+    <Lib>
+      <AdditionalDependencies>lib\zlib.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <OutputFile>Lib\cmld.lib</OutputFile>
+      <AdditionalLibraryDirectories>Lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <IgnoreAllDefaultLibraries>true</IgnoreAllDefaultLibraries>
+    </Lib>
+    <ResourceCompile>
+      <PreprocessorDefinitions>_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <Culture>0x0412</Culture>
+    </ResourceCompile>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <InlineFunctionExpansion>OnlyExplicitInline</InlineFunctionExpansion>
+      <AdditionalIncludeDirectories>Include;../sdk/zlib/include;../sdk/rapidxml/include;../sdk;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <StringPooling>true</StringPooling>
+      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <PrecompiledHeaderOutputFile>$(IntDir)$(TargetName).pch</PrecompiledHeaderOutputFile>
+      <AssemblerListingLocation>Release/</AssemblerListingLocation>
+      <ObjectFileName>$(IntDir)</ObjectFileName>
+      <ProgramDataBaseFileName>$(IntDir)</ProgramDataBaseFileName>
+      <WarningLevel>Level3</WarningLevel>
+      <SuppressStartupBanner>true</SuppressStartupBanner>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+      <LanguageStandard>stdcpp14</LanguageStandard>
+    </ClCompile>
+    <Lib>
+      <AdditionalDependencies>zlib.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>Lib;../sdk/zlib/lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <SuppressStartupBanner>true</SuppressStartupBanner>
+    </Lib>
+    <ResourceCompile>
+      <PreprocessorDefinitions>NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <Culture>0x0412</Culture>
+    </ResourceCompile>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClInclude Include="Include\apply.h" />
+    <ClInclude Include="Include\Arena.h" />
+    <ClInclude Include="Include\ArrayView.h" />
+    <ClInclude Include="Include\CfgFile.h" />
+    <ClInclude Include="Include\CMError.h" />
+    <ClInclude Include="Include\CMErrorDef.h" />
+    <ClInclude Include="Include\CMLexicalAnalyzer.h" />
+    <ClInclude Include="Include\CMList.h" />
+    <ClInclude Include="Include\CMPtrList.h" />
+    <ClInclude Include="Include\CodePageConversion.h" />
+    <ClInclude Include="Include\CommonLog.h" />
+    <ClInclude Include="Include\defer.h" />
+    <ClInclude Include="Include\FileInfo.h" />
+    <ClInclude Include="Include\function_view.h" />
+    <ClInclude Include="Include\GlobalTypes.h" />
+    <ClInclude Include="Include\Hash.h" />
+    <ClInclude Include="Include\has_xxx.h" />
+    <ClInclude Include="Include\hsv.h" />
+    <ClInclude Include="Include\IniParser.h" />
+    <ClInclude Include="Include\LibPak.h" />
+    <ClInclude Include="Include\lua_tinker.h" />
+    <ClInclude Include="Include\MArchive.h" />
+    <ClInclude Include="Include\MAsyncHttp.h" />
+    <ClInclude Include="Include\MBlobArray.h" />
+    <ClInclude Include="Include\MCheckSum.h" />
+    <ClInclude Include="Include\MChunkReWriter.h" />
+    <ClInclude Include="Include\MClipboard.h" />
+    <ClInclude Include="Include\MCrashDump.h" />
+    <ClInclude Include="Include\MCRC32.h" />
+    <ClInclude Include="Include\MCrypt.h" />
+    <ClInclude Include="Include\MCsvParser.h" />
+    <ClInclude Include="Include\MDataChecker.h" />
+    <ClInclude Include="Include\MDebug.h" />
+    <ClInclude Include="Include\MDebugNew.h" />
+    <ClInclude Include="Include\MemPool.h" />
+    <ClInclude Include="Include\MFile.h" />
+    <ClInclude Include="Include\MHash.h" />
+    <ClInclude Include="Include\MHttpSpooler.h" />
+    <ClInclude Include="Include\MInet.h" />
+    <ClInclude Include="Include\MInetUtil.h" />
+    <ClInclude Include="Include\MLex.h" />
+    <ClInclude Include="Include\MListSTL.h" />
+    <ClInclude Include="Include\MLocale.h" />
+    <ClInclude Include="Include\MLua.h" />
+    <ClInclude Include="Include\MMath.h" />
+    <ClInclude Include="Include\MMatrix.h" />
+    <ClInclude Include="Include\MMemoryProxy.h" />
+    <ClInclude Include="Include\MPageArray.h" />
+    <ClInclude Include="Include\MPdb.h" />
+    <ClInclude Include="Include\MPlane.h" />
+    <ClInclude Include="Include\MProcessController.h" />
+    <ClInclude Include="Include\MProfiler.h" />
+    <ClInclude Include="Include\MQuat.h" />
+    <ClInclude Include="Include\MRegistry.h" />
+    <ClInclude Include="Include\MRTTI.h" />
+    <ClInclude Include="Include\MSingleton.h" />
+    <ClInclude Include="Include\MSmartRefresh.h" />
+    <ClInclude Include="Include\MStateMachine.h" />
+    <ClInclude Include="Include\MStrEx.h" />
+    <ClInclude Include="Include\MSync.h" />
+    <ClInclude Include="Include\MThread.h" />
+    <ClInclude Include="Include\MTime.h" />
+    <ClInclude Include="Include\MTraceMemory.h" />
+    <ClInclude Include="Include\MTrafficLog.h" />
+    <ClInclude Include="Include\MTypes.h" />
+    <ClInclude Include="Include\MUtil.h" />
+    <ClInclude Include="Include\MVector3.h" />
+    <ClInclude Include="Include\MVK.h" />
+    <ClInclude Include="Include\MWindowFinder.h" />
+    <ClInclude Include="Include\MWindows.h" />
+    <ClInclude Include="Include\MWindowsFwd.h" />
+    <ClInclude Include="Include\MWLua.h" />
+    <ClInclude Include="Include\MXml.h" />
+    <ClInclude Include="Include\MZFile.h" />
+    <ClInclude Include="Include\MZFileSystem.h" />
+    <ClInclude Include="Include\MZip.h" />
+    <ClInclude Include="Include\optional.h" />
+    <ClInclude Include="Include\overload.h" />
+    <ClInclude Include="Include\reinterpret.h" />
+    <ClInclude Include="Include\RingBuffer.h" />
+    <ClInclude Include="Include\RLib.h" />
+    <ClInclude Include="Include\SafeString.h" />
+    <ClInclude Include="Include\seed.h" />
+    <ClInclude Include="Include\HMAC_SHA1.h" />
+    <ClInclude Include="Include\MMD5.h" />
+    <ClInclude Include="Include\SHA1.h" />
+    <ClInclude Include="Include\stdafx.h" />
+    <ClInclude Include="Include\StringView.h" />
+    <ClInclude Include="Include\targetver.h" />
+    <ClInclude Include="Include\TMP.h" />
+    <ClInclude Include="Include\variant.h" />
+    <ClInclude Include="Include\VariantPolymorphism.h" />
+    <ClInclude Include="Include\zlib_util.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="source\CfgFile.cpp" />
+    <ClCompile Include="source\CMLexicalAnalyzer.cpp" />
+    <ClCompile Include="source\CodePageConversion.cpp" />
+    <ClCompile Include="source\CommonLog.cpp" />
+    <ClCompile Include="source\FileInfo.cpp" />
+    <ClCompile Include="source\LibPak.cpp" />
+    <ClCompile Include="source\lua_tinker.cpp" />
+    <ClCompile Include="source\MArchive.cpp" />
+    <ClCompile Include="source\MAsyncHttp.cpp" />
+    <ClCompile Include="source\MBlobArray.cpp" />
+    <ClCompile Include="source\MCheckSum.cpp" />
+    <ClCompile Include="source\MChunkReWriter.cpp" />
+    <ClCompile Include="source\MClipboard.cpp" />
+    <ClCompile Include="source\MCrashDump.cpp" />
+    <ClCompile Include="source\MCRC32.cpp" />
+    <ClCompile Include="source\MCrypt.cpp" />
+    <ClCompile Include="source\MCsvParser.cpp" />
+    <ClCompile Include="source\MDataChecker.cpp" />
+    <ClCompile Include="source\MDebug.cpp" />
+    <ClCompile Include="source\MDebugNew.cpp" />
+    <ClCompile Include="source\MemPool.cpp" />
+    <ClCompile Include="source\MFile.cpp" />
+    <ClCompile Include="source\MHttpSpooler.cpp" />
+    <ClCompile Include="source\MInet.cpp" />
+    <ClCompile Include="source\MInetUtil.cpp" />
+    <ClCompile Include="source\MLex.cpp" />
+    <ClCompile Include="source\MLocale.cpp" />
+    <ClCompile Include="source\MLua.cpp" />
+    <ClCompile Include="Source\MMatrix.cpp" />
+    <ClCompile Include="source\MMemoryProxy.cpp" />
+    <ClCompile Include="source\MPageArray.cpp" />
+    <ClCompile Include="source\MPdb.cpp" />
+    <ClCompile Include="source\MProcessController.cpp" />
+    <ClCompile Include="source\MProfiler.cpp" />
+    <ClCompile Include="source\MRegistry.cpp" />
+    <ClCompile Include="source\MSmartRefresh.cpp" />
+    <ClCompile Include="source\MStateMachine.cpp" />
+    <ClCompile Include="source\MStrEx.cpp" />
+    <ClCompile Include="source\MSync.cpp" />
+    <ClCompile Include="source\MThread.cpp" />
+    <ClCompile Include="source\MTime.cpp" />
+    <ClCompile Include="source\MTraceMemory.cpp" />
+    <ClCompile Include="source\MUtil.cpp" />
+    <ClCompile Include="Source\MVector3.cpp" />
+    <ClCompile Include="source\MVK.cpp" />
+    <ClCompile Include="source\MWLua.cpp" />
+    <ClCompile Include="source\MXml.cpp" />
+    <ClCompile Include="source\MZFile.cpp" />
+    <ClCompile Include="source\MZFileSystem.cpp" />
+    <ClCompile Include="source\MZip.cpp" />
+    <ClCompile Include="source\SafeString.cpp" />
+    <ClCompile Include="source\seed.cpp" />
+    <ClCompile Include="source\HMAC_SHA1.cpp" />
+    <ClCompile Include="source\MMD5.cpp" />
+    <ClCompile Include="source\SHA1.cpp" />
+    <ClCompile Include="source\stdafx.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Include\MSXML.DLL" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>

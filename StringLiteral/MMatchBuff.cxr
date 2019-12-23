@@ -1,0 +1,34 @@
+/*
+	== XML 기술 설명 ==
+	
+	+ zBuff.xml 설명	
+	+ attribute 설명
+		BuffID			: 버프 아이디						(int)
+		BuffName		: 버프 이름							(string[128])
+		BuffIconName	: 버프 아이콘 이름					(string[128])
+		
+		BuffType		: 버프 타입			(MMatchBuffDesc.h내의 MMatchBuffType 참고)
+		BuffPeriodType	: 버프 기간 타입	(MMatchBuffDesc.h내의 MMatchBuffPeriodType 참고)
+		BuffPeirod		: 버프 기간			(초 단위)
+		
+		HP	:
+		AP	:
+		XP	:		
+*/
+
+#define MICTOK_BUFF														_CXR("BUFF")
+#define MICTOK_ATTRNAME_BUFF_ID											_CXR("ID")
+#define MICTOK_ATTRNAME_BUFF_ICON_NAME									_CXR("IconName")
+#define MICTOK_ATTRNAME_BUFF_PERIOD_TYPE								_CXR("PeriodType")
+#define MICTOK_ATTRNAME_BUFF_PERIOD										_CXR("Period")
+#define MICTOK_ATTRNAME_BUFF_EFFECT_TYPE								_CXR("EffectType")
+#define MICTOK_ATTRNAME_BUFF_HP_VALUE									_CXR("HP")
+#define MICTOK_ATTRNAME_BUFF_AP_VALUE									_CXR("AP")
+
+#define MICTOK_ATTRNAME_BUFF_RESPAWN_DECREASE_TIME						_CXR("Respawn")
+
+#define MICTOK_ATTRVAL_PERIOD_TYPE_SHORT								_CXR("short")
+#define MICTOK_ATTRVAL_PERIOD_TYPE_LONG									_CXR("long")
+
+#define MICTOK_ATTRVAL_BUFF_EFFECT_TYPE_NORMAL							_CXR("normal")
+#define MICTOK_ATTRVAL_BUFF_EFFECT_TYPE_DOTE							_CXR("dote")

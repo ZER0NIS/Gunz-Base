@@ -1,0 +1,84 @@
+CREATE PROC spIPFltGetIPtoCountryList
+AS
+ SET NOCOUNT ON
+ SELECT IPFrom, IPTo, CountryCode3
+ FROM IPtoCountry(NOLOCK)
+ ORDER BY IPFrom
+GO
+
+INSERT INTO CountryCode
+SELECT CountryCode3, CountryName
+FROM IPtoCountry(NOLOCK)
+GROUP BY CountryCode3, CountryName
+ORDER BY CountryCode3 ASC
+
+SELECT 'INSERT INTO CountryCode(CountryCode3, CountryName) VALUES (' +
+ '''' + CountryCode3 + ''''  + ', ' + '''' + CountryName + '''' + ')'
+FROM CountryCode(NOLOCK)
+ORDER BY CountryCode2 ASC
+
+
+------------------------------------------------------------------------------
+
+
+CREATE PROC spIPFltGetIPtoCountry  
+ @IP char(15)  
+AS  
+ SET NOCOUNT ON  
+ DECLARE @IPNumber BIGINT          
+ SET @IPNumber = GunzDB.game.inet_aton( @IP )  
+          
+ SELECT IPFrom, IPTo, CountryCode3 FROM IPtoCountry(NOLOCK)          
+ WHERE IPFrom <= @IPNumber AND IPTo >= @IPNumber          
+go
+
+
+------------------------------------------------------------------------------
+
+
+CREATE PROC spIPFltGetIPtoCountryCode  
+ @IP char(15)  
+AS  
+ SET NOCOUNT ON  
+ DECLARE @IPNumber BIGINT          
+ SET @IPNumber = GunzDB.dbo.inet_aton( @IP )  
+          
+ SELECT CountryCode3 FROM IPtoCountry(NOLOCK)          
+ WHERE IPFrom <= @IPNumber AND IPTo >= @IPNumber   
+
+
+------------------------------------------------------------------------------
+
+
+CREATE PROC spIPFltGetBlockCountryCodeList  
+AS  
+ SET NOCOUNT ON  
+ SELECT CountryCode3, RoutingURL, IsBlock  
+ FROM BlockCountryCode(NOLOCK)  
+ ORDER BY CountryCode3         
+
+
+------------------------------------------------------------------------------
+
+
+CREATE PROC spIPFltGetCustomIPList  
+AS  
+ SET NOCOUNT ON  
+ SELECT IPFrom, IPTo, IsBlock, CountryCode3, Comment FROM CustomIP(NOLOCK)  
+ ORDER BY IPFrom  
+
+
+------------------------------------------------------------------------------
+
+
+CREATE PROC spIPFltGetCustomIP    
+ @IP varchar(15)    
+AS    
+ SET NOCOUNT ON    
+ DECLARE @TmpIP bigint    
+    
+ SET @TmpIP = GunzDB.dbo.inet_aton( @IP )    
+    
+ SELECT IPFrom, IPTo, IsBlock, Comment, RegDate     
+ FROM CustomIP(NOLOCK)            
+ WHERE IPFrom <= @TmpIP AND IPTo >= @TmpIP    
