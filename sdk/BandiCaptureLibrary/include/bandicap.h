@@ -1,12 +1,10 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 /// 
-/// BandiCaptureLibrary 3.0
+/// BandiCaptureLibrary 1.1
 /// 
-/// Copyright(C) 2008-2018 Bandicam.com, All rights reserved.
+/// Copyright(C) 2008 BandiSoft.com All rights reserved.
 ///
-/// Author: denny
-///
-/// Visit http://www.bandicam.com for more information.
+/// Visit http://www.bandisoft.com for more information.
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -24,259 +22,176 @@
 #endif
 
 #ifndef _INC_TCHAR
-#	ifdef _UNICODE
-#		define _T(x)		L##x
-#		define _tcslen		wcslen
-#		define _stprintf	swprintf
-#		define _stprintf_s  swprintf_s
-#	else
-#		define _T(x)	x
-#		define _tcslen		strlen
-#		define _stprintf	sprintf
-#		define _stprintf_s	sprintf_s
-#	endif
+// "bandicap.h"를 include 하기 전에 <tchar.h> 를 먼저 include 해야합니다.
+#	error	You have to include <tchar.h> before "bandicap.h"
 #endif
 
-
 #define _BCAP_MAKE_VER(a,b,c,d)	((a<<24)+(b<<16)+(c<<8)+d)
-#define BCAP_VERSION	_BCAP_MAKE_VER(3,0,1,302)		// 3.0.1.302
+#define BCAP_VERSION			_BCAP_MAKE_VER(1,1,2,10)		// 1.1.2.10
 
-#define FOURCC_MPEG			mmioFOURCC('M','P','E','G')		// MPEG1
-#define FOURCC_MJPG			mmioFOURCC('M','J','P','G')		// MJPEG
-#define FOURCC_MP4V			mmioFOURCC('M','P','4','V')		// MPEG4
-#define FOURCC_ARGB			mmioFOURCC('A','R','G','B')		// 32bit Alpha DIB (ARGB)
-#define FOURCC_RGB24		mmioFOURCC('R','G','B',' ')		// 24bit DIB (RGB)
-#define FOURCC_YV12			mmioFOURCC('Y','V','1','2')		// YUV420 DIB (YUV)
+#define FOURCC_MJPG mmioFOURCC('M','J','P','G')		// MJPEG
+#define FOURCC_MP4V mmioFOURCC('M','P','4','V')		// MPEG4
 
-#define FOURCC_H264			mmioFOURCC('H','2','6','4')		// H264 - CPU
-#define FOURCC_H264_APP		mmioFOURCC('A','P','P',' ')		// H264 - AMD APP
-#define FOURCC_H264_SYNC	mmioFOURCC('S','Y','N','C')		// H264 - Intel Quick Sync Video
-#define FOURCC_H264_CUDA	mmioFOURCC('C','U','D','A')		// H264 - Nvidia CUDA
-#define FOURCC_H264_NVENC	mmioFOURCC('N','V','E','N')		// H264 - Nvidia NVENC
+#define WAVETAG_PCM	0x0001							// PCM
 
-#define FOURCC_AUTO			mmioFOURCC('A','U','T','O')		// The codec is automatically selected by GetSuggestedVideoCodec()
 
-#define WAVETAG_AAC			0x00FF							// HE-AAC
-#define WAVETAG_MP3			0x0055							// MP3
-#define WAVETAG_MP2			0x0050							// MPEG-1 Layer II
-#define WAVETAG_PCM			0x0001							// PCM
-#define WAVETAG_NULL		0x0000							// No Audio
-
-// Capture mode
+// 캡처 모드
 enum 
 {
-	BCAP_MODE_GDI,				// GDI Screen Capture 
-	BCAP_MODE_D3D9,				// Direct3D 9 Screen Capture 
-	BCAP_MODE_D3D9_SCALE,		// Direct3D 9 Screen Capture (with rescale)
-	BCAP_MODE_D3D9_SWAPCHAIN,	// Direct3D 9 Screen Capture (with IDirect3DSwapChain9)
-	BCAP_MODE_D3D8,				// Direct3D 8 Screen Capture 
-	BCAP_MODE_D3D10,			// Direct3D 10 Screen Capture 
-	BCAP_MODE_GL,				// OpenGL Screen Capture 
-	BCAP_MODE_DDRAW7,			// DirectDraw 7 Screen Capture 
-	BCAP_MODE_D3D11,			// Direct3D 11 Screen Capture 
+	BCAP_MODE_GDI,				// GDI의 DC를 이용한 화면 캡처
+	BCAP_MODE_D3D9,				// D3D9를 이용한 화면 캡처
+	BCAP_MODE_D3D9_SCALE,		// D3D9를 이용한 화면 캡처(D3D9 리사이징 처리 포함)
+	BCAP_MODE_D3D8,				// D3D8를 이용한 화면 캡처
+	BCAP_MODE_D3D10,			// D3D10을 이용한 화면 캡처
+	BCAP_MODE_GL				// OpenGL을 이용한 화면 캡처
 };
 
-
-// Image file format
-enum 
-{
-	BCAP_IMAGE_BMP,				// BMP
-	BCAP_IMAGE_PNG,				// PNG
-	BCAP_IMAGE_JPG,				// JPG
-	BCAP_IMAGE_CLIPBOARD,		// Clipboard
-};
-
-
-// Capture config structure 
+// BCAP 설정 구조체
 struct BCAP_CONFIG
 {
-	enum { F_AVI = 0, F_MP4 = 1 };
+	enum { F_AVI };
 	enum { V_CBR, V_VBR };
 	enum { A_CBR, A_VBR };
-
-	// How to auto-complete recording
-	enum { BY_NONE, BY_TIME, BY_SIZE };
 
 	BCAP_CONFIG() { Default(); };
 	void Default()
 	{
-		FileType				= F_MP4;
+		FileType				= F_AVI;
 
 		VideoSizeW				= 0;
 		VideoSizeH				= 0;
 		VideoFPS				= 30.000;
 
-		VideoCodec				= FOURCC_H264;
+		VideoCodec				= FOURCC_MP4V;
 		VideoRateControl		= V_VBR;
-		VideoKBitrate			= 5000;
+		VideoKBitrate			= 1024;
 		VideoQuality			= 80;
 		VideoKeyframeInterval	= 150;
 
 		AudioChannels			= 2;
-		AudioSampleRate			= 48000;
+		AudioSampleRate			= 24000;
 
-		AudioCodec				= WAVETAG_AAC;
+		AudioCodec				= WAVETAG_PCM;
 		AudioRateControl		= A_CBR;
-		AudioKBitrate			= 192;
+		AudioKBitrate			= 128;
 		AudioQuality			= 30;
 
 		LogoPath[0]				= '\0';
-		LogoAlpha				= 0;
 		LogoPosX				= 50;
 		LogoPosY				= 100;
 		LogoSizeW				= 100;
-		LogoSizeH				= 100;
-
-		CaptureRect.left		= 0;
-		CaptureRect.top			= 0;
-		CaptureRect.right		= 0;
-		CaptureRect.bottom		= 0;
-
-		AutoCompleteType		= BY_NONE;
-		AutoCompleteValue		= 0;
-
-		IncludeCursor			= FALSE;
-		AdjustAudioMixer		= TRUE;
-		SaveAudioTracksAsWav	= FALSE;
+		LogoSizeH				= 100;	
+		LogoAlpha				= 0;
 	};
 
-	// Video file format
-	INT		FileType;				
+	// 기본 설정 
+	INT		FileType;				// 저장될 파일의 타입(F_AVI)
 
-	// Video settings
-	INT		VideoSizeW;				
-	INT		VideoSizeH;				
-	FLOAT	VideoFPS;				
+	// 비디오 설정 
+	INT		VideoSizeW;				// 비디오 가로크기 
+	INT		VideoSizeH;				// 비디오 세로크기 
+	FLOAT	VideoFPS;				// 초당 프레임 수 
 
-	DWORD	VideoCodec;				// FOURCC_MPEG, FOURCC_MJPG, FOURCC_MP4V
-	INT		VideoRateControl;		// V_CBR, V_VBR 
-	INT		VideoKBitrate;			// 10k ~ 50000k		
-	INT		VideoQuality;			// 30 ~ 100			
+	DWORD	VideoCodec;				// 비디오 코덱(FOURCC) 
+	INT		VideoRateControl;		// CBR, VBR 
+	INT		VideoKBitrate;			// 10k ~ 50000k		(VBR일때는 이값은 무시) 
+	INT		VideoQuality;			// 30 ~ 100			(CBR일때는 이값은 무시) 
 	INT		VideoKeyframeInterval;	// 0 ~ 1000 frames
 	
-	// Audio settings
+	// 오디오 설정 
 	INT		AudioChannels;			// 1: mono, 2:stereo 
-	INT		AudioSampleRate;		// samplerate
+	INT		AudioSampleRate;		// 샘플레이트 
 
-	INT		AudioCodec;				// WAVETAG_MP2, WAVETAG_PCM, WAVETAG_NULL
-	INT		AudioRateControl;		// A_CBR, A_VBR 
+	INT		AudioCodec;				// 오디오 코덱(Wave Tag) 
+	INT		AudioRateControl;		// CBR, VBR 
 	INT		AudioKBitrate;			// 32k ~ 320k 
 	INT		AudioQuality;			// 30 ~ 100 
 
-	// Logo settings
-	WCHAR	LogoPath[MAX_PATH];		// Path of logo file(32bit png)
-	INT		LogoAlpha;				// Transparency of logo [0 ~ 100]%
-	INT		LogoPosX;				// Horizontal location of logo [0 ~ 100]%
-	INT		LogoPosY;				// Vertical location of logo [0 ~ 100]%
-	INT		LogoSizeW;				// Horizontal width of logo [0 ~ 999]%
-	INT		LogoSizeH;				// Vertical height of logo [0 ~ 999]%
-
-	// Auto-complete recording settings
-	INT		AutoCompleteType;		// How to auto-complete recording
-	INT		AutoCompleteValue;		// auto-complete recording value (seconds or MB)
-
-	// etc
-	RECT	CaptureRect;			// Capture target rectange
-
-	BOOL	IncludeCursor;			// Include the mouse cursor image
-	BOOL	AdjustAudioMixer;		
-	BOOL	SaveAudioTracksAsWav;	// Save audio tracks while recording (.wav)
+	// 로고 설정
+	WCHAR	LogoPath[MAX_PATH];		// 로고 파일 경로 (32bit png)
+	INT		LogoAlpha;				// 로고 투명도 [0 ~ 100]%
+	INT		LogoPosX;				// 로고 가로 위치 [0 ~ 100]%
+	INT		LogoPosY;				// 로고 세로 위치 [0 ~ 100]%
+	INT		LogoSizeW;				// 로고 가로 크기 [0 ~ 999]%
+	INT		LogoSizeH;				// 로고 세로 위치 [0 ~ 999]%
 };
 
 
-// IBandiCapture Interface
+// 반디캡 인터페이스
 struct IBandiCapture : public IUnknown
 {
-	STDMETHOD (Verify)(LPCSTR szID, LPCSTR szKey) PURE;				// Verify the license
+	STDMETHOD (Verify)(LPCSTR szID, LPCSTR szKey) PURE;				// 인증하기
 
-	STDMETHOD_(INT, GetVersion)() PURE;								// Version number
+	STDMETHOD_(INT, GetVersion)() PURE;								// 버전 정보 
 
 	STDMETHOD (Start)(LPCWSTR pwszFilePath, HWND hParentWnd,
-					INT nCaptureMode, LONG_PTR lpParam) PURE;		// Start capture
-	STDMETHOD (Pause)(BOOL bPause) PURE;							// Pause capture
-	STDMETHOD (Stop)() PURE;										// Stop capture
-	STDMETHOD (Work)(LONG_PTR lpParam) PURE;						
-	STDMETHOD_(BOOL, IsCapturing)() PURE;							
+					INT nCaptureMode, LONG_PTR lpParam) PURE;		// 캡처 시작 
+	STDMETHOD (Stop)() PURE;										// 캡처 종료 
+	STDMETHOD (Work)(LONG_PTR lpParam) PURE;						// 캡처 작업 
+	STDMETHOD_(BOOL, IsCapturing)() PURE;							// 캡처 작업 
 
-	STDMETHOD (CheckConfig)(BCAP_CONFIG *pCfg) PURE;				
-	STDMETHOD (SetConfig)(BCAP_CONFIG *pCfg) PURE;					
-	STDMETHOD (GetConfig)(BCAP_CONFIG *pCfg) PURE;					
+	STDMETHOD (CheckConfig)(BCAP_CONFIG *pCfg) PURE;				// 캡처 정보 체크
+	STDMETHOD (SetConfig)(BCAP_CONFIG *pCfg) PURE;					// 캡처 정보 설정 
+	STDMETHOD (GetConfig)(BCAP_CONFIG *pCfg) PURE;					// 캡처 정보 얻기 
 
-	STDMETHOD_(INT, GetCaptureTime)() PURE;							// msec
-	STDMETHOD_(INT64, GetCaptureFileSize)() PURE;					// bytes
+	STDMETHOD_(INT, GetCaptureTime)() PURE;							// 현재까지 캡처된 시간 (msec) 
 
-	STDMETHOD (SetPriority)(INT nPriority) PURE;					
-	STDMETHOD_(INT, GetPriority)() PURE;							
+	STDMETHOD (SetPriority)(INT nPriority) PURE;					// 캡처 모듈의 우선순위 설정 
+	STDMETHOD_(INT, GetPriority)() PURE;							// 현재 적용된 우선순위 얻기 
 
-	STDMETHOD (SetMinMaxFPS)(INT nMin, INT nMax) PURE;				
-	STDMETHOD (GetMinMaxFPS)(INT *pnMin, INT *pnMax) PURE;			
-
-	STDMETHOD (CaptureImage)(LPCWSTR pwszFilePath, INT nFileType, INT nQuality, INT nCaptureMode, 
-					BOOL bIncludeCursor, LONG_PTR lpParam) PURE;	
-
-	STDMETHOD_(DWORD, GetSuggestedVideoCodec)() PURE;				
-	STDMETHOD_(BOOL, IsSupportedVideoCodec)(DWORD dwCodec) PURE;	
+	STDMETHOD (SetMinMaxFPS)(INT nMin, INT nMax) PURE;				// 캡처 동작중의 FPS 제한 설정
+	STDMETHOD (GetMinMaxFPS)(INT *pnMin, INT *pnMax) PURE;			// 캡처 동작중의 FPS 제한 얻기
 };
 
 
+// 반디캡 인터페이스 생성 함수
 typedef HRESULT (WINAPI *LPCREATEBANDICAP)(UINT SDKVersion, void** pp);
 
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-// IBandiCapture error code
+// 반디캡 에러 코드
 #define _FACBC  0x777
 #define MAKE_BCHRESULT( code )				MAKE_HRESULT( 1, _FACBC, code )
 #define MAKE_BCSTATUS( code )				MAKE_HRESULT( 0, _FACBC, code )
 
-#define BC_OK								S_OK					// 0x00000000L
-#define BC_FALSE							S_FALSE					// 0x00000001L
-#define BC_OK_ONLY_VIDEO					MAKE_BCSTATUS(0x0010)	// 0x07770010L
-#define BC_OK_ONLY_AUDIO					MAKE_BCSTATUS(0x0011)	// 0x07770011L
-#define BC_OK_IS_NOT_CAPTURING				MAKE_BCSTATUS(0x0020)	// 0x07770020L
-#define BC_OK_COMPLETED_BY_TIME				MAKE_BCSTATUS(0x0030)	// 0x07770030L
-#define BC_OK_COMPLETED_BY_SIZE				MAKE_BCSTATUS(0x0031)	// 0x07770031L
-#define BC_OK_COMPLETED_BY_FAT32			MAKE_BCSTATUS(0x0032)	// 0x07770032L
+#define BC_OK								S_OK
+#define BC_FALSE							S_FALSE
+#define BC_OK_ONLY_VIDEO					MAKE_BCSTATUS(0x0010)
+#define BC_OK_ONLY_AUDIO					MAKE_BCSTATUS(0x0011)
+#define BC_OK_IS_NOT_CAPTURING				MAKE_BCSTATUS(0x0020)
 
-#define BCERR_FAIL							E_FAIL					// 0x80004005L
+#define BCERR_FAIL							E_FAIL
 
-#define BCERR_INVALIDARG					MAKE_BCHRESULT(0x1010)	// 0x87771010L
-#define BCERR_VIDEO_CAPTURE					MAKE_BCHRESULT(0x1011)	// 0x87771011L
-#define BCERR_AUDIO_CAPTURE					MAKE_BCHRESULT(0x1012)	// 0x87771012L
-#define BCERR_FILE_CREATE					MAKE_BCHRESULT(0x1013)	// 0x87771013L
-#define BCERR_FILE_WRITE					MAKE_BCHRESULT(0x1014)	// 0x87771014L
-#define BCERR_NOT_ENOUGH_DISKSPACE			MAKE_BCHRESULT(0x1015)	// 0x87771015L
+#define BCERR_INVALIDARG					MAKE_BCHRESULT(0x1010)
+#define BCERR_VIDEO_CAPTURE					MAKE_BCHRESULT(0x1011)
+#define BCERR_AUDIO_CAPTURE					MAKE_BCHRESULT(0x1012)
+#define BCERR_FILE_CREATE					MAKE_BCHRESULT(0x1013)
+#define BCERR_FILE_WRITE					MAKE_BCHRESULT(0x1014)
+#define BCERR_NOT_ENOUGH_DISKSPACE			MAKE_BCHRESULT(0x1015)
 
-#define BCERR_LOAD_LIBRARY_FAIL				MAKE_BCHRESULT(0x1020)	// 0x87771020L
-#define BCERR_ALREADY_CREATED				MAKE_BCHRESULT(0x1021)	// 0x87771021L
-#define BCERR_GET_PROC_ADDRESS_FAIL			MAKE_BCHRESULT(0x1022)	// 0x87771022L
-#define BCERR_LIBRARY_NOT_LOADED			MAKE_BCHRESULT(0x1023)	// 0x87771023L
-#define BCERR_UNSUPPORTED_OS				MAKE_BCHRESULT(0x1024)	// 0x87771024L
+#define BCERR_LOAD_LIBRARY_FAIL				MAKE_BCHRESULT(0x1020)
+#define BCERR_ALREADY_CREATED				MAKE_BCHRESULT(0x1021)
+#define BCERR_GET_PROC_ADDRESS_FAIL			MAKE_BCHRESULT(0x1022)
+#define BCERR_LIBRARY_NOT_LOADED			MAKE_BCHRESULT(0x1023)
+#define BCERR_UNSUPPORTED_OS				MAKE_BCHRESULT(0x1024)
 
-#define BCERR_INVALID_VERSION				MAKE_BCHRESULT(0x1030)	// 0x87771030L
-#define BCERR_NOT_ENOUGH_MEMORY				MAKE_BCHRESULT(0x1031)	// 0x87771031L
+#define BCERR_INVALID_VERSION				MAKE_BCHRESULT(0x1030)
+#define BCERR_NOT_ENOUGH_MEMORY				MAKE_BCHRESULT(0x1031)
 
 
+// 아래 유틸리티 클래스를 사용하지 않고자 할 경우 _BANDICAP_NO_UTIL_CLASS 를 define 해서 사용하면 된다.
 #ifndef _BANDICAP_NO_UTIL_CLASS
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 //
 // Utility class for dll load
 //
-#ifdef _WIN64
-	#ifdef _DEBUG
-	#	define BANDICAP_DLL_FILE_NAME			_T("bdcap64_d.dll")
-	#else
-	#	define BANDICAP_DLL_FILE_NAME			_T("bdcap64.dll")
-	#endif
-	#define BANDICAP_RELEASE_DLL_FILE_NAME		_T("bdcap64.dll")
+#ifdef _DEBUG
+#	define BANDICAP_DLL_FILE_NAME			_T("bdcap32_d.dll")
 #else
-	#ifdef _DEBUG
-	#	define BANDICAP_DLL_FILE_NAME			_T("bdcap32_d.dll")
-	#else
-	#	define BANDICAP_DLL_FILE_NAME			_T("bdcap32.dll")
-	#endif
-	#define BANDICAP_RELEASE_DLL_FILE_NAME		_T("bdcap32.dll")
+#	define BANDICAP_DLL_FILE_NAME			_T("bdcap32.dll")
 #endif
+#define BANDICAP_RELEASE_DLL_FILE_NAME		_T("bdcap32.dll")
 
 
 class CBandiCaptureLibrary : public IBandiCapture
@@ -291,12 +206,21 @@ public :
 
 	~CBandiCaptureLibrary()
 	{
-		Destroy();
+		Destory();
 	}
 
 	HRESULT Create(LPCTSTR szDllPathName)
 	{
 		if(m_hDll) {ASSERT(0); return BCERR_ALREADY_CREATED;}
+
+		// check os version
+		OSVERSIONINFO osv;
+		osv.dwOSVersionInfoSize = sizeof(OSVERSIONINFO);
+		if (GetVersionEx(&osv)==FALSE || 
+			osv.dwPlatformId <=VER_PLATFORM_WIN32_WINDOWS)		// does not support 98
+		{
+			return BCERR_UNSUPPORTED_OS;
+		}
 
 		m_hDll = LoadLibrary(szDllPathName);
 		if(m_hDll==NULL)
@@ -336,7 +260,7 @@ public :
 		return m_pCap ? TRUE : FALSE;
 	}
 
-	void	Destroy()
+	void	Destory()
 	{
 		if(m_pCap)
 		{
@@ -349,49 +273,43 @@ public :
 		m_hDll = NULL;
 	}
 
-	LPCTSTR MakePathnameByDate(LPCTSTR szTargetDirectory, LPCTSTR szName, LPCTSTR szExt, LPTSTR szBuf, int nBufLen)
+	LPCTSTR MakePathnameByDate(LPCTSTR szTargetDirectory, LPCTSTR szName, LPTSTR szBuf, int nBufLen)
 	{
 		SYSTEMTIME	sysTime;
 		GetLocalTime(&sysTime);
-
-#if _MSC_VER < 1400	// below 2005
-		if(szTargetDirectory[_tcslen(szTargetDirectory)-1] == '\\')
-			_stprintf(szBuf, _T("%s%s %d-%02d-%02d %02d-%02d-%02d-%03d.%s"), szTargetDirectory, szName, sysTime.wYear, sysTime.wMonth, sysTime.wDay, sysTime.wHour, sysTime.wMinute, sysTime.wSecond, sysTime.wMilliseconds, szExt);
-		else
-			_stprintf(szBuf, _T("%s\\%s %d-%02d-%02d %02d-%02d-%02d-%03d.%s"), szTargetDirectory, szName, sysTime.wYear, sysTime.wMonth, sysTime.wDay, sysTime.wHour, sysTime.wMinute, sysTime.wSecond, sysTime.wMilliseconds, szExt);
+#if _MSC_VER < 1400	// VS2005 미만
+		_stprintf(szBuf, _T("%s\\%s %d-%02d-%02d %02d-%02d-%02d.avi"), szTargetDirectory, szName, sysTime.wYear, sysTime.wMonth, sysTime.wDay, sysTime.wHour, sysTime.wMinute, sysTime.wSecond);
 #else				// 2005, 2008
-		if(szTargetDirectory[_tcslen(szTargetDirectory)-1] == '\\')
-			_stprintf_s(szBuf, nBufLen, _T("%s%s %d-%02d-%02d %02d-%02d-%02d-%03d.%s"), szTargetDirectory, szName, sysTime.wYear, sysTime.wMonth, sysTime.wDay, sysTime.wHour, sysTime.wMinute, sysTime.wSecond, sysTime.wMilliseconds, szExt);
-		else
-			_stprintf_s(szBuf, nBufLen, _T("%s\\%s %d-%02d-%02d %02d-%02d-%02d-%03d.%s"), szTargetDirectory, szName, sysTime.wYear, sysTime.wMonth, sysTime.wDay, sysTime.wHour, sysTime.wMinute, sysTime.wSecond, sysTime.wMilliseconds, szExt);
+		_stprintf_s(szBuf, nBufLen, _T("%s\\%s %d-%02d-%02d %02d-%02d-%02d.avi"), szTargetDirectory, szName, sysTime.wYear, sysTime.wMonth, sysTime.wDay, sysTime.wHour, sysTime.wMinute, sysTime.wSecond);
 #endif
-
 		return szBuf;
 	}
 
-public :		
+public :		// IUnknown
 	HRESULT STDMETHODCALLTYPE QueryInterface(REFIID riid, void** p) { return S_OK; }
 	ULONG   STDMETHODCALLTYPE AddRef( void){return 0;}
 	ULONG   STDMETHODCALLTYPE Release( void){return 0;}
 
 public :		// IBandiCapture
 
+	// 인증하기
 	STDMETHODIMP	Verify(LPCSTR szID, LPCSTR szKey)
 	{
 		if(m_pCap==NULL){ASSERT(0); return E_FAIL;}
 		return m_pCap->Verify(szID, szKey);
 	}
 
+	// 버전 정보
 	STDMETHODIMP_(INT)	GetVersion()
 	{
 		return m_pCap->GetVersion();
 	}
 
+	// 캡처 시작 
 	STDMETHODIMP	Start(LPCSTR pszFilePath, HWND hParentWnd, INT nCaptureMode, LONG_PTR lpParam)
 	{
-		if(m_pCap==NULL){ASSERT(0); return E_FAIL;}
-
 		WCHAR wszPath[MAX_PATH+1];
+
 		MultiByteToWideChar(CP_ACP, NULL, pszFilePath, -1, wszPath, MAX_PATH);
 		return m_pCap->Start(wszPath, hParentWnd, nCaptureMode, lpParam);
 	}
@@ -402,114 +320,73 @@ public :		// IBandiCapture
 		return m_pCap->Start(pwszFilePath, hParentWnd, nCaptureMode, lpParam);
 	}
 
-	STDMETHODIMP Pause(BOOL bPause)
-	{
-		if(m_pCap==NULL){ASSERT(0); return E_FAIL;}
-		return m_pCap->Pause(bPause);
-	}
-
+	// 캡처 종료 
 	STDMETHODIMP Stop()
 	{
 		if(m_pCap==NULL){ASSERT(0); return E_FAIL;}
 		return m_pCap->Stop();
 	}
 
+	// 캡처 작업 
 	STDMETHODIMP Work(LONG_PTR lpParam)
 	{
 		if(m_pCap==NULL){ASSERT(0); return E_FAIL;}
 		return m_pCap->Work(lpParam);
 	}
 
+	// 캡처 상태
 	STDMETHODIMP_(BOOL) IsCapturing()
 	{
 		if(m_pCap==NULL) return FALSE;
 		return m_pCap->IsCapturing();
 	}
 
+	// 캡처 정보 체크
 	STDMETHODIMP CheckConfig(BCAP_CONFIG *pCfg)
 	{
-		if(m_pCap==NULL){ASSERT(0); return E_FAIL;}
 		return m_pCap->CheckConfig(pCfg);
 	}
 
+	// 캡처 정보 설정 
 	STDMETHODIMP SetConfig(BCAP_CONFIG *pCfg)
 	{
-		if(m_pCap==NULL){ASSERT(0); return E_FAIL;}
 		return m_pCap->SetConfig(pCfg);
 	}
 
+	// 캡처 정보 얻기 
 	STDMETHODIMP GetConfig(BCAP_CONFIG *pCfg)
 	{
-		if(m_pCap==NULL){ASSERT(0); return E_FAIL;}
 		return m_pCap->GetConfig(pCfg);
 	}
 
+	// 현재까지 캡처된 시간 (msec) 
 	STDMETHODIMP_(INT) GetCaptureTime()
 	{
-		if(m_pCap==NULL){ASSERT(0); return 0;}
 		return m_pCap->GetCaptureTime();
 	}
 
-	STDMETHODIMP_(INT64) GetCaptureFileSize()
-	{
-		if(m_pCap==NULL){ASSERT(0); return 0;}
-		return m_pCap->GetCaptureFileSize();
-	}
-
+	// 캡처 모듈의 우선순위 설정 
 	STDMETHODIMP SetPriority(INT nPriority)
 	{
-		if(m_pCap==NULL){ASSERT(0); return E_FAIL;}
 		return m_pCap->SetPriority(nPriority);
 	}
 
+	// 현재 적용된 우선순위 얻기 
 	STDMETHODIMP_(INT) GetPriority()
 	{
-		if(m_pCap==NULL){ASSERT(0); return 0;}
 		return m_pCap->GetPriority();
 	}
 
+	// 캡처 동작중의 FPS 제한 설정
 	STDMETHODIMP SetMinMaxFPS(INT nMin, INT nMax)
 	{
-		if(m_pCap==NULL){ASSERT(0); return E_FAIL;}
 		return m_pCap->SetMinMaxFPS(nMin, nMax);
 	}
 
+	// 캡처 동작중의 FPS 제한 얻기
 	STDMETHODIMP GetMinMaxFPS(INT *pnMin, INT *pnMax)
 	{
-		if(m_pCap==NULL){ASSERT(0); return E_FAIL;}
 		return m_pCap->GetMinMaxFPS(pnMin, pnMax);
-	}
-
-	STDMETHODIMP CaptureImage(LPCSTR pszFilePath, INT nFileType, INT nQuality, INT nCaptureMode, 
-							BOOL bIncludeCursor, LONG_PTR lpParam)
-	{
-		if(m_pCap==NULL){ASSERT(0); return E_FAIL;}
-
-		WCHAR wszPath[MAX_PATH+1];
-		MultiByteToWideChar(CP_ACP, NULL, pszFilePath, -1, wszPath, MAX_PATH);
-
-		return m_pCap->CaptureImage(wszPath, nFileType, nQuality, nCaptureMode, bIncludeCursor, lpParam);
-	}
-
-	STDMETHODIMP CaptureImage(LPCWSTR pwszFilePath, INT nFileType, INT nQuality, INT nCaptureMode, 
-							BOOL bIncludeCursor, LONG_PTR lpParam)
-	{
-		if(m_pCap==NULL){ASSERT(0); return E_FAIL;}
-		return m_pCap->CaptureImage(pwszFilePath, nFileType, nQuality, nCaptureMode, bIncludeCursor, lpParam);
-	}
-	
-
-	
-	STDMETHODIMP_(DWORD) GetSuggestedVideoCodec()
-	{
-		if(m_pCap==NULL){ASSERT(0); return 0;}
-		return m_pCap->GetSuggestedVideoCodec();
-	}
-
-	STDMETHODIMP_(BOOL) IsSupportedVideoCodec(DWORD dwCodec)
-	{
-		if(m_pCap==NULL){ASSERT(0); return FALSE;}
-		return m_pCap->IsSupportedVideoCodec(dwCodec);
 	}
 
 private :
@@ -543,18 +420,14 @@ enum BCAP_PRESET
 	BCAP_PRESET_640x480,
 	BCAP_PRESET_800x600,
 
-	BCAP_PRESET_MPEG1,
 	BCAP_PRESET_MJPEG,
 	BCAP_PRESET_MJPEG_HIGH_QUALITY,
-	BCAP_PRESET_MPEG4,
 
 	BCAP_PRESET_YOUTUBE,
 	BCAP_PRESET_YOUTUBE_HIGH_QUALITY,
-	BCAP_PRESET_YOUTUBE_HIGH_DEFINITION,
 	BCAP_PRESET_NAVER_BLOG,
 	BCAP_PRESET_DAUM_TVPOT,
-
-	BCAP_PRESET_VIDEO_EDITING,
+	BCAP_PRESET_MNCAST,
 };
 
 // SETTING CONFIG BY PRESET
@@ -601,34 +474,14 @@ inline BOOL BCapConfigPreset(BCAP_CONFIG* pConfig, BCAP_PRESET preset)
 		pConfig->VideoSizeH = 0;
 		break;
 
-	case BCAP_PRESET_MPEG1 :				// MPEG1
-		pConfig->VideoCodec	= FOURCC_MPEG;
-		pConfig->VideoQuality = 80;
-		pConfig->AudioCodec	= WAVETAG_MP2;
-		pConfig->AudioSampleRate = 44100;
-		break;
-
 	case BCAP_PRESET_MJPEG :				// MJPEG
-		pConfig->FileType = BCAP_CONFIG::F_AVI;
 		pConfig->VideoCodec	= FOURCC_MJPG;
 		pConfig->VideoQuality = 80;
-		pConfig->AudioCodec	= WAVETAG_PCM;
-		pConfig->AudioSampleRate = 24000;
 		break;
 	case BCAP_PRESET_MJPEG_HIGH_QUALITY :	// MJPEG with High qulaity audio & video
-		pConfig->FileType = BCAP_CONFIG::F_AVI;
 		pConfig->VideoCodec	= FOURCC_MJPG;
 		pConfig->VideoQuality = 90;
-		pConfig->AudioCodec	= WAVETAG_PCM;
 		pConfig->AudioSampleRate = 44100;
-		break;
-
-	case BCAP_PRESET_MPEG4 :				// MPEG4
-		pConfig->FileType = BCAP_CONFIG::F_AVI;
-		pConfig->VideoCodec	= FOURCC_MP4V;
-		pConfig->VideoQuality = 80;
-		pConfig->AudioCodec	= WAVETAG_PCM;
-		pConfig->AudioSampleRate = 24000;
 		break;
 
 	case BCAP_PRESET_YOUTUBE :
@@ -641,39 +494,27 @@ inline BOOL BCapConfigPreset(BCAP_CONFIG* pConfig, BCAP_PRESET preset)
 		break;
 
 	case BCAP_PRESET_YOUTUBE_HIGH_QUALITY :
-		pConfig->VideoSizeW = 480;			// 480x272
+		pConfig->VideoSizeW = 480;			// 480x360
 		pConfig->VideoSizeH = 0;
-		pConfig->VideoFPS = 30;
+		pConfig->VideoFPS = 24;
 		pConfig->AudioChannels = 1;			// mono
-		pConfig->AudioSampleRate = 44100;	// 44k
+		pConfig->AudioSampleRate = 22050;	// 22k
 		break;
 
-	case BCAP_PRESET_YOUTUBE_HIGH_DEFINITION :
-		pConfig->VideoSizeW = 0;			// 1280x720
-		pConfig->VideoSizeH = 0;
-		pConfig->VideoFPS = 30;
-		pConfig->AudioChannels = 2;			// stereo
-		pConfig->AudioSampleRate = 44100;	// 44k
-		break;
 
 	case BCAP_PRESET_NAVER_BLOG :
-		pConfig->VideoSizeW = 0;			// 480p
-		pConfig->VideoSizeH = 480;
-		pConfig->VideoFPS = 24;
-		pConfig->AudioSampleRate = 44100;	// 44k
-		break;
-
 	case BCAP_PRESET_DAUM_TVPOT :
 		pConfig->VideoSizeW = 512;			// 512x384
 		pConfig->VideoSizeH = 0;
 		pConfig->VideoFPS = 24;
-		pConfig->AudioSampleRate = 44100;	// 22k
+		pConfig->AudioSampleRate = 22050;	// 22k
 		break;
 
-	case BCAP_PRESET_VIDEO_EDITING :		// for video edting (premier, vegas)
-		pConfig->FileType = BCAP_CONFIG::F_AVI;
-		pConfig->AudioCodec = 0x0001;		// pcm
+	case BCAP_PRESET_MNCAST :
+		pConfig->VideoSizeW = 500;			// 500x374
+		pConfig->VideoSizeH = 0;
 		break;
+
 	default :								// error
 		ASSERT(0);
 		return FALSE;
