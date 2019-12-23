@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<XML>
+	<EVENTINFO>
+		<EVENT name="H&amp;S" secondaryname="Hide&amp;Seek" tertiaryname="hide and seek" quarteraryname="Hide &amp; Seek" objective="STR:EVENT_OBJ_01" description="STR:EVENT_DESC_01"/>
+		<EVENT name="DodgeBall" secondaryname="dball" tertiaryname="" quarteraryname="" objective="STR:EVENT_OBJ_02" description="STR:EVENT_DESC_02"/>
+		<EVENT name="LMS" secondaryname="last man standing" tertiaryname="L M S" quarteraryname="" objective="STR:EVENT_OBJ_03" description="STR:EVENT_DESC_03"/>
+		<EVENT name="RFS" secondaryname="run from sword" tertiaryname="R F S" quarteraryname="" objective="STR:EVENT_OBJ_04" description="STR:EVENT_DESC_04"/>
+		<EVENT name="SimonSays" secondaryname="Simon Says" tertiaryname="" quarteraryname="" objective="STR:EVENT_OBJ_05" description="STR:EVENT_DESC_05"/>
+		<EVENT name="Scramble" secondaryname="" tertiaryname="" quarteraryname="" objective="STR:EVENT_OBJ_06" description="STR:EVENT_DESC_06"/>
+		<EVENT name="walltowall" secondaryname="wall 2 wall" tertiaryname="wall2wall" quarteraryname="wall to wall" objective="STR:EVENT_OBJ_07" description="STR:EVENT_DESC_07"/>
+		<EVENT name="true or false" secondaryname="true and false" tertiaryname="" quarteraryname="wall to wall" objective="STR:EVENT_OBJ_08" description="STR:EVENT_DESC_08"/>
+		<EVENT name="Infected" secondaryname="" tertiaryname="" quarteraryname="" objective="STR:EVENT_OBJ_09" description="STR:EVENT_DESC_09"/>
+		<EVENT name="Gungame" secondaryname="gun-game" tertiaryname="gun game" quarteraryname="" objective="STR:EVENT_OBJ_010" description="STR:EVENT_DESC_010"/>
+		<EVENT name="Race" secondaryname="deathrace" tertiaryname="" quarteraryname="" objective="STR:EVENT_OBJ_011" description="STR:EVENT_DESC_011"/>
+		<EVENT name="Run From Dagger" secondaryname="RFD" tertiaryname="R F D" quarteraryname="" objective="STR:EVENT_OBJ_012" description="STR:EVENT_DESC_012"/>
+		<EVENT name="Circle Of Mines" secondaryname="" tertiaryname="" quarteraryname="" objective="STR:EVENT_OBJ_013" description="STR:EVENT_DESC_013"/>
+		<EVENT name="stalker" secondaryname="" tertiaryname="" quarteraryname="" objective="STR:EVENT_OBJ_014" description="STR:EVENT_DESC_014"/>
+		<EVENT name="Run From Nade" secondaryname="rfn" tertiaryname="" quarteraryname="" objective="STR:EVENT_OBJ_015" description="STR:EVENT_DESC_015"/>
+		<EVENT name="survivor" secondaryname="" tertiaryname="" quarteraryname="" objective="STR:EVENT_OBJ_016" description="STR:EVENT_DESC_016"/>
+		<EVENT name="Find The Ghost" secondaryname="FTG" tertiaryname="" quarteraryname="" objective="STR:EVENT_OBJ_017" description="STR:EVENT_DESC_017"/>
+		<EVENT name="Berserker" secondaryname="" tertiaryname="" quarteraryname="" objective="STR:EVENT_OBJ_018" description="STR:EVENT_DESC_018"/>
+	</EVENTINFO>
+</XML>

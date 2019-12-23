@@ -1,0 +1,717 @@
+﻿<?xml version="1.0" ?>
+<XML>
+
+<!-- 병정 고블린 -->
+	<NPC id="11">
+		<Animation name="neglect1">
+			<AddAnimEvent eventtype="sound" filename="quest/goblin/Goblin_neglect" 				beginframe="2358"> </AddAnimEvent>
+		</Animation>
+		<Animation name="neglect2">
+			<AddAnimEvent eventtype="sound" filename="quest/goblin/GoblinClan_neglect" 			beginframe="10232"> </AddAnimEvent>
+		</Animation>
+		<Animation name="melee_attack">
+			<AddAnimEvent eventtype="sound" filename="quest/goblin/Goblin_attack" 				beginframe="0"> </AddAnimEvent>
+		</Animation>
+		<Animation name="die">
+			<AddAnimEvent eventtype="sound" filename="quest/goblin/Goblin_die" 					beginframe="0"> </AddAnimEvent>
+		</Animation>
+		<Animation name="die2">
+			<AddAnimEvent eventtype="sound" filename="quest/goblin/Goblin_die" 					beginframe="0"> </AddAnimEvent>
+		</Animation>
+	</NPC>
+
+<!-- 병정 고블린 -->
+	<NPC id="111">
+		<Animation name="neglect1">
+			<AddAnimEvent eventtype="sound" filename="quest/goblin/Goblin_neglect" 				beginframe="2358"> </AddAnimEvent>
+		</Animation>
+		<Animation name="neglect2">
+			<AddAnimEvent eventtype="sound" filename="quest/goblin/GoblinClan_neglect" 			beginframe="10232"> </AddAnimEvent>
+		</Animation>
+		<Animation name="melee_attack">
+			<AddAnimEvent eventtype="sound" filename="quest/goblin/Goblin_attack" 				beginframe="0"> </AddAnimEvent>
+		</Animation>
+		<Animation name="die">
+			<AddAnimEvent eventtype="sound" filename="quest/goblin/Goblin_die" 					beginframe="0"> </AddAnimEvent>
+		</Animation>
+		<Animation name="die2">
+			<AddAnimEvent eventtype="sound" filename="quest/goblin/Goblin_die" 					beginframe="0"> </AddAnimEvent>
+		</Animation>
+	</NPC>
+	
+<!-- 고블린 거너 -->
+	<NPC id="12">
+		<Animation name="neglect1">
+			<AddAnimEvent eventtype="sound" filename="quest/goblin/GoblinClan_neglect" 			beginframe="2358"> </AddAnimEvent>
+		</Animation>
+		<Animation name="neglect2">
+			<AddAnimEvent eventtype="sound" filename="quest/goblin/GoblinClan_neglect" 			beginframe="7674"> </AddAnimEvent>
+		</Animation>
+		<Animation name="melee_attack">
+			<AddAnimEvent eventtype="sound" filename="quest/goblin/GoblinG_attack" 				beginframe="905"> </AddAnimEvent>
+		</Animation>
+		<Animation name="die">
+			<AddAnimEvent eventtype="sound" filename="quest/goblin/Goblin_die" 					beginframe="0"> </AddAnimEvent>
+		</Animation>
+		<Animation name="die2">
+			<AddAnimEvent eventtype="sound" filename="quest/goblin/Goblin_die" 					beginframe="0"> </AddAnimEvent>
+		</Animation>
+		<Animation name="special_attack1">
+			<AddAnimEvent eventtype="sound" filename="we_shotgunpa_fire" 						beginframe="805"> </AddAnimEvent>
+		</Animation>
+	</NPC>
+	
+<!-- 고블린 위저드 -->
+	<NPC id="13">
+		<Animation name="neglect1">
+			<AddAnimEvent eventtype="sound" filename="quest/goblin/GoblinClan_neglect" 			beginframe="316"> </AddAnimEvent>
+		</Animation>
+		<Animation name="melee_attack">
+			<AddAnimEvent eventtype="sound" filename="quest/goblin/GoblinG_attack" 				beginframe="0"> </AddAnimEvent>
+		</Animation>
+		<Animation name="die">
+			<AddAnimEvent eventtype="sound" filename="quest/goblin/Goblin_die" 					beginframe="0"> </AddAnimEvent>
+		</Animation>
+		<Animation name="die2">
+			<AddAnimEvent eventtype="sound" filename="quest/goblin/Goblin_die" 					beginframe="0"> </AddAnimEvent>
+		</Animation>
+		<Animation name="special_attack1">
+			<AddAnimEvent eventtype="sound" filename="quest/goblin/GoblinG_attack" 				beginframe="0"> </AddAnimEvent>
+			<AddAnimEvent eventtype="sound" filename="quest/goblin/GoblinC_castSecond" 			beginframe="9179"> </AddAnimEvent>
+			<AddAnimEvent eventtype="sound" filename="quest/goblin/GoblinW_FX_Healing"	 		beginframe="11274"> </AddAnimEvent> 
+		</Animation>
+		<Animation name="special_attack2">
+			<AddAnimEvent eventtype="sound" filename="quest/goblin/GoblinG_attack" 				beginframe="0"> </AddAnimEvent>
+			<AddAnimEvent eventtype="sound" filename="we_grenade_explosion" 					beginframe="200"> </AddAnimEvent>  
+		</Animation>
+	</NPC>
+
+<!-- 대장 고블린 -->
+	<NPC id="14">
+		<Animation name="neglect1">
+			<AddAnimEvent eventtype="sound" filename="quest/goblin/GoblinClan_neglect" 			beginframe="1432"> </AddAnimEvent>
+		</Animation>
+		<Animation name="melee_attack">
+			<AddAnimEvent eventtype="sound" filename="quest/goblin/GoblinH_attack" 				beginframe="1389"> </AddAnimEvent>
+		</Animation>
+		<Animation name="die">
+			<AddAnimEvent eventtype="sound" filename="quest/goblin/GoblinH_die" 				beginframe="0"> </AddAnimEvent>
+		</Animation>
+		<Animation name="die2">
+			<AddAnimEvent eventtype="sound" filename="quest/goblin/GoblinH_die" 				beginframe="0"> </AddAnimEvent>
+		</Animation>
+	</NPC>
+
+<!-- 고블린 족장 -->
+	<NPC id="15">
+		<Animation name="neglect1">
+			<AddAnimEvent eventtype="sound" filename="quest/goblin/GoblinC_neglect" 			beginframe="3347"> </AddAnimEvent>
+		</Animation>
+		<Animation name="melee_attack">
+			<AddAnimEvent eventtype="sound" filename="quest/goblin/GoblinC_attack" 				beginframe="916"> </AddAnimEvent>
+		</Animation>
+		<Animation name="die">
+			<AddAnimEvent eventtype="sound" filename="quest/goblin/GoblinC_dieFirst" 			beginframe="379"> </AddAnimEvent>
+			<AddAnimEvent eventtype="sound" filename="quest/goblin/GoblinC_dieSecond" 			beginframe="10042"> </AddAnimEvent>
+		</Animation>
+		<Animation name="special_attack1">
+			<AddAnimEvent eventtype="sound" filename="quest/goblin/GoblinG_attack" 				beginframe="0"> </AddAnimEvent>
+			<AddAnimEvent eventtype="sound" filename="quest/goblin/GoblinC_castSecond" 			beginframe="9179"> </AddAnimEvent>
+			<AddAnimEvent eventtype="sound" filename="quest/goblin/GoblinC_FX_Slow" 			beginframe="11084"> </AddAnimEvent>
+		</Animation>
+		<Animation name="special_attack2">
+			<AddAnimEvent eventtype="sound" filename="quest/goblin/GoblinC_castFirst" 			beginframe="0"> </AddAnimEvent>
+			<AddAnimEvent eventtype="sound" filename="quest/goblin/GoblinC_FX_Fireball"			beginframe="4179"> </AddAnimEvent>
+		</Animation>
+	</NPC>
+
+<!-- 고블린킹 -->
+	<NPC id="16">
+		<Animation name="neglect1">
+			<AddAnimEvent eventtype="sound" filename="quest/goblin/GoblinK_neglect"				beginframe="0"> </AddAnimEvent>
+		</Animation>
+		<Animation name="melee_attack">
+			<AddAnimEvent eventtype="sound" filename="quest/goblin/GoblinK_attack"				beginframe="0"> </AddAnimEvent>
+		</Animation>
+		<Animation name="die">
+			<AddAnimEvent eventtype="sound" filename="quest/goblin/GoblinK_die" 				beginframe="0"> </AddAnimEvent>  
+		</Animation>
+		<Animation name="run">
+			<AddAnimEvent eventtype="sound" filename="quest/goblin/GoblinK_FX_L" 				beginframe="1768"> </AddAnimEvent>
+			<AddAnimEvent eventtype="sound" filename="quest/goblin/GoblinK_FX_R" 				beginframe="4168"> </AddAnimEvent>
+		</Animation>
+		<Animation name="special_attack1">
+			<AddAnimEvent eventtype="sound" filename="quest/goblin/GoblinK_special" 			beginframe="0"> </AddAnimEvent>
+		</Animation>
+		<Animation name="special_attack2">
+			<AddAnimEvent eventtype="sound" filename="quest/goblin/GoblinK_attack" 				beginframe="3753"> </AddAnimEvent>
+			<AddAnimEvent eventtype="sound" filename="quest/goblin/GoblinK_attack" 				beginframe="6700"> </AddAnimEvent>
+			<AddAnimEvent eventtype="sound" filename="quest/goblin/GoblinK_attack" 				beginframe="9647"> </AddAnimEvent>
+			<AddAnimEvent eventtype="sound" filename="quest/goblin/GoblinK_FX_Fireball"			beginframe="5579"> </AddAnimEvent>
+			<AddAnimEvent eventtype="sound" filename="quest/goblin/GoblinK_FX_Fireball"			beginframe="8316"> </AddAnimEvent>
+			<AddAnimEvent eventtype="sound" filename="quest/goblin/GoblinK_FX_Fireball"			beginframe="11368"> </AddAnimEvent>
+		</Animation>
+	</NPC>
+
+<!-- 가짜 고블린킹 -->
+	<NPC id="17">
+		<Animation name="neglect1">
+			<AddAnimEvent eventtype="sound" filename="quest/goblin/GoblinK_neglect"				beginframe="0"> </AddAnimEvent>
+		</Animation>
+		<Animation name="melee_attack">
+			<AddAnimEvent eventtype="sound" filename="quest/goblin/GoblinK_attack"				beginframe="0"> </AddAnimEvent>
+		</Animation>
+		<Animation name="die">
+			<AddAnimEvent eventtype="sound" filename="quest/goblin/GoblinK_die" 				beginframe="0"> </AddAnimEvent>  
+		</Animation>
+		<Animation name="run">
+			<AddAnimEvent eventtype="sound" filename="quest/goblin/GoblinK_FX_L" 				beginframe="1768"> </AddAnimEvent>
+			<AddAnimEvent eventtype="sound" filename="quest/goblin/GoblinK_FX_R" 				beginframe="4168"> </AddAnimEvent>
+		</Animation>
+		<Animation name="special_attack1">
+			<AddAnimEvent eventtype="sound" filename="quest/goblin/GoblinK_special" 			beginframe="0"> </AddAnimEvent>
+		</Animation>
+		<Animation name="special_attack2">
+			<AddAnimEvent eventtype="sound" filename="quest/goblin/GoblinK_attack" 				beginframe="3753"> </AddAnimEvent>
+			<AddAnimEvent eventtype="sound" filename="quest/goblin/GoblinK_attack" 				beginframe="6700"> </AddAnimEvent>
+			<AddAnimEvent eventtype="sound" filename="quest/goblin/GoblinK_attack" 				beginframe="9647"> </AddAnimEvent>
+			<AddAnimEvent eventtype="sound" filename="quest/goblin/GoblinK_FX_Fireball"			beginframe="5579"> </AddAnimEvent>
+			<AddAnimEvent eventtype="sound" filename="quest/goblin/GoblinK_FX_Fireball"			beginframe="8316"> </AddAnimEvent>
+			<AddAnimEvent eventtype="sound" filename="quest/goblin/GoblinK_FX_Fireball"			beginframe="11368"> </AddAnimEvent>
+		</Animation>
+	</NPC>
+
+<!-- 썬더 고블린킹 -->
+	<NPC id="18">
+		<Animation name="neglect1">
+			<AddAnimEvent eventtype="sound" filename="quest/goblin/GoblinK_neglect"				beginframe="0"> </AddAnimEvent>
+		</Animation>
+		<Animation name="melee_attack">
+			<AddAnimEvent eventtype="sound" filename="quest/goblin/GoblinK_attack"				beginframe="0"> </AddAnimEvent>
+		</Animation>
+		<Animation name="die">
+			<AddAnimEvent eventtype="sound" filename="quest/goblin/GoblinK_die" 				beginframe="0"> </AddAnimEvent>  
+		</Animation>
+		<Animation name="run">
+			<AddAnimEvent eventtype="sound" filename="quest/goblin/GoblinK_FX_L" 				beginframe="1768"> </AddAnimEvent>
+			<AddAnimEvent eventtype="sound" filename="quest/goblin/GoblinK_FX_R" 				beginframe="4168"> </AddAnimEvent>
+		</Animation>
+		<Animation name="special_attack1">
+			<AddAnimEvent eventtype="sound" filename="quest/goblin/GoblinK_special" 			beginframe="0"> </AddAnimEvent>
+		</Animation>
+		<Animation name="special_attack2">
+			<AddAnimEvent eventtype="sound" filename="quest/goblin/GoblinK_attack" 				beginframe="3753"> </AddAnimEvent>
+			<AddAnimEvent eventtype="sound" filename="quest/goblin/GoblinK_attack" 				beginframe="6700"> </AddAnimEvent>
+			<AddAnimEvent eventtype="sound" filename="quest/goblin/GoblinK_attack" 				beginframe="9647"> </AddAnimEvent>
+			<AddAnimEvent eventtype="sound" filename="quest/goblin/GoblinK_FX_Fireball"			beginframe="5579"> </AddAnimEvent>
+			<AddAnimEvent eventtype="sound" filename="quest/goblin/GoblinK_FX_Fireball"			beginframe="8316"> </AddAnimEvent>
+			<AddAnimEvent eventtype="sound" filename="quest/goblin/GoblinK_FX_Fireball"			beginframe="11368"> </AddAnimEvent>
+		</Animation>
+	</NPC>
+
+<!-- 썬더 고블린킹 주니어 -->
+	<NPC id="181">
+		<Animation name="neglect1">
+			<AddAnimEvent eventtype="sound" filename="quest/goblin/GoblinK_neglect"				beginframe="0"> </AddAnimEvent>
+		</Animation>
+		<Animation name="melee_attack">
+			<AddAnimEvent eventtype="sound" filename="quest/goblin/GoblinK_attack"				beginframe="0"> </AddAnimEvent>
+		</Animation>
+		<Animation name="die">
+			<AddAnimEvent eventtype="sound" filename="quest/goblin/GoblinK_die" 				beginframe="0"> </AddAnimEvent>  
+		</Animation>
+		<Animation name="run">
+			<AddAnimEvent eventtype="sound" filename="quest/goblin/GoblinK_FX_L" 				beginframe="1768"> </AddAnimEvent>
+			<AddAnimEvent eventtype="sound" filename="quest/goblin/GoblinK_FX_R" 				beginframe="4168"> </AddAnimEvent>
+		</Animation>
+		<Animation name="special_attack1">
+			<AddAnimEvent eventtype="sound" filename="quest/goblin/GoblinK_special" 			beginframe="0"> </AddAnimEvent>
+		</Animation>
+		<Animation name="special_attack2">
+			<AddAnimEvent eventtype="sound" filename="quest/goblin/GoblinK_attack" 				beginframe="3753"> </AddAnimEvent>
+			<AddAnimEvent eventtype="sound" filename="quest/goblin/GoblinK_attack" 				beginframe="6700"> </AddAnimEvent>
+			<AddAnimEvent eventtype="sound" filename="quest/goblin/GoblinK_attack" 				beginframe="9647"> </AddAnimEvent>
+			<AddAnimEvent eventtype="sound" filename="quest/goblin/GoblinK_FX_Fireball"			beginframe="5579"> </AddAnimEvent>
+			<AddAnimEvent eventtype="sound" filename="quest/goblin/GoblinK_FX_Fireball"			beginframe="8316"> </AddAnimEvent>
+			<AddAnimEvent eventtype="sound" filename="quest/goblin/GoblinK_FX_Fireball"			beginframe="11368"> </AddAnimEvent>
+		</Animation>
+	</NPC>
+
+<!-- 난쟁이 고블린킹 -->
+	<NPC id="19">
+		<Animation name="neglect1">
+			<AddAnimEvent eventtype="sound" filename="quest/goblin/GoblinK_neglect"				beginframe="0"> </AddAnimEvent>
+		</Animation>
+		<Animation name="melee_attack">
+			<AddAnimEvent eventtype="sound" filename="quest/goblin/GoblinK_attack"				beginframe="0"> </AddAnimEvent>
+		</Animation>
+		<Animation name="die">
+			<AddAnimEvent eventtype="sound" filename="quest/goblin/GoblinK_die" 				beginframe="0"> </AddAnimEvent>  
+		</Animation>
+		<Animation name="run">
+			<AddAnimEvent eventtype="sound" filename="quest/goblin/GoblinK_FX_L" 				beginframe="1768"> </AddAnimEvent>
+			<AddAnimEvent eventtype="sound" filename="quest/goblin/GoblinK_FX_R" 				beginframe="4168"> </AddAnimEvent>
+		</Animation>
+		<Animation name="special_attack1">
+			<AddAnimEvent eventtype="sound" filename="quest/goblin/GoblinK_special" 			beginframe="0"> </AddAnimEvent>
+		</Animation>
+		<Animation name="special_attack2">
+			<AddAnimEvent eventtype="sound" filename="quest/goblin/GoblinK_attack" 				beginframe="3753"> </AddAnimEvent>
+			<AddAnimEvent eventtype="sound" filename="quest/goblin/GoblinK_attack" 				beginframe="6700"> </AddAnimEvent>
+			<AddAnimEvent eventtype="sound" filename="quest/goblin/GoblinK_attack" 				beginframe="9647"> </AddAnimEvent>
+			<AddAnimEvent eventtype="sound" filename="quest/goblin/GoblinK_FX_Fireball"			beginframe="5579"> </AddAnimEvent>
+			<AddAnimEvent eventtype="sound" filename="quest/goblin/GoblinK_FX_Fireball"			beginframe="8316"> </AddAnimEvent>
+			<AddAnimEvent eventtype="sound" filename="quest/goblin/GoblinK_FX_Fireball"			beginframe="11368"> </AddAnimEvent>
+		</Animation>
+	</NPC>
+
+
+<!-- 난쟁이 고블린킹 주니어 -->
+	<NPC id="191">
+		<Animation name="neglect1">
+			<AddAnimEvent eventtype="sound" filename="quest/goblin/GoblinK_neglect"				beginframe="0"> </AddAnimEvent>
+		</Animation>
+		<Animation name="melee_attack">
+			<AddAnimEvent eventtype="sound" filename="quest/goblin/GoblinK_attack"				beginframe="0"> </AddAnimEvent>
+		</Animation>
+		<Animation name="die">
+			<AddAnimEvent eventtype="sound" filename="quest/goblin/GoblinK_die" 				beginframe="0"> </AddAnimEvent>  
+		</Animation>
+		<Animation name="run">
+			<AddAnimEvent eventtype="sound" filename="quest/goblin/GoblinK_FX_L" 				beginframe="1768"> </AddAnimEvent>
+			<AddAnimEvent eventtype="sound" filename="quest/goblin/GoblinK_FX_R" 				beginframe="4168"> </AddAnimEvent>
+		</Animation>
+		<Animation name="special_attack1">
+			<AddAnimEvent eventtype="sound" filename="quest/goblin/GoblinK_special" 			beginframe="0"> </AddAnimEvent>
+		</Animation>
+		<Animation name="special_attack2">
+			<AddAnimEvent eventtype="sound" filename="quest/goblin/GoblinK_attack" 				beginframe="3753"> </AddAnimEvent>
+			<AddAnimEvent eventtype="sound" filename="quest/goblin/GoblinK_attack" 				beginframe="6700"> </AddAnimEvent>
+			<AddAnimEvent eventtype="sound" filename="quest/goblin/GoblinK_attack" 				beginframe="9647"> </AddAnimEvent>
+			<AddAnimEvent eventtype="sound" filename="quest/goblin/GoblinK_FX_Fireball"			beginframe="5579"> </AddAnimEvent>
+			<AddAnimEvent eventtype="sound" filename="quest/goblin/GoblinK_FX_Fireball"			beginframe="8316"> </AddAnimEvent>
+			<AddAnimEvent eventtype="sound" filename="quest/goblin/GoblinK_FX_Fireball"			beginframe="11368"> </AddAnimEvent>
+		</Animation>
+	</NPC>
+
+<!-- 리쟈드 -->
+	<NPC id="21">
+		<Animation name="melee_attack">
+			<AddAnimEvent eventtype="sound" filename="quest/lizard/Lizard_attack" 				beginframe="0"> </AddAnimEvent>
+		</Animation>
+		<Animation name="die">
+			<AddAnimEvent eventtype="sound" filename="quest/lizard/Lizard_die" 					beginframe="0"> </AddAnimEvent>
+		</Animation>
+		<Animation name="die2">
+			<AddAnimEvent eventtype="sound" filename="quest/lizard/Lizard_die" 					beginframe="0"> </AddAnimEvent>
+		</Animation>
+	</NPC>
+	
+<!-- 리쟈드 샤만 -->
+	<NPC id="22">
+		<Animation name="melee_attack">
+			<AddAnimEvent eventtype="sound" filename="quest/lizard/LizardS_attack" 				beginframe="905"> </AddAnimEvent>
+		</Animation>
+		<Animation name="die">
+			<AddAnimEvent eventtype="sound" filename="quest/lizard/Lizard_die"					beginframe="0"> </AddAnimEvent>
+		</Animation>
+		<Animation name="die2">
+			<AddAnimEvent eventtype="sound" filename="quest/lizard/Lizard_die" 					beginframe="0"> </AddAnimEvent>
+		</Animation>
+		<Animation name="special_attack1">
+			<AddAnimEvent eventtype="sound" filename="quest/lizard/LizardS_cast" 				beginframe="705"> </AddAnimEvent>
+		</Animation>
+		<Animation name="special_attack2">
+			<AddAnimEvent eventtype="sound" filename="quest/lizard/LizardS_cast2" 				beginframe="563"> </AddAnimEvent>
+		</Animation>
+	</NPC>
+	
+<!-- 대장 리쟈드 -->
+	<NPC id="23">
+		<Animation name="neglect1">
+			<AddAnimEvent eventtype="sound" filename="quest/lizard/LizardC_neglect" 			beginframe="1432"> </AddAnimEvent>
+		</Animation>
+		<Animation name="melee_attack">
+			<AddAnimEvent eventtype="sound" filename="quest/lizard/Lizard_attack" 				beginframe="0"> </AddAnimEvent>
+		</Animation>
+		<Animation name="die">
+			<AddAnimEvent eventtype="sound" filename="quest/lizard/Lizard_die" 					beginframe="0"> </AddAnimEvent>
+		</Animation>
+		<Animation name="die2">
+			<AddAnimEvent eventtype="sound" filename="quest/lizard/Lizard_die"					beginframe="0"> </AddAnimEvent>
+		</Animation>
+		<Animation name="special_attack1">
+			<AddAnimEvent eventtype="sound" filename="quest/lizard/Lizard_attack" 				beginframe="0"> </AddAnimEvent>
+		</Animation>
+	</NPC>
+
+<!-- 리쟈드 왕 -->
+	<NPC id="24">
+		<Animation name="neglect1">
+			<AddAnimEvent eventtype="sound" filename="quest/lizard/LizardK_neglect" 			beginframe="3347"> </AddAnimEvent>
+		</Animation>
+		<Animation name="melee_attack">
+			<AddAnimEvent eventtype="sound" filename="quest/lizard/LizardK_attack" 				beginframe="0"> </AddAnimEvent>
+		</Animation>
+		<Animation name="die">
+			<AddAnimEvent eventtype="sound" filename="quest/lizard/LizardK_die" 				beginframe="331"> </AddAnimEvent>
+		</Animation>
+		<Animation name="special_attack1">
+			<AddAnimEvent eventtype="sound" filename="quest/lizard/LizardK_breath" 				beginframe="1445"> </AddAnimEvent>
+		</Animation>
+	</NPC>
+
+<!-- 리쟈드 왕(보스) -->
+	<NPC id="25">
+		<Animation name="neglect1">
+			<AddAnimEvent eventtype="sound" filename="quest/lizard/LizardK_neglect" 			beginframe="3347"> </AddAnimEvent>
+		</Animation>
+		<Animation name="melee_attack">
+			<AddAnimEvent eventtype="sound" filename="quest/lizard/LizardK_attack" 				beginframe="0"> </AddAnimEvent>
+		</Animation>
+		<Animation name="die">
+			<AddAnimEvent eventtype="sound" filename="quest/lizard/LizardK_die" 				beginframe="331"> </AddAnimEvent>
+		</Animation>
+		<Animation name="run">
+			<AddAnimEvent eventtype="sound" filename="quest/goblin/GoblinK_FX_L" 				beginframe="1768"> </AddAnimEvent>
+			<AddAnimEvent eventtype="sound" filename="quest/goblin/GoblinK_FX_R" 				beginframe="4168"> </AddAnimEvent>
+		</Animation>
+		<Animation name="special_attack1">
+			<AddAnimEvent eventtype="sound" filename="quest/lizard/LizardK_breath" 				beginframe="1445"> </AddAnimEvent>
+		</Animation>
+		<Animation name="special_attack2">
+			<AddAnimEvent eventtype="sound" filename="quest/goblin/GoblinW_FX_Healing"	 		beginframe="1445"> </AddAnimEvent> 
+		</Animation>
+	</NPC>
+
+<!-- 골렘(보스) -->
+	<NPC id="26">
+		<Animation name="neglect1">
+			<AddAnimEvent eventtype="sound" filename="quest/golem/Golem_neglect" 				beginframe="0"> </AddAnimEvent>
+		</Animation>
+		<Animation name="melee_attack">
+			<AddAnimEvent eventtype="sound" filename="quest/golem/Golem_attack" 				beginframe="0"> </AddAnimEvent>
+		</Animation>
+		<Animation name="die">
+			<AddAnimEvent eventtype="sound" filename="quest/golem/Golem_die" 					beginframe="0"> </AddAnimEvent>
+		</Animation>
+		<Animation name="run">
+			<AddAnimEvent eventtype="sound" filename="quest/goblin/GoblinK_FX_L" 				beginframe="1768"> </AddAnimEvent>
+			<AddAnimEvent eventtype="sound" filename="quest/goblin/GoblinK_FX_R" 				beginframe="4168"> </AddAnimEvent>
+		</Animation>
+		<Animation name="special_attack1">
+			<AddAnimEvent eventtype="sound" filename="quest/golem/Golem_stunfist" 				beginframe="0"> </AddAnimEvent>
+		</Animation>
+		<Animation name="special_attack2">
+			<AddAnimEvent eventtype="sound" filename="quest/golem/Golem_special"	 			beginframe="0"> </AddAnimEvent> 
+		</Animation>
+	</NPC>
+
+
+
+
+<!-- 스켈레톤 -->
+	<NPC id="31">
+		<Animation name="melee_attack">
+			<AddAnimEvent eventtype="sound" filename="blade_swing" 								beginframe="1900"> </AddAnimEvent>
+		</Animation>
+		<Animation name="die">
+			<AddAnimEvent eventtype="sound" filename="quest/skeleton/Skeleton_die" 				beginframe="2211"> </AddAnimEvent>
+		</Animation>
+		<Animation name="die2">
+			<AddAnimEvent eventtype="sound" filename="quest/skeleton/Skeleton_die" 				beginframe="2084"> </AddAnimEvent>
+			<AddAnimEvent eventtype="sound" filename="quest/skeleton/Skeleton_die" 				beginframe="3412"> </AddAnimEvent>
+		</Animation>
+	</NPC>
+
+<!-- 스켈레톤(이벤트용) -->
+	<NPC id="131">
+		<Animation name="melee_attack">
+			<AddAnimEvent eventtype="sound" filename="blade_swing" 								beginframe="1900"> </AddAnimEvent>
+		</Animation>
+		<Animation name="die">
+			<AddAnimEvent eventtype="sound" filename="quest/skeleton/Skeleton_die" 				beginframe="2211"> </AddAnimEvent>
+		</Animation>
+		<Animation name="die2">
+			<AddAnimEvent eventtype="sound" filename="quest/skeleton/Skeleton_die" 				beginframe="2084"> </AddAnimEvent>
+			<AddAnimEvent eventtype="sound" filename="quest/skeleton/Skeleton_die" 				beginframe="3412"> </AddAnimEvent>
+		</Animation>
+	</NPC>
+<!-- 스켈레톤 메이지 -->
+	<NPC id="32">
+		<Animation name="neglect1">
+			<AddAnimEvent eventtype="sound" filename="quest/skeleton/SkeletonM_neglect"			beginframe="2408"> </AddAnimEvent>
+		</Animation>
+		<Animation name="melee_attack">
+			<AddAnimEvent eventtype="sound" filename="quest/skeleton/SkeletonM_attack"			beginframe="0"> </AddAnimEvent>
+		</Animation>
+		<Animation name="special_attack1">
+			<AddAnimEvent eventtype="sound" filename="quest/skeleton/SkeletonM_FX_Burn" 		beginframe="9012"> </AddAnimEvent>
+		</Animation>
+		<Animation name="special_attack2">
+			<AddAnimEvent eventtype="sound" filename="quest/skeleton/SkeletonM_neglect" 		beginframe="0"> </AddAnimEvent>
+			<AddAnimEvent eventtype="sound" filename="quest/skeleton/SkeletonM_FX_MagicArrow"	beginframe="1579"> </AddAnimEvent>
+			<AddAnimEvent eventtype="sound" filename="quest/skeleton/SkeletonM_FX_MagicArrow"	beginframe="3000"> </AddAnimEvent>
+			<AddAnimEvent eventtype="sound" filename="quest/skeleton/SkeletonM_FX_MagicArrow"	beginframe="4053"> </AddAnimEvent>
+		</Animation>
+		<Animation name="die">
+			<AddAnimEvent eventtype="sound" filename="quest/skeleton/SkeletonM_die"				beginframe="0"> </AddAnimEvent>
+		</Animation>
+		<Animation name="die2">
+			<AddAnimEvent eventtype="sound" filename="quest/skeleton/SkeletonM_die" 			beginframe="0"> </AddAnimEvent>
+		</Animation>
+	</NPC>
+
+<!-- 대장 스켈레톤 -->
+	<NPC id="33">
+		<Animation name="neglect1">
+			<AddAnimEvent eventtype="sound" filename="quest/skeleton/SkeletonC_neglect" 		beginframe="3168"> </AddAnimEvent>
+		</Animation>
+		<Animation name="melee_attack">
+			<AddAnimEvent eventtype="sound" filename="quest/skeleton/SkeletonC_FX_SwordSlash" 	beginframe="1200"> </AddAnimEvent>
+		</Animation>
+		<Animation name="die">
+			<AddAnimEvent eventtype="sound" filename="quest/skeleton/SkeletonC_die"				beginframe="2211"> </AddAnimEvent>
+		</Animation>
+		<Animation name="die2">
+			<AddAnimEvent eventtype="sound" filename="quest/skeleton/SkeletonC_die" 			beginframe="2084"> </AddAnimEvent>
+			<AddAnimEvent eventtype="sound" filename="quest/skeleton/SkeletonC_die" 			beginframe="3412"> </AddAnimEvent>
+		</Animation>
+	</NPC>
+
+<!-- 거대 스켈레톤 -->
+	<NPC id="34">
+		<Animation name="neglect1">
+			<AddAnimEvent eventtype="sound" filename="quest/skeleton/SkeletonB_neglectFirst" 	beginframe="1400"> </AddAnimEvent>
+			<AddAnimEvent eventtype="sound" filename="quest/skeleton/SkeletonB_neglectSecond" 	beginframe="6695"> </AddAnimEvent>
+		</Animation>
+		<Animation name="melee_attack">
+			<AddAnimEvent eventtype="sound" filename="quest/skeleton/SkeletonB_attackFirst" 	beginframe="0"> </AddAnimEvent>
+			<AddAnimEvent eventtype="sound" filename="quest/skeleton/SkeletonB_attackSecond" 	beginframe="884"> </AddAnimEvent>
+		</Animation>
+		<Animation name="die">
+			<AddAnimEvent eventtype="sound" filename="quest/skeleton/SkeletonB_dieFirst" 		beginframe="1400"> </AddAnimEvent>
+			<AddAnimEvent eventtype="sound" filename="quest/skeleton/SkeletonB_dieSecond" 		beginframe="7937"> </AddAnimEvent>
+			<AddAnimEvent eventtype="sound" filename="quest/skeleton/SkeletonB_dieThird" 		beginframe="16421"> </AddAnimEvent>
+		</Animation>
+		<Animation name="special_attack1">
+			<AddAnimEvent eventtype="sound" filename="we_grenade_explosion" 					beginframe="2690"> </AddAnimEvent>	
+		</Animation>
+	</NPC>
+
+<!-- 저주받은 시신 -->
+	<NPC id="35">
+		<Animation name="melee_attack">
+			<AddAnimEvent eventtype="sound" filename="quest/skeleton/SkeletonCc_attack" 		beginframe="1611"> </AddAnimEvent>
+		</Animation>
+		<Animation name="die">
+			<AddAnimEvent eventtype="sound" filename="quest/skeleton/SkeletonCc_die"			beginframe="0"> </AddAnimEvent>
+		</Animation>
+		<Animation name="special_attack1">
+			<AddAnimEvent eventtype="sound" filename="quest/goblin/GoblinC_FX_Slow" 			beginframe="1870"> </AddAnimEvent>
+		</Animation>
+		<Animation name="special_attack2">		
+			<AddAnimEvent eventtype="sound" filename="quest/skeleton/SkeletonCc_cast"			beginframe="3316"> </AddAnimEvent>
+		</Animation>
+	</NPC>
+
+<!-- 리치 폰 -->
+	<NPC id="36">
+		<Animation name="melee_attack">
+			<AddAnimEvent eventtype="sound" filename="quest/skeleton/SkeletonLp_attack" 		beginframe="0"> </AddAnimEvent>
+		</Animation>
+		<Animation name="die">
+			<AddAnimEvent eventtype="sound" filename="quest/skeleton/SkeletonLp_die" 			beginframe="8695"> </AddAnimEvent>
+		</Animation>
+		<Animation name="special_attack1">
+			<AddAnimEvent eventtype="sound" filename="quest/goblin/GoblinC_FX_Fireball" 		beginframe="0"> </AddAnimEvent>
+		</Animation>
+		<Animation name="special_attack2">
+			<AddAnimEvent eventtype="sound" filename="quest/goblin/GoblinC_FX_Fireball" 		beginframe="0"> </AddAnimEvent>
+		</Animation>
+	</NPC>
+
+<!-- 슈페리온(보스) -->
+	<NPC id="37">
+		<Animation name="neglect1">
+			<AddAnimEvent eventtype="sound" filename="quest/skeleton/SkeletonSp_neglectFirst"	beginframe="1400"> </AddAnimEvent>
+			<AddAnimEvent eventtype="sound" filename="quest/skeleton/SkeletonSp_neglectSecond"	beginframe="6695"> </AddAnimEvent>
+		</Animation>
+		<Animation name="melee_attack">
+			<AddAnimEvent eventtype="sound" filename="quest/skeleton/SkeletonSp_attackFirst"	beginframe="0"> </AddAnimEvent>
+			<AddAnimEvent eventtype="sound" filename="quest/skeleton/SkeletonSp_attackSecond" 	beginframe="884"> </AddAnimEvent>
+		</Animation>
+		<Animation name="run">
+			<AddAnimEvent eventtype="sound" filename="quest/goblin/GoblinK_FX_L"				beginframe="2842"> </AddAnimEvent>
+			<AddAnimEvent eventtype="sound" filename="quest/goblin/GoblinK_FX_R"				beginframe="1284"> </AddAnimEvent>
+		</Animation>
+		<Animation name="die">
+			<AddAnimEvent eventtype="sound" filename="quest/skeleton/SkeletonSp_dieFirst"		beginframe="1400"> </AddAnimEvent>
+			<AddAnimEvent eventtype="sound" filename="quest/skeleton/SkeletonSp_dieSecond" 		beginframe="7937"> </AddAnimEvent>
+			<AddAnimEvent eventtype="sound" filename="quest/skeleton/SkeletonSp_dieThird"		beginframe="16421"> </AddAnimEvent>
+		</Animation>
+		<Animation name="special_attack1">
+			<AddAnimEvent eventtype="sound" filename="quest/goblin/GoblinK_FX_Fireball" 		beginframe="2842"> </AddAnimEvent>	
+		</Animation>
+		<Animation name="special_attack2">
+			<AddAnimEvent eventtype="sound" filename="quest/skeleton/SkeletonC_FX_SwordSlash"	beginframe="1954"> </AddAnimEvent>
+		</Animation>
+	</NPC>
+
+<!-- 아네라몬(보스) -->
+	<NPC id="38">
+		<Animation name="melee_attack">
+			<AddAnimEvent eventtype="sound" filename="quest/skeleton/SkeletonAn_attack"			beginframe="1611"> </AddAnimEvent>
+		</Animation>
+		<Animation name="die">
+			<AddAnimEvent eventtype="sound" filename="quest/skeleton/SkeletonAn_die"			beginframe="0"> </AddAnimEvent>
+		</Animation>
+		<Animation name="special_attack1">
+			<AddAnimEvent eventtype="sound" filename="quest/skeleton/SkeletonAn_cast"			beginframe="0"> </AddAnimEvent>
+			<AddAnimEvent eventtype="sound" filename="we_grenade_explosion"						beginframe="2000"> </AddAnimEvent>
+		</Animation>
+		<Animation name="special_attack2">		
+			<AddAnimEvent eventtype="sound" filename="quest/skeleton/SkeletonAn_FX_Lightning"	beginframe="2130"> </AddAnimEvent>
+		</Animation>
+	</NPC>
+
+<!-- 리치(보스) -->
+	<NPC id="39">
+		<Animation name="neglect1">
+			<AddAnimEvent eventtype="sound" filename="quest/skeleton/SkeletonLc_neglect" 		beginframe="0"> </AddAnimEvent>
+		</Animation>
+		<Animation name="run">
+			<AddAnimEvent eventtype="sound" filename="quest/skeleton/SkeletonLc_Wing" 			beginframe="0"> </AddAnimEvent>	
+		</Animation>
+		<Animation name="melee_attack">
+			<AddAnimEvent eventtype="sound" filename="quest/skeleton/SkeletonLc_attack" 		beginframe="0"> </AddAnimEvent>
+		</Animation>
+		<Animation name="die">
+			<AddAnimEvent eventtype="sound" filename="quest/skeleton/SkeletonLc_die" 			beginframe="0"> </AddAnimEvent>
+		</Animation>
+		<Animation name="special_attack1">
+			<AddAnimEvent eventtype="sound" filename="quest/skeleton/SkeletonLc_cast" 			beginframe="0"> </AddAnimEvent>
+			<AddAnimEvent eventtype="sound" filename="quest/skeleton/SkeletonLc_FX_Stomp"		beginframe="7421"> </AddAnimEvent>
+		</Animation>
+		<Animation name="special_attack2">
+			<AddAnimEvent eventtype="sound" filename="quest/skeleton/SkeletonLc_breathready" 	beginframe="0"> </AddAnimEvent>
+			<AddAnimEvent eventtype="sound" filename="quest/skeleton/SkeletonLc_FX_Burn"		beginframe="2130"> </AddAnimEvent>
+		</Animation>
+	</NPC>
+
+<!-- 팜오우베이비 -->
+	<NPC id="41">
+		<Animation name="run">
+			<AddAnimEvent eventtype="sound" filename="quest/Palmpoa/palmpou_baby_run" 			beginframe="0"> </AddAnimEvent>	
+		</Animation>
+		<Animation name="melee_attack">
+			<AddAnimEvent eventtype="sound" filename="quest/Palmpoa/palmpou_babymelee_attack" 		beginframe="0"> </AddAnimEvent>
+		</Animation>
+		<Animation name="die">
+			<AddAnimEvent eventtype="sound" filename="quest/Palmpoa/palmpou_baby_die" 			beginframe="0"> </AddAnimEvent>
+		</Animation>
+	</NPC>
+<!-- 팜오우베이비: 실전용 -->
+	<NPC id="48">
+		<Animation name="run">
+			<AddAnimEvent eventtype="sound" filename="quest/Palmpoa/palmpou_baby_run" 			beginframe="0"> </AddAnimEvent>	
+		</Animation>
+		<Animation name="melee_attack">
+			<AddAnimEvent eventtype="sound" filename="quest/Palmpoa/palmpou_babymelee_attack" 		beginframe="0"> </AddAnimEvent>
+		</Animation>
+		<Animation name="die">
+			<AddAnimEvent eventtype="sound" filename="quest/Palmpoa/palmpou_baby_die" 			beginframe="0"> </AddAnimEvent>
+		</Animation>
+	</NPC>
+<!-- 팜포아 -->
+	<NPC id="42">
+		<Animation name="run">
+			<AddAnimEvent eventtype="sound" filename="quest/Palmpoa/palmpo-au_run" 			beginframe="0"> </AddAnimEvent>
+		</Animation>
+		<Animation name="melee_attack">
+			<AddAnimEvent eventtype="sound" filename="quest/Palmpoa/palmpo-au_melee_attack" 		beginframe="0"> </AddAnimEvent>
+		</Animation>
+		<Animation name="die">
+			<AddAnimEvent eventtype="sound" filename="quest/Palmpoa/palmpo-au_die" 			beginframe="0"> </AddAnimEvent>
+		</Animation>
+		<Animation name="special_attack1">
+			<AddAnimEvent eventtype="sound" filename="quest/Palmpoa/palmpoa_special_attack" 			beginframe="0"> </AddAnimEvent>
+		</Animation>
+	</NPC>
+<!-- 대장 팜포아 -->
+	<NPC id="43">
+		<Animation name="run">
+			<AddAnimEvent eventtype="sound" filename="quest/Palmpoa/cpalmpoh_run" 			beginframe="0"> </AddAnimEvent>	
+		</Animation>
+		<Animation name="melee_attack">
+			<AddAnimEvent eventtype="sound" filename="quest/Palmpoa/cpalmpoh_melee_attack" 		beginframe="0"> </AddAnimEvent>
+		</Animation>
+		<Animation name="die">
+			<AddAnimEvent eventtype="sound" filename="quest/Palmpoa/cpalmpoh_die" 			beginframe="0"> </AddAnimEvent>
+		</Animation>
+		<Animation name="special_attack1">
+			<AddAnimEvent eventtype="sound" filename="quest/Palmpoa/cpalmpoh_special_attack" 			beginframe="0"> </AddAnimEvent>
+		</Animation>
+	</NPC>
+<!-- 대장 팜포아 보스-->
+	<NPC id="46">
+		<Animation name="run">
+			<AddAnimEvent eventtype="sound" filename="quest/Palmpoa/cpalmpoh_run" 			beginframe="0"> </AddAnimEvent>	
+		</Animation>
+		<Animation name="melee_attack">
+			<AddAnimEvent eventtype="sound" filename="quest/Palmpoa/cpalmpoh_melee_attack" 		beginframe="0"> </AddAnimEvent>
+		</Animation>
+		<Animation name="die">
+			<AddAnimEvent eventtype="sound" filename="quest/Palmpoa/cpalmpoh_die" 			beginframe="0"> </AddAnimEvent>
+		</Animation>
+		<Animation name="special_attack1">
+			<AddAnimEvent eventtype="sound" filename="quest/Palmpoa/cpalmpoh_special_attack" 			beginframe="0"> </AddAnimEvent>
+		</Animation>
+	</NPC>
+<!-- 팜오우 -->
+	<NPC id="44">
+		<Animation name="run">
+			<AddAnimEvent eventtype="sound" filename="quest/Palmpoa/palmpo-au_run" 			beginframe="0"> </AddAnimEvent>	
+		</Animation>
+		<Animation name="melee_attack">
+			<AddAnimEvent eventtype="sound" filename="quest/Palmpoa/palmpo-au_melee_attack" 		beginframe="0"> </AddAnimEvent>
+		</Animation>
+		<Animation name="die">
+			<AddAnimEvent eventtype="sound" filename="quest/Palmpoa/palmpo-au_die" 			beginframe="0"> </AddAnimEvent>
+		</Animation>
+		<Animation name="special_attack1">
+			<AddAnimEvent eventtype="sound" filename="quest/Palmpoa/palmpou_special_attack" 			beginframe="0"> </AddAnimEvent>
+		</Animation>
+	</NPC>
+<!-- 팜포우 보스 -->
+	<NPC id="47">
+		<Animation name="run">
+			<AddAnimEvent eventtype="sound" filename="quest/Palmpoa/palmpo-au_run" 			beginframe="0"> </AddAnimEvent>	
+		</Animation>
+		<Animation name="melee_attack">
+			<AddAnimEvent eventtype="sound" filename="quest/Palmpoa/palmpo-au_melee_attack" 		beginframe="0"> </AddAnimEvent>
+		</Animation>
+		<Animation name="die">
+			<AddAnimEvent eventtype="sound" filename="quest/Palmpoa/palmpo-au_die" 			beginframe="0"> </AddAnimEvent>
+		</Animation>
+		<Animation name="special_attack1">
+			<AddAnimEvent eventtype="sound" filename="quest/Palmpoa/palmpou_special_attack" 			beginframe="0"> </AddAnimEvent>
+		</Animation>
+	</NPC>
+<!-- 저주받은 팜포우   -->
+	<NPC id="45">
+		<Animation name="run">
+			<AddAnimEvent eventtype="sound" filename="quest/Palmpoa/cpalmpoa_run" 			beginframe="0"> </AddAnimEvent>	
+		</Animation>
+		<Animation name="melee_attack">
+			<AddAnimEvent eventtype="sound" filename="quest/Palmpoa/cpalmpoa_melee_attack" 		beginframe="0"> </AddAnimEvent>
+		</Animation>
+		<Animation name="die">
+			<AddAnimEvent eventtype="sound" filename="quest/Palmpoa/cpalmpoa_die" 			beginframe="0"> </AddAnimEvent>
+		</Animation>
+		<Animation name="special_attack1">
+			<AddAnimEvent eventtype="sound" filename="quest/Palmpoa/cpalmpoa_special_attack" 			beginframe="0"> </AddAnimEvent>
+		</Animation>
+	</NPC>
+
+</XML>

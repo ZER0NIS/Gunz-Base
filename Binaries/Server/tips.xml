@@ -1,0 +1,64 @@
+﻿<?xml version="1.0" encoding="UTF-8" ?>
+<XML>
+
+<!-- Category
+	default = 0 
+	0 - 일반
+	1 - 개인전
+	2 - 팀전
+	3 - 클랜전
+	4 - 왕초보
+	5 - 초보
+	6 - 중수
+	7 - 고수
+
+	MSG태그의 id는 특정한 조건에만 발동될 경우를 위해서 만들어놓음.
+-->
+
+<!-- 일반 -->
+<TIPS category="0">
+	<!-- STATIC TIPS -->
+	<MSG>If you have any inquiries about GunZ, you may use the Helpdesk function on the GunZ Main Page.</MSG>
+	<MSG>You can view a replay by double clicking the replay files located in .../My Documents/Gunz/Replay.</MSG>
+	<MSG>Press the F11 key to start recording a replay file. Press F11 again to stop recording.</MSG>
+	<MSG>You can view a replay file by selecting "Replay" in the Main Lobby.</MSG>
+	<MSG>Screenshots are saved in .../My Documents/Gunz/Screenshots.</MSG>
+	<MSG>Join a Clan now so you can experience a Clan War!</MSG>
+	<MSG>Press the F12 key to take a screenshot.</MSG>
+	<MSG>Tell your friends about GunZ. Together you can make a Clan.</MSG>
+	<MSG>All premium items can be shared through the "Storage" with every character on the same account.</MSG>
+	<MSG>Do you use a router? Try port forwarding to experience optimized network play.</MSG>
+	<MSG>You can give your friend an item as a present by using the gift function on the webpage.</MSG>
+	<MSG>Is GunZ running slow on your computer? Use the optimization feature in the Options menu.</MSG>
+	<MSG>You can use the "Play Now" function to quickly join a game.</MSG>
+	<MSG>Never give your password to anyone. The administrator will never ask you for your password.</MSG>
+	<MSG>The premium items bought in the item shop will appear in your "Storage".</MSG>
+	<MSG>Bounty items cannot be shared with other characters through your "Storage".</MSG>
+	<MSG>Use training mode to practice your skills without losing experience points.</MSG>
+	<MSG>Use the chat command '/r' to quickly reply to a whisper.</MSG>
+	<MSG>If you have a level 21 character, you cannot enter the Entry-level or Beginner Channel with any other characters.</MSG>
+
+
+	<!-- GM Message -->
+	<MSG>Any Game ID that may offend others will be restricted.</MSG>
+	<MSG>Anyone who offends others inside a game will be subject to punishment by the operating team.</MSG>
+
+	<!-- 새로 추가 -->
+	<MSG>If you successfully defend yourself against a melee attack, you have a chance to perform a Massive Strike right away!</MSG>
+	<MSG>Press the Ctrl key+any Number while in observer mode to assign a number to a player.</MSG>
+
+	<!-- 클랜전 전용 -->
+	<MSG>Have you played the exciting Clan War? Try it now!</MSG>
+	<MSG>In a Clan War you will receive 1.5 times the Exp. There is no loss of Exp. resulting from the level difference.</MSG>
+</TIPS>    
+
+<!-- 왕초보 -->
+<TIPS category="4">
+	<MSG id="1">For stable latency, please select a server which  accurately reflects your geographical location.</MSG>
+</TIPS>
+
+<!-- 듀얼토너먼트 -->
+<TIPS category="8">
+	<MSG id="1"></MSG>
+</TIPS>
+</XML>

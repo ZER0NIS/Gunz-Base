@@ -1,0 +1,305 @@
+﻿<?xml version="1.0" encoding="UTF-8" ?>
+<XML id="scenario2">
+	<!-- 유저에게 보여질 시나리오이름과 클리어시 보상 뽑기 아이템 id-->
+	<!-- 이 XML의 첫번째 시나리오가 디폴트 시나리오다.(디폴드 시나리오: 첼린지 퀘스트 모드 선택시 기본 세팅된 시나리오)-->
+	<!-- good_time_sec: 클리어 권장시간-->
+	<SCENARIO map_id="101" name="UI_STAGE_101" reward_item="3000101" players="4" level_limit="01" good_time_sec="480"
+	Description="UI_STAGE_151">
+		<!--섹터 목록을 차례대로 나열-->
+		<!--섹터의 맵 리소스 이름과 섹터 클리어시 보상 경험치 바운티-->
+		<!--섹터 클리어시 보상 경험치 바운티 벨런스 적용 400/6, 40/6-->
+
+		<SECTOR map="G_Easy_1" xp="200" bp="40">
+			<!--postag는 맥스에서 심은 스폰노드 이름(spawn_npc_는 제외),
+				num은 이 이름의 노드 갯수,
+			    actor는 스폰할 엔피씨 이름, drop은 드롭테이블-->
+			<SPAWN postag="1" num="8" actor="knifeman" drop="C1"/>
+			<SPAWN postag="2" num="3" actor="rifleman" drop="C2"/>
+		</SECTOR>
+		<SECTOR map="G_Easy_2" xp="250" bp="40">
+			<SPAWN postag="1" num="8" actor="rifleman" drop="C2"/>
+			<SPAWN postag="2" num="3" actor="knifeman" drop="C1"/>
+		</SECTOR>
+		<SECTOR map="G_Easy_3" xp="300" bp="40">
+			<SPAWN postag="1" num="6" actor="hunter" drop="C2"/>
+			<SPAWN postag="2" num="6" actor="rifleman" drop="C2"/>
+		</SECTOR>
+		<SECTOR map="G_Easy_4" xp="350" bp="40">
+			<SPAWN postag="1" num="8" actor="knifeman2" drop="C1"/>
+			<SPAWN postag="2" num="9" actor="hunter" drop="C2"/>
+		</SECTOR>
+		<SECTOR map="G_Easy_5" xp="400" bp="40">
+			<SPAWN postag="1" num="6" actor="knifeman2" drop="C1"/>
+			<SPAWN postag="2" num="6" actor="rifleman" drop="C2"/>
+			<SPAWN postag="3" num="4" actor="hunter2" drop="C2"/>
+		</SECTOR>
+		<SECTOR map="G_Easy_6" xp="1500" bp="100">
+			<SPAWN postag="boss" num="1" actor="robot" drop="" adjustplayernum="true"/>
+			<SPAWN postag="1" num="4" actor="knifeman2" drop="C1"/>
+			<SPAWN postag="2" num="4" actor="rifleman" drop="C2"/>
+			<SPAWN postag="3" num="4" actor="rifleman" drop="C2"/>
+		</SECTOR>
+
+	</SCENARIO>
+	
+	
+	
+	<SCENARIO map_id="201" name="UI_STAGE_201" reward_item="3000201" players="4" level_limit="21" good_time_sec="480"
+	Description="UI_STAGE_251">
+		<!--섹터 목록을 차례대로 나열-->
+		<!--섹터의 맵 리소스 이름과 섹터 클리어시 보상 경험치 바운티-->
+		<!--섹터 클리어시 보상 경험치 바운티 벨런스 적용 1200/6, 80/6-->
+
+		<SECTOR map="G_Normal_1" xp="600" bp="80">
+			<!--postag는 맥스에서 심은 스폰노드 이름(spawn_npc_는 제외),
+				num은 이 이름의 노드 갯수,
+			    actor는 스폰할 엔피씨 이름, drop은 드롭테이블-->
+			<SPAWN postag="1" num="6" actor="knifeman2" drop="C1"/>
+			<SPAWN postag="2" num="6" actor="hunter" drop="C2"/>
+			<SPAWN postag="3" num="1" actor="hunter3" drop="C2"/>
+		</SECTOR>
+		<SECTOR map="G_Normal_2" xp="750" bp="80">
+			<SPAWN postag="1" num="9" actor="rifleman2" drop="C2"/>
+			<SPAWN postag="2" num="3" actor="hunter" drop="C2"/>
+		</SECTOR>
+		<SECTOR map="G_Normal_3" xp="900" bp="80">
+			<SPAWN postag="1" num="12" actor="hunter2" drop="C2"/>
+		</SECTOR>
+		<SECTOR map="G_Normal_4" xp="1050" bp="80">
+			<SPAWN postag="1" num="8" actor="knifeman2" drop="C1"/>
+			<SPAWN postag="2" num="4" actor="hunter2" drop="C2"/>
+			<SPAWN postag="3" num="6" actor="rifleman2" drop="C2"/>
+		</SECTOR>
+		<SECTOR map="G_Normal_5" xp="1200" bp="80">
+			<SPAWN postag="1" num="4" actor="rifleman3" drop="C2"/>
+			<SPAWN postag="2" num="10" actor="hunter2" drop="C2"/>
+		</SECTOR>
+		<SECTOR map="G_Normal_6" xp="4500" bp="200">
+			<SPAWN postag="boss" num="1" actor="psychic" drop="" adjustplayernum="true"/>
+			<SPAWN postag="1" num="4" actor="rifleman2" drop="C2"/>
+			<SPAWN postag="2" num="8" actor="hunter2" drop="C2"/>
+		</SECTOR>	
+
+	</SCENARIO>
+	
+	
+	
+	<SCENARIO map_id="301" name="UI_STAGE_301" reward_item="3000301" players="4" level_limit="41" good_time_sec="480"
+	Description="UI_STAGE_351">
+		<!--섹터 목록을 차례대로 나열-->
+		<!--섹터의 맵 리소스 이름과 섹터 클리어시 보상 경험치 바운티-->
+		<!--섹터 클리어시 보상 경험치 바운티 벨런스 적용 3000/6, 160/6-->
+
+		<SECTOR map="G_Hard_1" xp="1800" bp="160">
+			<!--postag는 맥스에서 심은 스폰노드 이름(spawn_npc_는 제외),
+				num은 이 이름의 노드 갯수,
+			    actor는 스폰할 엔피씨 이름, drop은 드롭테이블-->
+			<SPAWN postag="1" num="6" actor="rifleman3" drop="C2"/>
+			<SPAWN postag="2" num="9" actor="knifeman3" drop="C1"/>
+		</SECTOR>
+		<SECTOR map="G_Hard_2" xp="2250" bp="160">
+			<SPAWN postag="1" num="8" actor="knifeman3" drop="C1"/>
+			<SPAWN postag="2" num="4" actor="hunter2" drop="C2"/>
+			<SPAWN postag="3" num="4" actor="rifleman2" drop="C2"/>
+		</SECTOR>
+		<SECTOR map="G_Hard_3" xp="2700" bp="160">
+			<SPAWN postag="1" num="9" actor="hunter3" drop="C2"/>
+			<SPAWN postag="2" num="6" actor="rifleman3" drop="C2"/>
+		</SECTOR>
+		<SECTOR map="G_Hard_4" xp="3150" bp="160">
+			<SPAWN postag="1" num="6" actor="rifleman3" drop="C2"/>
+			<SPAWN postag="2" num="4" actor="hunter3" drop="C2"/>
+			<SPAWN postag="3" num="4" actor="knifeman3" drop="C1"/>
+		</SECTOR>
+		<SECTOR map="G_Hard_5" xp="3600" bp="160">
+			<SPAWN postag="1" num="4" actor="knifeman3" drop="C1"/>
+			<SPAWN postag="2" num="10" actor="hunter3" drop="C2"/>
+		</SECTOR>
+		<SECTOR map="G_Easy_6" xp="13500" bp="400">
+			<SPAWN postag="boss" num="1" actor="general" drop="" adjustplayernum="true"/>
+			<SPAWN postag="1" num="4" actor="knifeman3" drop="C1"/>
+			<SPAWN postag="2" num="4" actor="hunter3" drop="C2"/>
+			<SPAWN postag="3" num="4" actor="rifleman3" drop="C2"/>
+		</SECTOR>
+
+	</SCENARIO>
+	
+	
+	<SCENARIO map_id="401" name="UI_STAGE_401" reward_item="3000401" players="4" level_limit="61" good_time_sec="960"
+	Description="UI_STAGE_451">
+		<!--섹터 목록을 차례대로 나열-->
+		<!--섹터의 맵 리소스 이름과 섹터 클리어시 보상 경험치 바운티-->
+		<!--섹터 클리어시 보상 경험치 바운티 벨런스 적용 3000/6, 160/6-->
+
+		<SECTOR map="G_HC_1" xp="5400" bp="240">
+			<!--postag는 맥스에서 심은 스폰노드 이름(spawn_npc_는 제외),
+				num은 이 이름의 노드 갯수,
+			    actor는 스폰할 엔피씨 이름, drop은 드롭테이블-->
+			<SPAWN postag="1" num="10" actor="knifeman3" drop="C1"/>
+			<SPAWN postag="2" num="8" actor="hunter2" drop="C2"/>
+		</SECTOR>
+		<SECTOR map="G_HC_2" xp="6750" bp="240">
+			<SPAWN postag="1" num="12" actor="rifleman" drop="C2"/>
+			<SPAWN postag="3" num="2" actor="robot" drop="" adjustplayernum="true"/>
+		</SECTOR>
+		<SECTOR map="G_HC_3" xp="8100" bp="240">
+			<SPAWN postag="1" num="16" actor="hunter3" drop="C2"/>
+		</SECTOR>
+		<SECTOR map="G_HC_4" xp="9450" bp="240">
+			<SPAWN postag="1" num="16" actor="hunter2" drop="C2"/>
+			<SPAWN postag="2" num="1" actor="psychic" drop="" adjustplayernum="true"/>
+		</SECTOR>
+		<SECTOR map="G_HC_5" xp="10800" bp="240">
+			<SPAWN postag="1" num="6" actor="knifeman3" drop="C1"/>
+			<SPAWN postag="2" num="6" actor="hunter3" drop="C2"/>
+			<SPAWN postag="3" num="6" actor="rifleman3" drop="C2"/>
+		</SECTOR>
+		<SECTOR map="G_HC_6" xp="40500" bp="600">
+			<SPAWN postag="1" num="12" actor="hunter3" drop="C2"/>
+			<SPAWN postag="2" num="1" actor="psychic" drop="" adjustplayernum="true"/>
+			<SPAWN postag="3" num="1" actor="general" drop="" adjustplayernum="true"/>
+		</SECTOR>
+
+	</SCENARIO>
+	
+	<!--이벤트 아이템 사용 유무설정에 따라 이벤트 아이템 추가-->
+	<!--<SCENARIO map_id="102" name="UI_STAGE_102" reward_item="3000102" event_reward_item="1002003" players="3" level_limit="11" good_time_sec="480"
+	Description="UI_STAGE_152">-->
+	<SCENARIO map_id="102" name="UI_STAGE_102" reward_item="3000102" players="3" level_limit="11" good_time_sec="480"
+	Description="UI_STAGE_152">
+
+		<SECTOR map="R_Normal" xp="340" bp="55">
+			<SPAWN postag="1" num="4" actor="charger" drop="C2"/>
+			<SPAWN postag="2" num="4" actor="charger" drop="C2"/>
+			<SPAWN postag="3" num="4" actor="shooter" drop="C2"/>
+		</SECTOR>
+		<SECTOR map="R_Normal" xp="425" bp="55">
+			<SPAWN postag="1" num="5" actor="charger" drop="C2"/>
+			<SPAWN postag="2" num="4" actor="shooter" drop="C2"/>
+			<SPAWN postag="3" num="4" actor="shooter" drop="C2"/>
+		</SECTOR>
+		<SECTOR map="R_Normal" xp="510" bp="55">
+			<SPAWN postag="1" num="5" actor="charger" drop="C2"/>
+			<SPAWN postag="2" num="5" actor="shooter" drop="C2"/>
+			<SPAWN postag="3" num="5" actor="disposer" drop="C2"/>
+		</SECTOR>
+		<SECTOR map="R_Normal" xp="595" bp="55">
+			<SPAWN postag="1" num="6" actor="charger" drop="C2"/>
+			<SPAWN postag="2" num="6" actor="charger" drop="C2"/>
+			<SPAWN postag="3" num="4" actor="charger2" drop="C2"/>
+		</SECTOR>
+		<SECTOR map="R_Normal" xp="680" bp="55">
+			<SPAWN postag="1" num="5" actor="shooter" drop="C2"/>
+			<SPAWN postag="2" num="5" actor="shooter" drop="C2"/>
+			<SPAWN postag="3" num="6" actor="disposer2" drop="C2"/>
+		</SECTOR>
+		<SECTOR map="R_Boss" xp="2550" bp="140">
+			<SPAWN postag="boss" num="1" actor="chaser" drop="" adjustplayernum="true"/>
+		</SECTOR>
+
+	</SCENARIO>
+	
+	<!--이벤트 아이템 사용 유무설정에 따라 이벤트 아이템 추가-->
+	<!--<SCENARIO map_id="202" name="UI_STAGE_202" reward_item="3000202" event_reward_item="1002003" players="3" level_limit="31" good_time_sec="480"
+	Description="UI_STAGE_252">-->
+	<SCENARIO map_id="202" name="UI_STAGE_202" reward_item="3000202" players="3" level_limit="31" good_time_sec="480"
+	Description="UI_STAGE_252">
+	
+		<SECTOR map="R_Normal" xp="1020" bp="112">
+			<SPAWN postag="1" num="4" actor="shooter2" drop="C2"/>
+			<SPAWN postag="2" num="4" actor="shooter2" drop="C2"/>
+			<SPAWN postag="3" num="4" actor="shooter2" drop="C2"/>
+		</SECTOR>
+		<SECTOR map="R_Normal" xp="1275" bp="112">
+			<SPAWN postag="1" num="4" actor="disposer2" drop="C2"/>
+			<SPAWN postag="2" num="4" actor="disposer2" drop="C2"/>
+			<SPAWN postag="3" num="4" actor="charger2" drop="C2"/>
+		</SECTOR>
+		<SECTOR map="R_Normal" xp="1530" bp="112">
+			<SPAWN postag="1" num="6" actor="charger2" drop="C2"/>
+			<SPAWN postag="2" num="4" actor="shooter2" drop="C2"/>
+			<SPAWN postag="3" num="4" actor="shooter2" drop="C2"/>
+		</SECTOR>
+		<SECTOR map="R_Normal" xp="1785" bp="112">
+			<SPAWN postag="1" num="5" actor="charger2" drop="C2"/>
+			<SPAWN postag="2" num="4" actor="shooter3" drop="C2"/>
+			<SPAWN postag="3" num="5" actor="charger2" drop="C2"/>
+		</SECTOR>
+		<SECTOR map="R_Normal" xp="2040" bp="112">
+			<SPAWN postag="1" num="6" actor="charger2" drop="C2"/>
+			<SPAWN postag="2" num="6" actor="shooter2" drop="C2"/>
+			<SPAWN postag="3" num="6" actor="disposer2" drop="C2"/>
+		</SECTOR>
+		<SECTOR map="R_Boss" xp="7650" bp="280">
+			<SPAWN postag="boss" num="1" actor="tower" drop="" adjustplayernum="true"/>
+		</SECTOR>
+
+	</SCENARIO>
+	
+	<!--이벤트 아이템 사용 유무설정에 따라 이벤트 아이템 추가-->
+	<!--<SCENARIO map_id="302" name="UI_STAGE_302" reward_item="3000302" event_reward_item="1002003" players="3" level_limit="51" good_time_sec="480"
+	Description="UI_STAGE_352">-->
+	<SCENARIO map_id="302" name="UI_STAGE_302" reward_item="3000302" players="3" level_limit="51" good_time_sec="480"
+	Description="UI_STAGE_352">
+
+		<SECTOR map="R_Normal" xp="3060" bp="200">
+			<SPAWN postag="1" num="4" actor="disposer3" drop="C2"/>
+			<SPAWN postag="2" num="4" actor="disposer3" drop="C2"/>
+			<SPAWN postag="3" num="6" actor="shooter2" drop="C2"/>
+		</SECTOR>
+		<SECTOR map="R_Normal" xp="3825" bp="200">
+			<SPAWN postag="1" num="5" actor="charger2" drop="C2"/>
+			<SPAWN postag="2" num="5" actor="charger3" drop="C2"/>
+			<SPAWN postag="3" num="5" actor="charger2" drop="C2"/>			
+		</SECTOR>
+		<SECTOR map="R_Normal" xp="4590" bp="200">
+			<SPAWN postag="1" num="5" actor="charger3" drop="C2"/>
+			<SPAWN postag="2" num="5" actor="shooter3" drop="C2"/>
+			<SPAWN postag="3" num="5" actor="disposer3" drop="C2"/>
+		</SECTOR>
+		<SECTOR map="R_Normal" xp="5355" bp="200">
+			<SPAWN postag="1" num="6" actor="disposer3" drop="C2"/>
+			<SPAWN postag="2" num="5" actor="shooter3" drop="C2"/>
+			<SPAWN postag="3" num="5" actor="shooter3" drop="C2"/>
+		</SECTOR>
+		<SECTOR map="R_Normal" xp="6120" bp="200">
+			<SPAWN postag="1" num="6" actor="charger3" drop="C2"/>
+			<SPAWN postag="2" num="6" actor="charger3" drop="C2"/>
+			<SPAWN postag="3" num="6" actor="disposer3" drop="C2"/>
+		</SECTOR>
+		<SECTOR map="R_Boss" xp="22950" bp="500">
+			<SPAWN postag="boss" num="1" actor="assassin" drop="" adjustplayernum="true"/>
+		</SECTOR>
+
+	</SCENARIO>
+	
+	<SCENARIO map_id="402" name="UI_STAGE_402" reward_item="3000402" players="3" level_limit="71" good_time_sec="960"
+	Description="UI_STAGE_452">
+
+		<SECTOR map="R_Normal" xp="9180" bp="300">
+			<SPAWN postag="1" num="6" actor="shooter3" drop="C2"/>
+			<SPAWN postag="2" num="6" actor="shooter3" drop="C2"/>
+			<SPAWN postag="3" num="6" actor="shooter3" drop="C2"/>
+		</SECTOR>
+		<SECTOR map="R_Hardcore" xp="11475" bp="300">
+			<SPAWN postag="boss" num="1" actor="chaserhc" drop="" adjustplayernum="true"/>	
+		</SECTOR>
+		<SECTOR map="R_Normal" xp="13770" bp="300">
+			<SPAWN postag="1" num="6" actor="charger3" drop="C2"/>
+			<SPAWN postag="2" num="6" actor="charger3" drop="C2"/>
+			<SPAWN postag="3" num="6" actor="shooter3" drop="C2"/>
+		</SECTOR>
+		<SECTOR map="R_Hardcore" xp="16065" bp="300">
+			<SPAWN postag="boss" num="1" actor="towerhc" drop="" adjustplayernum="true"/>
+		</SECTOR>
+		<SECTOR map="R_Normal" xp="18360" bp="300">
+			<SPAWN postag="1" num="6" actor="charger3" drop="C2"/>
+			<SPAWN postag="2" num="6" actor="charger3" drop="C2"/>
+			<SPAWN postag="3" num="6" actor="charger3" drop="C2"/>
+		</SECTOR>
+		<SECTOR map="R_Hardcore" xp="68850" bp="750">
+			<SPAWN postag="boss" num="1" actor="assassinhc" drop="" adjustplayernum="true"/>
+		</SECTOR>
+
+	</SCENARIO>
+</XML>

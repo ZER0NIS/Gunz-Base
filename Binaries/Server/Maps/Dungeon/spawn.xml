@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<XML>
+<GAMETYPE id="solo">
+<SPAWN item="blueflag" timesec="5000">
+<POSITION>830.9 -5720.1 31.1</POSITION>
+</SPAWN>
+<SPAWN item="redflag" timesec="5000">
+<POSITION>486.0 7693.9 1249.6</POSITION>
+</SPAWN>
+</GAMETYPE><GAMETYPE id="team">
+<SPAWN item="blueflag" timesec="5000">
+<POSITION>830.9 -5720.1 31.1</POSITION>
+</SPAWN>
+<SPAWN item="redflag" timesec="5000">
+<POSITION>486.0 7693.9 1249.6</POSITION>
+</SPAWN>
+</GAMETYPE>
+	<GAMETYPE id="solo">
+		<SPAWN item="bullet02" timesec="45000">
+			<POSITION>-2924.6311035 0.0111899 -283.1813049</POSITION>
+		</SPAWN>
+		<SPAWN item="ap03" timesec="45000">
+			<POSITION>-3900.5422363 1170.2413330 532.7059326</POSITION>
+		</SPAWN>
+		<SPAWN item="hp03" timesec="45000">
+			<POSITION>-3900.5422363 0.0111847 9.8839264</POSITION>
+		</SPAWN>
+</GAMETYPE><GAMETYPE id="team">
+		<SPAWN item="hp03" timesec="45000">
+			<POSITION>-3900.5422363 0.0111824 9.8839264</POSITION>
+		</SPAWN>
+		<SPAWN item="ap03" timesec="45000">
+			<POSITION>-3900.5422363 1170.2413330 532.7059326</POSITION>
+		</SPAWN>
+		<SPAWN item="bullet02" timesec="45000">
+			<POSITION>-2924.6311035 0.0111899 -283.1813049</POSITION>
+		</SPAWN>
+</GAMETYPE>
+
+</XML> 

@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xml>
+<!-- Monitor Client Tool To Monitor Relay Server Request -->
+	<REQUEST id="CheckProcessToMRS">
+		<PARAM type="string" description="request task name">task_name</PARAM>
+		<PARAM type="string" description="destination task name">target</PARAM>
+	</REQUEST>
+	<REQUEST id="CheckDBConnectionToMRS">
+		<PARAM type="string" description="request task name">task_name</PARAM>
+		<PARAM type="string" description="destination task name">target</PARAM>
+	</REQUEST>
+	<REQUEST id="CheckProcessRunningTimeToMRS">
+		<PARAM type="string" description="request task name">task_name</PARAM>
+		<PARAM type="string" description="destination task name">target</PARAM>
+	</REQUEST>
+	<REQUEST id="CheckCpuPerformanceToMRS">
+		<PARAM type="string" description="request task name">task_name</PARAM>
+		<PARAM type="string" description="destination task name">target</PARAM>
+	</REQUEST>
+	<REQUEST id="CheckMemoryPerformanceToMRS">
+		<PARAM type="string" description="request task name">task_name</PARAM>
+		<PARAM type="string" description="destination task name">target</PARAM>
+	</REQUEST>
+	<REQUEST id="CheckDiskPerformanceToMRS">
+		<PARAM type="string" description="request task name">task_name</PARAM>
+		<PARAM type="string" description="destination task name">target</PARAM>
+	</REQUEST>
+	<REQUEST id="CheckUserConnectionToMRS">
+		<PARAM type="string" description="request task name">task_name</PARAM>
+		<PARAM type="string" description="destination task name">target</PARAM>
+	</REQUEST>
+<!-- Monitor Relay Server To Monitor Client Tool Response -->
+	<RESPONSE id="CheckProcessToMRS">
+		<PARAM type="string" description="request task name">task_name</PARAM>
+		<PARAM type="parse_string" description="result output stirng">output_string</PARAM>
+		<PARAM type="DWORD" description="last update time">last_update_time</PARAM>
+	</RESPONSE>
+	<RESPONSE id="CheckDBConnectionToMRS">
+		<PARAM type="string" description="request task name">task_name</PARAM>
+		<PARAM type="parse_string" description="result output stirng">output_string</PARAM>
+		<PARAM type="DWORD" description="last update time">last_update_time</PARAM>
+	</RESPONSE>
+	<RESPONSE id="CheckProcessRunningTimeToMRS">
+		<PARAM type="string" description="request task name">task_name</PARAM>
+		<PARAM type="parse_string" description="result output stirng">output_string</PARAM>
+		<PARAM type="DWORD" description="last update time">last_update_time</PARAM>
+	</RESPONSE>
+	<RESPONSE id="CheckCpuPerformanceToMRS">
+		<PARAM type="string" description="request task name">task_name</PARAM>
+		<PARAM type="parse_string" description="result output stirng">output_string</PARAM>
+		<PARAM type="DWORD" description="last update time">last_update_time</PARAM>
+	</RESPONSE>
+	<RESPONSE id="CheckMemoryPerformanceToMRS">
+		<PARAM type="string" description="request task name">task_name</PARAM>
+		<PARAM type="parse_string" description="result output stirng">output_string</PARAM>
+		<PARAM type="DWORD" description="last update time">last_update_time</PARAM>
+	</RESPONSE>
+	<RESPONSE id="CheckDiskPerformanceToMRS">
+		<PARAM type="string" description="request task name">task_name</PARAM>
+		<PARAM type="parse_string" description="result output stirng">output_string</PARAM>
+		<PARAM type="DWORD" description="last update time">last_update_time</PARAM>
+	</RESPONSE>
+	<RESPONSE id="CheckUserConnectionToMRS">
+		<PARAM type="string" description="request task name">task_name</PARAM>
+		<PARAM type="parse_string" description="result output stirng">output_string</PARAM>
+		<PARAM type="DWORD" description="last update time">last_update_time</PARAM>
+	</RESPONSE>
+<!-- Monitor Relay Server To Server Request -->
+	<REQUEST id="CheckProcessToSVR">
+		<PARAM type="string" description="request task name">task_name</PARAM>
+		<PARAM type="string" description="destination task name">target</PARAM>
+	</REQUEST>
+	<REQUEST id="CheckDBConnectionToSVR">
+		<PARAM type="string" description="request task name">task_name</PARAM>
+		<PARAM type="string" description="destination task name">target</PARAM>
+	</REQUEST>
+	<REQUEST id="CheckProcessRunningTimeToSVR">
+		<PARAM type="string" description="request task name">task_name</PARAM>
+		<PARAM type="string" description="destination task name">target</PARAM>
+	</REQUEST>
+	<REQUEST id="CheckCpuPerformanceToSVR">
+		<PARAM type="string" description="request task name">task_name</PARAM>
+		<PARAM type="string" description="destination task name">target</PARAM>
+	</REQUEST>
+	<REQUEST id="CheckMemoryPerformanceToSVR">
+		<PARAM type="string" description="request task name">task_name</PARAM>
+		<PARAM type="string" description="destination task name">target</PARAM>
+	</REQUEST>
+	<REQUEST id="CheckDiskPerformanceToSVR">
+		<PARAM type="string" description="request task name">task_name</PARAM>
+		<PARAM type="string" description="destination task name">target</PARAM>
+	</REQUEST>
+	<REQUEST id="CheckUserConnectionToSVR">
+		<PARAM type="string" description="request task name">task_name</PARAM>
+		<PARAM type="string" description="destination task name">target</PARAM>
+	</REQUEST>
+<!-- Server To Monitor Relay Server Response -->
+	<RESPONSE id="CheckProcessToSVR">
+		<PARAM type="string" description="request task name">task_name</PARAM>
+		<PARAM type="parse_string" description="result output stirng">output_string</PARAM>
+		<PARAM type="DWORD" description="last update time">last_update_time</PARAM>
+	</RESPONSE>
+	<RESPONSE id="CheckDBConnectionToSVR">
+		<PARAM type="string" description="request task name">task_name</PARAM>
+		<PARAM type="parse_string" description="result output stirng">output_string</PARAM>
+		<PARAM type="DWORD" description="last update time">last_update_time</PARAM>
+	</RESPONSE>
+	<RESPONSE id="CheckProcessRunningTimeToSVR">
+		<PARAM type="string" description="request task name">task_name</PARAM>
+		<PARAM type="parse_string" description="result output stirng">output_string</PARAM>
+		<PARAM type="DWORD" description="last update time">last_update_time</PARAM>
+	</RESPONSE>
+	<RESPONSE id="CheckCpuPerformanceToSVR">
+		<PARAM type="string" description="request task name">task_name</PARAM>
+		<PARAM type="parse_string" description="result output stirng">output_string</PARAM>
+		<PARAM type="DWORD" description="last update time">last_update_time</PARAM>
+	</RESPONSE>
+	<RESPONSE id="CheckMemoryPerformanceToSVR">
+		<PARAM type="string" description="request task name">task_name</PARAM>
+		<PARAM type="parse_string" description="result output stirng">output_string</PARAM>
+		<PARAM type="DWORD" description="last update time">last_update_time</PARAM>
+	</RESPONSE>
+	<RESPONSE id="CheckDiskPerformanceToSVR">
+		<PARAM type="string" description="request task name">task_name</PARAM>
+		<PARAM type="parse_string" description="result output stirng">output_string</PARAM>
+		<PARAM type="DWORD" description="last update time">last_update_time</PARAM>
+	</RESPONSE>
+	<RESPONSE id="CheckUserConnectionToSVR">
+		<PARAM type="string" description="request task name">task_name</PARAM>
+		<PARAM type="parse_string" description="result output stirng">output_string</PARAM>
+		<PARAM type="DWORD" description="last update time">last_update_time</PARAM>
+	</RESPONSE>
+</xml>

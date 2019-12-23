@@ -1,0 +1,254 @@
+﻿<?xml version="1.0" encoding="UTF-8" ?>
+<XML ID="zitem_specialized">
+	<!-- 한국
+      /////////////////////////////////////////////////////////////////////////////////////////////////////////////
+      /// 소모성 아이템 ///////////////////////////////////////////////////////////////////////////////////////////
+	  ///       Added By 홍기주 ///////////////////////////////////////////////////////////////////////////////////
+	  /// Type = "custom" (공통)
+	  /// slot = "custom" (공통)
+	  /// weapon = "potion" (현재는 potion 하나, 추가할 때마다 기존의 것과 겹치더라도 새로 추가해주는 방식을 취하자)
+	  /// stackable, spendable은 무조건 "true"(공통)
+      /////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	-->
+
+	<!-- 의료 캡슐 -->
+	<ITEM id="40001" name="STR:ZITEM_NAME_40001" mesh_name="potion" type="custom" slot="custom" weapon="potion" 
+		spendable="true" spendtype="normal" itempower="13" damagetype="heal" magazine="3" maxbullet="3" weight="5"
+		delay="500" totalpoint="0" res_sex="a" res_level="0" bt_price="2" iscashitem="false" color="#FFFFFFFF" 
+		snd_fire="fx_itemget" effect_id="100" magazine_image_id="0" desc="STR:ZITEM_DESC_40001"/>
+
+	<ITEM id="40002" name="STR:ZITEM_NAME_40002" mesh_name="potion" type="custom" slot="custom" weapon="potion" 
+		spendable="true" spendtype="normal" itempower="13" damagetype="heal" magazine="4" maxbullet="4" weight="5"
+		delay="500" totalpoint="0" res_sex="a" res_level="25" bt_price="7" iscashitem="false" color="#FFFFFFFF" 
+		snd_fire="fx_itemget" effect_id="100" magazine_image_id="0" desc="STR:ZITEM_DESC_40002"/>
+
+	<ITEM id="40003" name="STR:ZITEM_NAME_40003" mesh_name="potion" type="custom" slot="custom" weapon="potion" 
+		spendable="true" spendtype="normal" itempower="13" damagetype="heal" magazine="5" maxbullet="5" weight="5"
+		delay="500" totalpoint="0" res_sex="a" res_level="50" bt_price="20" iscashitem="false" color="#FFFFFFFF" 
+		snd_fire="fx_itemget" effect_id="100" magazine_image_id="0" desc="STR:ZITEM_DESC_40003"/>
+
+	<!-- 의료 앰플 -->
+	<ITEM id="40101" name="STR:ZITEM_NAME_40101" mesh_name="potion" type="custom" slot="custom" weapon="potion" 
+		spendable="true" spendtype="shortbuff" 
+		itempower="5" damagetime="5" damagetype="heal" magazine="2" maxbullet="2" weight="4"
+		delay="1000" totalpoint="0" res_sex="a" res_level="0" bt_price="2" iscashitem="false" color="#FFFFFFFF" 
+		snd_fire="fx_itemget" effect_id="102" magazine_image_id="0" desc="STR:ZITEM_DESC_40101"/>
+
+	<ITEM id="40102" name="STR:ZITEM_NAME_40102" mesh_name="potion" type="custom" slot="custom" weapon="potion" 
+		spendable="true" spendtype="shortbuff" 
+		itempower="5" damagetime="5" damagetype="heal" magazine="3" maxbullet="3" weight="4"
+		delay="1000" totalpoint="0" res_sex="a" res_level="23" bt_price="10" iscashitem="false" color="#FFFFFFFF" 
+		snd_fire="fx_itemget" effect_id="102" magazine_image_id="0" desc="STR:ZITEM_DESC_40102"/>
+
+	<ITEM id="40103" name="STR:ZITEM_NAME_40103" mesh_name="potion" type="custom" slot="custom" weapon="potion" 
+		spendable="true" spendtype="shortbuff" 
+		itempower="5" damagetime="5" damagetype="heal" magazine="4" maxbullet="4" weight="4"
+		delay="1000" totalpoint="0" res_sex="a" res_level="46" bt_price="25" iscashitem="false" color="#FFFFFFFF" 
+		snd_fire="fx_itemget" effect_id="102" magazine_image_id="0" desc="STR:ZITEM_DESC_40103"/>
+
+	<!-- 수리 캡슐 -->
+	<ITEM id="40201" name="STR:ZITEM_NAME_40201" mesh_name="potion" type="custom" slot="custom" weapon="potion" 
+		spendable="true" spendtype="normal" itempower="13" damagetype="repair" magazine="3" maxbullet="3" weight="5"
+		delay="500" totalpoint="0" res_sex="a" res_level="0" bt_price="2" iscashitem="false" color="#FFFFFFFF" 
+		snd_fire="fx_itemget" effect_id="101" magazine_image_id="0" desc="STR:ZITEM_DESC_40201"/>
+
+	<ITEM id="40202" name="STR:ZITEM_NAME_40202" mesh_name="potion" type="custom" slot="custom" weapon="potion" 
+		spendable="true" spendtype="normal" itempower="13" damagetype="repair" magazine="4" maxbullet="4" weight="5"
+		delay="500" totalpoint="0" res_sex="a" res_level="25" bt_price="7" iscashitem="false" color="#FFFFFFFF" 
+		snd_fire="fx_itemget" effect_id="101" magazine_image_id="0" desc="STR:ZITEM_DESC_40202"/>
+
+	<ITEM id="40203" name="STR:ZITEM_NAME_40203" mesh_name="potion" type="custom" slot="custom" weapon="potion" 
+		spendable="true" spendtype="normal" itempower="13" damagetype="repair" magazine="5" maxbullet="5" weight="5"
+		delay="500" totalpoint="0" res_sex="a" res_level="50" bt_price="20" iscashitem="false" color="#FFFFFFFF" 
+		snd_fire="fx_itemget" effect_id="101" magazine_image_id="0" desc="STR:ZITEM_DESC_40203"/>
+
+	<!-- 수리 앰플 -->
+	<ITEM id="40301" name="STR:ZITEM_NAME_40301" mesh_name="potion" type="custom" slot="custom" weapon="potion" 
+		spendable="true" spendtype="shortbuff" 
+		itempower="5" damagetime="5" damagetype="repair" magazine="2" maxbullet="2" weight="4"
+		delay="1000" totalpoint="0" res_sex="a" res_level="0" bt_price="2" iscashitem="false" color="#FFFFFFFF" 
+		snd_fire="fx_itemget" effect_id="103" magazine_image_id="0" desc="STR:ZITEM_DESC_40301"/>
+
+	<ITEM id="40302" name="STR:ZITEM_NAME_40302" mesh_name="potion" type="custom" slot="custom" weapon="potion" 
+		spendable="true" spendtype="shortbuff" 
+		itempower="5" damagetime="5" damagetype="repair" magazine="3" maxbullet="3" weight="4"
+		delay="1000" totalpoint="0" res_sex="a" res_level="23" bt_price="10" iscashitem="false" color="#FFFFFFFF" 
+		snd_fire="fx_itemget" effect_id="103" magazine_image_id="0" desc="STR:ZITEM_DESC_40302"/>
+
+	<ITEM id="40303" name="STR:ZITEM_NAME_40303" mesh_name="potion" type="custom" slot="custom" weapon="potion" 
+		spendable="true" spendtype="shortbuff" 
+		itempower="5" damagetime="5" damagetype="repair" magazine="4" maxbullet="4" weight="4"
+		delay="1000" totalpoint="0" res_sex="a" res_level="46" bt_price="25" iscashitem="false" color="#FFFFFFFF" 
+		snd_fire="fx_itemget" effect_id="103" magazine_image_id="0" desc="STR:ZITEM_DESC_40303"/>
+
+	<!-- 카녹스 EX -->
+	<ITEM id="40401" name="STR:ZITEM_NAME_40401" mesh_name="dynamite" type="custom" slot="custom" weapon="dynamite" 
+		spendable="true" spendtype="normal" damage="40" magazine="2" maxbullet="2" weight="6"
+		delay="1500" totalpoint="0" res_sex="a" res_level="0" bt_price="2" iscashitem="false" color="#FFFFFFFF" 
+		snd_fire="we_grenade_fire" bullet_image_id="0" magazine_image_id="0" desc="STR:ZITEM_DESC_40401"/>
+
+	<ITEM id="40402" name="STR:ZITEM_NAME_40402" mesh_name="dynamite" type="custom" slot="custom" weapon="dynamite" 
+		spendable="true" spendtype="normal" damage="40" magazine="2" maxbullet="2" weight="4"
+		delay="1500" totalpoint="0" res_sex="a" res_level="12" bt_price="5" iscashitem="false" color="#FFFFFFFF" 
+		snd_fire="we_grenade_fire" bullet_image_id="0" magazine_image_id="0" desc="STR:ZITEM_DESC_40402"/>
+
+	<ITEM id="40403" name="STR:ZITEM_NAME_40403" mesh_name="dynamite" type="custom" slot="custom" weapon="dynamite" 
+		spendable="true" spendtype="normal" damage="40" magazine="2" maxbullet="2" weight="2"
+		delay="1500" totalpoint="0" res_sex="a" res_level="24" bt_price="10" iscashitem="false" color="#FFFFFFFF" 
+		snd_fire="we_grenade_fire" bullet_image_id="0" magazine_image_id="0" desc="STR:ZITEM_DESC_40403"/>
+
+	<ITEM id="40404" name="STR:ZITEM_NAME_40404" mesh_name="dynamite" type="custom" slot="custom" weapon="dynamite" 
+		spendable="true" spendtype="normal" damage="40" magazine="3" maxbullet="3" weight="4"
+		delay="1500" totalpoint="0" res_sex="a" res_level="36" bt_price="15" iscashitem="false" color="#FFFFFFFF" 
+		snd_fire="we_grenade_fire" bullet_image_id="0" magazine_image_id="0" desc="STR:ZITEM_DESC_40404"/>
+
+	<ITEM id="40405" name="STR:ZITEM_NAME_40405" mesh_name="dynamite" type="custom" slot="custom" weapon="dynamite" 
+		spendable="true" spendtype="normal" damage="40" magazine="3" maxbullet="3" weight="2"
+		delay="1500" totalpoint="0" res_sex="a" res_level="48" bt_price="20" iscashitem="false" color="#FFFFFFFF" 
+		snd_fire="we_grenade_fire" bullet_image_id="0" magazine_image_id="0" desc="STR:ZITEM_DESC_40405"/>
+
+	<!-- 화염 트랩 -->
+	<ITEM id="40501" name="STR:ZITEM_NAME_40501" mesh_name="trap_firefield" type="custom" slot="custom" weapon="trap" 
+		spendable="true" spendtype="normal" itempower="18" damagetime="1200" damagetype="fire" magazine="2" maxbullet="2"
+		lifetime="2000" weight="6"
+		delay="2500" totalpoint="0" res_sex="a" res_level="0" bt_price="2" iscashitem="false" color="#FFFFFFFF" 
+		snd_fire="we_grenade_fire" desc="STR:ZITEM_DESC_40501" />
+
+	<ITEM id="40502" name="STR:ZITEM_NAME_40502" mesh_name="trap_firefield" type="custom" slot="custom" weapon="trap" 
+		spendable="true" spendtype="normal" itempower="18" damagetime="1200" damagetype="fire" magazine="2" maxbullet="2"
+		lifetime="2000" weight="4"
+		delay="2500" totalpoint="0" res_sex="a" res_level="13" bt_price="5" iscashitem="false" color="#FFFFFFFF" 
+		snd_fire="we_grenade_fire" desc="STR:ZITEM_DESC_40502" />
+
+	<ITEM id="40503" name="STR:ZITEM_NAME_40503" mesh_name="trap_firefield" type="custom" slot="custom" weapon="trap" 
+		spendable="true" spendtype="normal" itempower="18" damagetime="1200" damagetype="fire" magazine="2" maxbullet="2"
+		lifetime="2000" weight="2"
+		delay="2500" totalpoint="0" res_sex="a" res_level="26" bt_price="10" iscashitem="false" color="#FFFFFFFF" 
+		snd_fire="we_grenade_fire" desc="STR:ZITEM_DESC_40503" />
+
+	<ITEM id="40504" name="STR:ZITEM_NAME_40504" mesh_name="trap_firefield" type="custom" slot="custom" weapon="trap" 
+		spendable="true" spendtype="normal" itempower="18" damagetime="1200" damagetype="fire" magazine="3" maxbullet="3"
+		lifetime="2000" weight="4"
+		delay="2500" totalpoint="0" res_sex="a" res_level="39" bt_price="15" iscashitem="false" color="#FFFFFFFF" 
+		snd_fire="we_grenade_fire" desc="STR:ZITEM_DESC_40504" />
+
+	<ITEM id="40505" name="STR:ZITEM_NAME_40505" mesh_name="trap_firefield" type="custom" slot="custom" weapon="trap" 
+		spendable="true" spendtype="normal" itempower="18" damagetime="1200" damagetype="fire" magazine="3" maxbullet="3"
+		lifetime="2000" weight="2"
+		delay="2500" totalpoint="0" res_sex="a" res_level="52" bt_price="20" iscashitem="false" color="#FFFFFFFF" 
+		snd_fire="we_grenade_fire" desc="STR:ZITEM_DESC_40505" />
+
+	<!-- 얼음 트랩 -->
+	<ITEM id="40601" name="STR:ZITEM_NAME_40601" mesh_name="trap_frozenfield" type="custom" slot="custom" weapon="trap" 
+		spendable="true" spendtype="normal" itempower="80" damagetime="1200" damagetype="cold" magazine="2" maxbullet="2"
+		lifetime="2000" weight="6"
+		delay="2500" totalpoint="0" res_sex="a" res_level="0" bt_price="2" iscashitem="false" color="#FFFFFFFF" 
+		snd_fire="we_grenade_fire" desc="STR:ZITEM_DESC_40601" />
+
+	<ITEM id="40602" name="STR:ZITEM_NAME_40602" mesh_name="trap_frozenfield" type="custom" slot="custom" weapon="trap" 
+		spendable="true" spendtype="normal" itempower="80" damagetime="1200" damagetype="cold" magazine="2" maxbullet="2"
+		lifetime="2000" weight="4"
+		delay="2500" totalpoint="0" res_sex="a" res_level="14" bt_price="5" iscashitem="false" color="#FFFFFFFF" 
+		snd_fire="we_grenade_fire" desc="STR:ZITEM_DESC_40602" />
+
+	<ITEM id="40603" name="STR:ZITEM_NAME_40603" mesh_name="trap_frozenfield" type="custom" slot="custom" weapon="trap" 
+		spendable="true" spendtype="normal" itempower="80" damagetime="1200" damagetype="cold" magazine="2" maxbullet="2"
+		lifetime="2000" weight="2"
+		delay="2500" totalpoint="0" res_sex="a" res_level="28" bt_price="10" iscashitem="false" color="#FFFFFFFF" 
+		snd_fire="we_grenade_fire" desc="STR:ZITEM_DESC_40603" />
+
+	<ITEM id="40604" name="STR:ZITEM_NAME_40604" mesh_name="trap_frozenfield" type="custom" slot="custom" weapon="trap" 
+		spendable="true" spendtype="normal" itempower="80" damagetime="1200" damagetype="cold" magazine="3" maxbullet="3"
+		lifetime="2000" weight="4"
+		delay="2500" totalpoint="0" res_sex="a" res_level="42" bt_price="15" iscashitem="false" color="#FFFFFFFF" 
+		snd_fire="we_grenade_fire" desc="STR:ZITEM_DESC_40604" />
+
+	<ITEM id="40605" name="STR:ZITEM_NAME_40605" mesh_name="trap_frozenfield" type="custom" slot="custom" weapon="trap" 
+		spendable="true" spendtype="normal" itempower="80" damagetime="1200" damagetype="cold" magazine="3" maxbullet="3"
+		lifetime="2000" weight="2"
+		delay="2500" totalpoint="0" res_sex="a" res_level="56" bt_price="20" iscashitem="false" color="#FFFFFFFF" 
+		snd_fire="we_grenade_fire" desc="STR:ZITEM_DESC_40605" />
+		
+	<!-- 가속 캡슐 -->
+	<ITEM id="40701" name="STR:ZITEM_NAME_40701" mesh_name="potion" type="custom" slot="custom" weapon="potion" 
+		spendable="true" spendtype="shortbuff" 
+		itempower="114" damagetime="3000" damagetype="haste" magazine="2" maxbullet="2" weight="10"
+		delay="1000" totalpoint="0" res_sex="a" res_level="0" bt_price="2" iscashitem="false" color="#FFFFFFFF" 
+		snd_fire="fx_itemget" effect_id="130" magazine_image_id="0" desc="STR:ZITEM_DESC_40701"/>
+		
+	<ITEM id="40702" name="STR:ZITEM_NAME_40702" mesh_name="potion" type="custom" slot="custom" weapon="potion" 
+		spendable="true" spendtype="shortbuff" 
+		itempower="114" damagetime="3000" damagetype="haste" magazine="2" maxbullet="2" weight="6"
+		delay="1000" totalpoint="0" res_sex="a" res_level="22" bt_price="10" iscashitem="false" color="#FFFFFFFF" 
+		snd_fire="fx_itemget" effect_id="130" magazine_image_id="0" desc="STR:ZITEM_DESC_40702"/>
+		
+	<ITEM id="40703" name="STR:ZITEM_NAME_40703" mesh_name="potion" type="custom" slot="custom" weapon="potion" 
+		spendable="true" spendtype="shortbuff" 
+		itempower="114" damagetime="3000" damagetype="haste" magazine="2" maxbullet="2" weight="2"
+		delay="1000" totalpoint="0" res_sex="a" res_level="44" bt_price="25" iscashitem="false" color="#FFFFFFFF" 
+		snd_fire="fx_itemget" effect_id="130" magazine_image_id="0" desc="STR:ZITEM_DESC_40703"/>
+
+	<!-- 캐쉬 소모성 아이템 -->
+	<ITEM id="800001" name="STR:ZITEM_NAME_800001" mesh_name="potion" type="custom" slot="custom" weapon="potion" 
+		spendable="true" spendtype="normal" itempower="15" damagetype="heal" magazine="3" maxbullet="3" weight="6"
+		delay="500" totalpoint="0" res_sex="a" res_level="0" bt_price="500000" iscashitem="true" color="#FFFFFFFF" 
+		snd_fire="fx_itemget" effect_id="100" magazine_image_id="0" desc="STR:ZITEM_DESC_800001"/>
+		
+	<!-- 캐쉬 의료 캡슐 -->
+	<ITEM id="800101" name="STR:ZITEM_NAME_800101" mesh_name="potion" type="custom" slot="custom" weapon="potion" 
+		spendable="true" spendtype="normal" itempower="17" damagetype="heal" magazine="4" maxbullet="4" weight="4"
+		delay="500" totalpoint="0" res_sex="a" res_level="0" bt_price="500000" iscashitem="true" color="#FFFFFFFF" 
+		snd_fire="fx_itemget" effect_id="100" magazine_image_id="0" desc="STR:ZITEM_DESC_800101"/>
+		
+	<ITEM id="800102" name="STR:ZITEM_NAME_800102" mesh_name="potion" type="custom" slot="custom" weapon="potion" 
+		spendable="true" spendtype="normal" itempower="17" damagetype="heal" magazine="5" maxbullet="5" weight="3"
+		delay="500" totalpoint="0" res_sex="a" res_level="20" bt_price="500000" iscashitem="true" color="#FFFFFFFF" 
+		snd_fire="fx_itemget" effect_id="100" magazine_image_id="0" desc="STR:ZITEM_DESC_800102"/>
+		
+	<ITEM id="800103" name="STR:ZITEM_NAME_800103" mesh_name="potion" type="custom" slot="custom" weapon="potion" 
+		spendable="true" spendtype="normal" itempower="18" damagetype="heal" magazine="5" maxbullet="5" weight="4"
+		delay="500" totalpoint="0" res_sex="a" res_level="0" bt_price="500000" iscashitem="true" color="#FFFFFFFF" 
+		snd_fire="fx_itemget" effect_id="100" magazine_image_id="0" desc="STR:ZITEM_DESC_800103"/>		
+		
+	<!-- 캐쉬 의료 앰플 -->
+	<ITEM id="800201" name="STR:ZITEM_NAME_800201" mesh_name="potion" type="custom" slot="custom" weapon="potion" 
+		spendable="true" spendtype="shortbuff" 
+		itempower="6" damagetime="5" damagetype="heal" magazine="3" maxbullet="3" weight="3"
+		delay="1000" totalpoint="0" res_sex="a" res_level="0" bt_price="500000" iscashitem="true" color="#FFFFFFFF" 
+		snd_fire="fx_itemget" effect_id="102" magazine_image_id="0" desc="STR:ZITEM_DESC_800201"/>
+	
+	<ITEM id="800202" name="STR:ZITEM_NAME_800202" mesh_name="potion" type="custom" slot="custom" weapon="potion" 
+		spendable="true" spendtype="shortbuff" 
+		itempower="6" damagetime="5" damagetype="heal" magazine="4" maxbullet="4" weight="2"
+		delay="1000" totalpoint="0" res_sex="a" res_level="20" bt_price="500000" iscashitem="true" color="#FFFFFFFF" 
+		snd_fire="fx_itemget" effect_id="102" magazine_image_id="0" desc="STR:ZITEM_DESC_800202"/>
+		
+	<!-- 캐쉬 수리 캡슐 -->
+	<ITEM id="800301" name="STR:ZITEM_NAME_800301" mesh_name="potion" type="custom" slot="custom" weapon="potion" 
+		spendable="true" spendtype="normal" itempower="17" damagetype="repair" magazine="4" maxbullet="4" weight="4"
+		delay="500" totalpoint="0" res_sex="a" res_level="0" bt_price="500000" iscashitem="true" color="#FFFFFFFF" 
+		snd_fire="fx_itemget" effect_id="101" magazine_image_id="0" desc="STR:ZITEM_DESC_800301"/>
+	
+	<ITEM id="800302" name="STR:ZITEM_NAME_800302" mesh_name="potion" type="custom" slot="custom" weapon="potion" 
+		spendable="true" spendtype="normal" itempower="17" damagetype="repair" magazine="5" maxbullet="5" weight="3"
+		delay="500" totalpoint="0" res_sex="a" res_level="20" bt_price="500000" iscashitem="true" color="#FFFFFFFF" 
+		snd_fire="fx_itemget" effect_id="101" magazine_image_id="0" desc="STR:ZITEM_DESC_800302"/>
+		
+	<ITEM id="800303" name="STR:ZITEM_NAME_800303" mesh_name="potion" type="custom" slot="custom" weapon="potion" 
+		spendable="true" spendtype="normal" itempower="18" damagetype="repair" magazine="5" maxbullet="5" weight="4"
+		delay="500" totalpoint="0" res_sex="a" res_level="0" bt_price="500000" iscashitem="true" color="#FFFFFFFF" 
+		snd_fire="fx_itemget" effect_id="101" magazine_image_id="0" desc="STR:ZITEM_DESC_800303"/>
+		
+	<!-- 캐쉬 수리 앰플 -->
+	<ITEM id="800401" name="STR:ZITEM_NAME_800401" mesh_name="potion" type="custom" slot="custom" weapon="potion" 
+		spendable="true" spendtype="shortbuff" 
+		itempower="6" damagetime="5" damagetype="repair" magazine="3" maxbullet="3" weight="3"
+		delay="1000" totalpoint="0" res_sex="a" res_level="0" bt_price="500000" iscashitem="true" color="#FFFFFFFF" 
+		snd_fire="fx_itemget" effect_id="103" magazine_image_id="0" desc="STR:ZITEM_DESC_800401"/>
+	
+	<ITEM id="800402" name="STR:ZITEM_NAME_800402" mesh_name="potion" type="custom" slot="custom" weapon="potion" 
+		spendable="true" spendtype="shortbuff" 
+		itempower="6" damagetime="5" damagetype="repair" magazine="4" maxbullet="4" weight="2"
+		delay="1000" totalpoint="0" res_sex="a" res_level="20" bt_price="500000" iscashitem="true" color="#FFFFFFFF" 
+		snd_fire="fx_itemget" effect_id="103" magazine_image_id="0" desc="STR:ZITEM_DESC_800402"/>
+</XML>

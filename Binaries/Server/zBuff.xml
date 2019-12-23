@@ -1,0 +1,16 @@
+﻿<?xml version="1.0" encoding="UTF-8" ?>
+<XML xmlns="http://tempuri.org/zitem.xsd" id="zitem">
+
+	<!--
+		버프 아이템에 관한 버프 디스크립션입니다. 
+														- Created by 홍기주(2010-07-20)	-->
+
+	<BUFF id="40100" IconName="" PeriodType="short" Period="8" EffectType="dote" hp="100"/>
+	<BUFF id="40101" IconName="" PeriodType="short" Period="8" EffectType="dote" hp="3"/>
+	<BUFF id="40102" IconName="" PeriodType="short" Period="8" EffectType="dote" hp="3"/>
+	<BUFF id="40103" IconName="" PeriodType="short" Period="8" EffectType="dote" hp="3"/>
+
+	<BUFF id="40301" IconName="" PeriodType="short" Period="8" EffectType="dote" ap="3"/>
+	<BUFF id="40302" IconName="" PeriodType="short" Period="8" EffectType="dote" ap="3"/>
+	<BUFF id="40303" IconName="" PeriodType="short" Period="8" EffectType="dote" ap="3"/>
+</XML>

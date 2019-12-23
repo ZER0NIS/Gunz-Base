@@ -1,0 +1,22 @@
+﻿<?xml version="1.0" ?>
+<XML>
+	<XMLHEADER>version="1.0"</XMLHEADER>
+	<SKIN>Default</SKIN>
+	<DEFFONT>Consolas</DEFFONT>
+	<IME>false</IME>
+	<BAREPORT>
+		<ADDR>www.American-Gunz.com</ADDR>
+		<DIR>incoming/gunz_US</DIR>
+	</BAREPORT>
+	<EMBLEM_URL>http://westgames.gq/clanimages</EMBLEM_URL>
+	<TEMBLEM_URL>http://westgames.gq/clanimages</TEMBLEM_URL>
+	<CASHSHOP_URL>https://american-gunz.com</CASHSHOP_URL>
+	<HOMEPAGE>
+	    <URL>https://american-gunz.com</URL>
+	    <TITLE>American GunZ : the Dual</TITLE>
+	</HOMEPAGE>
+
+	<LOCATORLIST>
+		<LOCATOR id="1" IP="patch.westgames.gq" />
+	</LOCATORLIST>
+</XML>

@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<XML id="formula">
+
+<FORMULA_TABLE id="NeedExpLM">
+	<LM lower="1" upper="20">1</LM>
+	<LM lower="21" upper="30">1.1</LM>
+	<LM lower="31" upper="40">1.2</LM>
+	<LM lower="41" upper="45">1.4</LM>
+	<LM lower="46" upper="50">1.6</LM>
+	<LM lower="51" upper="55">1.8</LM>
+	<LM lower="56" upper="60">2</LM>
+	<LM lower="61" upper="65">4</LM>
+	<LM lower="66" upper="70">8</LM>
+	<LM lower="71" upper="75">12</LM>
+	<LM lower="76" upper="80">16</LM>
+	<LM lower="81" upper="85">20</LM>
+	<LM lower="86" upper="90">20</LM>
+	<LM lower="91" upper="95">40</LM>
+	<LM lower="96" upper="99">40</LM>
+</FORMULA_TABLE>
+
+<FORMULA_TABLE id="GettingExpLM">
+	<LM lower="1" upper="20">10</LM>
+	<LM lower="21" upper="30">10</LM>
+	<LM lower="31" upper="40">10</LM>
+	<LM lower="41" upper="45">10.1</LM>
+	<LM lower="46" upper="50">10.1</LM>
+	<LM lower="51" upper="55">8.1</LM>
+	<LM lower="56" upper="60">8.1</LM>
+	<LM lower="61" upper="65">7.1</LM>
+	<LM lower="66" upper="70">7.1</LM>
+	<LM lower="71" upper="75">6.1</LM>
+	<LM lower="76" upper="80">6.1</LM>
+	<LM lower="81" upper="85">6.2</LM>
+	<LM lower="86" upper="90">6.2</LM>
+	<LM lower="91" upper="95">6.2</LM>
+	<LM lower="96" upper="99">6.2</LM>
+</FORMULA_TABLE>
+
+<FORMULA_TABLE id="GettingBountyLM">
+	<LM lower="1" upper="20">20</LM>
+	<LM lower="21" upper="30">20.1</LM>
+	<LM lower="31" upper="40">20.1</LM>
+	<LM lower="41" upper="45">20.2</LM>
+	<LM lower="46" upper="50">20.2</LM>
+	<LM lower="51" upper="55">20.2</LM>
+	<LM lower="56" upper="60">20.2</LM>
+	<LM lower="61" upper="65">20.2</LM>
+	<LM lower="66" upper="70">20.2</LM>
+	<LM lower="71" upper="75">20.2</LM>
+	<LM lower="76" upper="80">20.2</LM>
+	<LM lower="81" upper="85">20.2</LM>
+	<LM lower="86" upper="90">20.2</LM>
+	<LM lower="91" upper="95">20.2</LM>
+	<LM lower="96" upper="99">20.2</LM>
+</FORMULA_TABLE>
+
+</XML>

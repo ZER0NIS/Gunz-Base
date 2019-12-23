@@ -1,0 +1,215 @@
+﻿<?xml version="1.0" encoding="UTF-8" ?>
+<XML id="scenario">
+
+<!--
+////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+ 정규 시나리오 : Mansion
+         
+////////////////////////////////////////////////////////////////////////////////////////////////////////
+-->
+<STANDARD_SCENARIO
+	QL="0"
+	title="Quest Mansion QL0"
+	DC="1"
+	mapset="Mansion"
+	XP="200"
+	BP="25"
+	repeat="20"
+	max_spawn="30"
+	max_spawn_sametime="12">
+
+
+	<!--  Hall1 맵 부터 시작 -->
+	<MAP dice="1" key_sector="102">
+		<NPCSET_ARRAY>V11/V12/V13/V14/V15</NPCSET_ARRAY>
+		<KEYNPC_ARRAY>141/142/156/159/159</KEYNPC_ARRAY>
+		<SECTOR_XP_ARRAY>160/320/480/640/800</SECTOR_XP_ARRAY>
+		<SECTOR_BP_ARRAY>16/32/48/64/80</SECTOR_BP_ARRAY>
+	</MAP>
+	<MAP dice="2" key_sector="102">
+		<NPCSET_ARRAY>V11/V12/V13/V14/V15</NPCSET_ARRAY>
+		<KEYNPC_ARRAY>141/142/156/159/159</KEYNPC_ARRAY>
+		<SECTOR_XP_ARRAY>160/320/480/640/800</SECTOR_XP_ARRAY>
+		<SECTOR_BP_ARRAY>16/32/48/64/80</SECTOR_BP_ARRAY>
+	</MAP>
+	<MAP dice="3" key_sector="102">
+		<NPCSET_ARRAY>V11/V12/V13/V14/V15</NPCSET_ARRAY>
+		<KEYNPC_ARRAY>141/142/156/159/159</KEYNPC_ARRAY>
+		<SECTOR_XP_ARRAY>160/320/480/640/800</SECTOR_XP_ARRAY>
+		<SECTOR_BP_ARRAY>16/32/48/64/80</SECTOR_BP_ARRAY>
+	</MAP>
+	<MAP dice="4" key_sector="102">
+		<NPCSET_ARRAY>V11/V12/V13/V14/V15</NPCSET_ARRAY>
+		<KEYNPC_ARRAY>141/142/156/159/159</KEYNPC_ARRAY>
+		<SECTOR_XP_ARRAY>160/320/480/640/800</SECTOR_XP_ARRAY>
+		<SECTOR_BP_ARRAY>16/32/48/64/80</SECTOR_BP_ARRAY>
+	</MAP>
+	<MAP dice="5" key_sector="102">
+		<NPCSET_ARRAY>V11/V12/V13/V14/V15</NPCSET_ARRAY>
+		<KEYNPC_ARRAY>141/142/156/159/159</KEYNPC_ARRAY>
+		<SECTOR_XP_ARRAY>160/320/480/640/800</SECTOR_XP_ARRAY>
+		<SECTOR_BP_ARRAY>16/32/48/64/80</SECTOR_BP_ARRAY>
+	</MAP>
+	<MAP dice="6" key_sector="102">
+		<NPCSET_ARRAY>V11/V12/V13/V14/V15</NPCSET_ARRAY>
+		<KEYNPC_ARRAY>141/142/156/159/159</KEYNPC_ARRAY>
+		<SECTOR_XP_ARRAY>160/320/480/640/800</SECTOR_XP_ARRAY>
+		<SECTOR_BP_ARRAY>16/32/48/64/80</SECTOR_BP_ARRAY>
+	</MAP>
+</STANDARD_SCENARIO>
+
+<!--
+////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+ 정규 시나리오 : Prison
+         
+////////////////////////////////////////////////////////////////////////////////////////////////////////
+-->
+<STANDARD_SCENARIO
+	QL="0"
+	title="Quest Prison QL0"
+	DC="1"
+	mapset="Prison"
+	XP="200"
+	BP="25"
+	repeat="20"
+	max_spawn="30"
+	max_spawn_sametime="12">
+
+	<!-- Prison 맵 부터 시작 -->
+	<MAP dice="1" key_sector="205">
+		<NPCSET_ARRAY>V21/V22/V23/V24/V25</NPCSET_ARRAY>
+		<KEYNPC_ARRAY>143/144/165/167/166</KEYNPC_ARRAY>
+		<SECTOR_XP_ARRAY>160/320/480/640/800</SECTOR_XP_ARRAY>
+		<SECTOR_BP_ARRAY>16/32/48/64/80</SECTOR_BP_ARRAY>
+	</MAP>
+	<MAP dice="2" key_sector="205">
+		<NPCSET_ARRAY>V21/V22/V23/V24/V25</NPCSET_ARRAY>
+		<KEYNPC_ARRAY>143/144/165/167/166</KEYNPC_ARRAY>
+		<SECTOR_XP_ARRAY>160/320/480/640/800</SECTOR_XP_ARRAY>
+		<SECTOR_BP_ARRAY>16/32/48/64/80</SECTOR_BP_ARRAY>
+	</MAP>
+	<MAP dice="3" key_sector="205">
+		<NPCSET_ARRAY>V21/V22/V23/V24/V25</NPCSET_ARRAY>
+		<KEYNPC_ARRAY>143/144/165/167/166</KEYNPC_ARRAY>
+		<SECTOR_XP_ARRAY>160/320/480/640/800</SECTOR_XP_ARRAY>
+		<SECTOR_BP_ARRAY>16/32/48/64/80</SECTOR_BP_ARRAY>
+	</MAP>
+	<MAP dice="4" key_sector="205">
+		<NPCSET_ARRAY>V21/V22/V23/V24/V25</NPCSET_ARRAY>
+		<KEYNPC_ARRAY>143/144/165/167/166</KEYNPC_ARRAY>
+		<SECTOR_XP_ARRAY>160/320/480/640/800</SECTOR_XP_ARRAY>
+		<SECTOR_BP_ARRAY>16/32/48/64/80</SECTOR_BP_ARRAY>
+	</MAP>
+	<MAP dice="5" key_sector="205">
+		<NPCSET_ARRAY>V21/V22/V23/V24/V25</NPCSET_ARRAY>
+		<KEYNPC_ARRAY>143/144/165/167/166</KEYNPC_ARRAY>
+		<SECTOR_XP_ARRAY>160/320/480/640/800</SECTOR_XP_ARRAY>
+		<SECTOR_BP_ARRAY>16/32/48/64/80</SECTOR_BP_ARRAY>
+	</MAP>
+	<MAP dice="6" key_sector="205">
+		<NPCSET_ARRAY>V21/V22/V23/V24/V25</NPCSET_ARRAY>
+		<KEYNPC_ARRAY>143/144/165/167/166</KEYNPC_ARRAY>
+		<SECTOR_XP_ARRAY>160/320/480/640/800</SECTOR_XP_ARRAY>
+		<SECTOR_BP_ARRAY>16/32/48/64/80</SECTOR_BP_ARRAY>
+	</MAP>
+</STANDARD_SCENARIO>
+
+
+<!--
+////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+ 정규 시나리오 : Dungeon
+         
+////////////////////////////////////////////////////////////////////////////////////////////////////////
+-->
+<STANDARD_SCENARIO
+	QL="0"
+	title="Quest Dungeon QL0"
+	DC="1"
+	mapset="Dungeon"
+	XP="200"
+	BP="25"
+	repeat="20"
+	max_spawn="30"
+	max_spawn_sametime="12">
+
+	<!-- nest1 맵 부터 시작 -->
+	<MAP dice="1" key_sector="309">
+		<NPCSET_ARRAY>V31/V32/V33/V34/V35</NPCSET_ARRAY>
+		<KEYNPC_ARRAY>145/177/178/179/180</KEYNPC_ARRAY>
+		<SECTOR_XP_ARRAY>160/320/480/640/800</SECTOR_XP_ARRAY>
+		<SECTOR_BP_ARRAY>16/32/48/64/80</SECTOR_BP_ARRAY>
+	</MAP>
+	<MAP dice="2" key_sector="309">
+		<NPCSET_ARRAY>V31/V32/V33/V34/V35</NPCSET_ARRAY>
+		<KEYNPC_ARRAY>145/177/178/179/180</KEYNPC_ARRAY>
+		<SECTOR_XP_ARRAY>160/320/480/640/800</SECTOR_XP_ARRAY>
+		<SECTOR_BP_ARRAY>16/32/48/64/80</SECTOR_BP_ARRAY>
+	</MAP>
+	<MAP dice="3" key_sector="309">
+		<NPCSET_ARRAY>V31/V32/V33/V34/V35</NPCSET_ARRAY>
+		<KEYNPC_ARRAY>145/177/178/179/180</KEYNPC_ARRAY>
+		<SECTOR_XP_ARRAY>160/320/480/640/800</SECTOR_XP_ARRAY>
+		<SECTOR_BP_ARRAY>16/32/48/64/80</SECTOR_BP_ARRAY>
+	</MAP>
+	<MAP dice="4" key_sector="309">
+		<NPCSET_ARRAY>V31/V32/V33/V34/V35</NPCSET_ARRAY>
+		<KEYNPC_ARRAY>145/177/178/179/180</KEYNPC_ARRAY>
+		<SECTOR_XP_ARRAY>160/320/480/640/800</SECTOR_XP_ARRAY>
+		<SECTOR_BP_ARRAY>16/32/48/64/80</SECTOR_BP_ARRAY>
+	</MAP>
+	<MAP dice="5" key_sector="309">
+		<NPCSET_ARRAY>V31/V32/V33/V34/V35</NPCSET_ARRAY>
+		<KEYNPC_ARRAY>145/177/178/179/180</KEYNPC_ARRAY>
+		<SECTOR_XP_ARRAY>160/320/480/640/800</SECTOR_XP_ARRAY>
+		<SECTOR_BP_ARRAY>16/32/48/64/80</SECTOR_BP_ARRAY>
+	</MAP>
+	<MAP dice="6" key_sector="309">
+		<NPCSET_ARRAY>V31/V32/V33/V34/V35</NPCSET_ARRAY>
+		<KEYNPC_ARRAY>145/177/178/179/180</KEYNPC_ARRAY>
+		<SECTOR_XP_ARRAY>160/320/480/640/800</SECTOR_XP_ARRAY>
+		<SECTOR_BP_ARRAY>16/32/48/64/80</SECTOR_BP_ARRAY>
+	</MAP>
+</STANDARD_SCENARIO>
+
+
+<!--
+////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+ 특별 시나리오 : Dungeon
+ 
+  - 디버그 퀘스트
+         
+////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+<SPECIAL_SCENARIO id="100"
+	title="디버그 퀘스트"
+	QL="1"
+	DC="1"
+	mapset="Mansion"
+	XP="12000"
+	BP="1000">
+	
+	<MAP dice="1" key_sector="102">
+		<NPCSET_ARRAY>D10</NPCSET_ARRAY>
+	</MAP>
+	<MAP dice="2" key_sector="102">
+		<NPCSET_ARRAY>D10</NPCSET_ARRAY>
+	</MAP>
+	<MAP dice="3" key_sector="102">
+		<NPCSET_ARRAY>D10</NPCSET_ARRAY>
+	</MAP>
+	<MAP dice="4" key_sector="102">
+		<NPCSET_ARRAY>D10</NPCSET_ARRAY>
+	</MAP>
+	<MAP dice="5" key_sector="102">
+		<NPCSET_ARRAY>D10</NPCSET_ARRAY>
+	</MAP>
+	<MAP dice="6" key_sector="102">
+		<NPCSET_ARRAY>D10</NPCSET_ARRAY>
+	</MAP>
+</SPECIAL_SCENARIO>
+-->
+</XML>
