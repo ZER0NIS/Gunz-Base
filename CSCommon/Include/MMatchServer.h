@@ -467,8 +467,10 @@ protected:	// Å¬·£
 	void OnClanRequestCloseClan(const MUID& uidClanMaster, const char* szClanName);
 	void ResponseCloseClan(const MUID& uidClanMaster, const char* szClanName);
 	void OnClanRequestJoinClan(const MUID& uidClanAdmin, const char* szClanName, const char* szJoiner);
+	
 	void ResponseJoinClan(const MUID& uidClanAdmin, const char* szClanName, const char* szJoiner);
 	void OnClanAnswerJoinAgreement(const MUID& uidClanAdmin, const char* szJoiner, const bool bAnswer);
+	
 	void OnClanRequestAgreedJoinClan(const MUID& uidClanAdmin, const char* szClanName, const char* szJoiner);
 	void ResponseAgreedJoinClan(const MUID& uidClanAdmin, const char* szClanName, const char* szJoiner);
 

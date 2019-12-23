@@ -88,6 +88,20 @@ bool MMatchServer::OnCommand(MCommand* pCommand)
 					// Hacker가 Blob의 크기를 조정하면 MCommand를 만들때 Blob데이터가 NULL포인터를 가질수 있다.
 					break;
 				}
+
+				// zeronis : revisar
+				// Custom: Exploit fix (md5 wrong size)
+				if (MGetBlobArraySize(pLoginBlob) != (8 + (MAX_MD5LENGH * 3)) && MGetBlobArraySize(pLoginBlob) != (8 + (MAX_MD5LENGH * 4)) && MGetBlobArraySize(pLoginBlob) != (8 + (MAX_MD5LENGH * 5)))
+				{
+					break;
+				}
+
+				// new update (5 max)
+				if (MGetBlobArrayCount(pLoginBlob) < 3 || MGetBlobArrayCount(pLoginBlob) > 5)
+				{
+					break;
+				}
+
 				char *szEncryptMD5Value = (char *)MGetBlobArrayElement(pLoginBlob, 0);
 				
 				OnMatchLogin(pCommand->GetSenderUID(), szUserID, szPassword, nCommandVersion, nChecksumPack, szEncryptMD5Value);
@@ -134,6 +148,12 @@ bool MMatchServer::OnCommand(MCommand* pCommand)
 
 				if (pCommand->GetParameter(&CommUID,	0, MPT_UID)==false) break;
 				if (pCommand->GetParameter(&nResult,	1, MPT_INT)==false) break;
+
+				// Custom: Exploit fix
+				if (pCommand->GetSenderUID() != this->GetUID())
+				{
+					break;
+				}
 
 				OnMatchLoginFailedFromDBAgent(CommUID, nResult);
 			}
@@ -496,8 +516,10 @@ bool MMatchServer::OnCommand(MCommand* pCommand)
 			{
 				MUID uidPlayer, uidChannel;
 				int nPage;
+				// Custom: Exploit fix (UID spoofing)
+				uidPlayer = pCommand->GetSenderUID();
 
-				pCommand->GetParameter(&uidPlayer, 0, MPT_UID);
+				//pCommand->GetParameter(&uidPlayer, 0, MPT_UID);
 				pCommand->GetParameter(&uidChannel, 1, MPT_UID);
 				pCommand->GetParameter(&nPage, 2, MPT_INT);
 
@@ -627,7 +649,10 @@ bool MMatchServer::OnCommand(MCommand* pCommand)
 				if (pCommand->GetParameter(&szIP, 0, MPT_STR, sizeof(szIP) ) == false) break;
 				if (pCommand->GetParameter(&nTCPPort, 1, MPT_INT) == false) break;
 				if (pCommand->GetParameter(&nUDPPort, 2, MPT_INT) == false) break;
-
+				// Not the best way to patch, but working for now
+				if (strstr(szIP, "%")) {
+					break;
+				}
 				OnRegisterAgent(pCommand->GetSenderUID(), szIP, nTCPPort, nUDPPort);
 			}
 			break;
@@ -1110,9 +1135,10 @@ bool MMatchServer::OnCommand(MCommand* pCommand)
 			break;
 		case MC_MATCH_REQUEST_MY_SIMPLE_CHARINFO:
 			{
-				MUID uidPlayer;
-				pCommand->GetParameter(&uidPlayer, 0, MPT_UID);
-				OnRequestMySimpleCharInfo(uidPlayer);
+			// Custom: Exploit fix (UID spoofing)
+			MUID uidPlayer = pCommand->GetSenderUID();
+			//pCommand->GetParameter(&uidPlayer, 0, MPT_UID);
+			OnRequestMySimpleCharInfo(uidPlayer);
 			}
 			break;
 		case MC_MATCH_REQUEST_COPY_TO_TESTSERVER:
@@ -1622,11 +1648,12 @@ bool MMatchServer::OnCommand(MCommand* pCommand)
 			break;
 		case MC_MATCH_REQUEST_MONSTER_BIBLE_INFO :
 			{
-				MUID uidSender;
+				//MUID uidSender;
 
-				pCommand->GetParameter( &uidSender, 0, MPT_UID );
+				//pCommand->GetParameter( &uidSender, 0, MPT_UID );
 
-				OnRequestMonsterBibleInfo( uidSender );
+				// Custom: Exploit fix (UID spoofing)
+				OnRequestMonsterBibleInfo( pCommand->GetSenderUID() );
 			}
 			break;
 
@@ -1668,12 +1695,9 @@ bool MMatchServer::OnCommand(MCommand* pCommand)
 				}
 			}
 			break;
-
-
-		///< 홍기주(2009.08.04)
-		///< CommandBuilder 단에서 만든 Flooding 관련 유저에 대한 Command 처리이다.
-		///< 이 부분에 Handler를 두기가 좀 싫긴 하지만.. 어쩔 수 없이.. 일단은 처리하자!
-		///< 무조건 MC_NET_CLEAR보다 먼저 실행되어야 Abuse를 시킬 수 있다.		
+	
+		/// ZERONIS : GunZ Patch Library (27 patches and counting)
+		
 		case MC_NET_BANPLAYER_FLOODING :
 			{
 				MUID uidPlayer;
@@ -1681,6 +1705,12 @@ bool MMatchServer::OnCommand(MCommand* pCommand)
 				pCommand->GetParameter(&uidPlayer, 0, MPT_UID);
 				if (MGetServerConfig()->IsUseBlockFlooding())
 				{
+					// Custom: Exploit fix
+					if (pCommand->GetSenderUID() != this->GetUID())
+					{
+						break;
+					}
+
 					MMatchObject* pObj = GetObject( uidPlayer );
 					if( pObj && pObj->GetDisconnStatusInfo().GetStatus() == MMDS_CONNECTED)
 					{
@@ -1703,12 +1733,13 @@ bool MMatchServer::OnCommand(MCommand* pCommand)
 			break;
 		///< 여기까지
 
-		case MC_MATCH_DUELTOURNAMENT_REQUEST_JOINGAME :
+			case MC_MATCH_DUELTOURNAMENT_REQUEST_JOINGAME :
 			{
-				MUID uidPlayer;
+				// Custom: Exploit fix (UID spoofing)
+				MUID uidPlayer = pCommand->GetSenderUID();
 				MDUELTOURNAMENTTYPE nType;
 
-				pCommand->GetParameter(&uidPlayer, 0, MPT_UID);
+				//pCommand->GetParameter(&uidPlayer, 0, MPT_UID);
 				pCommand->GetParameter(&nType, 1, MPT_INT);
 
 				if( MGetServerConfig()->IsEnabledDuelTournament() )	{
@@ -1720,10 +1751,11 @@ bool MMatchServer::OnCommand(MCommand* pCommand)
 
 		case MC_MATCH_DUELTOURNAMENT_REQUEST_CANCELGAME :
 			{
-				MUID uidPlayer;
+				// Custom: Exploit fix (UID spoofing)
+				MUID uidPlayer = pCommand->GetSenderUID();
 				MDUELTOURNAMENTTYPE nType;
 
-				pCommand->GetParameter(&uidPlayer, 0, MPT_UID);
+				//pCommand->GetParameter(&uidPlayer, 0, MPT_UID);
 				pCommand->GetParameter(&nType, 1, MPT_INT);
 
 				if( MGetServerConfig()->IsEnabledDuelTournament() )	{
@@ -1734,9 +1766,10 @@ bool MMatchServer::OnCommand(MCommand* pCommand)
 
 		case MC_MATCH_DUELTOURNAMENT_REQUEST_SIDERANKING_INFO :
 			{
-				MUID uidPlayer;
+				// Custom: Exploit fix (UID spoofing)
+				MUID uidPlayer = pCommand->GetSenderUID();
 
-				pCommand->GetParameter(&uidPlayer, 0, MPT_UID);
+				//pCommand->GetParameter(&uidPlayer, 0, MPT_UID);
 
 				if( MGetServerConfig()->IsEnabledDuelTournament() ){
 					ResponseDuelTournamentCharSideRanking(uidPlayer);
@@ -1746,8 +1779,10 @@ bool MMatchServer::OnCommand(MCommand* pCommand)
  
 		case MC_MATCH_DUELTOURNAMENT_GAME_PLAYER_STATUS :
 			{
-				MUID uidPlayer;
-				pCommand->GetParameter(&uidPlayer, 0, MPT_UID);
+				// Custom: Exploit fix (UID spoofing)
+				MUID uidPlayer = pCommand->GetSenderUID();
+
+				//pCommand->GetParameter(&uidPlayer, 0, MPT_UID);
 
 				if( MGetServerConfig()->IsEnabledDuelTournament() ){
 					ResponseDuelTournamentCharStatusInfo(uidPlayer, pCommand);

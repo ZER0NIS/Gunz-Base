@@ -111,8 +111,9 @@ bool MClient::OnCommand(MCommand* pCommand)
 			OutputLocalInfo();
 			break;
 		case MC_LOCAL_ECHO:
-			if(pCommand->GetParameter(szMessage, 0, MPT_STR, sizeof(szMessage))==false) break;
-			OutputMessage(szMessage, MZMOM_LOCALREPLY);
+			// Custom: Exploit fix (Fake echo from different player)
+			//if(pCommand->GetParameter(szMessage, 0, MPT_STR, sizeof(szMessage))==false) break;
+			//OutputMessage(szMessage, MZMOM_LOCALREPLY);
 			break;
 		case MC_HELP:
 			OutputMessage("MAIET Default Help :", MZMOM_LOCALREPLY);
@@ -156,7 +157,9 @@ bool MClient::OnCommand(MCommand* pCommand)
 			}
 			break;
 		case MC_NET_DISCONNECT:
-			if (pCommand->GetSenderUID() != GetUID()) {
+			// Custom: Exploit fix (Fake disconnect from different player)
+			if (pCommand->GetSenderUID() != GetUID())
+			{
 				break;
 			}
 
@@ -164,8 +167,9 @@ bool MClient::OnCommand(MCommand* pCommand)
 			break;
 
 		case MC_NET_ECHO:
-			if(pCommand->GetParameter(szMessage, 0, MPT_STR, sizeof(szMessage) )==false) break;
-			OutputMessage(szMessage, MZMOM_LOCALREPLY);
+			// Custom: Exploit fix (Fake echo from different player)
+			//if(pCommand->GetParameter(szMessage, 0, MPT_STR, sizeof(szMessage) )==false) break;
+			//OutputMessage(szMessage, MZMOM_LOCALREPLY);
 			break;
 		default:
 			return false;
