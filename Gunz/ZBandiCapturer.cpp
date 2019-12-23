@@ -78,7 +78,7 @@ bool ZBandiCapturer::Start()
 
 		GetFolder(folderName);
 		//m_bandiCaptureLibrary.MakePathnameByDate(folderName, _T("Gunz"), m_pathName, MAX_PATH);
-		m_bandiCaptureLibrary.MakePathnameByDate(folderName, _T("Gunz"), _T("avi"), m_pathName, MAX_PATH);
+		m_bandiCaptureLibrary.MakePathnameByDate(folderName, _T("Gunz"), m_pathName, MAX_PATH);
 
 	
 		HRESULT hr = m_bandiCaptureLibrary.Start(m_pathName, m_hHandle, BCAP_MODE_D3D9_SCALE, (LONG_PTR)m_pDevice);
