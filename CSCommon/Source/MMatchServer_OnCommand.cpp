@@ -643,17 +643,14 @@ bool MMatchServer::OnCommand(MCommand* pCommand)
 			break;
 		case MC_MATCH_REGISTERAGENT:
 			{
-				char szIP[128];
-				int nTCPPort, nUDPPort;
+			char szIP[128];
+			int nTCPPort, nUDPPort;
 
-				if (pCommand->GetParameter(&szIP, 0, MPT_STR, sizeof(szIP) ) == false) break;
-				if (pCommand->GetParameter(&nTCPPort, 1, MPT_INT) == false) break;
-				if (pCommand->GetParameter(&nUDPPort, 2, MPT_INT) == false) break;
-				// Not the best way to patch, but working for now
-				if (strstr(szIP, "%")) {
-					break;
-				}
-				OnRegisterAgent(pCommand->GetSenderUID(), szIP, nTCPPort, nUDPPort);
+			if (pCommand->GetParameter(&szIP, 0, MPT_STR, sizeof(szIP)) == false) break;
+			if (pCommand->GetParameter(&nTCPPort, 1, MPT_INT) == false) break;
+			if (pCommand->GetParameter(&nUDPPort, 2, MPT_INT) == false) break;
+
+			OnRegisterAgent(pCommand->GetSenderUID(), szIP, nTCPPort, nUDPPort);
 			}
 			break;
 		case MC_MATCH_UNREGISTERAGENT:
