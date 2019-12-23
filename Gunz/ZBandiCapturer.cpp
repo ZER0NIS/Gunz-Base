@@ -77,7 +77,7 @@ bool ZBandiCapturer::Start()
 	
 
 		GetFolder(folderName);
-		//m_bandiCaptureLibrary.MakePathnameByDate(folderName, _T("Gunz"), m_pathName, MAX_PATH);
+
 		m_bandiCaptureLibrary.MakePathnameByDate(folderName, _T("Gunz"), m_pathName, MAX_PATH);
 
 	

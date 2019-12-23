@@ -28,6 +28,8 @@ bld/
 *[Rr]elease*/
 !libsodium/**/*
 lib/
+Binaries/Gunz
+Output/
 Lib_LTCG/
 cml/MatchServer
 cml/MatchServerLib
