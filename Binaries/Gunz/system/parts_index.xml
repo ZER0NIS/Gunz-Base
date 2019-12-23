@@ -1,0 +1,333 @@
+<partslisting mesh="heroman1">
+<parts file="Model/man/man-parts00.elu" part="eq_hands_00" part="eq_chest_00" part="eq_feet_00" part="eq_legs_00" part="eq_head_08" part="eq_face_05"/>
+<parts file="Model/man/man-parts01.elu" part="eq_chest_a001" part="eq_hands_a001" part="eq_head_a001" part="eq_legs_a001" part="eq_feet_a001" part="eq_face_a01"/>
+<parts file="Model/man/man-parts02.elu" part="eq_chest_01" part="eq_legs_01" part="eq_hands_01" part="eq_head_01" part="eq_face_01"/>
+<parts file="Model/man/man-parts03.elu" part="eq_legs_02" part="eq_hands_02" part="eq_feet_02" part="eq_face_02" part="eq_head_02" part="eq_chest_02"/>
+<parts file="Model/man/man-parts04.elu" part="eq_chest_03" part="eq_feet_03" part="eq_head_20" part="eq_legs_03" part="eq_face_04"/>
+<parts file="Model/man/man-parts05.elu" part="eq_legs_04" part="eq_feet_05" part="eq_chest_04" part="eq_head_05" part="eq_hands_09" part="eq_face_03"/>
+<parts file="Model/man/man-parts06.elu" part="eq_chest_07" part="eq_head_04" part="eq_hands_07" part="eq_legs_07" part="eq_feet_11"/>
+<parts file="Model/man/man-parts06_1.elu" part="eq_chest_07_1" part="eq_head_13"/>
+<parts file="Model/man/man-parts07.elu" part="eq_hands_04" part="eq_chest_05" part="eq_feet_06" part="eq_legs_05" part="eq_head_16"/>
+<parts file="Model/man/man-parts08.elu" part="eq_legs_06" part="eq_chest_06" part="eq_head_15" part="eq_hands_03" part="eq_feet_07"/>
+<parts file="Model/man/man-parts09.elu" part="eq_feet_09" part="eq_legs_09" part="eq_head_08" part="eq_chest_09" part="eq_hands_08"/>
+<parts file="Model/man/man-parts10.elu" part="eq_hands_10" part="eq_feet_04" part="eq_legs_10" part="eq_head_07" part="eq_chest_10"/>
+<parts file="Model/man/man-parts12.elu" part="eq_hands_11" part="eq_chest_12" part="eq_feet_12" part="eq_legs_12" part="eq_head_06"/>
+<parts file="Model/man/man-parts13.elu" part="eq_hands_13" part="eq_chest_13" part="eq_legs_13" part="eq_head_14" part="eq_feet_08"/>
+<parts file="Model/man/man-parts14.elu" part="eq_feet_14" part="eq_chest_14" part="eq_legs_14" part="eq_hands_14" part="eq_head_09" part="eq_head_visor"/>
+<parts file="Model/man/man-parts15.elu" part="eq_chest_15" part="eq_hands_16" part="eq_feet_15" part="eq_legs_15"/>
+<parts file="Model/man/man-parts16.elu" part="eq_legs_16" part="eq_chest_16" part="eq_feet_16" part="eq_hands_17" part="eq_head_12"/>
+<parts file="Model/man/man-parts17.elu" part="eq_feet_17" part="eq_legs_17" part="eq_chest_17" part="eq_hands_15" part="eq_head_10"/>
+<parts file="Model/man/man-parts18.elu" part="eq_feet_18" part="eq_chest_18" part="eq_legs_18" part="eq_head_11" part="eq_hands_18"/>
+<parts file="Model/man/man-parts19.elu" part="eq_feet_19" part="eq_hands_19" part="eq_chest_19" part="eq_legs_19" part="eq_head_19"/>
+<parts file="Model/man/man-parts20.elu" part="eq_chest_20" part="eq_head_21" part="eq_legs_20" part="eq_hands_20" part="eq_feet_20"/>
+<parts file="Model/man/man-parts21.elu" part="eq_chest_21" part="eq_legs_21" part="eq_hands_21" part="eq_feet_21"/>
+<parts file="Model/man/man-parts22.elu" part="eq_feet_22" part="eq_legs_22" part="eq_chest_22" part="eq_hands_22" part="eq_head_22"/>
+<parts file="Model/man/man-parts23.elu" part="eq_feet_23" part="eq_legs_23" part="eq_hands_23" part="eq_chest_23" part="eq_head_23"/>
+<parts file="Model/man/man-parts24.elu" part="eq_legs_24" part="eq_head_24" part="eq_chest_24" part="eq_hands_24" part="eq_feet_24"/>
+<parts file="Model/man/man-parts25.elu" part="eq_hands_25" part="eq_chest_25" part="eq_head_25" part="eq_legs_25" part="eq_feet_25"/>
+<parts file="Model/man/man-parts26.elu" part="eq_legs_26" part="eq_hands_26" part="eq_chest_26" part="eq_feet_26" part="eq_head_26"/>
+<parts file="Model/man/man-parts27.elu" part="eq_legs_27" part="eq_hands_27" part="eq_feet_27" part="eq_chest_27"/>
+<parts file="Model/man/man-parts28.elu" part="eq_chest_28" part="eq_hands_28" part="eq_legs_28" part="eq_head_28" part="eq_feet_28"/>
+<parts file="Model/man/man-parts29.elu" part="eq_feet_29" part="eq_chest_29" part="eq_legs_29" part="eq_hands_29" part="eq_head_29"/>
+<parts file="Model/man/man-parts30.elu" part="eq_feet_30" part="eq_legs_30" part="eq_hands_30" part="eq_head_30" part="eq_chest_30"/>
+<parts file="Model/man/man-parts31.elu" part="eq_feet_32" part="eq_chest_32" part="eq_legs_32" part="eq_head_32" part="eq_hands_32"/>
+<parts file="Model/man/man-parts32.elu" part="eq_feet_33" part="eq_chest_33" part="eq_legs_33" part="eq_hands_33" part="eq_head_33"/>
+<parts file="Model/man/man-parts33.elu" part="eq_feet_34" part="eq_head_34" part="eq_hands_34" part="eq_chest_34" part="eq_legs_34"/>
+<parts file="Model/man/man-parts33_white.elu" part="eq_feet_34_white" part="eq_legs_34_white" part="eq_head_34_white" part="eq_hands_34_white" part="eq_chest_34_white"/>
+<parts file="Model/man/man-parts34.elu" part="eq_chest_35" part="eq_hands_35" part="eq_head_35" part="eq_legs_35" part="eq_feet_35"/>
+<parts file="Model/man/man-parts35.elu" part="eq_feet_36" part="eq_legs_36" part="eq_hands_36" part="eq_head_36" part="eq_chest_36"/>
+<parts file="Model/man/man-parts_ach.elu" part="eq_feet_ach" part="eq_head_ach" part="eq_legs_ach" part="eq_hands_ach" part="eq_chest_ach"/>
+<parts file="Model/man/man-parts_antler.elu" part="eq_head_antler"/>
+<parts file="Model/man/man-parts_assassin.elu" part="eq_head_Assassin" part="eq_hands_Assassin" part="eq_chest_Assassin" part="eq_feet_Assassin" part="eq_legs_Assassin"/>
+<parts file="Model/man/man-parts_aura.elu" part="eq_feet_aura" part="eq_legs_aura" part="eq_hands_aura" part="eq_head_aura" part="eq_chest_aura"/>
+<parts file="Model/man/man-parts_axium_high.elu" part="eq_head_axium_high" part="eq_legs_axium_high" part="eq_hands_axium_high" part="eq_chest_axium_high" part="eq_feet_axium_high"/>
+<parts file="Model/man/man-parts_axium_uniform.elu" part="eq_legs_axium_uniform" part="eq_hands_axium_uniform" part="eq_feet_axium_uniform" part="eq_head_axium_uniform" part="eq_chest_axium_uniform"/>
+<parts file="Model/man/man-parts_battlesuit.elu" part="eq_chest_battlesuit" part="eq_head_battlesuit" part="eq_hands_battlesuit" part="eq_legs_battlesuit" part="eq_feet_battlesuit"/>
+<parts file="Model/man/man-parts_bear.elu" part="eq_head_bear"/>
+<parts file="Model/man/man-parts_bigi.elu" part="eq_chest_bigi" part="eq_head_bigi"/>
+<parts file="Model/man/man-parts_blackdragon.elu" part="eq_feet_blackdragon" part="eq_legs_blackdragon" part="eq_hands_blackdragon" part="eq_chest_blackdragon" part="eq_head_blackdragon"/>
+<parts file="Model/man/man-parts_blackleather.elu" part="eq_feet_blackleather" part="eq_head_blackleather" part="eq_chest_blackleather" part="eq_legs_blackleather" part="eq_hands_blackleather"/>
+<parts file="Model/man/man-parts_bloodsuit.elu" part="eq_legs_bloodsuit" part="eq_feet_bloodsuit" part="eq_hands_bloodsuit" part="eq_chest_bloodsuit" part="eq_head_bloodsuit"/>
+<parts file="Model/man/man-parts_cat.elu" part="eq_head_cat"/>
+<parts file="Model/man/man-parts_ce.elu" part="eq_chest_ce"/>
+<parts file="Model/man/man-parts_clanmaster.elu" part="eq_chest_clanmaster"/>
+<parts file="Model/man/man-parts_cleric.elu" part="eq_legs_cleric" part="eq_feet_cleric" part="eq_hands_cleric" part="eq_chest_cleric" part="eq_head_cleric"/>
+<parts file="Model/man/man-parts_crown.elu" part="eq_head_crown"/>
+<parts file="Model/man/man-parts_crusader.elu" part="eq_legs_crusader" part="eq_feet_crusader" part="eq_hands_crusader" part="eq_chest_crusader" part="eq_head_crusader"/>
+<parts file="Model/man/man-parts_darkhand.elu" part="eq_hands_darkhand"/>
+<parts file="Model/man/man-parts_deathbring.elu" part="eq_feet_deathbring" part="eq_head_deathbring" part="eq_legs_deathbring" part="eq_chest_deathbring" part="eq_hands_deathbring"/>
+<parts file="Model/man/man-parts_DesertWarrior.elu" part="eq_feet_DesertWarrior" part="eq_head_DesertWarrior" part="eq_legs_DesertWarrior" part="eq_chest_DesertWarrior" part="eq_hands_DesertWarrior"/>
+<parts file="Model/man/man-parts_designercoat.elu" part="eq_chest_designercoat"/>
+<parts file="Model/man/man-parts_detective.elu" part="eq_feet_detective" part="eq_head_detective" part="eq_legs_detective" part="eq_chest_detective" part="eq_hands_detective"/>
+<parts file="Model/man/man-parts_devil.elu" part="eq_head_devil" part="eq_face_01" part="eq_hands_devil" part="eq_feet_devil" part="eq_chest_devil" part="eq_legs_devil" part="eq_chest_devil_small"/>
+<parts file="Model/man/man-parts_divingsuit.elu" part="eq_legs_divingsuit" part="eq_head_divingsuit" part="eq_feet_divingsuit" part="eq_chest_divingsuit" part="eq_hands_divingsuit"/>
+<parts file="Model/man/man-parts_doghead.elu" part="eq_head_doghead"/>
+<parts file="Model/man/man-parts_dragonhead.elu" part="eq_head_dragonhead"/>
+<parts file="Model/man/man-parts_drva.elu" part="eq_legs_drva" part="eq_head_drva" part="eq_feet_drva" part="eq_chest_drva" part="eq_hands_drva"/>
+<parts file="Model/man/man-parts_dryad.elu" part="eq_chest_dryad" part="eq_hands_dryad" part="eq_head_dryad" part="eq_feet_dryad" part="eq_legs_dryad"/>
+<parts file="Model/man/man-parts_eaglehead.elu" part="eq_head_eaglehead"/>
+<parts file="Model/man/man-parts_eagleheadblack.elu" part="eq_head_eagleheadblack"/>
+<parts file="Model/man/man-parts_eliteuniform.elu" part="eq_head_eliteuniform" part="eq_legs_eliteuniform" part="eq_feet_eliteuniform" part="eq_hands_eliteuniform" part="eq_chest_eliteuniform"/>
+<parts file="Model/man/man-parts_eola.elu" part="eq_head_eola" part="eq_legs_eola" part="eq_hands_eola" part="eq_chest_eola" part="eq_feet_eola"/>
+<parts file="Model/man/man-parts_eolava.elu" part="eq_head_eolava" part="eq_legs_eolava" part="eq_feet_eolava" part="eq_hands_eolava" part="eq_chest_eolava"/>
+<parts file="Model/man/man-parts_eskimo.elu" part="eq_head_eskimo" part="eq_legs_eskimo" part="eq_feet_eskimo" part="eq_hands_eskimo" part="eq_chest_eskimo"/>
+<parts file="Model/man/man-parts_event08.elu" part="eq_head_koala" part="eq_chest_germany" part="eq_chest_peru"/>
+<parts file="Model/man/man-parts_executioner.elu" part="eq_head_executioner" part="eq_legs_executioner" part="eq_feet_executioner" part="eq_hands_executioner" part="eq_chest_executioner"/>
+<parts file="Model/man/man-parts_face.elu" part="eq_face_newface08" part="eq_face_newface09" part="eq_face_newface07" part="eq_face_newface06" part="eq_face_newface05" part="eq_face_newface04" part="eq_face_newface03" part="eq_face_newface02" part="eq_face_newface01" part="eq_face_newface10" part="eq_face_newface11" part="eq_face_newface12" part="eq_face_newface13"/>
+<parts file="Model/man/man-parts_fenrir.elu" part="eq_head_fenrir_guardian" part="eq_feet_fenrir_guardian" part="eq_legs_fenrir_guardian" part="eq_hands_fenrir_guardian" part="eq_chest_fenrir_guardian" part="eq_legs_fenrir_guardian_s" part="eq_chest_fenrir_guardian_s"/>
+<parts file="Model/man/man-parts_fishhead.elu" part="eq_hands_fishhead"/>
+<parts file="Model/man/man-parts_flamearmor.elu" part="eq_hands_flamearmor" part="eq_feet_flamearmor" part="eq_head_flamearmor" part="eq_chest_flamearmor" part="eq_legs_flamearmor"/>
+<parts file="Model/man/man-parts_flamewvip.elu" part="eq_hands_flamewvip" part="eq_feet_flamewvip" part="eq_head_flamewvip" part="eq_chest_flamewvip" part="eq_legs_flamewvip"/>
+<parts file="Model/man/man-parts_flowerhead.elu" part="eq_head_flowerhead" />
+<parts file="Model/man/man-parts_froghead.elu" part="eq_head_froghead" />
+<parts file="Model/man/man-parts_gears.elu" part="eq_hands_gears" part="eq_feet_gears" part="eq_head_gears" part="eq_chest_gears" part="eq_legs_gears"/>
+<parts file="Model/man/man-parts_gleader.elu" part="eq_hands_gleader" part="eq_feet_gleader" part="eq_head_gleader" part="eq_chest_gleader" part="eq_legs_gleader"/>
+<parts file="Model/man/man-parts_gm.elu" part="eq_chest_gm"/>
+<parts file="Model/man/man-parts_gorilla.elu" part="eq_hands_gorilla" part="eq_feet_gorilla" part="eq_head_gorilla" part="eq_chest_gorilla" part="eq_legs_gorilla"/>
+<parts file="Model/man/man-parts_gpunk.elu" part="eq_hands_gpunk" part="eq_feet_gpunk" part="eq_head_gpunk" part="eq_chest_gpunk" part="eq_legs_gpunk"/>
+<parts file="Model/man/man-parts_guard.elu" part="eq_legs_guard" part="eq_feet_guard" part="eq_hands_guard" part="eq_chest_guard"/>
+<parts file="Model/man/man-parts_gunerva.elu" part="eq_hands_unerva" part="eq_feet_unerva" part="eq_head_unerva" part="eq_chest_unerva" part="eq_legs_unerva"/>
+<parts file="Model/man/man-parts_gveteran.elu" part="eq_hands_gveteran" part="eq_feet_gveteran" part="eq_head_gveteran" part="eq_chest_gveteran" part="eq_legs_gveteran"/>
+<parts file="Model/man/man-parts_halem.elu" part="eq_hands_halem" part="eq_feet_halem" part="eq_head_halem" part="eq_chest_halem" part="eq_legs_halem"/>
+<parts file="Model/man/man-parts_halloweensuit.elu" part="eq_head_halloween"/>
+<parts file="Model/man/man-parts_hanbok.elu" part="eq_chest_hanbok" part="eq_legs_hanbok" part="eq_hands_hanbok" part="eq_head_hanbok" part="eq_feet_hanbok"/>
+<parts file="Model/man/man-parts_hat.elu" part="eq_head_helmet2" part="eq_head_musketeer3"/>
+<parts file="Model/man/man-parts_heavy.elu" part="eq_head_heavymetal" part="eq_legs_heavymetal" part="eq_hands_heavymetal" part="eq_feet_heavymetal" part="eq_chest_heavymetal"/>
+<parts file="Model/man/man-parts_hitva.elu" part="eq_chest_hitva" part="eq_hands_hitva" part="eq_feet_hitva" part="eq_legs_hitva" part="eq_head_hitva"/>
+<parts file="Model/man/man-parts_hog.elu" part="eq_chest_hog" part="eq_hands_hog" part="eq_feet_hog" part="eq_legs_hog" part="eq_head_hog"/> 
+<parts file="Model/man/man-parts_holyarmor.elu" part="eq_chest_holyarmor" part="eq_hands_holyarmor" part="eq_feet_holyarmor" part="eq_legs_holyarmor" part="eq_head_holyarmor"/>
+<parts file="Model/man/man-parts_iceelemental.elu" part="eq_chest_iceelemental" part="eq_hands_iceelemental" part="eq_feet_iceelemental" part="eq_legs_iceelemental" part="eq_head_iceelemental"/>
+<parts file="Model/man/man-parts_iguardian.elu" part="eq_chest_iguardian" part="eq_hands_iguardian" part="eq_feet_iguardian" part="eq_legs_iguardian" part="eq_head_iguardian"/>
+<parts file="Model/man/man-parts_Invisible.elu" part="eq_chest_invisible" part="eq_hands_invisible" part="eq_feet_invisible" part="eq_legs_invisible" part="eq_head_invisible"/>
+<parts file="Model/man/man-parts_jhunter.elu" part="eq_legs_jhunter" part="eq_feet_jhunter" part="eq_chest_jhunter" part="eq_head_jhunter" part="eq_hands_jhunter"/>
+<parts file="Model/man/man-parts_judge.elu" part="eq_feet_judgement" part="eq_head_judgement" part="eq_legs_judgement" part="eq_hands_judgement" part="eq_chest_judgement"/>
+<parts file="Model/man/man-parts_kungfu.elu" part="eq_legs_kungfu" part="eq_hands_kungfu" part="eq_head_kungfu" part="eq_feet_kungfu" part="eq_chest_kungfu"/>
+<parts file="Model/man/man-parts_leopard.elu" part="eq_head_leopard" part="eq_hands_leopard" part="eq_legs_leopard" part="eq_feet_leopard" part="eq_chest_leopard"/>
+<parts file="Model/man/man-parts_lokva.elu" part="eq_head_lokva" part="eq_hands_lokva" part="eq_legs_lokva" part="eq_feet_lokva" part="eq_chest_lokva"/>
+<parts file="Model/man/man-parts_magic.elu" part="eq_head_magician" part="eq_hands_magician" part="eq_legs_magician" part="eq_feet_magician" part="eq_chest_magician"/>
+<parts file="Model/man/man-parts_magician_r.elu" part="eq_head_magician_r" part="eq_hands_magician_r" part="eq_legs_magician_r" part="eq_feet_magician_r" part="eq_chest_magician_r"/>
+<parts file="Model/man/man-parts_metalhand.elu" part="eq_hands_metalhand"/>
+<parts file="Model/man/man-parts_miner.elu" part="eq_head_miner" part="eq_legs_minere" part="eq_chest_miner" part="eq_hands_miner" part="eq_feet_miner"/>
+<parts file="Model/man/man-parts_monsterhand.elu" part="eq_hands_monsterhand"/>
+<parts file="Model/man/man-parts_mumme.elu" part="eq_head_mumme" part="eq_legs_mumme" part="eq_chest_mumme" part="eq_hands_mumme" part="eq_feet_mumme"/>
+<parts file="Model/man/man-parts_mummy.elu" part="eq_head_mummy" part="eq_legs_mummy" part="eq_chest_mummy" part="eq_hands_mummy" part="eq_feet_mummy"/>
+<parts file="Model/man/man-parts_navy.elu" part="eq_head_US_Navy_Costume" part="eq_chest_US_Navy_Costume" part="eq_legs_US_Navy_Costume" part="eq_hands_US_Navy_Costume" part="eq_feet_US_Navy_Costume"/>
+<parts file="Model/man/man-parts_needlearmor.elu" part="eq_head_needlearmor" part="eq_legs_needlearmor" part="eq_chest_needlearmor" part="eq_hands_needlearmor" part="eq_feet_needlearmor"/>
+<parts file="Model/man/man-parts_ninja.elu" part="eq_head_ninja" part="eq_legs_ninja" part="eq_chest_ninja" part="eq_hands_ninja" part="eq_feet_ninja"/>
+<parts file="Model/man/man-parts_outlaw.elu" part="eq_head_outlaw" part="eq_legs_outlaw" part="eq_chest_outlaw" part="eq_hands_outlaw" part="eq_feet_outlaw"/>
+<parts file="Model/man/man-parts_panda.elu" part="eq_head_panda"/>
+<parts file="Model/man/man-parts_perub.elu" part="eq_head_perub" part="eq_legs_perub" part="eq_chest_perub" part="eq_hands_perub" part="eq_feet_perub"/>
+<parts file="Model/man/man-parts_phantommask.elu" part="eq_head_phantommask"/>
+<parts file="Model/man/man-parts_pierrot.elu" part="eq_head_pierrot"/>
+<parts file="Model/man/man-parts_pirate.elu" part="eq_hands_pirate" part="eq_feet_pirate" part="eq_chest_pirate" part="eq_head_pirate" part="eq_legs_pirate"/>
+<parts file="Model/man/man-parts_polarhunter.elu" part="eq_head_polarhunter" part="eq_hands_polarhunter" part="eq_feet_polarhunter" part="eq_chest_polarhunter" part="eq_legs_polarhunter"/>
+<parts file="Model/man/man-parts_police.elu" part="eq_hands_police" part="eq_head_police" part="eq_feet_police" part="eq_chest_police" part="eq_legs_police"/>
+<parts file="Model/man/man-parts_primehunter.elu" part="eq_hands_primehunter" part="eq_head_primehunter" part="eq_feet_primehunter" part="eq_chest_primehunter" part="eq_legs_primehunter"/>
+<parts file="Model/man/man-parts_privatesoldier.elu" part="eq_head_privatesoldier" part="eq_chest_privatesoldier" part="eq_legs_privatesoldier" part="eq_feet_privatesoldier" part="eq_hands_privatesoldier"/>
+<parts file="Model/man/man-parts_pumpkin.elu" part="eq_head_pumpkin"/>
+<parts file="Model/man/man-parts_quest.elu" part="eq_head_goblin" part="eq_hands_skeleton" part="eq_feet_wrapshoes" part="eq_legs_dark"/>
+<parts file="Model/man/man-parts_quest_gold.elu" part="eq_head_goblin_gold" part="eq_hands_goblin" part="eq_head_palmpou" part="eq_hands_goblin_gold" part="eq_chest_palmpou"/>
+<parts file="Model/man/man-parts_quest_lizard.elu" part="eq_hands_lizard" part="eq_head_android" part="eq_head_mouse"/>
+<parts file="Model/man/man-parts_rabbit.elu" part="eq_head_rabbit"/>
+<parts file="Model/man/man-parts_rabbitmask.elu" part="eq_head_rabbitmask"/>
+<parts file="Model/man/man-parts_rabbitmaskdutch.elu" part="eq_head_rabbitmaskdutch"/>
+<parts file="Model/man/man-parts_racoonhead.elu" part="eq_head_racoonhead"/>
+<parts file="Model/man/man-parts_raven.elu" part="eq_feet_raven" part="eq_chest_raven" part="eq_hands_raven" part="eq_legs_raven" part="eq_head_raven"/>
+<parts file="Model/man/man-parts_resercher.elu" part="eq_feet_resercher" part="eq_chest_resercher" part="eq_hands_resercher" part="eq_legs_resercher" part="eq_head_resercher"/>
+<parts file="Model/man/man-parts_robothead.elu" part="eq_head_robothead"/>
+<parts file="Model/man/man-parts_royal.elu" part="eq_feet_royal_children" part="eq_legs_royal_children" part="eq_head_royal_children" part="eq_hands_royal_children" part="eq_chest_royal_children"/>
+<parts file="Model/man/man-parts_santa.elu" part="eq_hands_santa" part="eq_chest_santa" part="eq_legs_santa" part="eq_feet_santa" part="eq_head_santa"/>
+<parts file="Model/man/man-parts_santa_w.elu" part="eq_hands_santa_w" part="eq_chest_santa_w" part="eq_legs_santa_w" part="eq_feet_santa_w" part="eq_head_santa_w"/>
+<parts file="Model/man/man-parts_scarecrow.elu" part="eq_feet_scarecrow" part="eq_chest_scarecrow" part="eq_head_scarecrow" part="eq_legs_scarecrowt" part="eq_hands_scarecrow"/>
+<parts file="Model/man/man-parts_school.elu" part="eq_legs_school" part="eq_feet_school" part="eq_hands_school" part="eq_chest_school" part="eq_head_school"/>
+<parts file="Model/man/man-parts_shadow.elu" part="eq_chest_shadow" part="eq_head_shadow" part="eq_feet_shadow" part="eq_legs_shadow" part="eq_hands_shadow"/>
+<parts file="Model/man/man-parts_shinehand.elu" part="eq_hands_shinehand"/>
+<parts file="Model/man/man-parts_shunter.elu" part="eq_feet_shunter" part="eq_chest_shunter" part="eq_head_shunter" part="eq_legs_shunter" part="eq_hands_shunter"/>
+<parts file="Model/man/man-parts_sknight.elu" part="eq_feet_sknight" part="eq_chest_sknight" part="eq_head_sknight" part="eq_legs_sknight" part="eq_hands_sknight"/>
+<parts file="Model/man/man-parts_snowhead.elu" part="eq_head_snowhead"/>
+<parts file="Model/man/man-parts_staff.elu" part="eq_chest_staff"/>
+<parts file="Model/man/man-parts_sum08.elu" part="eq_head_french" part="eq_chest_canada" part="eq_head_american"/>
+<parts file="Model/man/man-parts_sunduk.elu" part="eq_chest_sunduk" part="eq_feet_sunduk" part="eq_legs_sunduk" part="eq_head_sunduk" part="eq_hands_sunduk"/>
+<parts file="Model/man/man-parts_swim.elu" part="eq_legs_swim" part="eq_hands_swim" part="eq_chest_swim" part="eq_feet_swim" part="eq_head_swim"/>
+<parts file="Model/man/man-parts_travia_suit.elu" part="eq_legs_travia_suit" part="eq_hands_travia_suit" part="eq_feet_travia_suit" part="eq_chest_travia_suit" part="eq_head_travia_suit"/>
+<parts file="Model/man/man-parts_trider.elu" part="eq_legs_trider" part="eq_hands_trider" part="eq_feet_trider" part="eq_head_trider" part="eq_chest_trider"/>
+<parts file="Model/man/man-parts_trophy.elu" part="eq_head_trophy"/>
+<parts file="Model/man/man-parts_vagrant.elu" part="eq_legs_vagrant" part="eq_hands_vagrant" part="eq_feet_vagrant" part="eq_head_vagrant" part="eq_chest_vagrant"/>
+<parts file="Model/man/man-parts_valkyrie.elu" part="eq_legs_valkyrie" part="eq_hands_valkyrie" part="eq_feet_valkyrie" part="eq_head_valkyrie" part="eq_chest_valkyrie"/>
+<parts file="Model/man/man-parts_vampire.elu" part="eq_legs_vampire" part="eq_hands_vampire" part="eq_feet_vampire" part="eq_head_vampire" part="eq_chest_vampire"/>
+<parts file="Model/man/man-parts_wed.elu" part="eq_head_wedding" part="eq_legs_wedding" part="eq_feet_wedding" part="eq_hands_wedding" part="eq_chest_wedding"/>
+<parts file="Model/man/man-parts_western.elu" part="eq_chest_western" part="eq_legs_western" part="eq_hands_western" part="eq_head_western" part="eq_feet_western"/>
+<parts file="Model/man/man-parts_winter.elu" part="eq_legs_winter" part="eq_feet_winter" part="eq_hands_winter" part="eq_chest_winter" part="eq_head_winter"/>
+<parts file="Model/man/man-parts_wolfman.elu" part="eq_legs_wolfman" part="eq_feet_wolfman" part="eq_hands_wolfman" part="eq_chest_wolfman" part="eq_head_wolfman"/>
+<parts file="Model/man/man-parts_worldcup.elu" part="eq_legs_brazil" part="eq_chest_brazil" part="eq_feet_brazil" part="eq_legs_korea" part="eq_chest_korea" part="eq_feet_korea" part="eq_head_korea" part="eq_legs_japan" part="eq_chest_japan" part="eq_feet_japan" part="eq_head_brazil" part="eq_head_japan"/>
+<parts file="Model/man/man-parts_worldcup_hat.elu" part="eq_head_worldcup2010"/>
+<parts file="Model/man/man-parts_yohawk.elu" part="eq_chest_clan_yohawk" part="eq_feet_clan_yohawk" part="eq_legs_clan_yohawk" part="eq_hands_clan_yohawk" part="eq_head_clan_yohawk"/>
+<parts file="Model/man/man-parts_zeus.elu" part="eq_chest_zeus" part="eq_head_zeus"/>
+<parts file="Model/man/man-parts_zombie.elu" part="eq_feet_zombie" part="eq_head_zombie" part="eq_chest_zombie" part="eq_hands_zombie" part="eq_legs_zombie"/>
+</partslisting>
+<partslisting mesh="herowoman1">
+<parts file="Model/woman/woman-parts01.elu" part="eq_feets_01" part="eq_hands_01" part="eq_head_hair006" part="eq_chest_01" part="eq_legs_01" part="eq_face_003"/>
+<parts file="Model/woman/woman-parts02.elu" part="eq_head_hair002" part="eq_legs_g002" part="eq_chest_long002" part="eq_hands_leather001" part="eq_feets_p02" part="eq_face_001"/>
+<parts file="Model/woman/woman-parts03.elu" part="eq_chest_long001" part="eq_legs_ge001" part="eq_head_pony" part="eq_feets_p002"/>
+<parts file="Model/woman/woman-parts04.elu" part="eq_hands_leather04" part="eq_chest_p001" part="eq_legs_j001" part="eq_feets_p004" part="eq_head_11"/>
+<parts file="Model/woman/woman-parts05.elu" part="eq_chest_07" part="eq_legs_007" part="eq_feets_07" part="eq_hands_07" part="eq_head_04"/>
+<parts file="Model/woman/woman-parts06.elu" part="eq_hands_leather05" part="eq_chest_c001" part="eq_legs_c001" part="eq_feet_leather001" part="eq_head_hair04"/>
+<parts file="Model/woman/woman-parts07.elu" part="eq_head_hair001" part="eq_feets_leather003" part="eq_chest_long003" part="eq_hands_leather02" part="eq_legs_l001" part="eq_face_002"/>
+<parts file="Model/woman/woman-parts07_1.elu" part="eq_chest_long004" part="eq_head_07" part="eq_legs_006" part="eq_feets_006"/>
+<parts file="Model/woman/woman-parts08.elu" part="eq_legs_c002" part="eq_hands_02" part="eq_head_12" part="eq_feets_008" part="eq_chest_ce"/>
+<parts file="Model/woman/woman-parts09.elu" part="eq_chest_n013" part="eq_legs_c013" part="eq_feets_leather007" part="eq_hands_leather07" part="eq_head_01"/>
+<parts file="Model/woman/woman-parts10.elu" part="eq_chest_n014" part="eq_legs_l014" part="eq_feets_leather008" part="eq_hands_leather08" part="eq_head_10"/>
+<parts file="Model/woman/woman-parts11.elu" part="eq_chest_05" part="eq_legs_005" part="eq_feet_005" part="eq_hands_05" part="eq_head_02" part="eq_face_004"/>
+<parts file="Model/woman/woman-parts12.elu" part="eq_hands_14" part="eq_legs_014" part="eq_feets_014" part="eq_head_05" part="eq_chest_14"/>
+<parts file="Model/woman/woman-parts13.elu" part="eq_chest_08" part="eq_feet_009" part="eq_hands_08" part="eq_legs_008" part="eq_head_13"/>
+<parts file="Model/woman/woman-parts14.elu" part="eq_chest_15" part="eq_head_03" part="eq_legs_015" part="eq_feet_015" part="eq_hands_15" part="eq_head_visor"/>
+<parts file="Model/woman/woman-parts15.elu" part="eq_feet_16" part="eq_hands_16" part="eq_chest_16"/>
+<parts file="Model/woman/woman-parts16.elu" part="eq_feet_017" part="eq_hands_17" part="eq_legs_017" part="eq_chest_17" part="eq_head_06"/>
+<parts file="Model/woman/woman-parts17.elu" part="eq_feet_018" part="eq_legs_018" part="eq_chest_18" part="eq_hands_18" part="eq_head_18"/>
+<parts file="Model/woman/woman-parts18.elu" part="eq_feet_019" part="eq_legs_019" part="eq_hands_19" part="eq_head_08" part="eq_chest_19"/>
+<parts file="Model/woman/woman-parts20.elu" part="eq_hands_20" part="eq_chest_20" part="eq_legs_20" part="eq_feet_20" part="eq_head_20"/>
+<parts file="Model/woman/woman-parts21.elu" part="eq_chest_21" part="eq_legs_21" part="eq_feet_21" part="eq_hands_21"/>
+<parts file="Model/woman/woman-parts22.elu" part="eq_chest_22" part="eq_legs_22" part="eq_feet_22" part="eq_head_22" part="eq_hands_22"/>
+<parts file="Model/woman/woman-parts23.elu" part="eq_legs_23" part="eq_hands_23" part="eq_chest_023" part="eq_feet_23" part="eq_head_23"/>
+<parts file="Model/woman/woman-parts24.elu" part="eq_legs_24" part="eq_chest_024" part="eq_head_24" part="eq_feet_24" part="eq_hands_24"/>
+<parts file="Model/woman/woman-parts25.elu" part="eq_head_25" part="eq_chest_025" part="eq_feet_25" part="eq_legs_25" part="eq_hands_25"/>
+<parts file="Model/woman/woman-parts26.elu" part="eq_chest_026" part="eq_feet_26" part="eq_head_26" part="eq_hands_26" part="eq_legs_26"/>
+<parts file="Model/woman/woman-parts27.elu" part="eq_feet_27" part="eq_chest_027" part="eq_hands_27" part="eq_head_27" part="eq_legs_27"/>
+<parts file="Model/woman/woman-parts28.elu" part="eq_chest_28" part="eq_hands_28" part="eq_legs_28" part="eq_feet_28"/>
+<parts file="Model/woman/woman-parts29.elu" part="eq_chest_29" part="eq_feet_29" part="eq_hands_29" part="eq_head_29" part="eq_legs_29"/>
+<parts file="Model/woman/woman-parts30.elu" part="eq_feets_30" part="eq_chest_30" part="eq_legs_30" part="eq_head_30" part="eq_hands_30"/>
+<parts file="Model/woman/woman-parts31.elu" part="eq_feet_31" part="eq_chest_31" part="eq_head_31" part="eq_hands_31" part="eq_legs_31"/>
+<parts file="Model/woman/woman-parts32.elu" part="eq_feet_32" part="eq_chest_32" part="eq_legs_32" part="eq_head_32" part="eq_hands_32"/>
+<parts file="Model/woman/woman-parts33.elu" part="eq_head_33" part="eq_feet_33" part="eq_hands_33" part="eq_legs_33" part="eq_chest_33"/>
+<parts file="Model/woman/woman-parts34.elu" part="eq_legs_34" part="eq_hands_34" part="eq_feet_34" part="eq_head_34" part="eq_chest_34"/>
+<parts file="Model/woman/woman-parts35.elu" part="eq_hands_35" part="eq_feet_35" part="eq_chest_35" part="eq_legs_35" part="eq_head_35"/>
+<parts file="Model/woman/woman-parts36.elu" part="eq_legs_36" part="eq_chest_36" part="eq_hands_36" part="eq_feet_36" part="eq_head_36"/>
+<parts file="Model/woman/woman-parts_ach.elu" part="eq_hands_ach" part="eq_legs_ach" part="eq_feet_ach" part="eq_head_ach" part="eq_chest_ach"/>
+<parts file="Model/woman/woman-parts_angel.elu" part="eq_legs_angel" part="eq_head_angel" part="eq_chest_angel" part="eq_hands_angel" part="eq_feet_angel" part="eq_chest_angel_small"/>
+<parts file="Model/woman/woman-parts_antler.elu" part="eq_head_antler"/>
+<parts file="Model/woman/woman-parts_assassin.elu" part="eq_head_Assassin" part="eq_feet_Assassin" part="eq_hands_Assassin" part="eq_chest_Assassin" part="eq_legs_Assassin"/>
+<parts file="Model/woman/woman-parts_aura.elu" part="eq_hands_aura" part="eq_feets_aura" part="eq_head_aura" part="eq_chest_aura" part="eq_legs_aura"/>
+<parts file="Model/woman/woman-parts_axium_high.elu" part="eq_feet_axium_high" part="eq_legs_axium_high" part="eq_head_axium_high" part="eq_hands_axium_high" part="eq_chest_axium_high"/>
+<parts file="Model/woman/woman-parts_axium_uniform.elu" part="eq_legs_axium_uniform" part="eq_feet_axium_uniform" part="eq_hands_axium_uniform" part="eq_head_axium_uniform" part="eq_chest_axium_uniform"/>
+<parts file="Model/woman/woman-parts_battlesuit.elu" part="eq_chest_battlesuit" part="eq_head_battlesuit" part="eq_hands_battlesuit" part="eq_feet_battlesuit" part="eq_legs_battlesuit"/>
+<parts file="Model/woman/woman-parts_bear.elu" part="eq_head_bear"/>
+<parts file="Model/woman/woman-parts_blackdragon.elu" part="eq_hands_blackdragon" part="eq_chest_blackdragon" part="eq_legs_blackdragon" part="eq_head_blackdragon" part="eq_feet_blackdragon"/>
+<parts file="Model/woman/woman-parts_blackleather.elu" part="eq_legs_blackleather" part="eq_feet_blackleather" part="eq_chest_blackleather" part="eq_head_blackleather" part="eq_hands_blackleather"/>
+<parts file="Model/woman/woman-parts_bloodsuit.elu" part="eq_head_bloodsuit" part="eq_chest_bloodsuit" part="eq_hands_bloodsuit" part="eq_legs_bloodsuit" part="eq_feet_bloodsuit" />
+<parts file="Model/woman/woman-parts_cat.elu" part="eq_head_cat"/>
+<parts file="Model/woman/woman-parts_clanmaster.elu" part="eq_chest_clanmaster"/>
+<parts file="Model/woman/woman-parts_cleric.elu" part="eq_head_cleric" part="eq_chest_cleric" part="eq_hands_cleric" part="eq_legs_cleric" part="eq_feet_cleric" />
+<parts file="Model/woman/woman-parts_crown.elu" part="eq_head_crown"/>
+<parts file="Model/woman/woman-parts_crusader.elu" part="eq_hands_crusader" part="eq_feet_crusader" part="eq_legs_crusader" part="eq_chest_crusader" part="eq_head_crusader"/>
+<parts file="Model/woman/woman-parts_darkhand.elu" part="eq_hands_darkhand" />
+<parts file="Model/woman/woman-parts_deathbring.elu" part="eq_head_deathbring" part="eq_chest_deathbring" part="eq_hands_deathbring" part="eq_legs_deathbring" part="eq_feet_deathbring" />
+<parts file="Model/woman/woman-parts_DesertWarrior.elu" part="eq_head_DesertWarrior" part="eq_chest_DesertWarrior" part="eq_hands_DesertWarrior" part="eq_legs_DesertWarrior" part="eq_feet_DesertWarrior" />
+<parts file="Model/woman/woman-parts_designercoat.elu" part="eq_chest_wdesignercoat"/>
+<parts file="Model/woman/woman-parts_detective.elu" part="eq_hands_detective" part="eq_feet_detective" part="eq_legs_detective" part="eq_head_detective" part="eq_chest_detective"/>
+<parts file="Model/woman/woman-parts_divingsuit.elu" part="eq_legs_divingsuit" part="eq_hands_divingsuit" part="eq_chest_divingsuit" part="eq_feet_divingsuit" part="eq_head_divingsuit"/>
+<parts file="Model/woman/woman-parts_doghead.elu" part="eq_head_doghead"/>
+<parts file="Model/woman/woman-parts_dragonhead.elu" part="eq_head_dragonhead"/>
+<parts file="Model/woman/woman-parts_drva.elu" part="eq_head_drva" part="eq_chest_drva" part="eq_hands_drva" part="eq_legs_drva" part="eq_feet_drva"/>
+<parts file="Model/woman/woman-parts_dryad.elu" part="eq_chest_dryad" part="eq_hands_dryad" part="eq_legs_dryad" part="eq_feet_dryad" part="eq_head_dryad"/>
+<parts file="Model/woman/woman-parts_eaglehead.elu" part="eq_had_eaglehead"/>
+<parts file="Model/woman/woman-parts_eagleheadblack.elu" part="eq_had_eagleheadblack"/>
+<parts file="Model/woman/woman-parts_eliteuniform.elu" part="eq_head_eliteuniform" part="eq_chest_eliteuniform" part="eq_hands_eliteuniform" part="eq_legs_eliteuniform" part="eq_feet_eliteuniform"/>
+<parts file="Model/woman/woman-parts_eola.elu" part="eq_feet_eola" part="eq_legs_eola" part="eq_head_eola" part="eq_hands_eola" part="eq_chest_eola"/>
+<parts file="Model/woman/woman-parts_eolava.elu" part="eq_head_eolava" part="eq_chest_eolava" part="eq_hands_eolava" part="eq_legs_eolava" part="eq_feet_eolava"/>
+<parts file="Model/woman/woman-parts_eskimo.elu" part="eq_feet_eskimo" part="eq_hands_eskimo" part="eq_legs_eskimo" part="eq_head_eskimo" part="eq_chest_eskimo"/>
+<parts file="Model/woman/woman-parts_event08.elu" part="eq_head_koala" part="eq_chest_germany" part="eq_chest_peru"/>
+<parts file="Model/woman/woman-parts_executioner.elu" part="eq_head_executioner" part="eq_chest_executioner" part="eq_hands_executioner" part="eq_legs_executioner" part="eq_feet_executioner"/>
+<parts file="Model/woman/woman-parts_face.elu" part="eq_face_newface09" part="eq_face_newface08" part="eq_face_newface07" part="eq_face_newface06" part="eq_face_newface05" part="eq_face_newface04" part="eq_face_newface03" part="eq_face_newface02" part="eq_face_newface01" part="eq_face_newface11" part="eq_face_newface12" part="eq_face_newface13" part="eq_face_newface14" part="eq_face_newface15" part="eq_face_newface10"/>
+<parts file="Model/woman/woman-parts_fenrir.elu" part="eq_legs_fenrir_guardian" part="eq_chest_fenrir_guardian" part="eq_head_fenrir_guardian" part="eq_hands_fenrir_guardian" part="eq_feet_fenrir_guardian" part="eq_chest_fenrir_guardian_s" part="eq_legs_fenrir_guardian_s"/>
+<parts file="Model/woman/woman-parts_fishhead.elu" part="eq_head_fishhead"/>
+<parts file="Model/woman/woman-parts_flamearmor.elu" part="eq_head_flamearmor" part="eq_chest_flamearmor" part="eq_hands_flamearmor" part="eq_legs_flamearmor" part="eq_feet_flamearmor"/>
+<parts file="Model/woman/woman-parts_flamewvip.elu" part="eq_head_flamearvip" part="eq_chest_flamearvip" part="eq_hands_flamearvip" part="eq_legs_flamearvip" part="eq_feet_flamearvip"/>
+<parts file="Model/woman/woman-parts_flowerhead.elu" part="eq_head_flowerhead"/>
+<parts file="Model/woman/woman-parts_froghead.elu" part="eq_head_froghead"/>
+<parts file="Model/woman/woman-parts_gears.elu" part="eq_head_gears" part="eq_chest_gears" part="eq_hands_gears" part="eq_legs_gears" part="eq_feet_gears"/>
+<parts file="Model/woman/woman-parts_gleader.elu" part="eq_head_gleader" part="eq_chest_gleader" part="eq_hands_gleader" part="eq_legs_gleader" part="eq_feet_gleader"/>
+<parts file="Model/woman/woman-parts_gm.elu" part="eq_chest_gm"/>
+<parts file="Model/woman/woman-parts_gorilla.elu" part="eq_head_gorilla" part="eq_chest_gorilla" part="eq_hands_gorilla" part="eq_legs_gorilla" part="eq_feet_gorilla"/>
+<parts file="Model/woman/woman-parts_gpunk.elu" part="eq_head_gpunk" part="eq_chest_gpunk" part="eq_hands_gpunk" part="eq_legs_gpunk" part="eq_feet_gpunk"/>
+<parts file="Model/woman/woman-parts_guard.elu" part="eq_feets_guard" part="eq_hands_guard" part="eq_chest_guard" part="eq_legs_guard"/>
+<parts file="Model/woman/woman-parts_gunerva.elu" part="eq_head_gunerva" part="eq_chest_gunerva" part="eq_hands_gunerva" part="eq_legs_gunerva" part="eq_feet_gunerva"/>
+<parts file="Model/woman/woman-parts_gveteran.elu" part="eq_head_gveteran" part="eq_chest_gveteran" part="eq_hands_gveteran" part="eq_legs_gveteran" part="eq_feet_gveteran"/>
+<parts file="Model/woman/woman-parts_halem.elu" part="eq_hands_halem" part="eq_chest_halem" part="eq_feet_halem" part="eq_head_halem" part="eq_legs_halem"/>
+<parts file="Model/woman/woman-parts_halloweensuit.elu" part="eq_head_halloween"/>
+<parts file="Model/woman/woman-parts_hanbok.elu" part="eq_feets_hanbok" part="eq_hands_hanbok" part="eq_chest_hanbok" part="eq_head_hanbok" part="eq_legs_hanbok"/>
+<parts file="Model/woman/woman-parts_hat.elu" part="eq_head_helmet" part="eq_head_hat"/>
+<parts file="Model/woman/woman-parts_heavy.elu" part="eq_hands_heavymetal" part="eq_chest_heavymetal" part="eq_legs_heavymetal" part="eq_feet_heavymetal" part="eq_head_heavymetal"/>
+<parts file="Model/woman/woman-parts_hitva.elu" part="eq_head_hitva" part="eq_chest_hitva" part="eq_hands_hitva" part="eq_legs_hitva" part="eq_feet_hitva"/>
+<parts file="Model/woman/woman-parts_hog.elu" part="eq_head_hog" part="eq_chest_hog" part="eq_hands_hog" part="eq_legs_hog" part="eq_feet_hog"/>
+<parts file="Model/woman/woman-parts_holyarmor.elu" part="eq_head_holyarmor" part="eq_chest_holyarmor" part="eq_hands_holyarmor" part="eq_legs_holyarmor" part="eq_feet_holyarmor"/>
+<parts file="Model/woman/woman-parts_iceelemental.elu" part="eq_head_iceelemental" part="eq_chest_iceelemental" part="eq_hands_iceelemental" part="eq_legs_iceelemental" part="eq_feet_iceelemental"/>
+<parts file="Model/woman/woman-parts_iguardian.elu" part="eq_head_iguardian" part="eq_chest_iguardian" part="eq_hands_iguardian" part="eq_legs_iguardian" part="eq_feet_iguardian"/>
+<parts file="Model/woman/woman-parts_invisible.elu" part="eq_feet_invisible" part="eq_hands_invisible" part="eq_head_invisible" part="eq_chest_invisible" part="eq_legs_invisible"/>
+<parts file="Model/woman/woman-parts_jhunter.elu" part="eq_head_jhunter" part="eq_hands_jhunter" part="eq_chest_jhunter" part="eq_legs_jhunter" part="eq_feet_jhunter"/>
+<parts file="Model/woman/woman-parts_judge.elu" part="eq_legs_judgement" part="eq_chest_judgement" part="eq_feet_judgement" part="eq_hands_judgement" part="eq_head_judgement"/>
+<parts file="Model/woman/woman-parts_kungfu.elu" part="eq_legs_kungfu" part="eq_chest_kungfu" part="eq_hands_kungfu" part="eq_feet_kungfu" part="eq_head_kungfu"/>
+<parts file="Model/woman/woman-parts_leopard.elu" part="eq_head_leopard" part="eq_chest_leopard" part="eq_hands_leopard" part="eq_legs_leopard" part="eq_feet_leopard"/>
+<parts file="Model/woman/woman-parts_lokva.elu" part="eq_head_lokva" part="eq_chest_lokva" part="eq_hands_lokva" part="eq_legs_lokva" part="eq_feet_lokva"/>
+<parts file="Model/woman/woman-parts_magic.elu" part="eq_chest_magician" part="eq_head_magician" part="eq_feet_magician" part="eq_hands_magician" part="eq_legs_magician"/>
+<parts file="Model/woman/woman-parts_magician_r.elu" part="eq_chest_magician_r" part="eq_head_magician_r" part="eq_feet_magician_r" part="eq_hands_magician_r" part="eq_legs_magician_r"/>
+<parts file="Model/woman/woman-parts_metalhand.elu" part="eq_hands_metalhand"/>
+<parts file="Model/woman/woman-parts_miner.elu" part="eq_head_miner" part="eq_chest_miner" part="eq_hands_miner" part="eq_legs_miner" part="eq_feet_miner"/>
+<parts file="Model/woman/woman-parts_monsterhand.elu" part="eq_hands_monsterhand"/>
+<parts file="Model/woman/woman-parts_mummv.elu" part="eq_head_mummv" part="eq_chest_mummv" part="eq_hands_mummv" part="eq_legs_mummv" part="eq_feet_mummv" />
+<parts file="Model/woman/woman-parts_navy.elu" part="eq_hands_US_Navy_Costume" part="eq_legs_US_Navy_Costume" part="eq_chest_US_Navy_Costume" part="eq_feet_US_Navy_Costume" part="eq_head_US_Navy_Costume"/>
+<parts file="Model/woman/woman-parts_needlearmor.elu" part="eq_head_needlearmor" part="eq_chest_needlearmor" part="eq_hands_needlearmor" part="eq_legs_needlearmor" part="eq_feet_needlearmor"/>
+<parts file="Model/woman/woman-parts_ninja.elu" part="eq_hands_ninja" part="eq_legs_ninja" part="eq_feet_ninja" part="eq_head_ninja" part="eq_chest_ninja"/>
+<parts file="Model/woman/woman-parts_noir.elu" part="eq_legs_noir" part="eq_hands_noir" part="eq_chest_noir" part="eq_feet_noir"/>
+<parts file="Model/woman/woman-parts_outlaw.elu" part="eq_head_outlaw" part="eq_chest_outlaw" part="eq_hands_outlaw" part="eq_legs_outlaw" part="eq_feet_outlaw"/>
+<parts file="Model/woman/woman-parts_panda.elu" part="eq_head_panda"/>
+<parts file="Model/woman/woman-parts_perub.elu" part="eq_head_perub" part="eq_chest_perub" part="eq_hands_perub" part="eq_legs_perub" part="eq_feet_perub"/>
+<parts file="Model/woman/woman-parts_phantommask.elu" part="eq_head_phantommask"/>
+<parts file="Model/woman/woman-parts_pierrot.elu" part="eq_head_pierrot"/>
+<parts file="Model/woman/woman-parts_pirate.elu" part="eq_legs_pirate" part="eq_hands_pirate" part="eq_feet_pirate" part="eq_face_01" part="eq_head_pirate" part="eq_chest_pirate"/>
+<parts file="Model/woman/woman-parts_polarhunter.elu" part="eq_hands_polarhunter" part="eq_head_polarhunter" part="eq_feet_polarhunter" part="eq_chest_polarhunter" part="eq_legs_polarhunter"/>
+<parts file="Model/woman/woman-parts_police.elu" part="eq_chest_police" part="eq_head_police" part="eq_hands_police" part="eq_feet_police" part="eq_legs_police"/>
+<parts file="Model/woman/woman-parts_primehunter.elu" part="eq_head_primehunter" part="eq_chest_primehunter" part="eq_hands_primehunter" part="eq_legs_primehunter" part="eq_feet_primehunter"/>
+<parts file="Model/woman/woman-parts_privatesoldier.elu" part="eq_head_privatesoldier" part="eq_chest_privatesoldier" part="eq_hands_privatesoldier" part="eq_legs_privatesoldier" part="eq_feet_privatesoldier"/>
+<parts file="Model/woman/woman-parts_pumpkin.elu" part="eq_head_pumpkin"/>
+<parts file="Model/woman/woman-parts_quest.elu" part="eq_head_goblin" part="eq_hands_skeleton" part="eq_feet_wrapshoes" part="eq_legs_dark"/>
+<parts file="Model/woman/woman-parts_quest_gold.elu" part="eq_head_goblin_gold" part="eq_head_palmpou" part="eq_hands_goblin" part="eq_hands_goblin_gold" part="eq_chest_palmpou"/>
+<parts file="Model/woman/woman-parts_quest_lizard.elu" part="eq_hands_lizard" part="eq_head_android" part="eq_head_mouse"/>
+<parts file="Model/woman/woman-parts_rabbit.elu" part="eq_head_rabbit"/>
+<parts file="Model/woman/woman-parts_rabbitmask.elu" part="eq_head_rabbitmask"/>
+<parts file="Model/woman/woman-parts_rabbitmaskdutch.elu" part="eq_head_rabbitmaskdutch"/>
+<parts file="Model/woman/woman-parts_racoonhead.elu" part="eq_head_racoonhead"/>
+<parts file="Model/woman/woman-parts_raven.elu" part="eq_head_raven" part="eq_chest_raven" part="eq_hands_raven" part="eq_legs_raven" part="eq_feet_raven"/>
+<parts file="Model/woman/woman-parts_resercher.elu" part="eq_chest_resercher" part="eq_head_resercher" part="eq_feet_resercher" part="eq_legs_resercher" part="eq_hands_resercher"/>
+<parts file="Model/woman/woman-parts_robothead.elu" part="eq_head_robothead"/>
+<parts file="Model/woman/woman-parts_royal.elu" part="eq_head_royal_children" part="eq_hands_royal_children" part="eq_chest_royal_children" part="eq_legs_royal_children" part="eq_feet_royal_children"/>
+<parts file="Model/woman/woman-parts_santa.elu" part="eq_legs_santa" part="eq_feet_santa" part="eq_hands_santa" part="eq_chest_santa" part="eq_head_santa"/>
+<parts file="Model/woman/woman-parts_santa_w.elu" part="eq_legs_santa_w" part="eq_feet_santa_w" part="eq_hands_santa_w" part="eq_chest_santa_w" part="eq_head_santa_w"/>
+<parts file="Model/woman/woman-parts_scarecrow.elu" part="eq_head_scarecrow" part="eq_chest_scarecrow" part="eq_hands_scarecrow" part="eq_legs_scarecrow" part="eq_feet_scarecrow"/>
+<parts file="Model/woman/woman-parts_school.elu" part="eq_feets_school" part="eq_hands_school" part="eq_chest_school" part="eq_head_school" part="eq_legs_school"/>
+<parts file="Model/woman/woman-parts_shadow.elu" part="eq_head_shadow" part="eq_hands_shadow" part="eq_legs_shadow" part="eq_feet_shadow" part="eq_chest_shadow"/>
+<parts file="Model/woman/woman-parts_shinehand.elu" part="eq_hands_shinehand"/>
+<parts file="Model/woman/woman-parts_shunter.elu" part="eq_legs_shunter" part="eq_feet_shunter" part="eq_head_shunter" part="eq_chest_shunter" part="eq_hands_shunter"/>
+<parts file="Model/woman/woman-parts_sknight.elu" part="eq_head_sknight" part="eq_chest_sknight" part="eq_hands_sknight" part="eq_legs_sknight" part="eq_feet_sknight"/>
+<parts file="Model/woman/woman-parts_snowhead.elu" part="eq_head_snowhead"/>
+<parts file="Model/woman/woman-parts_staff.elu" part="eq_chest_staff"/>
+<parts file="Model/woman/woman-parts_sum08.elu" part="eq_head_american" part="eq_chest_canada" part="eq_head_french"/>
+<parts file="Model/woman/woman-parts_sunduk.elu" part="eq_feet_sunduk" part="eq_legs_sunduk" part="eq_head_sunduk" part="eq_chest_sunduk" part="eq_hands_sunduk"/>
+<parts file="Model/woman/woman-parts_swim.elu" part="eq_hands_swim" part="eq_chest_swim" part="eq_legs_swim" part="eq_feet_swim" part="eq_head_swim"/>
+<parts file="Model/woman/woman-parts_travia_suit.elu" part="eq_legs_travia_suit" part="eq_feet_travia_suit" part="eq_hands_travia_suit" part="eq_chest_travia_suit" part="eq_head_travia_suit"/>
+<parts file="Model/woman/woman-parts_trider.elu" part="eq_head_trider" part="eq_chest_trider" part="eq_hands_trider" part="eq_legs_trider" part="eq_feet_trider"/>
+<parts file="Model/woman/woman-parts_trophy.elu" part="eq_head_00" part="eq_chest_00" part="eq_hands_00" part="eq_legs_00" part="eq_feet_00"/>
+<parts file="Model/woman/woman-parts_vagrant.elu" part="eq_head_vagrant" part="eq_chest_vagrant" part="eq_hands_vagrant" part="eq_legs_vagrant" part="eq_feet_vagrant"/>
+<parts file="Model/woman/woman-parts_valkyrie.elu" part="eq_feet_valkyrie" part="eq_hands_valkyrie" part="eq_legs_valkyrie" part="eq_head_valkyrie" part="eq_chest_valkyrie"/>
+<parts file="Model/woman/woman-parts_vampire.elu" part="eq_head_vampire" part="eq_chest_vampire" part="eq_hands_vampire" part="eq_legs_vampire" part="eq_feet_vampire"/>
+<parts file="Model/woman/woman-parts_wed.elu" part="eq_chest_wedding" part="eq_head_wedding" part="eq_hands_wedding" part="eq_feet_wedding" part="eq_legs_wedding"/>
+<parts file="Model/woman/woman-parts_western.elu" part="eq_legs_western" part="eq_hands_western" part="eq_feet_western" part="eq_head_western" part="eq_chest_western"/>
+<parts file="Model/woman/woman-parts_winter.elu" part="eq_feets_winter" part="eq_hands_winter" part="eq_head_winter" part="eq_chest_winter" part="eq_legs_winter"/>
+<parts file="Model/woman/woman-parts_wolfman.elu" part="eq_head_wolfman" part="eq_chest_wolfman" part="eq_hands_wolfman" part="eq_legs_wolfman" part="eq_feet_wolfman"/>
+<parts file="Model/woman/woman-parts_worldcup.elu" part="eq_feets_korea" part="eq_chest_korea" part="eq_legs_korea" part="eq_chest_brazil" part="eq_feets_brazil" part="eq_legs_brazil" part="eq_feets_japan" part="eq_legs_japan" part="eq_chest_japan" part="eq_head_korea" part="eq_head_brazil" part="eq_head_japan"/>
+<parts file="Model/woman/woman-parts_worldcup_hat.elu" part="eq_head_worldcup2010"/>
+<parts file="Model/woman/woman-parts_yohawk.elu" part="eq_chest_yohawk" part="eq_head_yohawk" part="eq_feet_yohawk" part="eq_legs_yohawk" part="eq_hands_yohawk"/>
+<parts file="Model/woman/woman-parts_zeus.elu" part="eq_chest_zeus" part="eq_head_zeus"/>
+<parts file="Model/woman/woman-parts_zombie.elu" part="eq_chest_zombie" part="eq_head_zombie" part="eq_hands_zombie" part="eq_legs_zombie" part="eq_feet_zombie"/>
+<parts file="Model/woman/woman_bigi.elu" part="eq_chest_bigi" part="eq_head_bigi"/>
+
+</partslisting>

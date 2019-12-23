@@ -1,0 +1,186 @@
+﻿<?xml version="1.0" encoding="UTF-8" ?>
+<XML>
+<!-- Error Massage -->
+<STR id="100">Communicator does not have a UID. This Communicator must be initialized by the Master-Controller.</STR>
+<STR id="101">Communicator has no UID space to allocate your UID.</STR>
+<STR id="110">Communicator tries to connect to an invalid direct connection.</STR>
+<STR id="200">Command has an invalid receiver UID. If you did not connect to any server and set default receiver, you must do it first.</STR>
+<STR id="300">Zone-Server is not connected to the Master-Controller.</STR>
+<STR id="301">Zone-Server tries to invalidate the Master-Controller.</STR>
+<STR id="1000">Invalid object UID.</STR>
+<!--
+<STR id="1001"></STR>
+-->
+
+<STR id="2000">Map file open error.</STR>
+
+<!-- Connection, Login -->
+<STR id="10000">You have entered an incorrect password.  Please check your password and try again.</STR>
+<STR id="10001">This ID is already in use.</STR>
+<STR id="10002">The client version does not match the server.</STR>
+<STR id="10003">The server is full.</STR>
+<STR id="10004">This ID is banned from Gunz online.</STR>
+<STR id="10005">Authentication failed.</STR>
+<STR id="10006"></STR>
+<STR id="10007">Connection failed. Please try again later.</STR>
+<STR id="10008">Failed to retrieve the account information. Please try again later.</STR>
+<STR id="10009">Wrong client version. Please run 'Repair' from the Ijji Reactor or reinstall the GunZ client.</STR>
+<STR id="10010">Please wait while the game attempts to connect.</STR>
+<STR id="10011">Your IP address is from an area we don't support.</STR>
+<STR id="10012">Your log-in information is outdated or unavailable.  Please restart the Ijji Reactor.</STR>
+
+<!-- Character Admin -->
+<STR id="10100">This character name is already in use.</STR>
+<STR id="10101">You have used invalid characters that are not allowed. Please use letters and numbers only.</STR>
+<STR id="10102">The character name is too short.</STR>
+<STR id="10103">The character name is too long.</STR>
+<STR id="10104">Enter character name.</STR>
+<STR id="10110">The character name does not exist.</STR>
+<STR id="10111">Cannot delete a character if it belongs to a clan or has cash items.</STR>
+
+<!-- Item -->
+<STR id="20001">Insufficient Bounty!</STR>
+<STR id="20002">You are not allowed to purchase the item.</STR>
+<STR id="20003">You are not allowed to equip this iem.</STR>
+<STR id="20004">You ae not allowed to unequip this item.</STR>
+<STR id="20005">You are not allowed to sell this item.</STR>
+<STR id="20006">You are not allowed to sell the equipped item.</STR>
+<STR id="20007">The item is not available.</STR>
+<STR id="20008">You have too many items.</STR>
+<STR id="20009">The selected item does not exist.</STR>
+<STR id="20010">The item you selected is too heavy for your current configuration.</STR>
+<STR id="20011">You must be a higher level to use this item.</STR>
+<STR id="20012">Cannot equip the same equipment(or item) in a slot.</STR>
+<STR id="20013">Cannot take off because there is too much weight.</STR>
+<STR id="20014">Cannot sell the cash equipment (or item) at the shop.</STR>
+<STR id="20015">Cannot take the equipment (or item), it does not match your gender.</STR>
+<STR id="20016">This item cannot be equipped, you do not have the required level. Do you still want this equipment (or item)?</STR>
+<STR id="20017">Cannot deposit the equipment(or item) in the Storage.</STR>
+<STR id="20018">You may only deposit a cash item into the Storage.</STR>
+<STR id="20019">The item has been unequipped because of a level decrease.</STR>
+<STR id="20020">Cannot equip this item.</STR>
+<STR id="20021"></STR>
+<STR id="20024">You can only have 30,000 of the same item in your backpack.</STR>
+<STR id="20025">You can only put up to 30,000 of the item you have selected in your storage.</STR>
+<STR id="20026">You can only have 30,000 of the same item.  Please try again later. </STR>
+
+<!-- Stage -->
+<STR id="30000">Cannot enter the room.</STR>
+<STR id="30001">Room is full.</STR>
+<STR id="30002">Incorrect password!</STR>
+<STR id="30003">You cannot enter at your current level.</STR>
+<STR id="30004">Cannot join game in progress.</STR>
+<STR id="30005">You may not enter.</STR>
+<STR id="30006">The stage does not exist.</STR>
+<STR id="30007">The stage is already present.</STR>
+<STR id="30008">You cannot make the room.</STR>
+<STR id="30009">There is no room available for you to enter.</STR>
+
+<!-- Channel -->
+<STR id="30020">Cannot enter the channel.</STR>
+<STR id="30021">Max number of user reached.</STR>
+<STR id="30022">You cannot enter at your current level.</STR>
+<STR id="30023">If you have a character that is level 21 or above, you cannot enter the beginner's channel.</STR>
+
+<!-- Primium Ticket -->
+
+<STR id="30026">Please select a character first.</STR>
+
+<!-- Clan -->
+<STR id="30030">Cannot form a clan.</STR>
+<STR id="30031">The clan cannot be closed.</STR>
+<STR id="30032">The clan name is already in use.</STR>
+<STR id="30033">You do not have enough members for the clan to be created.</STR>
+<STR id="30034">This user already belongs to another clan.</STR>
+<STR id="30035">The member you have requested to join your clan is not in the lobby.</STR>
+<STR id="30036">The clan name is incorrect.</STR>
+<STR id="30037">This is not the Clan Leader.</STR>
+<STR id="30038">You are not a authorized to perform this action.</STR>
+<STR id="30039">This user already belongs to another clan.</STR>
+<STR id="30040">Your request to join the clan has been rejected.</STR>
+<STR id="30041">This user already is a member in another clan.</STR>
+<STR id="30042">Unable to send invite. Player is currently in a game.</STR>
+<STR id="30043">You have not joined the clan.</STR>
+<STR id="30044">You cannot withdraw from the clan.</STR>
+<STR id="30045">Cannot add an additional clan member.</STR>
+<STR id="30046">Your friend is not online.</STR>
+<STR id="30047">Not in the same clan.</STR>
+<STR id="30048">You cannot change your permissions.</STR>
+<STR id="30049">Theclan member is not available.</STR>
+<STR id="30050">Insufficient bounty (1000 BP) for clan creation.</STR>
+<STR id="30051">Only level 10 or higher can create a clan.</STR>
+<STR id="30052">Clan will be closed on '%s'.</STR>
+
+<!-- Ladder -->
+<STR id="30070">You cannot request a Clan War.</STR>
+<STR id="30071">When does this message appear?</STR>
+<STR id="30072">When does this message appear?</STR>
+<STR id="30073">When does this message appear?</STR>
+<STR id="30074">The Clan War is closed.  Service Time AM 9:00.</STR>
+
+<!-- Clan Battle -->
+<STR id="30080">You are not in the same clan.</STR>
+<STR id="30081">There are no clan members present.</STR>
+<STR id="30082">One of the selected clan members is not available for a Clan War right now.</STR>
+
+<!-- Client -->
+<STR id="30103">This function is not yet supported.</STR>
+<STR id="30104">Please do not use vulgar or profane language.</STR>
+<STR id="30105">Please do not spam the channel or room.</STR>
+<STR id="30106">Prohibited to join chat for 1 minute.</STR>
+
+<!-- Server Message -->
+<STR id="90000">Cannot access server.</STR>
+<STR id="90002">Disconnected from the server.</STR>
+
+<!-- Clan Message -->
+<STR id="100000">You have joined the clan.</STR>
+<STR id="100001">The clan has been created.</STR>
+
+<!-- Follow -->
+<STR id="110000">You cannot enter.</STR>
+
+<!-- Vote -->
+<STR id="120000">Cannot apply for a vote.</STR>
+
+<!-- Disconnect message -->
+<STR id="130001">A hacking attempt was detected. Connection to the game server will be terminated.</STR>
+<STR id="130002">This account has been blocked due to a hacking attempt. Account will be blocked for approximately an hour.</STR>
+<STR id="130003">Connection is denied due to user's status. Connection to the game server will be terminated shortly.</STR>
+<STR id="130004">An invalid file has been detected.</STR>
+<STR id="130005">Game abusing detected: Your account is suspended for one hour.</STR>
+<STR id="130006">Account blocked in 1 hour.</STR>
+<STR id="130007">Your characters have been removed due to inactivity.</STR>
+
+<!-- DuelTournament message -->
+<STR id="140000">This is not the Duel Tournament channel.</STR>
+<STR id="140001">You’ve already requested to enter the Duel Tournament.</STR>
+<STR id="140002">Your application has failed. Please try again later. If the problem continues, please contact ijji Help Desk.</STR>
+<STR id="140003">Tournament application time limit has been exceeded.</STR>
+<STR id="140004">Cannot create the stage.</STR>
+<STR id="140005">Cannot find the stage.</STR>
+<STR id="140006">There is an error at the stage setting.</STR>
+<STR id="140007">Cannot start the stage.</STR>
+<STR id="140008">The communication with DB is unstable.</STR>
+<STR id="140009">The Duel Tournament is closed.  It will be open during %d:00 to %d:59.</STR>
+
+<!-- Administartor message -->
+<STR id="150000">The character cannot be found.</STR>
+<STR id="150001">There is no response from DB. Please try again.</STR>
+
+<!-- Server -->
+<STR id="200000">You cannot start the vote.</STR>
+<STR id="200001">You cannot use this function in a ladder game.</STR>
+<STR id="200002">Voting already started.</STR>
+<STR id="200003">The vote failed.</STR>
+<STR id="200004">10 seconds remaining.</STR>
+<STR id="200005">30 seconds remaining.</STR>
+<STR id="200006">60 seconds remaining.</STR>
+<STR id="200007">There are too many players to start this game.</STR>
+<STR id="200008">'%s' isn't ready.</STR>
+
+<!-- Challenge Quest -->
+<STR id="210000"> '%s' is lower than the required level. </STR>
+<STR id="210001">You can't start the challenge because at least one player is lower than the required level.</STR>
+
+</XML>

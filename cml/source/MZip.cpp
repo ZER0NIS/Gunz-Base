@@ -86,29 +86,10 @@ struct MZIPDIRFILEHEADER{
 
 #pragma pack()
 
-void ConvertChar(char* pData,int _size)
-{
-
-}
-
-static u8 s_PackageListKey[] = { '♥', '♪', '®', '®','•', 'ƒ', '×','ZER'
-									   ,'‼', 'T', 'Q','M', '►', 'M','NIS' ,'Ø'
-									   ,'DUS', 'TIN', 'Ø', 'ù', 'ú', '♂', '♀'
-									   ,'♪', '♫', '☼', '►',  '◄', '§','▬','→'
-									   ,'↓','♥', '♪', '®','•', 'ƒ', '×','NXS' };
+void ConvertChar(char* pData,int _size) { }
 
 static void ZERONIS(char* data, size_t size)
 {
-/*	for (size_t i = 0; i < size; ++i)
-	{
-		u8& b = reinterpret_cast<u8*>(data)[i];
-		for (size_t d = 0; d < 39; d++)
-		{
-			b = b ^ s_PackageListKey[d % (sizeof(s_PackageListKey) / sizeof(char))];
-		}
-		data[i] = b;
-	}*/
-
 	for (size_t i = 0; i < size; ++i)
 	{
 		u8& c = reinterpret_cast<u8*>(data)[i];

@@ -1,0 +1,157 @@
+﻿<?xml version="1.0" ?>
+<XML id="QUESTMAP">
+
+<!--
+////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+ Mansion
+        
+////////////////////////////////////////////////////////////////////////////////////////////////////////
+-->
+<MAPSET id="1"  title="Mansion">
+	<SECTOR id="109" 
+			title="Mansion_Passage3"
+			melee_spawn="15"
+			range_spawn="15">
+		<LINK name="link01">
+		  <TARGET sector="Mansion_Passage2"	/>
+		</LINK>
+	</SECTOR>
+	<SECTOR id="108"
+			title="Mansion_Passage2"
+			melee_spawn="15"
+			range_spawn="15">
+		<LINK name="link01">
+		  <TARGET sector="Mansion_Room3"	/>
+		</LINK>	
+	</SECTOR>
+	<SECTOR id="105"
+			title="Mansion_Room3"
+			melee_spawn="15"
+			range_spawn="15">
+		<LINK>
+			<TARGET sector="Mansion_Room2"	/>
+		</LINK>
+	</SECTOR>
+	<SECTOR id="103"
+			title="Mansion_Room2"
+			melee_spawn="15"
+			range_spawn="15">
+		<LINK name="link01">
+			<TARGET sector="Mansion_Hall2"	/>
+		</LINK>
+	</SECTOR>
+	<SECTOR id="102"
+			title="Mansion_Hall2"
+			melee_spawn="15"
+			range_spawn="15">
+		<LINK name="link01">
+		  <TARGET sector="Mansion_Passage3"	/>
+		</LINK>	
+	</SECTOR>
+</MAPSET>
+
+
+<!--
+////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+ Prison
+        
+////////////////////////////////////////////////////////////////////////////////////////////////////////
+-->
+<!-- 섹터207은 Prison_hall2라는 가정하에 하드코딩된 것이 있음(npc/맵 충돌 문제).. 변경시 코드도 변경해야함-->
+<MAPSET id="2"  title="Prison">
+	<SECTOR id="209"
+		title="Prison_passage1"
+		melee_spawn="15"
+		range_spawn="15">
+		<LINK>
+			<TARGET sector="Prison_drainage1" />
+		</LINK>
+	</SECTOR>
+	<SECTOR id="206"
+		title="Prison_drainage1"
+		melee_spawn="15"
+		range_spawn="15">
+		<LINK>
+			<TARGET sector="Prison_drainage2" />
+		</LINK>
+	</SECTOR>
+	<SECTOR id="208"
+		title="Prison_drainage2"
+		melee_spawn="15"
+		range_spawn="15">
+		<LINK>
+			<TARGET sector="Prison_hall2" />
+		</LINK>
+	</SECTOR>
+	<SECTOR id="207"
+		title="Prison_hall2"
+		melee_spawn="15"
+		range_spawn="15">
+		<LINK>
+			<TARGET sector="Prison_hall1" />
+		</LINK>
+	</SECTOR>
+	<SECTOR id="205"
+		title="Prison_hall1"
+		melee_spawn="15"
+		range_spawn="15">
+		<LINK>
+			<TARGET sector="Prison_passage1" />
+		</LINK>
+	</SECTOR>
+</MAPSET>
+
+
+<!--
+////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+ Dungeon
+        
+////////////////////////////////////////////////////////////////////////////////////////////////////////
+-->
+<MAPSET id="3"  title="Dungeon">
+	<SECTOR id="308"
+		title="Dungeon_passage2"
+		melee_spawn="15"
+		range_spawn="15">
+		<LINK>
+			<TARGET sector="Dungeon_cavern1" />
+		</LINK>
+	</SECTOR>
+	<SECTOR id="305"
+		title="Dungeon_cavern1"
+		melee_spawn="15"
+		range_spawn="15">
+		<LINK>
+			<TARGET sector="Dungeon_cavern2" />
+		</LINK>
+	</SECTOR>
+	<SECTOR id="304"
+		title="Dungeon_cavern2"
+		melee_spawn="15"
+		range_spawn="15">
+		<LINK>
+			<TARGET sector="Dungeon_cavern3" />
+		</LINK>
+	</SECTOR>
+	<SECTOR id="306"
+		title="Dungeon_cavern3"
+		melee_spawn="15"
+		range_spawn="15">
+		<LINK>
+			<TARGET sector="Dungeon_nest2" />
+		</LINK>
+	</SECTOR>
+	<SECTOR id="309"
+		title="Dungeon_nest2"
+		melee_spawn="15"
+		range_spawn="15">
+		<LINK>
+			<TARGET sector="Dungeon_passage2" />
+		</LINK>
+	</SECTOR>
+</MAPSET>
+
+</XML>

@@ -1,0 +1,10 @@
+1,negro
+2,maiet
+2,gunz
+2,duel
+2,admin
+2,developer
+2,operator
+2,manager
+2,moderator
+END

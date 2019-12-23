@@ -1,0 +1,1281 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<XML>
+<!--> 
+	액션은 여러 npc가 공용으로 사용할 수 있다.
+	예를 들어 idle 액션인 경우는 그냥 대기 애니메이션을 재생해주는 것 뿐이므로
+	하나만 만들어두고 여러 npc에서 사용할 수 있을 것이다.
+	물론 idle 애니메이션이 존재하는 npc의 경우에만 가능하다.
+	
+	달리는 애니라던가 근접 공격을 하는 등의 액션도 마찬가지다.
+	달리기나 칼질 애니가 서로 다를 순 있지만 같은 이름으로 바인딩되었다면 같은 action을 사용할 수 있다.
+	
+	어떤 npc가 자신의 특수 스킬을 가지고 있다면 그런 스킬을 정의한 액션은 그 npc에서만 사용할 수 있겠지..
+</-->
+	<ACTION name="wait" animation="wait" />
+	<ACTION name="arrive" animation="arrive" />
+	<ACTION name="idle" animation="idle" />
+	<ACTION name="run" animation="run" />
+	<ACTION name="runfast" animation="runfast" >
+		<EFFECT delay="30" mesh="ef_dust_1m" posparts="" posmod="0 40 0" dirmod="0 0 0" scale="1.0"/>
+		<EFFECT delay="90" mesh="ef_dust_1m" posparts="" posmod="0 -30 0" dirmod="0 0 0" scale="1.0"/>
+		<EFFECT delay="180" mesh="ef_dust_1m" posparts="" posmod="20 0 0" dirmod="0 0 0" scale="1.0"/>
+		<EFFECT delay="300" mesh="ef_dust_1m" posparts="" posmod="-10 0 0" dirmod="0 0 0" scale="1.0"/>
+		<EFFECT delay="450" mesh="ef_dust_1m" posparts="" posmod="0 0 0" dirmod="0 0 0" scale="1.0"/>
+	</ACTION>
+	<ACTION name="run2" animation="run2" />
+	<ACTION name="run3" animation="run3" />
+	<ACTION name="suffer1" animation="suffer1" movinganimation="true" />
+	<ACTION name="suffer2" animation="suffer2" movinganimation="true" />	
+	<ACTION name="suffer3" animation="suffer3" movinganimation="true" />
+	<ACTION name="suffer3recover" animation="suffer3recover" movinganimation="true" />
+	
+	<ACTION name="dash" animation="dash"  movinganimation="true" />
+	<ACTION name="backdash" animation="backdash"  movinganimation="true" />
+	<ACTION name="stepforward" animation="stepforward"  movinganimation="true" />
+	<ACTION name="stepbackward" animation="stepbackward"  movinganimation="true" />
+	<ACTION name="stepleft" animation="stepleft"  movinganimation="true" />
+	<ACTION name="stepright" animation="stepright"  movinganimation="true" />
+	<ACTION name="retreat" animation="retreat"  movinganimation="true" />
+	
+	<ACTION name="bot_die" animation="idle" >
+		<EFFECT delay="1" mesh="grenade_effect" posparts="" posmod="0 0 0" dirmod="0 0 0" scale="0.45"/>
+		<EFFECT delay="1" mesh="ef_dust_2m" posparts="" posmod="0 0 0" dirmod="0 0 0" scale="0.75"/>
+		<SOUND delay="1" sound="fx_explosion01" />
+	</ACTION>
+	
+<!--> 
+	나이프맨 스킬
+</-->
+	
+	<ACTION name="charge" animation="charge" movinganimation="true" >
+		<MELEESHOT delay="666" damage="18" range="190" angle="5" pierce="0" sound="challenge_quest/guerilla_knifeman/guerilla_knifeman_charge" />
+	</ACTION>
+	<ACTION name="charge2" animation="charge2" movinganimation="true" >
+		<MELEESHOT delay="600" damage="27" range="190" angle="5" pierce="0" sound="challenge_quest/guerilla_knifeman/guerilla_knifeman_charge" />
+	</ACTION>
+	<ACTION name="charge3" animation="charge3" movinganimation="true" >
+		<MELEESHOT delay="544" damage="36" range="190" angle="5" pierce="0" sound="challenge_quest/guerilla_knifeman/guerilla_knifeman_charge" />
+	</ACTION>
+	
+	<ACTION name="slash" animation="slash" movinganimation="true" >
+		<MELEESHOT delay="433" damage="12" range="160" angle="140" pierce="0" sound="challenge_quest/guerilla_knifeman/guerilla_knifeman_slash" />
+	</ACTION>
+	<ACTION name="slash2" animation="slash2" movinganimation="true" >
+		<MELEESHOT delay="400" damage="18" range="160" angle="140" pierce="0" sound="challenge_quest/guerilla_knifeman/guerilla_knifeman_slash" />
+	</ACTION>
+	<ACTION name="slash3" animation="slash3" movinganimation="true" >
+		<MELEESHOT delay="366" damage="24" range="160" angle="140" pierce="0" sound="challenge_quest/guerilla_knifeman/guerilla_knifeman_slash" />
+	</ACTION>
+	
+	<ACTION name="knifeman_suffer1" animation="suffer1" movinganimation="true" >
+		<SOUND delay="0" sound="challenge_quest/guerilla_knifeman/guerilla_knifeman_suffer1" />
+	</ACTION>
+	<ACTION name="knifeman_suffer2" animation="suffer2" movinganimation="true" >	
+		<SOUND delay="0" sound="challenge_quest/guerilla_knifeman/guerilla_knifeman_suffer2" />
+	</ACTION>
+	<ACTION name="knifeman_suffer3" animation="suffer3" movinganimation="true" >
+		<SOUND delay="0" sound="challenge_quest/guerilla_knifeman/guerilla_knifeman_suffer3" />
+	</ACTION>
+	
+<!--> 
+	헌터 스킬
+</-->
+
+	<ACTION name="slash1_1" animation="slash1_1" movinganimation="true" >
+		<MELEESHOT delay="594" damage="12" range="160" angle="120" pierce="0" sound="challenge_quest/guerilla_hunter/guerilla_hunter_slash1" />
+	</ACTION>
+	<ACTION name="slash1_2" animation="slash1_2" movinganimation="true" >
+		<MELEESHOT delay="528" damage="18" range="160" angle="120" pierce="0" sound="challenge_quest/guerilla_hunter/guerilla_hunter_slash1" />
+	</ACTION>
+	<ACTION name="slash1_3" animation="slash1_3" movinganimation="true" >
+		<MELEESHOT delay="462" damage="24" range="160" angle="120" pierce="0" sound="challenge_quest/guerilla_hunter/guerilla_hunter_slash1" />
+	</ACTION>
+	
+	<ACTION name="slash2_1" animation="slash2_1" movinganimation="true" >
+		<MELEESHOT delay="594" damage="12" range="160" angle="360" pierce="0" sound="challenge_quest/guerilla_hunter/guerilla_hunter_slash2" />
+	</ACTION>
+	<ACTION name="slash2_2" animation="slash2_2" movinganimation="true" >
+		<MELEESHOT delay="528" damage="18" range="160" angle="360" pierce="0" sound="challenge_quest/guerilla_hunter/guerilla_hunter_slash2" />
+	</ACTION>
+	<ACTION name="slash2_3" animation="slash2_3" movinganimation="true" >
+		<MELEESHOT delay="462" damage="24" range="160" angle="360" pierce="0" sound="challenge_quest/guerilla_hunter/guerilla_hunter_slash2" />
+	</ACTION>
+	
+	<ACTION name="hunter_suffer1" animation="suffer1" movinganimation="true" >
+		<SOUND delay="0" sound="challenge_quest/guerilla_hunter/guerilla_hunter_suffer1" />
+	</ACTION>
+	<ACTION name="hunter_suffer2" animation="suffer2" movinganimation="true" >	
+		<SOUND delay="0" sound="challenge_quest/guerilla_hunter/guerilla_hunter_suffer2" />
+	</ACTION>
+	<ACTION name="hunter_suffer3" animation="suffer3" movinganimation="true" >
+		<SOUND delay="0" sound="challenge_quest/guerilla_hunter/guerilla_hunter_suffer3" />
+	</ACTION>
+	
+	<ACTION name="stepshootforward" animation="stepforward" movinganimation="true" >
+		<RANGESHOT delay="66" damage="6" pierce="50" sound="hitsound" mesh="ef_bullet" speed="3000" collradius="1" dirmod="0.02 0.02 0.0" posparts="lhand" dirtarget="true"/>
+		<EFFECT delay="66" mesh="flame_rifle" posparts="lhand" posmod="0 20 0" dirmod="0 0 0" scale="0.6"/>
+		<SOUND delay="66" sound="challenge_quest/guerilla_hunter/guerilla_hunter_shoot" />
+		<RANGESHOT delay="231" damage="6" pierce="50" sound="hitsound" mesh="ef_bullet" speed="3000" collradius="1" dirmod="-0.02 -0.02 0.0" posparts="lhand" dirtarget="true"/>
+		<EFFECT delay="231" mesh="flame_rifle" posparts="lhand" posmod="0 20 0" dirmod="0 0 0" scale="0.6"/>
+		<SOUND delay="231" sound="challenge_quest/guerilla_hunter/guerilla_hunter_shoot" />
+		<RANGESHOT delay="396" damage="6" pierce="50" sound="hitsound" mesh="ef_bullet" speed="3000" collradius="1" dirmod="0.04 0.04 0.0" posparts="lhand" dirtarget="true"/>
+		<EFFECT delay="396" mesh="flame_rifle" posparts="lhand" posmod="0 20 0" dirmod="0 0 0" scale="0.6"/>
+		<SOUND delay="396" sound="challenge_quest/guerilla_hunter/guerilla_hunter_shoot" />
+		<RANGESHOT delay="561" damage="6" pierce="50" sound="hitsound" mesh="ef_bullet" speed="3000" collradius="1" dirmod="-0.04 -0.04 0.0" posparts="lhand" dirtarget="true"/>
+		<EFFECT delay="561" mesh="flame_rifle" posparts="lhand" posmod="0 20 0" dirmod="0 0 0" scale="0.6"/>
+		<SOUND delay="561" sound="challenge_quest/guerilla_hunter/guerilla_hunter_shoot" />
+	</ACTION>
+	
+	<ACTION name="stepshootbackward" animation="stepbackward" movinganimation="true" >
+		<RANGESHOT delay="66" damage="6" pierce="50" sound="hitsound" mesh="ef_bullet" speed="3000" collradius="1" dirmod="0.02 0.02 0.0" posparts="lhand" dirtarget="true"/>
+		<EFFECT delay="66" mesh="flame_rifle" posparts="lhand" posmod="0 20 0" dirmod="0 0 0" scale="0.6"/>
+		<SOUND delay="66" sound="challenge_quest/guerilla_hunter/guerilla_hunter_shoot" />
+		<RANGESHOT delay="231" damage="6" pierce="50" sound="hitsound" mesh="ef_bullet" speed="3000" collradius="1" dirmod="-0.02 -0.02 0.0" posparts="lhand" dirtarget="true"/>
+		<EFFECT delay="231" mesh="flame_rifle" posparts="lhand" posmod="0 20 0" dirmod="0 0 0" scale="0.6"/>
+		<SOUND delay="231" sound="challenge_quest/guerilla_hunter/guerilla_hunter_shoot" />
+		<RANGESHOT delay="396" damage="6" pierce="50" sound="hitsound" mesh="ef_bullet" speed="3000" collradius="1" dirmod="0.04 0.04 0.0" posparts="lhand" dirtarget="true"/>
+		<EFFECT delay="396" mesh="flame_rifle" posparts="lhand" posmod="0 20 0" dirmod="0 0 0" scale="0.6"/>
+		<SOUND delay="396" sound="challenge_quest/guerilla_hunter/guerilla_hunter_shoot" />
+		<RANGESHOT delay="561" damage="6" pierce="50" sound="hitsound" mesh="ef_bullet" speed="3000" collradius="1" dirmod="-0.04 -0.04 0.0" posparts="lhand" dirtarget="true"/>
+		<EFFECT delay="561" mesh="flame_rifle" posparts="lhand" posmod="0 20 0" dirmod="0 0 0" scale="0.6"/>
+		<SOUND delay="561" sound="challenge_quest/guerilla_hunter/guerilla_hunter_shoot" />
+	</ACTION>
+	
+	<ACTION name="stepshootleft" animation="stepleft" movinganimation="true" >
+		<RANGESHOT delay="66" damage="6" pierce="50" sound="hitsound" mesh="ef_bullet" speed="3000" collradius="1" dirmod="0.02 0.02 0.0" posparts="lhand" dirtarget="true"/>
+		<EFFECT delay="66" mesh="flame_rifle" posparts="lhand" posmod="0 20 0" dirmod="0 0 0" scale="0.6"/>
+		<SOUND delay="66" sound="challenge_quest/guerilla_hunter/guerilla_hunter_shoot" />
+		<RANGESHOT delay="231" damage="6" pierce="50" sound="hitsound" mesh="ef_bullet" speed="3000" collradius="1" dirmod="-0.02 -0.02 0.0" posparts="lhand" dirtarget="true"/>
+		<EFFECT delay="231" mesh="flame_rifle" posparts="lhand" posmod="0 20 0" dirmod="0 0 0" scale="0.6"/>
+		<SOUND delay="231" sound="challenge_quest/guerilla_hunter/guerilla_hunter_shoot" />
+		<RANGESHOT delay="396" damage="6" pierce="50" sound="hitsound" mesh="ef_bullet" speed="3000" collradius="1" dirmod="0.04 0.04 0.0" posparts="lhand" dirtarget="true"/>
+		<EFFECT delay="396" mesh="flame_rifle" posparts="lhand" posmod="0 20 0" dirmod="0 0 0" scale="0.6"/>
+		<SOUND delay="396" sound="challenge_quest/guerilla_hunter/guerilla_hunter_shoot" />
+		<RANGESHOT delay="561" damage="6" pierce="50" sound="hitsound" mesh="ef_bullet" speed="3000" collradius="1" dirmod="-0.04 -0.04 0.0" posparts="lhand" dirtarget="true"/>
+		<EFFECT delay="561" mesh="flame_rifle" posparts="lhand" posmod="0 20 0" dirmod="0 0 0" scale="0.6"/>
+		<SOUND delay="561" sound="challenge_quest/guerilla_hunter/guerilla_hunter_shoot" />
+	</ACTION>
+	
+	<ACTION name="stepshootright" animation="stepright" movinganimation="true" >
+		<RANGESHOT delay="66" damage="6" pierce="50" sound="hitsound" mesh="ef_bullet" speed="3000" collradius="1" dirmod="0.02 0.02 0.0" posparts="lhand" dirtarget="true"/>
+		<EFFECT delay="66" mesh="flame_rifle" posparts="lhand" posmod="0 20 0" dirmod="0 0 0" scale="0.6"/>
+		<SOUND delay="66" sound="challenge_quest/guerilla_hunter/guerilla_hunter_shoot" />
+		<RANGESHOT delay="231" damage="6" pierce="50" sound="hitsound" mesh="ef_bullet" speed="3000" collradius="1" dirmod="-0.02 -0.02 0.0" posparts="lhand" dirtarget="true"/>
+		<EFFECT delay="231" mesh="flame_rifle" posparts="lhand" posmod="0 20 0" dirmod="0 0 0" scale="0.6"/>
+		<SOUND delay="231" sound="challenge_quest/guerilla_hunter/guerilla_hunter_shoot" />
+		<RANGESHOT delay="396" damage="6" pierce="50" sound="hitsound" mesh="ef_bullet" speed="3000" collradius="1" dirmod="0.04 0.04 0.0" posparts="lhand" dirtarget="true"/>
+		<EFFECT delay="396" mesh="flame_rifle" posparts="lhand" posmod="0 20 0" dirmod="0 0 0" scale="0.6"/>
+		<SOUND delay="396" sound="challenge_quest/guerilla_hunter/guerilla_hunter_shoot" />
+		<RANGESHOT delay="561" damage="6" pierce="50" sound="hitsound" mesh="ef_bullet" speed="3000" collradius="1" dirmod="-0.04 -0.04 0.0" posparts="lhand" dirtarget="true"/>
+		<EFFECT delay="561" mesh="flame_rifle" posparts="lhand" posmod="0 20 0" dirmod="0 0 0" scale="0.6"/>
+		<SOUND delay="561" sound="challenge_quest/guerilla_hunter/guerilla_hunter_shoot" />
+	</ACTION>
+	
+	<ACTION name="huntershootup" animation="shootup" movinganimation="true" >
+		<RANGESHOT delay="66" damage="6" pierce="50" sound="hitsound" mesh="ef_bullet" speed="3000" collradius="1" dirmod="0.02 0.02 0.0" posparts="lhand" dirtarget="true"/>
+		<EFFECT delay="66" mesh="flame_rifle" posparts="lhand" posmod="0 20 0" dirmod="0 0 0" scale="0.6"/>
+		<SOUND delay="66" sound="challenge_quest/guerilla_hunter/guerilla_hunter_shoot" />
+		<RANGESHOT delay="231" damage="6" pierce="50" sound="hitsound" mesh="ef_bullet" speed="3000" collradius="1" dirmod="-0.02 -0.02 0.0" posparts="lhand" dirtarget="true"/>
+		<EFFECT delay="231" mesh="flame_rifle" posparts="lhand" posmod="0 20 0" dirmod="0 0 0" scale="0.6"/>
+		<SOUND delay="231" sound="challenge_quest/guerilla_hunter/guerilla_hunter_shoot" />
+		<RANGESHOT delay="396" damage="6" pierce="50" sound="hitsound" mesh="ef_bullet" speed="3000" collradius="1" dirmod="0.04 0.04 0.0" posparts="lhand" dirtarget="true"/>
+		<EFFECT delay="396" mesh="flame_rifle" posparts="lhand" posmod="0 20 0" dirmod="0 0 0" scale="0.6"/>
+		<SOUND delay="396" sound="challenge_quest/guerilla_hunter/guerilla_hunter_shoot" />
+		<RANGESHOT delay="561" damage="6" pierce="50" sound="hitsound" mesh="ef_bullet" speed="3000" collradius="1" dirmod="-0.04 -0.04 0.0" posparts="lhand" dirtarget="true"/>
+		<EFFECT delay="561" mesh="flame_rifle" posparts="lhand" posmod="0 20 0" dirmod="0 0 0" scale="0.6"/>
+		<SOUND delay="561" sound="challenge_quest/guerilla_hunter/guerilla_hunter_shoot" />
+	</ACTION>
+
+	
+<!--> 
+	라이플맨 스킬
+</-->
+	
+	<ACTION name="rifleman_suffer1" animation="suffer1" movinganimation="true" >
+		<SOUND delay="0" sound="challenge_quest/guerilla_rifleman/guerilla_rifleman_suffer1" />
+	</ACTION>
+	<ACTION name="rifleman_suffer2" animation="suffer2" movinganimation="true" >	
+		<SOUND delay="0" sound="challenge_quest/guerilla_rifleman/guerilla_rifleman_suffer2" />
+	</ACTION>
+	<ACTION name="rifleman_suffer3" animation="suffer3" movinganimation="true" >
+		<SOUND delay="0" sound="challenge_quest/guerilla_rifleman/guerilla_rifleman_suffer3" />
+	</ACTION>
+	
+	<ACTION name="shoot" animation="shoot" movinganimation="true" >
+		<RANGESHOT delay="66" damage="6" pierce="50" sound="hitsound" mesh="ef_bullet" speed="3000" collradius="1" dirmod="0.0 0.0 0.0" posparts="lhand" dirtarget="true"/>
+		<EFFECT delay="66" mesh="flame_rifle" posparts="lhand" posmod="0 20 0" dirmod="0 0 0" scale="0.6"/>
+		<SOUND delay="66" sound="challenge_quest/guerilla_rifleman/guerilla_rifleman_shoot" />
+		<RANGESHOT delay="264" damage="6" pierce="50" sound="hitsound" mesh="ef_bullet" speed="3000" collradius="1" dirmod="0.01 0.01 0.0" posparts="lhand" dirtarget="true"/>
+		<EFFECT delay="264" mesh="flame_rifle" posparts="lhand" posmod="0 20 0" dirmod="0 0 0" scale="0.6"/>
+		<SOUND delay="264" sound="challenge_quest/guerilla_rifleman/guerilla_rifleman_shoot" />
+		<RANGESHOT delay="462" damage="6" pierce="50" sound="hitsound" mesh="ef_bullet" speed="3000" collradius="1" dirmod="0.0 0.0 0.0" posparts="lhand" dirtarget="true"/>
+		<EFFECT delay="462" mesh="flame_rifle" posparts="lhand" posmod="0 20 0" dirmod="0 0 0" scale="0.6"/>
+		<SOUND delay="462" sound="challenge_quest/guerilla_rifleman/guerilla_rifleman_shoot" />
+		<RANGESHOT delay="660" damage="6" pierce="50" sound="hitsound" mesh="ef_bullet" speed="3000" collradius="1" dirmod="-0.01 -0.01 0.0" posparts="lhand" dirtarget="true"/>
+		<EFFECT delay="660" mesh="flame_rifle" posparts="lhand" posmod="0 20 0" dirmod="0 0 0" scale="0.6"/>
+		<SOUND delay="660" sound="challenge_quest/guerilla_rifleman/guerilla_rifleman_shoot" />
+		<RANGESHOT delay="858" damage="6" pierce="50" sound="hitsound" mesh="ef_bullet" speed="3000" collradius="1" dirmod="0.02 0.02 0.0" posparts="lhand" dirtarget="true"/>
+		<EFFECT delay="858" mesh="flame_rifle" posparts="lhand" posmod="0 20 0" dirmod="0 0 0" scale="0.6"/>
+		<SOUND delay="858" sound="challenge_quest/guerilla_rifleman/guerilla_rifleman_shoot" />
+		<RANGESHOT delay="1056" damage="6" pierce="50" sound="hitsound" mesh="ef_bullet" speed="3000" collradius="1" dirmod="-0.02 -0.02 0.0" posparts="lhand" dirtarget="true"/>
+		<EFFECT delay="1056" mesh="flame_rifle" posparts="lhand" posmod="0 20 0" dirmod="0 0 0" scale="0.6"/>
+		<SOUND delay="1056" sound="challenge_quest/guerilla_rifleman/guerilla_rifleman_shoot" />
+	</ACTION>
+	<ACTION name="shootup" animation="shootup" movinganimation="true" >
+		<RANGESHOT delay="66" damage="6" pierce="50" sound="hitsound" mesh="ef_bullet" speed="3000" collradius="1" dirmod="0.0 0.0 0.0" posparts="lhand" dirtarget="true"/>
+		<EFFECT delay="66" mesh="flame_rifle" posparts="lhand" posmod="0 20 0" dirmod="0 0 0" scale="0.6"/>
+		<SOUND delay="66" sound="challenge_quest/guerilla_rifleman/guerilla_rifleman_shoot" />
+		<RANGESHOT delay="264" damage="6" pierce="50" sound="hitsound" mesh="ef_bullet" speed="3000" collradius="1" dirmod="0.01 0.01 0.0" posparts="lhand" dirtarget="true"/>
+		<EFFECT delay="264" mesh="flame_rifle" posparts="lhand" posmod="0 20 0" dirmod="0 0 0" scale="0.6"/>
+		<SOUND delay="264" sound="challenge_quest/guerilla_rifleman/guerilla_rifleman_shoot" />
+		<RANGESHOT delay="462" damage="6" pierce="50" sound="hitsound" mesh="ef_bullet" speed="3000" collradius="1" dirmod="0.0 0.0 0.0" posparts="lhand" dirtarget="true"/>
+		<EFFECT delay="462" mesh="flame_rifle" posparts="lhand" posmod="0 20 0" dirmod="0 0 0" scale="0.6"/>
+		<SOUND delay="462" sound="challenge_quest/guerilla_rifleman/guerilla_rifleman_shoot" />
+		<RANGESHOT delay="660" damage="6" pierce="50" sound="hitsound" mesh="ef_bullet" speed="3000" collradius="1" dirmod="-0.01 -0.01 0.0" posparts="lhand" dirtarget="true"/>
+		<EFFECT delay="660" mesh="flame_rifle" posparts="lhand" posmod="0 20 0" dirmod="0 0 0" scale="0.6"/>
+		<SOUND delay="660" sound="challenge_quest/guerilla_rifleman/guerilla_rifleman_shoot" />
+		<RANGESHOT delay="858" damage="6" pierce="50" sound="hitsound" mesh="ef_bullet" speed="3000" collradius="1" dirmod="0.02 0.02 0.0" posparts="lhand" dirtarget="true"/>
+		<EFFECT delay="858" mesh="flame_rifle" posparts="lhand" posmod="0 20 0" dirmod="0 0 0" scale="0.6"/>
+		<SOUND delay="858" sound="challenge_quest/guerilla_rifleman/guerilla_rifleman_shoot" />
+		<RANGESHOT delay="1056" damage="6" pierce="50" sound="hitsound" mesh="ef_bullet" speed="3000" collradius="1" dirmod="-0.02 -0.02 0.0" posparts="lhand" dirtarget="true"/>
+		<EFFECT delay="1056" mesh="flame_rifle" posparts="lhand" posmod="0 20 0" dirmod="0 0 0" scale="0.6"/>
+		<SOUND delay="1056" sound="challenge_quest/guerilla_rifleman/guerilla_rifleman_shoot" />
+	</ACTION>
+	<ACTION name="shootdown" animation="shootdown" movinganimation="true" >
+		<RANGESHOT delay="66" damage="6" pierce="50" sound="hitsound" mesh="ef_bullet" speed="3000" collradius="1" dirmod="0.0 0.0 0.0" posparts="lhand" dirtarget="true"/>
+		<EFFECT delay="66" mesh="flame_rifle" posparts="lhand" posmod="0 20 0" dirmod="0 0 0" scale="0.6"/>
+		<SOUND delay="66" sound="challenge_quest/guerilla_rifleman/guerilla_rifleman_shoot" />
+		<RANGESHOT delay="264" damage="6" pierce="50" sound="hitsound" mesh="ef_bullet" speed="3000" collradius="1" dirmod="0.01 0.01 0.0" posparts="lhand" dirtarget="true"/>
+		<EFFECT delay="264" mesh="flame_rifle" posparts="lhand" posmod="0 20 0" dirmod="0 0 0" scale="0.6"/>
+		<SOUND delay="264" sound="challenge_quest/guerilla_rifleman/guerilla_rifleman_shoot" />
+		<RANGESHOT delay="462" damage="6" pierce="50" sound="hitsound" mesh="ef_bullet" speed="3000" collradius="1" dirmod="0.0 0.0 0.0" posparts="lhand" dirtarget="true"/>
+		<EFFECT delay="462" mesh="flame_rifle" posparts="lhand" posmod="0 20 0" dirmod="0 0 0" scale="0.6"/>
+		<SOUND delay="462" sound="challenge_quest/guerilla_rifleman/guerilla_rifleman_shoot" />
+		<RANGESHOT delay="660" damage="6" pierce="50" sound="hitsound" mesh="ef_bullet" speed="3000" collradius="1" dirmod="-0.01 -0.01 0.0" posparts="lhand" dirtarget="true"/>
+		<EFFECT delay="660" mesh="flame_rifle" posparts="lhand" posmod="0 20 0" dirmod="0 0 0" scale="0.6"/>
+		<SOUND delay="660" sound="challenge_quest/guerilla_rifleman/guerilla_rifleman_shoot" />
+		<RANGESHOT delay="858" damage="6" pierce="50" sound="hitsound" mesh="ef_bullet" speed="3000" collradius="1" dirmod="0.02 0.02 0.0" posparts="lhand" dirtarget="true"/>
+		<EFFECT delay="858" mesh="flame_rifle" posparts="lhand" posmod="0 20 0" dirmod="0 0 0" scale="0.6"/>
+		<SOUND delay="858" sound="challenge_quest/guerilla_rifleman/guerilla_rifleman_shoot" />
+		<RANGESHOT delay="1056" damage="6" pierce="50" sound="hitsound" mesh="ef_bullet" speed="3000" collradius="1" dirmod="-0.02 -0.02 0.0" posparts="lhand" dirtarget="true"/>
+		<EFFECT delay="1056" mesh="flame_rifle" posparts="lhand" posmod="0 20 0" dirmod="0 0 0" scale="0.6"/>
+		<SOUND delay="1056" sound="challenge_quest/guerilla_rifleman/guerilla_rifleman_shoot" />
+	</ACTION>
+	
+<!--> 
+	로봇 스킬
+</-->
+	<ACTION name="robot_arrive" animation="arrive" >
+		<EFFECT delay="0" mesh="ef_dust_2m" posparts="" posmod="0 0 0" dirmod="0 0 0" scale="0.6"/>
+		<EFFECT delay="200" mesh="ef_dust_2m" posparts="" posmod="0 0 0" dirmod="0 0 0" scale="0.8"/>
+		<EFFECT delay="400" mesh="ef_dust_2m" posparts="" posmod="0 0 0" dirmod="0 0 0" scale="1.0"/>
+		<SOUND delay="0" sound="challenge_quest/guerilla_robot/guerilla_robot_arrive" />	
+	</ACTION>
+	<ACTION name="robot_run" animation="run" >
+		<SOUND delay="0" sound="challenge_quest/guerilla_robot/guerilla_robot_run" />
+	</ACTION>
+	<ACTION name="robot_charge" animation="charge" movinganimation="true" >
+		<MELEESHOT delay="1300" damage="15" range="200" angle="180" pierce="0" sound="" uppercut="true"/>
+		<MELEESHOT delay="1400" damage="15" range="200" angle="180" pierce="0" sound="" uppercut="true"/>
+		<MELEESHOT delay="1500" damage="15" range="200" angle="180" pierce="0" sound="" uppercut="true"/>
+		<MELEESHOT delay="1600" damage="15" range="200" angle="180" pierce="0" sound="" uppercut="true"/>
+		<MELEESHOT delay="1700" damage="15" range="200" angle="180" pierce="0" sound="" uppercut="true"/>	
+		<MELEESHOT delay="2000" damage="15" range="350" angle="90" pierce="0" sound="challenge_quest/guerilla_robot/guerilla_robot_hit_player" />		
+		<MELEESHOT delay="2300" damage="15" range="350" angle="90" pierce="0" sound="challenge_quest/guerilla_robot/guerilla_robot_hit_player" thrust="true"/>			
+		<EFFECT delay="1900" mesh="ef_dust_2m" posparts="" posmod="0 200 0" dirmod="0 0 0" scale="1.0"/>
+		<EFFECT delay="0" mesh="ef_dust_2m" posparts="" posmod="0 0 0" dirmod="0 0 0" scale="1.0"/>
+		<EFFECT delay="1300" mesh="ef_dust_2m" posparts="" posmod="0 150 0" dirmod="0 0 0" scale="0.7"/>
+		<EFFECT delay="1350" mesh="ef_dust_2m" posparts="" posmod="0 150 0" dirmod="0 0 0" scale="0.7"/>
+		<EFFECT delay="1400" mesh="ef_dust_2m" posparts="" posmod="0 150 0" dirmod="0 0 0" scale="0.7"/>
+		<EFFECT delay="1450" mesh="ef_dust_2m" posparts="" posmod="0 150 0" dirmod="0 0 0" scale="0.7"/>
+		<EFFECT delay="1500" mesh="ef_dust_2m" posparts="" posmod="0 150 0" dirmod="0 0 0" scale="0.7"/>
+		<EFFECT delay="1550" mesh="ef_dust_2m" posparts="" posmod="0 150 0" dirmod="0 0 0" scale="0.7"/>
+		<EFFECT delay="1600" mesh="ef_dust_2m" posparts="" posmod="0 100 0" dirmod="0 0 0" scale="0.7"/>
+		<SOUND delay="0" sound="challenge_quest/guerilla_robot/guerilla_robot_charge" />
+	</ACTION>
+	<ACTION name="robot_smash" animation="smash" movinganimation="true" >
+		<MELEESHOT delay="594" damage="15" range="325" angle="140" pierce="0" sound="challenge_quest/guerilla_robot/guerilla_robot_hit_player" />		
+		<MELEESHOT delay="894" damage="15" range="325" angle="140" pierce="0" sound="challenge_quest/guerilla_robot/guerilla_robot_hit_player" thrust="true"/>	
+		<EFFECT delay="500" mesh="ef_dust_2m" posparts="" posmod="0 0 0" dirmod="0 0 0" scale="1.0"/>
+		<SOUND delay="0" sound="challenge_quest/guerilla_robot/guerilla_robot_smash" />
+	</ACTION>
+	<ACTION name="robot_stomp" animation="stomp" movinganimation="true" >
+		<MELEESHOT delay="1700" damage="25" range="500" angle="360" pierce="0" sound="" />
+		<MELEESHOT delay="2000" damage="25" range="500" angle="360" pierce="0" sound="" uppercut="true"/>
+		<MELEESHOT delay="800" damage="15" range="250" angle="360" pierce="0" sound="" />
+		<MELEESHOT delay="900" damage="15" range="250" angle="360" pierce="0" sound="" />
+		<MELEESHOT delay="1000" damage="15" range="250" angle="360" pierce="0" sound="" />
+		<MELEESHOT delay="1100" damage="15" range="250" angle="360" pierce="0" sound="challenge_quest/guerilla_robot/guerilla_robot_hit_player" />
+		<EFFECT delay="0" mesh="ef_dust_2m" posparts="" posmod="0 0 0" dirmod="0 0 0" scale="1.0"/>
+		<EFFECT delay="1650" mesh="ef_dust_5m" posparts="" posmod="0 0 0" dirmod="0 0 0" scale="1.2"/>
+		<SOUND delay="0" sound="challenge_quest/guerilla_robot/guerilla_robot_stomp" />
+	</ACTION>
+	<ACTION name="robot_stomp_front" animation="stomp_front" movinganimation="true" >
+		<MELEESHOT delay="1700" damage="25" range="500" angle="360" pierce="0" sound="" />
+		<MELEESHOT delay="2000" damage="25" range="500" angle="360" pierce="0" sound="" uppercut="true"/>
+		<EFFECT delay="0" mesh="ef_dust_2m" posparts="" posmod="0 0 0" dirmod="0 0 0" scale="1.0"/>
+		<MELEESHOT delay="800" damage="15" range="250" angle="360" pierce="0" sound="" />
+		<MELEESHOT delay="900" damage="15" range="250" angle="360" pierce="0" sound="" />
+		<MELEESHOT delay="1000" damage="15" range="250" angle="360" pierce="0" sound="" />
+		<MELEESHOT delay="1100" damage="15" range="250" angle="360" pierce="0" sound="challenge_quest/guerilla_robot/guerilla_robot_hit_player" />
+		<EFFECT delay="1650" mesh="ef_dust_5m" posparts="" posmod="0 0 0" dirmod="0 0 0" scale="1.2"/>
+		<SOUND delay="0" sound="challenge_quest/guerilla_robot/guerilla_robot_stomp_front" />
+	</ACTION>
+	
+	<ACTION name="robot_suffer1" animation="suffer1" movinganimation="true" >
+		<SOUND delay="0" sound="challenge_quest/guerilla_robot/guerilla_robot_suffer1" />
+	</ACTION>
+	<ACTION name="robot_suffer2" animation="suffer2" movinganimation="true" >	
+		<SOUND delay="0" sound="challenge_quest/guerilla_robot/guerilla_robot_suffer2" />
+	</ACTION>
+	<ACTION name="robot_suffer3" animation="suffer3" movinganimation="true" >
+		<SOUND delay="0" sound="challenge_quest/guerilla_robot/guerilla_robot_suffer3" />
+	</ACTION>
+<!--> 
+	초능력자 스킬
+</-->
+	<ACTION name="psychic_arrive" animation="arrive" >
+		<EFFECT delay="100" mesh="ef_dust_2m" posparts="" posmod="0 0 0" dirmod="0 0 0" scale="0.6"/>
+		<EFFECT delay="300" mesh="ef_dust_2m" posparts="" posmod="0 0 0" dirmod="0 0 0" scale="0.8"/>
+		<EFFECT delay="500" mesh="ef_dust_2m" posparts="" posmod="0 0 0" dirmod="0 0 0" scale="1.0"/>
+		<SOUND delay="0" sound="challenge_quest/guerilla_psychic/guerilla_psychic_arrive" />
+	</ACTION>
+
+	<ACTION name="psychic_bash" animation="bash" movinganimation="true" >
+		<MELEESHOT delay="700" damage="20" range="2000" angle="35" pierce="0" sound="" />
+		<MELEESHOT delay="1000" damage="20" range="2000" angle="35" pierce="0" sound="" thrust="true"/>
+		<SOUND delay="0" sound="challenge_quest/guerilla_psychic/guerilla_psychic_bash" />
+		<SOUND delay="600" sound="challenge_quest/guerilla_psychic/guerilla_psychic_bash_effect" />
+		<EFFECT delay="600" mesh="ef_dust_2m" posparts="" posmod="0 226 0" dirmod="0 0 0" scale="0.3"/>
+		<EFFECT delay="600" mesh="ef_dust_2m" posparts="" posmod="0 453 0" dirmod="0 0 0" scale="0.6"/>
+		<EFFECT delay="620" mesh="ef_dust_2m" posparts="" posmod="0 679 0" dirmod="0 0 0" scale="0.9"/>
+		<EFFECT delay="640" mesh="ef_dust_2m" posparts="" posmod="0 905 0" dirmod="0 0 0" scale="1.2"/>
+		<EFFECT delay="660" mesh="ef_dust_2m" posparts="" posmod="0 1131 0" dirmod="0 0 0" scale="1.5"/>
+		<EFFECT delay="680" mesh="ef_dust_2m" posparts="" posmod="0 1357 0" dirmod="0 0 0" scale="1.8"/>
+		<EFFECT delay="700" mesh="ef_dust_2m" posparts="" posmod="0 1583 0" dirmod="0 0 0" scale="2.1"/>
+	</ACTION>
+	<ACTION name="psychic_bashup" animation="bash" movinganimation="true" >
+		<RANGESHOT delay="500" damage="15" pierce="50" sound="we_trap_explosion" mesh="nullmesh" speed="10000" collradius="1" dirmod="0.0 0.0 0.0" posparts="lhand" dirtarget="true" thrust="true"/>
+		<RANGESHOT delay="500" damage="15" pierce="50" sound="we_trap_explosion" mesh="nullmesh" speed="10000" collradius="1" dirmod="0.0 0.05 0.0" posparts="lhand" dirtarget="true" thrust="true"/>
+		<RANGESHOT delay="500" damage="15" pierce="50" sound="we_trap_explosion" mesh="nullmesh" speed="10000" collradius="1" dirmod="0.0 -0.05 0.0" posparts="lhand" dirtarget="true" thrust="true"/>
+		<RANGESHOT delay="500" damage="15" pierce="50" sound="we_trap_explosion" mesh="nullmesh" speed="10000" collradius="1" dirmod="0.05 0.0 0.0" posparts="lhand" dirtarget="true" thrust="true"/>
+		<RANGESHOT delay="500" damage="15" pierce="50" sound="we_trap_explosion" mesh="nullmesh" speed="10000" collradius="1" dirmod="-0.05 0.0 0.0" posparts="lhand" dirtarget="true" thrust="true"/>
+		<SOUND delay="0" sound="challenge_quest/guerilla_psychic/guerilla_psychic_bashup" />
+	</ACTION>
+	<ACTION name="psychic_wave" animation="wave" movinganimation="true" >
+		<MELEESHOT delay="1200" damage="25" range="850" angle="120" pierce="0" sound="" />
+		<MELEESHOT delay="1500" damage="25" range="850" angle="120" pierce="0" sound="" uppercut="true"/>
+		<EFFECT delay="0" mesh="ef_guide120" posparts="" posmod="0 0 0" dirmod="0 0 0" scale="0.8"/>
+		<EFFECT delay="1155" mesh="ef_wave120" posparts="" posmod="0 0 0" dirmod="0 0 0" scale="0.8"/>
+		<EFFECT delay="1200" mesh="ef_dust_2m" posparts="" posmod="0 405 0" dirmod="0 0 0" scale="1.0"/>
+		<EFFECT delay="1200" mesh="ef_dust_2m" posparts="" posmod="-300 305 0" dirmod="0 0 0" scale="1.0"/>
+		<EFFECT delay="1200" mesh="ef_dust_2m" posparts="" posmod="300 305 0" dirmod="0 0 0" scale="1.0"/>
+		<SOUND delay="0" sound="challenge_quest/guerilla_psychic/guerilla_psychic_wave" />
+	</ACTION>
+	<ACTION name="psychic_storm" animation="storm" movinganimation="true" >
+		<MELEESHOT delay="1700" damage="25" range="700" angle="360" pierce="0" sound="fx_explosion01" />
+		<MELEESHOT delay="2000" damage="35" range="700" angle="360" pierce="0" sound="fx_explosion01" uppercut="true"/>
+		<EFFECT delay="0" mesh="ef_guide_10m" posparts="" posmod="0 0 0" dirmod="0 0 0" scale="1.2"/>
+		<EFFECT delay="1155" mesh="ef_dust_10m" posparts="" posmod="0 0 0" dirmod="0 0 0" scale="1.2"/>			
+		<EFFECT delay="1355" mesh="ef_dust_5m" posparts="" posmod="500 0 0" dirmod="0 0 0" scale="1.2"/>		
+		<EFFECT delay="1405" mesh="ef_dust_5m" posparts="" posmod="250 430 0" dirmod="0 0 0" scale="1.2"/>		
+		<EFFECT delay="1385" mesh="ef_dust_5m" posparts="" posmod="-250 430 0" dirmod="0 0 0" scale="1.2"/>		
+		<EFFECT delay="1425" mesh="ef_dust_5m" posparts="" posmod="-500 0 0" dirmod="0 0 0" scale="1.2"/>		
+		<EFFECT delay="1325" mesh="ef_dust_5m" posparts="" posmod="-250 -430 0" dirmod="0 0 0" scale="1.2"/>		
+		<EFFECT delay="1505" mesh="ef_dust_5m" posparts="" posmod="250 -430 0" dirmod="0 0 0" scale="1.2"/>
+		<SOUND delay="0" sound="challenge_quest/guerilla_psychic/guerilla_psychic_storm" />
+	</ACTION>
+	
+	<ACTION name="psychic_suffer1" animation="suffer1" movinganimation="true" >
+		<SOUND delay="0" sound="challenge_quest/guerilla_psychic/guerilla_psychic_suffer1" />
+	</ACTION>
+	<ACTION name="psychic_suffer2" animation="suffer2" movinganimation="true" >	
+		<SOUND delay="0" sound="challenge_quest/guerilla_psychic/guerilla_psychic_suffer2" />
+	</ACTION>
+	<ACTION name="psychic_suffer3" animation="suffer3" movinganimation="true" >
+		<SOUND delay="0" sound="challenge_quest/guerilla_psychic/guerilla_psychic_suffer3" />
+	</ACTION>
+	
+<!--> 
+	장군 스킬
+</-->
+	<ACTION name="general_arrive" animation="arrive" >
+		<SOUND delay="0" sound="challenge_quest/guerilla_general/guerilla_general_arrive" />	
+	</ACTION>
+	<ACTION name="general_run" animation="run" >
+		<SOUND delay="0" sound="challenge_quest/guerilla_general/guerilla_general_run" />
+	</ACTION>
+	<ACTION name="general_spinslash" animation="spinslash" movinganimation="true" >
+		<MELEESHOT delay="528" damage="50" range="300" angle="180" pierce="0" sound="" />
+		<SOUND delay="0" sound="challenge_quest/guerilla_general/guerilla_general_spinslash" />
+	</ACTION>
+	<ACTION name="general_leftslash" animation="leftslash" movinganimation="true" >
+		<MELEESHOT delay="528" damage="40" range="350" angle="140" pierce="0" sound="" />
+		<MELEESHOT delay="825" damage="40" range="350" angle="180" pierce="0" sound="" thrust="true"/>
+		<SOUND delay="0" sound="challenge_quest/guerilla_general/guerilla_general_leftslash" />
+	</ACTION>
+	<ACTION name="general_rightslash" animation="rightslash" movinganimation="true" >
+		<MELEESHOT delay="528" damage="40" range="350" angle="140" pierce="0" sound="" />
+		<MELEESHOT delay="825" damage="40" range="350" angle="180" pierce="0" sound="" thrust="true"/>
+		<SOUND delay="0" sound="challenge_quest/guerilla_general/guerilla_general_rightslash" />
+	</ACTION>
+	<ACTION name="general_dash" animation="dash" movinganimation="true" >
+		<EFFECT delay="0" mesh="ef_dust_2m" posparts="" posmod="0 0 0" dirmod="0 0 0" scale="0.6"/>
+		<SOUND delay="0" sound="challenge_quest/guerilla_general/guerilla_general_dash" />
+	</ACTION>
+	<ACTION name="general_step" animation="stepforward" movinganimation="true" >
+		<SOUND delay="0" sound="challenge_quest/guerilla_general/guerilla_general_step" />
+	</ACTION>
+	
+	<ACTION name="general_dashattack" animation="dashattack" movinganimation="true" >
+		<EFFECT delay="333" mesh="ef_dust_2m" posparts="" posmod="0 0 0" dirmod="0 0 0" scale="0.8"/>
+		<MELEESHOT delay="660" damage="30" range="320" angle="120" pierce="0" sound="" />
+		<MELEESHOT delay="825" damage="30" range="320" angle="120" pierce="0" sound="" />
+		<MELEESHOT delay="999" damage="30" range="320" angle="120" pierce="0" sound="" />
+		<EFFECT delay="1250" mesh="ef_dust_2m" posparts="" posmod="0 0 0" dirmod="0 0 0" scale="0.8"/>
+		<SOUND delay="0" sound="challenge_quest/guerilla_general/guerilla_general_dashattack" />
+	</ACTION>
+	<ACTION name="general_jumpattack" animation="jumpattack" movinganimation="true" >
+		<EFFECT delay="100" mesh="ef_dust_2m" posparts="" posmod="0 0 0" dirmod="0 0 0" scale="0.8"/>
+		<EFFECT delay="1000" mesh="ef_dust_2m" posparts="" posmod="0 0 0" dirmod="0 0 0" scale="0.8"/>
+		<MELEESHOT delay="1040" damage="20" range="400" angle="140" pierce="0" sound="" />
+		<MELEESHOT delay="1340" damage="25" range="400" angle="140" pierce="0" sound="" thrust="true"/>
+		<MELEESHOT delay="300" damage="20" range="250" angle="360" pierce="0" sound="" />
+		<MELEESHOT delay="400" damage="20" range="250" angle="360" pierce="0" sound="" />
+		<MELEESHOT delay="500" damage="20" range="250" angle="360" pierce="0" sound="" />
+		<MELEESHOT delay="600" damage="20" range="250" angle="360" pierce="0" sound="" />
+		<SOUND delay="0" sound="challenge_quest/guerilla_general/guerilla_general_jumpattack" />
+	</ACTION>
+	
+	<ACTION name="general_suffer1" animation="suffer1" movinganimation="true" >
+		<SOUND delay="0" sound="challenge_quest/guerilla_general/guerilla_general_suffer1" />
+	</ACTION>
+	<ACTION name="general_suffer2" animation="suffer2" movinganimation="true" >	
+		<SOUND delay="0" sound="challenge_quest/guerilla_general/guerilla_general_suffer2" />
+	</ACTION>
+	<ACTION name="general_suffer3" animation="suffer3" movinganimation="true" >
+		<SOUND delay="0" sound="challenge_quest/guerilla_general/guerilla_general_suffer3" />
+	</ACTION>
+	
+<!--> 
+	차저 스킬
+</-->
+	
+	<ACTION name="charger_attack" animation="attack" movinganimation="true" >
+		<MELEESHOT delay="333" damage="22" range="215" angle="35" pierce="0" sound="" />
+		<SOUND delay="0" sound="challenge_quest/researchlab/lab_charger_attack" />
+	</ACTION>
+	
+	<ACTION name="charger_suffer1" animation="suffer1" movinganimation="true" >
+		<SOUND delay="0" sound="challenge_quest/researchlab/lab_charger_suffer1" />
+	</ACTION>
+	<ACTION name="charger_suffer2" animation="suffer2" movinganimation="true" >	
+		<SOUND delay="0" sound="challenge_quest/researchlab/lab_charger_suffer2" />
+	</ACTION>
+	<ACTION name="charger_suffer3" animation="suffer3" movinganimation="true" >
+		<SOUND delay="0" sound="challenge_quest/researchlab/lab_charger_suffer3" />
+	</ACTION>
+	
+<!--> 
+	슈터 스킬
+</-->
+	
+	<ACTION name="shooter_shoot" animation="shoot" movinganimation="true" >
+		<RANGESHOT delay="400" damage="6" pierce="50" sound="hitsound" mesh="ef_bullet" speed="3000" collradius="1" dirmod="0.2 0.2 0.0" posparts="lhand" dirtarget="true"/>
+		<EFFECT delay="400" mesh="flame_rifle" posparts="lhand" posmod="0 20 0" dirmod="0 0 0" scale="0.6"/>
+		<SOUND delay="400" sound="we_machinegun_fire" />
+		<RANGESHOT delay="466" damage="6" pierce="50" sound="hitsound" mesh="ef_bullet" speed="3000" collradius="1" dirmod="0.2 0.2 0.0" posparts="rhand" dirtarget="true"/>
+		<EFFECT delay="466" mesh="flame_rifle" posparts="rhand" posmod="0 20 0" dirmod="0 0 0" scale="0.6"/>
+		<SOUND delay="466" sound="we_machinegun_fire" />
+		<RANGESHOT delay="533" damage="6" pierce="50" sound="hitsound" mesh="ef_bullet" speed="3000" collradius="1" dirmod="0.1 0.1 0.0" posparts="lhand" dirtarget="true"/>
+		<EFFECT delay="533" mesh="flame_rifle" posparts="lhand" posmod="0 20 0" dirmod="0 0 0" scale="0.6"/>
+		<SOUND delay="533" sound="we_machinegun_fire" />
+		<RANGESHOT delay="600" damage="6" pierce="50" sound="hitsound" mesh="ef_bullet" speed="3000" collradius="1" dirmod="0.1 0.1 0.0" posparts="rhand" dirtarget="true"/>
+		<EFFECT delay="600" mesh="flame_rifle" posparts="rhand" posmod="0 20 0" dirmod="0 0 0" scale="0.6"/>
+		<SOUND delay="600" sound="we_machinegun_fire" />
+		<RANGESHOT delay="666" damage="6" pierce="50" sound="hitsound" mesh="ef_bullet" speed="3000" collradius="1" dirmod="-0.1 -0.1 0.0" posparts="lhand" dirtarget="true"/>
+		<EFFECT delay="666" mesh="flame_rifle" posparts="lhand" posmod="0 20 0" dirmod="0 0 0" scale="0.6"/>
+		<SOUND delay="666" sound="we_machinegun_fire" />
+		<RANGESHOT delay="733" damage="6" pierce="50" sound="hitsound" mesh="ef_bullet" speed="3000" collradius="1" dirmod="-0.1 -0.1 0.0" posparts="rhand" dirtarget="true"/>
+		<EFFECT delay="733" mesh="flame_rifle" posparts="rhand" posmod="0 20 0" dirmod="0 0 0" scale="0.6"/>
+		<SOUND delay="733" sound="we_machinegun_fire" />
+		<RANGESHOT delay="800" damage="6" pierce="50" sound="hitsound" mesh="ef_bullet" speed="3000" collradius="1" dirmod="-0.2 -0.2 0.0" posparts="lhand" dirtarget="true"/>
+		<EFFECT delay="800" mesh="flame_rifle" posparts="lhand" posmod="0 20 0" dirmod="0 0 0" scale="0.6"/>
+		<SOUND delay="800" sound="we_machinegun_fire" />
+		<RANGESHOT delay="866" damage="6" pierce="50" sound="hitsound" mesh="ef_bullet" speed="3000" collradius="1" dirmod="-0.2 -0.2 0.0" posparts="rhand" dirtarget="true"/>
+		<EFFECT delay="866" mesh="flame_rifle" posparts="rhand" posmod="0 20 0" dirmod="0 0 0" scale="0.6"/>
+		<SOUND delay="866" sound="we_machinegun_fire" />
+		<RANGESHOT delay="933" damage="6" pierce="50" sound="hitsound" mesh="ef_bullet" speed="3000" collradius="1" dirmod="-0.1 -0.1 0.0" posparts="lhand" dirtarget="true"/>
+		<EFFECT delay="933" mesh="flame_rifle" posparts="lhand" posmod="0 20 0" dirmod="0 0 0" scale="0.6"/>
+		<SOUND delay="933" sound="we_machinegun_fire" />
+		<RANGESHOT delay="1000" damage="6" pierce="50" sound="hitsound" mesh="ef_bullet" speed="3000" collradius="1" dirmod="-0.1 -0.1 0.0" posparts="rhand" dirtarget="true"/>
+		<EFFECT delay="1000" mesh="flame_rifle" posparts="rhand" posmod="0 20 0" dirmod="0 0 0" scale="0.6"/>
+		<SOUND delay="1000" sound="we_machinegun_fire" />
+		<RANGESHOT delay="1066" damage="6" pierce="50" sound="hitsound" mesh="ef_bullet" speed="3000" collradius="1" dirmod="0.1 0.1 0.0" posparts="lhand" dirtarget="true"/>
+		<EFFECT delay="1066" mesh="flame_rifle" posparts="lhand" posmod="0 20 0" dirmod="0 0 0" scale="0.6"/>
+		<SOUND delay="1066" sound="we_machinegun_fire" />		
+	</ACTION>
+	
+	<ACTION name="shooter_shootup" animation="shootup" movinganimation="true" >
+		<RANGESHOT delay="400" damage="7" pierce="50" sound="hitsound" mesh="ef_bullet" speed="3000" collradius="1" dirmod="0.03 0.03 0.0" posparts="lhand" dirtarget="true"/>
+		<EFFECT delay="400" mesh="flame_rifle" posparts="lhand" posmod="0 20 0" dirmod="0 0 0" scale="0.6"/>
+		<SOUND delay="400" sound="we_machinegun_fire" />
+		<RANGESHOT delay="466" damage="7" pierce="50" sound="hitsound" mesh="ef_bullet" speed="3000" collradius="1" dirmod="0.03 0.03 0.0" posparts="rhand" dirtarget="true"/>
+		<EFFECT delay="466" mesh="flame_rifle" posparts="rhand" posmod="0 20 0" dirmod="0 0 0" scale="0.6"/>
+		<SOUND delay="466" sound="we_machinegun_fire" />
+		<RANGESHOT delay="533" damage="7" pierce="50" sound="hitsound" mesh="ef_bullet" speed="3000" collradius="1" dirmod="0.01 0.01 0.0" posparts="lhand" dirtarget="true"/>
+		<EFFECT delay="533" mesh="flame_rifle" posparts="lhand" posmod="0 20 0" dirmod="0 0 0" scale="0.6"/>
+		<SOUND delay="533" sound="we_machinegun_fire" />
+		<RANGESHOT delay="600" damage="7" pierce="50" sound="hitsound" mesh="ef_bullet" speed="3000" collradius="1" dirmod="0.01 0.01 0.0" posparts="rhand" dirtarget="true"/>
+		<EFFECT delay="600" mesh="flame_rifle" posparts="rhand" posmod="0 20 0" dirmod="0 0 0" scale="0.6"/>
+		<SOUND delay="600" sound="we_machinegun_fire" />
+		<RANGESHOT delay="666" damage="7" pierce="50" sound="hitsound" mesh="ef_bullet" speed="3000" collradius="1" dirmod="-0.01 -0.01 0.0" posparts="lhand" dirtarget="true"/>
+		<EFFECT delay="666" mesh="flame_rifle" posparts="lhand" posmod="0 20 0" dirmod="0 0 0" scale="0.6"/>
+		<SOUND delay="666" sound="we_machinegun_fire" />
+		<RANGESHOT delay="733" damage="7" pierce="50" sound="hitsound" mesh="ef_bullet" speed="3000" collradius="1" dirmod="-0.01 -0.01 0.0" posparts="rhand" dirtarget="true"/>
+		<EFFECT delay="733" mesh="flame_rifle" posparts="rhand" posmod="0 20 0" dirmod="0 0 0" scale="0.6"/>
+		<SOUND delay="733" sound="we_machinegun_fire" />
+		<RANGESHOT delay="800" damage="7" pierce="50" sound="hitsound" mesh="ef_bullet" speed="3000" collradius="1" dirmod="-0.03 -0.03 0.0" posparts="lhand" dirtarget="true"/>
+		<EFFECT delay="800" mesh="flame_rifle" posparts="lhand" posmod="0 20 0" dirmod="0 0 0" scale="0.6"/>
+		<SOUND delay="800" sound="we_machinegun_fire" />
+		<RANGESHOT delay="866" damage="7" pierce="50" sound="hitsound" mesh="ef_bullet" speed="3000" collradius="1" dirmod="-0.03 -0.03 0.0" posparts="rhand" dirtarget="true"/>
+		<EFFECT delay="866" mesh="flame_rifle" posparts="rhand" posmod="0 20 0" dirmod="0 0 0" scale="0.6"/>
+		<SOUND delay="866" sound="we_machinegun_fire" />
+		<RANGESHOT delay="933" damage="7" pierce="50" sound="hitsound" mesh="ef_bullet" speed="3000" collradius="1" dirmod="-0.01 -0.01 0.0" posparts="lhand" dirtarget="true"/>
+		<EFFECT delay="933" mesh="flame_rifle" posparts="lhand" posmod="0 20 0" dirmod="0 0 0" scale="0.6"/>
+		<SOUND delay="933" sound="we_machinegun_fire" />
+		<RANGESHOT delay="1000" damage="7" pierce="50" sound="hitsound" mesh="ef_bullet" speed="3000" collradius="1" dirmod="-0.01 -0.01 0.0" posparts="rhand" dirtarget="true"/>
+		<EFFECT delay="1000" mesh="flame_rifle" posparts="rhand" posmod="0 20 0" dirmod="0 0 0" scale="0.6"/>
+		<SOUND delay="1000" sound="we_machinegun_fire" />
+		<RANGESHOT delay="1066" damage="7" pierce="50" sound="hitsound" mesh="ef_bullet" speed="3000" collradius="1" dirmod="0.01 0.01 0.0" posparts="lhand" dirtarget="true"/>
+		<EFFECT delay="1066" mesh="flame_rifle" posparts="lhand" posmod="0 20 0" dirmod="0 0 0" scale="0.6"/>
+		<SOUND delay="1066" sound="we_machinegun_fire" />	
+	</ACTION>
+	
+	<ACTION name="shooter_suffer1" animation="suffer1" movinganimation="true" >
+		<SOUND delay="0" sound="challenge_quest/researchlab/lab_charger_suffer1" />
+	</ACTION>
+	<ACTION name="shooter_suffer2" animation="suffer2" movinganimation="true" >	
+		<SOUND delay="0" sound="challenge_quest/researchlab/lab_charger_suffer2" />
+	</ACTION>
+	<ACTION name="shooter_suffer3" animation="suffer3" movinganimation="true" >
+		<SOUND delay="0" sound="challenge_quest/researchlab/lab_charger_suffer3" />
+	</ACTION>
+	
+	<!--> 
+	디스포저 스킬
+	</-->
+	<ACTION name="disposer_shoot" animation="shoot" movinganimation="true" >
+		<EFFECT delay="333" mesh="ef_gunsmoke" posparts="" posmod="0 80 100" dirmod="0 0 0" scale="0.8"/>
+		<GRENADESHOT delay="333" damage="40" pierce="0" grenadetype="3" itemid = "40505" zaxis = "0" yaxis = "45" force = "1050" posparts="" posmod="0 0 20" dirmod="0 0 0" />
+		<SOUND delay="333" sound="challenge_quest/researchlab/ef_gunsmoke" />
+		<SOUND delay="0" sound="challenge_quest/researchlab/lab_disposer_shoot" />
+	</ACTION>
+	
+	<ACTION name="disposer_suffer1" animation="suffer1" movinganimation="true" >
+		<SOUND delay="0" sound="challenge_quest/researchlab/lab_disposer_suffer1" />
+	</ACTION>
+	<ACTION name="disposer_suffer2" animation="suffer2" movinganimation="true" >	
+		<SOUND delay="0" sound="challenge_quest/researchlab/lab_charger_suffer2" />
+	</ACTION>
+	<ACTION name="disposer_suffer3" animation="suffer3" movinganimation="true" >
+		<SOUND delay="0" sound="challenge_quest/researchlab/lab_disposer_suffer3" />
+	</ACTION>
+	
+	<!--> 
+	체이서 스킬
+	</-->
+	<ACTION name="chaser_arrive" animation="arrive" >
+		<EFFECT delay="0" mesh="ef_dust_2m" posparts="" posmod="0 0 0" dirmod="0 0 0" scale="0.6"/>
+		<EFFECT delay="200" mesh="ef_dust_2m" posparts="" posmod="0 0 0" dirmod="0 0 0" scale="0.8"/>
+		<EFFECT delay="400" mesh="ef_dust_2m" posparts="" posmod="0 0 0" dirmod="0 0 0" scale="1.0"/>
+		<SOUND delay="0" sound="challenge_quest/researchlab/lab_chaser_arrive" />
+	</ACTION>
+	
+	<ACTION name="chaser_run" animation="run" >
+		<SOUND delay="0" sound="challenge_quest/researchlab/lab_chaser_run" />
+	</ACTION>
+	
+	<ACTION name="chaser_runfast" animation="runfast" >
+		<SOUND delay="0" sound="challenge_quest/researchlab/lab_chaser_runfast" />
+		<EFFECT delay="30" mesh="ef_dust_1m" posparts="" posmod="0 40 0" dirmod="0 0 0" scale="1.0"/>
+		<EFFECT delay="90" mesh="ef_dust_1m" posparts="" posmod="0 -30 0" dirmod="0 0 0" scale="1.0"/>
+		<EFFECT delay="180" mesh="ef_dust_1m" posparts="" posmod="20 0 0" dirmod="0 0 0" scale="1.0"/>
+		<EFFECT delay="300" mesh="ef_dust_1m" posparts="" posmod="-10 0 0" dirmod="0 0 0" scale="1.0"/>
+		<EFFECT delay="450" mesh="ef_dust_1m" posparts="" posmod="0 0 0" dirmod="0 0 0" scale="1.0"/>
+	</ACTION>
+	
+	<ACTION name="chaser_chargeattack" animation="chargeattack" movinganimation="true" >
+		<MELEESHOT delay="600" damage="15" range="325" angle="90" pierce="0" sound="challenge_quest/guerilla_robot/guerilla_robot_hit_player" />		
+		<MELEESHOT delay="900" damage="15" range="325" angle="90" pierce="0" sound="challenge_quest/guerilla_robot/guerilla_robot_hit_player" thrust="true"/>	
+		<EFFECT delay="550" mesh="ef_dust_2m" posparts="" posmod="0 0 0" dirmod="0 0 0" scale="1.2"/>
+		<SOUND delay="0" sound="challenge_quest/guerilla_robot/guerilla_robot_smash" />
+	</ACTION>
+	
+	<ACTION name="chaser_dashleft" animation="dashleft" movinganimation="true" >
+		<RANGESHOT delay="66" damage="6" pierce="50" sound="hitsound" mesh="ef_bullet" speed="3000" collradius="1" zaxis="3" posparts="lhand" dirtarget="true"/>
+		<EFFECT delay="66" mesh="flame_rifle" posparts="lhand" posmod="0 20 0" dirmod="0 0 0" scale="0.6"/>
+		<SOUND delay="66" sound="challenge_quest/guerilla_rifleman/guerilla_rifleman_shoot" />
+		<RANGESHOT delay="133" damage="6" pierce="50" sound="hitsound" mesh="ef_bullet" speed="3000" collradius="1" zaxis="1" posparts="lhand" dirtarget="true"/>
+		<EFFECT delay="133" mesh="flame_rifle" posparts="lhand" posmod="0 20 0" dirmod="0 0 0" scale="0.6"/>
+		<SOUND delay="133" sound="challenge_quest/guerilla_rifleman/guerilla_rifleman_shoot" />
+		<RANGESHOT delay="200" damage="6" pierce="50" sound="hitsound" mesh="ef_bullet" speed="3000" collradius="1" zaxis="-1" posparts="lhand" dirtarget="true"/>
+		<EFFECT delay="200" mesh="flame_rifle" posparts="lhand" posmod="0 20 0" dirmod="0 0 0" scale="0.6"/>
+		<SOUND delay="200" sound="challenge_quest/guerilla_rifleman/guerilla_rifleman_shoot" />
+		<RANGESHOT delay="266" damage="6" pierce="50" sound="hitsound" mesh="ef_bullet" speed="3000" collradius="1" zaxis="1" posparts="lhand" dirtarget="true"/>
+		<EFFECT delay="266" mesh="flame_rifle" posparts="lhand" posmod="0 20 0" dirmod="0 0 0" scale="0.6"/>
+		<SOUND delay="266" sound="challenge_quest/guerilla_rifleman/guerilla_rifleman_shoot" />
+		<RANGESHOT delay="66" damage="6" pierce="50" sound="hitsound" mesh="ef_bullet" speed="3000" collradius="1" zaxis="1" posparts="lhand" dirtarget="true"/>
+		<EFFECT delay="66" mesh="flame_rifle" posparts="lhand" posmod="0 20 0" dirmod="0 0 0" scale="0.6"/>
+		<SOUND delay="66" sound="challenge_quest/guerilla_rifleman/guerilla_rifleman_shoot" />
+		<RANGESHOT delay="133" damage="6" pierce="50" sound="hitsound" mesh="ef_bullet" speed="3000" collradius="1" zaxis="-1" posparts="lhand" dirtarget="true"/>
+		<EFFECT delay="133" mesh="flame_rifle" posparts="lhand" posmod="0 20 0" dirmod="0 0 0" scale="0.6"/>
+		<SOUND delay="133" sound="challenge_quest/guerilla_rifleman/guerilla_rifleman_shoot" />
+		<RANGESHOT delay="200" damage="6" pierce="50" sound="hitsound" mesh="ef_bullet" speed="3000" collradius="1" zaxis="-3" posparts="lhand" dirtarget="true"/>
+		<EFFECT delay="200" mesh="flame_rifle" posparts="lhand" posmod="0 20 0" dirmod="0 0 0" scale="0.6"/>
+		<SOUND delay="200" sound="challenge_quest/guerilla_rifleman/guerilla_rifleman_shoot" />
+		<RANGESHOT delay="266" damage="6" pierce="50" sound="hitsound" mesh="ef_bullet" speed="3000" collradius="1" zaxis="-1" posparts="lhand" dirtarget="true"/>
+		<EFFECT delay="266" mesh="flame_rifle" posparts="lhand" posmod="0 20 0" dirmod="0 0 0" scale="0.6"/>
+		<SOUND delay="266" sound="challenge_quest/guerilla_rifleman/guerilla_rifleman_shoot" />
+		<SOUND delay="0" sound="challenge_quest/researchlab/lab_chaser_dash" />
+	</ACTION>
+	
+	<ACTION name="chaser_dashright" animation="dashright" movinganimation="true" >
+		<RANGESHOT delay="66" damage="6" pierce="50" sound="hitsound" mesh="ef_bullet" speed="3000" collradius="1" zaxis="3" posparts="lhand" dirtarget="true"/>
+		<EFFECT delay="66" mesh="flame_rifle" posparts="lhand" posmod="0 20 0" dirmod="0 0 0" scale="0.6"/>
+		<SOUND delay="66" sound="challenge_quest/guerilla_rifleman/guerilla_rifleman_shoot" />
+		<RANGESHOT delay="133" damage="6" pierce="50" sound="hitsound" mesh="ef_bullet" speed="3000" collradius="1" zaxis="1" posparts="lhand" dirtarget="true"/>
+		<EFFECT delay="133" mesh="flame_rifle" posparts="lhand" posmod="0 20 0" dirmod="0 0 0" scale="0.6"/>
+		<SOUND delay="133" sound="challenge_quest/guerilla_rifleman/guerilla_rifleman_shoot" />
+		<RANGESHOT delay="200" damage="6" pierce="50" sound="hitsound" mesh="ef_bullet" speed="3000" collradius="1" zaxis="-1" posparts="lhand" dirtarget="true"/>
+		<EFFECT delay="200" mesh="flame_rifle" posparts="lhand" posmod="0 20 0" dirmod="0 0 0" scale="0.6"/>
+		<SOUND delay="200" sound="challenge_quest/guerilla_rifleman/guerilla_rifleman_shoot" />
+		<RANGESHOT delay="266" damage="6" pierce="50" sound="hitsound" mesh="ef_bullet" speed="3000" collradius="1" zaxis="1" posparts="lhand" dirtarget="true"/>
+		<EFFECT delay="266" mesh="flame_rifle" posparts="lhand" posmod="0 20 0" dirmod="0 0 0" scale="0.6"/>
+		<SOUND delay="266" sound="challenge_quest/guerilla_rifleman/guerilla_rifleman_shoot" />
+		<RANGESHOT delay="66" damage="6" pierce="50" sound="hitsound" mesh="ef_bullet" speed="3000" collradius="1" zaxis="1" posparts="lhand" dirtarget="true"/>
+		<EFFECT delay="66" mesh="flame_rifle" posparts="lhand" posmod="0 20 0" dirmod="0 0 0" scale="0.6"/>
+		<SOUND delay="66" sound="challenge_quest/guerilla_rifleman/guerilla_rifleman_shoot" />
+		<RANGESHOT delay="133" damage="6" pierce="50" sound="hitsound" mesh="ef_bullet" speed="3000" collradius="1" zaxis="-1" posparts="lhand" dirtarget="true"/>
+		<EFFECT delay="133" mesh="flame_rifle" posparts="lhand" posmod="0 20 0" dirmod="0 0 0" scale="0.6"/>
+		<SOUND delay="133" sound="challenge_quest/guerilla_rifleman/guerilla_rifleman_shoot" />
+		<RANGESHOT delay="200" damage="6" pierce="50" sound="hitsound" mesh="ef_bullet" speed="3000" collradius="1" zaxis="-3" posparts="lhand" dirtarget="true"/>
+		<EFFECT delay="200" mesh="flame_rifle" posparts="lhand" posmod="0 20 0" dirmod="0 0 0" scale="0.6"/>
+		<SOUND delay="200" sound="challenge_quest/guerilla_rifleman/guerilla_rifleman_shoot" />
+		<RANGESHOT delay="266" damage="6" pierce="50" sound="hitsound" mesh="ef_bullet" speed="3000" collradius="1" zaxis="-1" posparts="lhand" dirtarget="true"/>
+		<EFFECT delay="266" mesh="flame_rifle" posparts="lhand" posmod="0 20 0" dirmod="0 0 0" scale="0.6"/>
+		<SOUND delay="266" sound="challenge_quest/guerilla_rifleman/guerilla_rifleman_shoot" />
+		<SOUND delay="0" sound="challenge_quest/researchlab/lab_chaser_dash" />
+	</ACTION>
+	
+	<ACTION name="chaser_upshot" animation="upshoot" movinganimation="true" >
+		<RANGESHOT delay="66" damage="7" pierce="50" sound="hitsound" mesh="ef_bullet" speed="3000" collradius="1" dirmod="0.03 0.03 0.0" posparts="lhand" dirtarget="true"/>
+		<EFFECT delay="66" mesh="flame_rifle" posparts="lhand" posmod="0 20 0" dirmod="0 0 0" scale="0.6"/>
+		<SOUND delay="66" sound="challenge_quest/guerilla_rifleman/guerilla_rifleman_shoot" />
+		<RANGESHOT delay="133" damage="7" pierce="50" sound="hitsound" mesh="ef_bullet" speed="3000" collradius="1" dirmod="0.03 0.03 0.0" posparts="lhand" dirtarget="true"/>
+		<EFFECT delay="133" mesh="flame_rifle" posparts="rhand" posmod="0 20 0" dirmod="0 0 0" scale="0.6"/>
+		<SOUND delay="133" sound="challenge_quest/guerilla_rifleman/guerilla_rifleman_shoot" />
+		<RANGESHOT delay="200" damage="7" pierce="50" sound="hitsound" mesh="ef_bullet" speed="3000" collradius="1" dirmod="0.01 0.01 0.0" posparts="lhand" dirtarget="true"/>
+		<EFFECT delay="200" mesh="flame_rifle" posparts="lhand" posmod="0 20 0" dirmod="0 0 0" scale="0.6"/>
+		<SOUND delay="200" sound="challenge_quest/guerilla_rifleman/guerilla_rifleman_shoot" />
+		<RANGESHOT delay="266" damage="7" pierce="50" sound="hitsound" mesh="ef_bullet" speed="3000" collradius="1" dirmod="0.01 0.01 0.0" posparts="lhand" dirtarget="true"/>
+		<EFFECT delay="266" mesh="flame_rifle" posparts="rhand" posmod="0 20 0" dirmod="0 0 0" scale="0.6"/>
+		<SOUND delay="266" sound="challenge_quest/guerilla_rifleman/guerilla_rifleman_shoot" />
+		<RANGESHOT delay="333" damage="7" pierce="50" sound="hitsound" mesh="ef_bullet" speed="3000" collradius="1" dirmod="-0.01 -0.01 0.0" posparts="lhand" dirtarget="true"/>
+		<EFFECT delay="333" mesh="flame_rifle" posparts="lhand" posmod="0 20 0" dirmod="0 0 0" scale="0.6"/>
+		<SOUND delay="333" sound="challenge_quest/guerilla_rifleman/guerilla_rifleman_shoot" />
+		<RANGESHOT delay="66" damage="7" pierce="50" sound="hitsound" mesh="ef_bullet" speed="3000" collradius="1" dirmod="0.02 0.02 0.0" posparts="lhand" dirtarget="true"/>
+		<EFFECT delay="66" mesh="flame_rifle" posparts="lhand" posmod="0 20 0" dirmod="0 0 0" scale="0.6"/>
+		<SOUND delay="66" sound="challenge_quest/guerilla_rifleman/guerilla_rifleman_shoot" />
+		<RANGESHOT delay="133" damage="7" pierce="50" sound="hitsound" mesh="ef_bullet" speed="3000" collradius="1" dirmod="0.02 0.02 0.0" posparts="lhand" dirtarget="true"/>
+		<EFFECT delay="133" mesh="flame_rifle" posparts="rhand" posmod="0 20 0" dirmod="0 0 0" scale="0.6"/>
+		<SOUND delay="133" sound="challenge_quest/guerilla_rifleman/guerilla_rifleman_shoot" />
+		<RANGESHOT delay="200" damage="7" pierce="50" sound="hitsound" mesh="ef_bullet" speed="3000" collradius="1" dirmod="0.0 0.0 0.0" posparts="lhand" dirtarget="true"/>
+		<EFFECT delay="200" mesh="flame_rifle" posparts="lhand" posmod="0 20 0" dirmod="0 0 0" scale="0.6"/>
+		<SOUND delay="200" sound="challenge_quest/guerilla_rifleman/guerilla_rifleman_shoot" />
+		<RANGESHOT delay="266" damage="7" pierce="50" sound="hitsound" mesh="ef_bullet" speed="3000" collradius="1" dirmod="0.00 0.00 0.0" posparts="lhand" dirtarget="true"/>
+		<EFFECT delay="266" mesh="flame_rifle" posparts="rhand" posmod="0 20 0" dirmod="0 0 0" scale="0.6"/>
+		<SOUND delay="266" sound="challenge_quest/guerilla_rifleman/guerilla_rifleman_shoot" />
+		<RANGESHOT delay="333" damage="7" pierce="50" sound="hitsound" mesh="ef_bullet" speed="3000" collradius="1" dirmod="-0.02 -0.02 0.0" posparts="lhand" dirtarget="true"/>
+		<EFFECT delay="333" mesh="flame_rifle" posparts="lhand" posmod="0 20 0" dirmod="0 0 0" scale="0.6"/>
+		<SOUND delay="333" sound="challenge_quest/guerilla_rifleman/guerilla_rifleman_shoot" />
+		<RANGESHOT delay="66" damage="7" pierce="50" sound="hitsound" mesh="ef_bullet" speed="3000" collradius="1" dirmod="0.01 0.01 0.0" posparts="lhand" dirtarget="true"/>
+		<EFFECT delay="66" mesh="flame_rifle" posparts="lhand" posmod="0 20 0" dirmod="0 0 0" scale="0.6"/>
+		<SOUND delay="66" sound="challenge_quest/guerilla_rifleman/guerilla_rifleman_shoot" />
+		<RANGESHOT delay="133" damage="7" pierce="50" sound="hitsound" mesh="ef_bullet" speed="3000" collradius="1" dirmod="0.01 0.01 0.0" posparts="lhand" dirtarget="true"/>
+		<EFFECT delay="133" mesh="flame_rifle" posparts="rhand" posmod="0 20 0" dirmod="0 0 0" scale="0.6"/>
+		<SOUND delay="133" sound="challenge_quest/guerilla_rifleman/guerilla_rifleman_shoot" />
+		<RANGESHOT delay="200" damage="7" pierce="50" sound="hitsound" mesh="ef_bullet" speed="3000" collradius="1" dirmod="-0.01 -0.01 0.0" posparts="lhand" dirtarget="true"/>
+		<EFFECT delay="200" mesh="flame_rifle" posparts="lhand" posmod="0 20 0" dirmod="0 0 0" scale="0.6"/>
+		<SOUND delay="200" sound="challenge_quest/guerilla_rifleman/guerilla_rifleman_shoot" />
+		<RANGESHOT delay="266" damage="7" pierce="50" sound="hitsound" mesh="ef_bullet" speed="3000" collradius="1" dirmod="-0.01 -0.01 0.0" posparts="lhand" dirtarget="true"/>
+		<EFFECT delay="266" mesh="flame_rifle" posparts="rhand" posmod="0 20 0" dirmod="0 0 0" scale="0.6"/>
+		<SOUND delay="266" sound="challenge_quest/guerilla_rifleman/guerilla_rifleman_shoot" />
+		<RANGESHOT delay="333" damage="7" pierce="50" sound="hitsound" mesh="ef_bullet" speed="3000" collradius="1" dirmod="-0.03 -0.03 0.0" posparts="lhand" dirtarget="true"/>
+		<EFFECT delay="333" mesh="flame_rifle" posparts="lhand" posmod="0 20 0" dirmod="0 0 0" scale="0.6"/>
+		<SOUND delay="333" sound="challenge_quest/guerilla_rifleman/guerilla_rifleman_shoot" />
+	</ACTION>
+	
+	<ACTION name="chaser_launch" animation="launch" movinganimation="true" >
+		<GRENADESHOT delay="666" damage="30" pierce="0" grenadetype="3" itemid = "40505" zaxis = "0" yaxis = "30" force = "800" posparts="" posmod="0 0 150" dirmod="0 0 0" sound="challenge_quest/guerilla_knifeman/guerilla_knifeman_slash" />
+		<GRENADESHOT delay="666" damage="30" pierce="0" grenadetype="3" itemid = "40505" zaxis = "45" yaxis = "60" force = "800" posparts="" posmod="0 0 150" dirmod="0 0 0" sound="challenge_quest/guerilla_knifeman/guerilla_knifeman_slash" />
+		<GRENADESHOT delay="666" damage="30" pierce="0" grenadetype="3" itemid = "40505" zaxis = "90" yaxis = "30" force = "800" posparts="" posmod="0 0 150" dirmod="0 0 0" sound="challenge_quest/guerilla_knifeman/guerilla_knifeman_slash" />
+		<GRENADESHOT delay="666" damage="30" pierce="0" grenadetype="3" itemid = "40505" zaxis = "135" yaxis = "60" force = "800" posparts="" posmod="0 0 150" dirmod="0 0 0" sound="challenge_quest/guerilla_knifeman/guerilla_knifeman_slash" />
+		<GRENADESHOT delay="666" damage="30" pierce="0" grenadetype="3" itemid = "40505" zaxis = "180" yaxis = "30" force = "800" posparts="" posmod="0 0 150" dirmod="0 0 0" sound="challenge_quest/guerilla_knifeman/guerilla_knifeman_slash" />
+		<GRENADESHOT delay="666" damage="30" pierce="0" grenadetype="3" itemid = "40505" zaxis = "225" yaxis = "60" force = "800" posparts="" posmod="0 0 150" dirmod="0 0 0" sound="challenge_quest/guerilla_knifeman/guerilla_knifeman_slash" />
+		<GRENADESHOT delay="666" damage="30" pierce="0" grenadetype="3" itemid = "40505" zaxis = "270" yaxis = "30" force = "800" posparts="" posmod="0 0 150" dirmod="0 0 0" sound="challenge_quest/guerilla_knifeman/guerilla_knifeman_slash" />
+		<GRENADESHOT delay="666" damage="30" pierce="0" grenadetype="3" itemid = "40505" zaxis = "315" yaxis = "60" force = "800" posparts="" posmod="0 0 150" dirmod="0 0 0" sound="challenge_quest/guerilla_knifeman/guerilla_knifeman_slash" />
+		<SOUND delay="0" sound="challenge_quest/researchlab/lab_chaser_launch" />
+	</ACTION>
+	
+	<ACTION name="chaser_summon" animation="summon" movinganimation="true" >
+		<SUMMON name="charger" delay="1000" range="400" angle="60" adjustplayernum="true" drop="C2"/>
+		<SUMMON name="charger" delay="1000" range="300" angle="0" adjustplayernum="true" drop="C2"/>
+		<SUMMON name="charger" delay="1000" range="400" angle="-60" adjustplayernum="true" drop="C2"/>
+		<EFFECT delay="1000" mesh="ef_dust_2m" posparts="" posmod="0 0 0" dirmod="0 0 0" scale="1.2"/>
+		<SOUND delay="0" sound="challenge_quest/researchlab/lab_chaser_summon" />
+	</ACTION>
+	
+	<ACTION name="chaser_summon2" animation="summon" movinganimation="true" >
+		<SUMMON name="charger2" delay="1000" range="400" angle="60" adjustplayernum="true" drop="C2"/>
+		<SUMMON name="charger2" delay="1000" range="300" angle="0" adjustplayernum="true" drop="C2"/>
+		<SUMMON name="charger2" delay="1000" range="400" angle="-60" adjustplayernum="true" drop="C2"/>
+		<EFFECT delay="1000" mesh="ef_dust_2m" posparts="" posmod="0 0 0" dirmod="0 0 0" scale="1.2"/>
+		<SOUND delay="0" sound="challenge_quest/researchlab/lab_chaser_summon" />
+	</ACTION>
+	
+	<ACTION name="chaser_suffer1" animation="suffer1" movinganimation="true" >
+		<SOUND delay="0" sound="challenge_quest/researchlab/lab_chaser_suffer1" />
+	</ACTION>
+	<ACTION name="chaser_suffer2" animation="suffer2" movinganimation="true" >	
+		<SOUND delay="0" sound="challenge_quest/researchlab/lab_chaser_suffer2" />
+	</ACTION>
+	<ACTION name="chaser_suffer3" animation="suffer3" movinganimation="true" >
+		<SOUND delay="0" sound="challenge_quest/researchlab/lab_chaser_suffer3" />
+	</ACTION>
+	
+	<!--> 
+	타워 스킬
+	</-->
+	<ACTION name="tower_arrive" animation="arrive" >
+		<EFFECT delay="0" mesh="ef_dust_2m" posparts="" posmod="0 0 0" dirmod="0 0 0" scale="0.6"/>
+		<EFFECT delay="200" mesh="ef_dust_2m" posparts="" posmod="0 0 0" dirmod="0 0 0" scale="0.8"/>
+		<EFFECT delay="400" mesh="ef_dust_2m" posparts="" posmod="0 0 0" dirmod="0 0 0" scale="1.0"/>
+		<SOUND delay="0" sound="challenge_quest/researchlab/lab_tower_arrive" />	
+	</ACTION>
+	
+	<ACTION name="tower_idle" animation="idle" >
+		<SOUND delay="0" sound="challenge_quest/researchlab/lab_tower_idle" />	
+	</ACTION>
+		
+	<ACTION name="tower_longshot" animation="longshot" >
+		<RANGESHOT delay="1333" damage="7" pierce="50" sound="hitsound" mesh="ef_bullet" speed="3000" collradius="1" dirmod="0.01 0.01 0.0" posparts="head" dirtarget="true"/>
+		<EFFECT delay="1333" mesh="flame_rifle" posparts="" posmod="80 80 700" dirmod="0 0 0" scale="0.6"/>
+		<SOUND delay="1333" sound="challenge_quest/guerilla_rifleman/guerilla_rifleman_shoot" />
+		<RANGESHOT delay="1333" damage="7" pierce="50" sound="hitsound" mesh="ef_bullet" speed="3000" collradius="1" dirmod="0.00 0.00 0.0" posparts="head" dirtarget="true"/>
+		<EFFECT delay="1333" mesh="flame_rifle" posparts="" posmod="80 0 700" dirmod="0 0 0" scale="0.6"/>
+		<SOUND delay="1333" sound="challenge_quest/guerilla_rifleman/guerilla_rifleman_shoot" />
+		<RANGESHOT delay="1333" damage="7" pierce="50" sound="hitsound" mesh="ef_bullet" speed="3000" collradius="1" dirmod="-0.01 -0.01 0.0" posparts="head" dirtarget="true"/>
+		<EFFECT delay="1333" mesh="flame_rifle" posparts="" posmod="80 -80 700" dirmod="0 0 0" scale="0.6"/>
+		<SOUND delay="1333" sound="challenge_quest/guerilla_rifleman/guerilla_rifleman_shoot" />
+	</ACTION>
+	
+	<ACTION name="tower_shot" animation="shot" >
+		<EFFECT delay="1500" mesh="ef_gunsmoke" posparts="" posmod="100 100 700" dirmod="0 0 0" scale="1.2"/>
+		<EFFECT delay="1500" mesh="ef_gunsmoke" posparts="" posmod="100 0 700" dirmod="0 0 0" scale="1.2"/>
+		<EFFECT delay="1500" mesh="ef_gunsmoke" posparts="" posmod="100 -100 700" dirmod="0 0 0" scale="1.2"/>
+		<EFFECT delay="1500" mesh="ef_gunsmoke" posparts="" posmod="0 100 700" dirmod="0 0 0" scale="1.2"/>
+		<EFFECT delay="1500" mesh="ef_gunsmoke" posparts="" posmod="0 0 700" dirmod="0 0 0" scale="1.2"/>
+		<EFFECT delay="1500" mesh="ef_gunsmoke" posparts="" posmod="0 -100 700" dirmod="0 0 0" scale="1.2"/>
+		<EFFECT delay="1500" mesh="ef_gunsmoke" posparts="" posmod="-100 100 700" dirmod="0 0 0" scale="1.2"/>
+		<EFFECT delay="1500" mesh="ef_gunsmoke" posparts="" posmod="-100 0 700" dirmod="0 0 0" scale="1.2"/>
+		<EFFECT delay="1500" mesh="ef_gunsmoke" posparts="" posmod="-100 -100 700" dirmod="0 0 0" scale="1.2"/>
+		<EFFECT delay="1650" mesh="ef_gunsmoke" posparts="" posmod="100 100 700" dirmod="0 0 0" scale="1.2"/>
+		<EFFECT delay="1650" mesh="ef_gunsmoke" posparts="" posmod="100 0 700" dirmod="0 0 0" scale="1.2"/>
+		<EFFECT delay="1650" mesh="ef_gunsmoke" posparts="" posmod="100 -100 700" dirmod="0 0 0" scale="1.2"/>
+		<EFFECT delay="1650" mesh="ef_gunsmoke" posparts="" posmod="0 100 700" dirmod="0 0 0" scale="1.2"/>
+		<EFFECT delay="1650" mesh="ef_gunsmoke" posparts="" posmod="0 0 700" dirmod="0 0 0" scale="1.2"/>
+		<EFFECT delay="1650" mesh="ef_gunsmoke" posparts="" posmod="0 -100 700" dirmod="0 0 0" scale="1.2"/>
+		<EFFECT delay="1650" mesh="ef_gunsmoke" posparts="" posmod="-100 100 700" dirmod="0 0 0" scale="1.2"/>
+		<EFFECT delay="1650" mesh="ef_gunsmoke" posparts="" posmod="-100 0 700" dirmod="0 0 0" scale="1.2"/>
+		<EFFECT delay="1650" mesh="ef_gunsmoke" posparts="" posmod="-100 -100 700" dirmod="0 0 0" scale="1.2"/>
+		<EFFECT delay="1800" mesh="ef_gunsmoke" posparts="" posmod="100 100 700" dirmod="0 0 0" scale="1.2"/>
+		<EFFECT delay="1800" mesh="ef_gunsmoke" posparts="" posmod="100 0 700" dirmod="0 0 0" scale="1.2"/>
+		<EFFECT delay="1800" mesh="ef_gunsmoke" posparts="" posmod="100 -100 700" dirmod="0 0 0" scale="1.2"/>
+		<EFFECT delay="1800" mesh="ef_gunsmoke" posparts="" posmod="0 100 700" dirmod="0 0 0" scale="1.2"/>
+		<EFFECT delay="1800" mesh="ef_gunsmoke" posparts="" posmod="0 0 700" dirmod="0 0 0" scale="1.2"/>
+		<EFFECT delay="1800" mesh="ef_gunsmoke" posparts="" posmod="0 -100 700" dirmod="0 0 0" scale="1.2"/>
+		<EFFECT delay="1800" mesh="ef_gunsmoke" posparts="" posmod="-100 100 700" dirmod="0 0 0" scale="1.2"/>
+		<EFFECT delay="1800" mesh="ef_gunsmoke" posparts="" posmod="-100 0 700" dirmod="0 0 0" scale="1.2"/>
+		<EFFECT delay="1800" mesh="ef_gunsmoke" posparts="" posmod="-100 -100 700" dirmod="0 0 0" scale="1.2"/>
+		<EFFECT delay="1950" mesh="ef_gunsmoke" posparts="" posmod="100 100 700" dirmod="0 0 0" scale="1.2"/>
+		<EFFECT delay="1950" mesh="ef_gunsmoke" posparts="" posmod="100 0 700" dirmod="0 0 0" scale="1.2"/>
+		<EFFECT delay="1950" mesh="ef_gunsmoke" posparts="" posmod="100 -100 700" dirmod="0 0 0" scale="1.2"/>
+		<EFFECT delay="1950" mesh="ef_gunsmoke" posparts="" posmod="0 100 700" dirmod="0 0 0" scale="1.2"/>
+		<EFFECT delay="1950" mesh="ef_gunsmoke" posparts="" posmod="0 0 700" dirmod="0 0 0" scale="1.2"/>
+		<EFFECT delay="1950" mesh="ef_gunsmoke" posparts="" posmod="0 -100 700" dirmod="0 0 0" scale="1.2"/>
+		<EFFECT delay="1950" mesh="ef_gunsmoke" posparts="" posmod="-100 100 700" dirmod="0 0 0" scale="1.2"/>
+		<EFFECT delay="1950" mesh="ef_gunsmoke" posparts="" posmod="-100 0 700" dirmod="0 0 0" scale="1.2"/>
+		<EFFECT delay="1950" mesh="ef_gunsmoke" posparts="" posmod="-100 -100 700" dirmod="0 0 0" scale="1.2"/>
+		<GRENADESHOT delay="1500" damage="40" pierce="0" grenadetype="3" itemid = "40505" zaxis = "0" yaxis = "30" force = "900" posparts="" posmod="0 0 700" dirmod="0 0 0" />
+		<GRENADESHOT delay="1500" damage="40" pierce="0" grenadetype="3" itemid = "40505" zaxis = "45" yaxis = "60" force = "900" posparts="" posmod="0 0 700" dirmod="0 0 0" />
+		<GRENADESHOT delay="1500" damage="40" pierce="0" grenadetype="3" itemid = "40505" zaxis = "90" yaxis = "30" force = "900" posparts="" posmod="0 0 700" dirmod="0 0 0" />
+		<GRENADESHOT delay="1500" damage="40" pierce="0" grenadetype="3" itemid = "40505" zaxis = "135" yaxis = "60" force = "900" posparts="" posmod="0 0 700" dirmod="0 0 0" />
+		<GRENADESHOT delay="1650" damage="40" pierce="0" grenadetype="3" itemid = "40505" zaxis = "180" yaxis = "30" force = "1100" posparts="" posmod="0 0 700" dirmod="0 0 0" />
+		<GRENADESHOT delay="1650" damage="40" pierce="0" grenadetype="3" itemid = "40505" zaxis = "225" yaxis = "60" force = "1100" posparts="" posmod="0 0 700" dirmod="0 0 0" />
+		<GRENADESHOT delay="1650" damage="40" pierce="0" grenadetype="3" itemid = "40505" zaxis = "270" yaxis = "30" force = "1100" posparts="" posmod="0 0 700" dirmod="0 0 0" />
+		<GRENADESHOT delay="1650" damage="40" pierce="0" grenadetype="3" itemid = "40505" zaxis = "315" yaxis = "60" force = "1100" posparts="" posmod="0 0 700" dirmod="0 0 0" />
+		<GRENADESHOT delay="1800" damage="40" pierce="0" grenadetype="3" itemid = "40505" zaxis = "15" yaxis = "30" force = "1300" posparts="" posmod="0 0 700" dirmod="0 0 0" />
+		<GRENADESHOT delay="1800" damage="40" pierce="0" grenadetype="3" itemid = "40505" zaxis = "60" yaxis = "60" force = "1300" posparts="" posmod="0 0 700" dirmod="0 0 0" />
+		<GRENADESHOT delay="1800" damage="40" pierce="0" grenadetype="3" itemid = "40505" zaxis = "105" yaxis = "30" force = "1300" posparts="" posmod="0 0 700" dirmod="0 0 0" />
+		<GRENADESHOT delay="1800" damage="40" pierce="0" grenadetype="3" itemid = "40505" zaxis = "150" yaxis = "60" force = "1300" posparts="" posmod="0 0 700" dirmod="0 0 0" />
+		<GRENADESHOT delay="1950" damage="40" pierce="0" grenadetype="3" itemid = "40505" zaxis = "195" yaxis = "30" force = "1500" posparts="" posmod="0 0 700" dirmod="0 0 0" />
+		<GRENADESHOT delay="1950" damage="40" pierce="0" grenadetype="3" itemid = "40505" zaxis = "240" yaxis = "60" force = "1500" posparts="" posmod="0 0 700" dirmod="0 0 0" />
+		<GRENADESHOT delay="1950" damage="40" pierce="0" grenadetype="3" itemid = "40505" zaxis = "285" yaxis = "30" force = "1500" posparts="" posmod="0 0 700" dirmod="0 0 0" />
+		<GRENADESHOT delay="1950" damage="40" pierce="0" grenadetype="3" itemid = "40505" zaxis = "330" yaxis = "60" force = "1500" posparts="" posmod="0 0 700" dirmod="0 0 0" />
+		<SOUND delay="1500" sound="challenge_quest/researchlab/ef_gunsmoke" />
+		<SOUND delay="1550" sound="challenge_quest/researchlab/ef_gunsmoke" />
+		<SOUND delay="1600" sound="challenge_quest/researchlab/ef_gunsmoke" />
+		<SOUND delay="1650" sound="challenge_quest/researchlab/ef_gunsmoke" />
+		<SOUND delay="1700" sound="challenge_quest/researchlab/ef_gunsmoke" />
+		<SOUND delay="1750" sound="challenge_quest/researchlab/ef_gunsmoke" />
+		<SOUND delay="1800" sound="challenge_quest/researchlab/ef_gunsmoke" />
+		<SOUND delay="1850" sound="challenge_quest/researchlab/ef_gunsmoke" />
+		<SOUND delay="1900" sound="challenge_quest/researchlab/ef_gunsmoke" />
+		<SOUND delay="1950" sound="challenge_quest/researchlab/ef_gunsmoke" />
+		<SOUND delay="0" sound="challenge_quest/researchlab/lab_tower_shot" />
+	</ACTION>
+	
+	<ACTION name="tower_shot2" animation="shot" >
+		<EFFECT delay="1500" mesh="ef_gunsmoke" posparts="" posmod="100 100 700" dirmod="0 0 0" scale="1.2"/>
+		<EFFECT delay="1500" mesh="ef_gunsmoke" posparts="" posmod="100 0 700" dirmod="0 0 0" scale="1.2"/>
+		<EFFECT delay="1500" mesh="ef_gunsmoke" posparts="" posmod="100 -100 700" dirmod="0 0 0" scale="1.2"/>
+		<EFFECT delay="1500" mesh="ef_gunsmoke" posparts="" posmod="0 100 700" dirmod="0 0 0" scale="1.2"/>
+		<EFFECT delay="1500" mesh="ef_gunsmoke" posparts="" posmod="0 0 700" dirmod="0 0 0" scale="1.2"/>
+		<EFFECT delay="1500" mesh="ef_gunsmoke" posparts="" posmod="0 -100 700" dirmod="0 0 0" scale="1.2"/>
+		<EFFECT delay="1500" mesh="ef_gunsmoke" posparts="" posmod="-100 100 700" dirmod="0 0 0" scale="1.2"/>
+		<EFFECT delay="1500" mesh="ef_gunsmoke" posparts="" posmod="-100 0 700" dirmod="0 0 0" scale="1.2"/>
+		<EFFECT delay="1500" mesh="ef_gunsmoke" posparts="" posmod="-100 -100 700" dirmod="0 0 0" scale="1.2"/>
+		<EFFECT delay="1650" mesh="ef_gunsmoke" posparts="" posmod="100 100 700" dirmod="0 0 0" scale="1.2"/>
+		<EFFECT delay="1650" mesh="ef_gunsmoke" posparts="" posmod="100 0 700" dirmod="0 0 0" scale="1.2"/>
+		<EFFECT delay="1650" mesh="ef_gunsmoke" posparts="" posmod="100 -100 700" dirmod="0 0 0" scale="1.2"/>
+		<EFFECT delay="1650" mesh="ef_gunsmoke" posparts="" posmod="0 100 700" dirmod="0 0 0" scale="1.2"/>
+		<EFFECT delay="1650" mesh="ef_gunsmoke" posparts="" posmod="0 0 700" dirmod="0 0 0" scale="1.2"/>
+		<EFFECT delay="1650" mesh="ef_gunsmoke" posparts="" posmod="0 -100 700" dirmod="0 0 0" scale="1.2"/>
+		<EFFECT delay="1650" mesh="ef_gunsmoke" posparts="" posmod="-100 100 700" dirmod="0 0 0" scale="1.2"/>
+		<EFFECT delay="1650" mesh="ef_gunsmoke" posparts="" posmod="-100 0 700" dirmod="0 0 0" scale="1.2"/>
+		<EFFECT delay="1650" mesh="ef_gunsmoke" posparts="" posmod="-100 -100 700" dirmod="0 0 0" scale="1.2"/>
+		<EFFECT delay="1800" mesh="ef_gunsmoke" posparts="" posmod="100 100 700" dirmod="0 0 0" scale="1.2"/>
+		<EFFECT delay="1800" mesh="ef_gunsmoke" posparts="" posmod="100 0 700" dirmod="0 0 0" scale="1.2"/>
+		<EFFECT delay="1800" mesh="ef_gunsmoke" posparts="" posmod="100 -100 700" dirmod="0 0 0" scale="1.2"/>
+		<EFFECT delay="1800" mesh="ef_gunsmoke" posparts="" posmod="0 100 700" dirmod="0 0 0" scale="1.2"/>
+		<EFFECT delay="1800" mesh="ef_gunsmoke" posparts="" posmod="0 0 700" dirmod="0 0 0" scale="1.2"/>
+		<EFFECT delay="1800" mesh="ef_gunsmoke" posparts="" posmod="0 -100 700" dirmod="0 0 0" scale="1.2"/>
+		<EFFECT delay="1800" mesh="ef_gunsmoke" posparts="" posmod="-100 100 700" dirmod="0 0 0" scale="1.2"/>
+		<EFFECT delay="1800" mesh="ef_gunsmoke" posparts="" posmod="-100 0 700" dirmod="0 0 0" scale="1.2"/>
+		<EFFECT delay="1800" mesh="ef_gunsmoke" posparts="" posmod="-100 -100 700" dirmod="0 0 0" scale="1.2"/>
+		<EFFECT delay="1950" mesh="ef_gunsmoke" posparts="" posmod="100 100 700" dirmod="0 0 0" scale="1.2"/>
+		<EFFECT delay="1950" mesh="ef_gunsmoke" posparts="" posmod="100 0 700" dirmod="0 0 0" scale="1.2"/>
+		<EFFECT delay="1950" mesh="ef_gunsmoke" posparts="" posmod="100 -100 700" dirmod="0 0 0" scale="1.2"/>
+		<EFFECT delay="1950" mesh="ef_gunsmoke" posparts="" posmod="0 100 700" dirmod="0 0 0" scale="1.2"/>
+		<EFFECT delay="1950" mesh="ef_gunsmoke" posparts="" posmod="0 0 700" dirmod="0 0 0" scale="1.2"/>
+		<EFFECT delay="1950" mesh="ef_gunsmoke" posparts="" posmod="0 -100 700" dirmod="0 0 0" scale="1.2"/>
+		<EFFECT delay="1950" mesh="ef_gunsmoke" posparts="" posmod="-100 100 700" dirmod="0 0 0" scale="1.2"/>
+		<EFFECT delay="1950" mesh="ef_gunsmoke" posparts="" posmod="-100 0 700" dirmod="0 0 0" scale="1.2"/>
+		<EFFECT delay="1950" mesh="ef_gunsmoke" posparts="" posmod="-100 -100 700" dirmod="0 0 0" scale="1.2"/>
+		<GRENADESHOT delay="1500" damage="40" pierce="0" grenadetype="0" itemid = "40405" zaxis = "0" yaxis = "-70" force = "900" posparts="" posmod="0 0 700" dirmod="0 0 0" />
+		<GRENADESHOT delay="1500" damage="40" pierce="0" grenadetype="0" itemid = "40405" zaxis = "45" yaxis = "-45" force = "900" posparts="" posmod="0 0 700" dirmod="0 0 0" />
+		<GRENADESHOT delay="1500" damage="40" pierce="0" grenadetype="0" itemid = "40405" zaxis = "90" yaxis = "-70" force = "900" posparts="" posmod="0 0 700" dirmod="0 0 0" />
+		<GRENADESHOT delay="1500" damage="40" pierce="0" grenadetype="0" itemid = "40405" zaxis = "135" yaxis = "-45" force = "900" posparts="" posmod="0 0 700" dirmod="0 0 0" />
+		<GRENADESHOT delay="1650" damage="40" pierce="0" grenadetype="0" itemid = "40405" zaxis = "180" yaxis = "-70" force = "1100" posparts="" posmod="0 0 700" dirmod="0 0 0" />
+		<GRENADESHOT delay="1650" damage="40" pierce="0" grenadetype="0" itemid = "40405" zaxis = "225" yaxis = "-45" force = "1100" posparts="" posmod="0 0 700" dirmod="0 0 0" />
+		<GRENADESHOT delay="1650" damage="40" pierce="0" grenadetype="0" itemid = "40405" zaxis = "270" yaxis = "-70" force = "1100" posparts="" posmod="0 0 700" dirmod="0 0 0" />
+		<GRENADESHOT delay="1650" damage="40" pierce="0" grenadetype="0" itemid = "40405" zaxis = "315" yaxis = "-45" force = "1100" posparts="" posmod="0 0 700" dirmod="0 0 0" />
+		<GRENADESHOT delay="1800" damage="40" pierce="0" grenadetype="0" itemid = "40405" zaxis = "15" yaxis = "-70" force = "1300" posparts="" posmod="0 0 700" dirmod="0 0 0" />
+		<GRENADESHOT delay="1800" damage="40" pierce="0" grenadetype="0" itemid = "40405" zaxis = "60" yaxis = "-45" force = "1300" posparts="" posmod="0 0 700" dirmod="0 0 0" />
+		<GRENADESHOT delay="1800" damage="40" pierce="0" grenadetype="0" itemid = "40405" zaxis = "105" yaxis = "-70" force = "1300" posparts="" posmod="0 0 700" dirmod="0 0 0" />
+		<GRENADESHOT delay="1800" damage="40" pierce="0" grenadetype="0" itemid = "40405" zaxis = "150" yaxis = "-45" force = "1300" posparts="" posmod="0 0 700" dirmod="0 0 0" />
+		<GRENADESHOT delay="1950" damage="40" pierce="0" grenadetype="0" itemid = "40405" zaxis = "195" yaxis = "-70" force = "1500" posparts="" posmod="0 0 700" dirmod="0 0 0" />
+		<GRENADESHOT delay="1950" damage="40" pierce="0" grenadetype="0" itemid = "40405" zaxis = "240" yaxis = "-45" force = "1500" posparts="" posmod="0 0 700" dirmod="0 0 0" />
+		<GRENADESHOT delay="1950" damage="40" pierce="0" grenadetype="0" itemid = "40405" zaxis = "285" yaxis = "-70" force = "1500" posparts="" posmod="0 0 700" dirmod="0 0 0" />
+		<GRENADESHOT delay="1950" damage="40" pierce="0" grenadetype="0" itemid = "40405" zaxis = "330" yaxis = "-45" force = "1500" posparts="" posmod="0 0 700" dirmod="0 0 0" />
+		<SOUND delay="1500" sound="challenge_quest/researchlab/ef_gunsmoke" />
+		<SOUND delay="1550" sound="challenge_quest/researchlab/ef_gunsmoke" />
+		<SOUND delay="1600" sound="challenge_quest/researchlab/ef_gunsmoke" />
+		<SOUND delay="1650" sound="challenge_quest/researchlab/ef_gunsmoke" />
+		<SOUND delay="1700" sound="challenge_quest/researchlab/ef_gunsmoke" />
+		<SOUND delay="1750" sound="challenge_quest/researchlab/ef_gunsmoke" />
+		<SOUND delay="1800" sound="challenge_quest/researchlab/ef_gunsmoke" />
+		<SOUND delay="1850" sound="challenge_quest/researchlab/ef_gunsmoke" />
+		<SOUND delay="1900" sound="challenge_quest/researchlab/ef_gunsmoke" />
+		<SOUND delay="1950" sound="challenge_quest/researchlab/ef_gunsmoke" />
+		<SOUND delay="0" sound="challenge_quest/researchlab/lab_tower_shot" />
+	</ACTION>
+	
+		<ACTION name="tower_shot3" animation="shot" >
+		<EFFECT delay="1500" mesh="ef_gunsmoke" posparts="" posmod="100 100 700" dirmod="0 0 0" scale="1.2"/>
+		<EFFECT delay="1500" mesh="ef_gunsmoke" posparts="" posmod="100 0 700" dirmod="0 0 0" scale="1.2"/>
+		<EFFECT delay="1500" mesh="ef_gunsmoke" posparts="" posmod="100 -100 700" dirmod="0 0 0" scale="1.2"/>
+		<EFFECT delay="1500" mesh="ef_gunsmoke" posparts="" posmod="0 100 700" dirmod="0 0 0" scale="1.2"/>
+		<EFFECT delay="1500" mesh="ef_gunsmoke" posparts="" posmod="0 0 700" dirmod="0 0 0" scale="1.2"/>
+		<EFFECT delay="1500" mesh="ef_gunsmoke" posparts="" posmod="0 -100 700" dirmod="0 0 0" scale="1.2"/>
+		<EFFECT delay="1500" mesh="ef_gunsmoke" posparts="" posmod="-100 100 700" dirmod="0 0 0" scale="1.2"/>
+		<EFFECT delay="1500" mesh="ef_gunsmoke" posparts="" posmod="-100 0 700" dirmod="0 0 0" scale="1.2"/>
+		<EFFECT delay="1500" mesh="ef_gunsmoke" posparts="" posmod="-100 -100 700" dirmod="0 0 0" scale="1.2"/>
+		<EFFECT delay="1650" mesh="ef_gunsmoke" posparts="" posmod="100 100 700" dirmod="0 0 0" scale="1.2"/>
+		<EFFECT delay="1650" mesh="ef_gunsmoke" posparts="" posmod="100 0 700" dirmod="0 0 0" scale="1.2"/>
+		<EFFECT delay="1650" mesh="ef_gunsmoke" posparts="" posmod="100 -100 700" dirmod="0 0 0" scale="1.2"/>
+		<EFFECT delay="1650" mesh="ef_gunsmoke" posparts="" posmod="0 100 700" dirmod="0 0 0" scale="1.2"/>
+		<EFFECT delay="1650" mesh="ef_gunsmoke" posparts="" posmod="0 0 700" dirmod="0 0 0" scale="1.2"/>
+		<EFFECT delay="1650" mesh="ef_gunsmoke" posparts="" posmod="0 -100 700" dirmod="0 0 0" scale="1.2"/>
+		<EFFECT delay="1650" mesh="ef_gunsmoke" posparts="" posmod="-100 100 700" dirmod="0 0 0" scale="1.2"/>
+		<EFFECT delay="1650" mesh="ef_gunsmoke" posparts="" posmod="-100 0 700" dirmod="0 0 0" scale="1.2"/>
+		<EFFECT delay="1650" mesh="ef_gunsmoke" posparts="" posmod="-100 -100 700" dirmod="0 0 0" scale="1.2"/>
+		<EFFECT delay="1800" mesh="ef_gunsmoke" posparts="" posmod="100 100 700" dirmod="0 0 0" scale="1.2"/>
+		<EFFECT delay="1800" mesh="ef_gunsmoke" posparts="" posmod="100 0 700" dirmod="0 0 0" scale="1.2"/>
+		<EFFECT delay="1800" mesh="ef_gunsmoke" posparts="" posmod="100 -100 700" dirmod="0 0 0" scale="1.2"/>
+		<EFFECT delay="1800" mesh="ef_gunsmoke" posparts="" posmod="0 100 700" dirmod="0 0 0" scale="1.2"/>
+		<EFFECT delay="1800" mesh="ef_gunsmoke" posparts="" posmod="0 0 700" dirmod="0 0 0" scale="1.2"/>
+		<EFFECT delay="1800" mesh="ef_gunsmoke" posparts="" posmod="0 -100 700" dirmod="0 0 0" scale="1.2"/>
+		<EFFECT delay="1800" mesh="ef_gunsmoke" posparts="" posmod="-100 100 700" dirmod="0 0 0" scale="1.2"/>
+		<EFFECT delay="1800" mesh="ef_gunsmoke" posparts="" posmod="-100 0 700" dirmod="0 0 0" scale="1.2"/>
+		<EFFECT delay="1800" mesh="ef_gunsmoke" posparts="" posmod="-100 -100 700" dirmod="0 0 0" scale="1.2"/>
+		<EFFECT delay="1950" mesh="ef_gunsmoke" posparts="" posmod="100 100 700" dirmod="0 0 0" scale="1.2"/>
+		<EFFECT delay="1950" mesh="ef_gunsmoke" posparts="" posmod="100 0 700" dirmod="0 0 0" scale="1.2"/>
+		<EFFECT delay="1950" mesh="ef_gunsmoke" posparts="" posmod="100 -100 700" dirmod="0 0 0" scale="1.2"/>
+		<EFFECT delay="1950" mesh="ef_gunsmoke" posparts="" posmod="0 100 700" dirmod="0 0 0" scale="1.2"/>
+		<EFFECT delay="1950" mesh="ef_gunsmoke" posparts="" posmod="0 0 700" dirmod="0 0 0" scale="1.2"/>
+		<EFFECT delay="1950" mesh="ef_gunsmoke" posparts="" posmod="0 -100 700" dirmod="0 0 0" scale="1.2"/>
+		<EFFECT delay="1950" mesh="ef_gunsmoke" posparts="" posmod="-100 100 700" dirmod="0 0 0" scale="1.2"/>
+		<EFFECT delay="1950" mesh="ef_gunsmoke" posparts="" posmod="-100 0 700" dirmod="0 0 0" scale="1.2"/>
+		<EFFECT delay="1950" mesh="ef_gunsmoke" posparts="" posmod="-100 -100 700" dirmod="0 0 0" scale="1.2"/>
+		<GRENADESHOT delay="1500" damage="30" pierce="0" grenadetype="3" itemid = "40605" zaxis = "0" yaxis = "30" force = "900" posparts="" posmod="0 0 700" dirmod="0 0 0" />
+		<GRENADESHOT delay="1500" damage="30" pierce="0" grenadetype="3" itemid = "40605" zaxis = "45" yaxis = "40" force = "900" posparts="" posmod="0 0 700" dirmod="0 0 0" />
+		<GRENADESHOT delay="1500" damage="30" pierce="0" grenadetype="3" itemid = "40605" zaxis = "90" yaxis = "50" force = "900" posparts="" posmod="0 0 700" dirmod="0 0 0" />
+		<GRENADESHOT delay="1500" damage="30" pierce="0" grenadetype="3" itemid = "40605" zaxis = "135" yaxis = "60" force = "900" posparts="" posmod="0 0 700" dirmod="0 0 0" />
+		<GRENADESHOT delay="1650" damage="30" pierce="0" grenadetype="3" itemid = "40605" zaxis = "180" yaxis = "30" force = "1100" posparts="" posmod="0 0 700" dirmod="0 0 0" />
+		<GRENADESHOT delay="1650" damage="30" pierce="0" grenadetype="3" itemid = "40605" zaxis = "225" yaxis = "40" force = "1100" posparts="" posmod="0 0 700" dirmod="0 0 0" />
+		<GRENADESHOT delay="1650" damage="30" pierce="0" grenadetype="3" itemid = "40605" zaxis = "270" yaxis = "50" force = "1100" posparts="" posmod="0 0 700" dirmod="0 0 0" />
+		<GRENADESHOT delay="1650" damage="30" pierce="0" grenadetype="3" itemid = "40605" zaxis = "315" yaxis = "60" force = "1100" posparts="" posmod="0 0 700" dirmod="0 0 0" />
+		<GRENADESHOT delay="1800" damage="30" pierce="0" grenadetype="3" itemid = "40605" zaxis = "15" yaxis = "30" force = "1300" posparts="" posmod="0 0 700" dirmod="0 0 0" />
+		<GRENADESHOT delay="1800" damage="30" pierce="0" grenadetype="3" itemid = "40605" zaxis = "60" yaxis = "40" force = "1300" posparts="" posmod="0 0 700" dirmod="0 0 0" />
+		<GRENADESHOT delay="1800" damage="30" pierce="0" grenadetype="3" itemid = "40605" zaxis = "105" yaxis = "50" force = "1300" posparts="" posmod="0 0 700" dirmod="0 0 0" />
+		<GRENADESHOT delay="1800" damage="30" pierce="0" grenadetype="3" itemid = "40605" zaxis = "150" yaxis = "60" force = "1300" posparts="" posmod="0 0 700" dirmod="0 0 0" />
+		<GRENADESHOT delay="1950" damage="30" pierce="0" grenadetype="3" itemid = "40605" zaxis = "195" yaxis = "30" force = "1500" posparts="" posmod="0 0 700" dirmod="0 0 0" />
+		<GRENADESHOT delay="1950" damage="30" pierce="0" grenadetype="3" itemid = "40605" zaxis = "240" yaxis = "40" force = "1500" posparts="" posmod="0 0 700" dirmod="0 0 0" />
+		<GRENADESHOT delay="1950" damage="30" pierce="0" grenadetype="3" itemid = "40605" zaxis = "285" yaxis = "50" force = "1500" posparts="" posmod="0 0 700" dirmod="0 0 0" />
+		<GRENADESHOT delay="1950" damage="30" pierce="0" grenadetype="3" itemid = "40605" zaxis = "330" yaxis = "60" force = "1500" posparts="" posmod="0 0 700" dirmod="0 0 0" />
+		<SOUND delay="1500" sound="challenge_quest/researchlab/ef_gunsmoke" />
+		<SOUND delay="1550" sound="challenge_quest/researchlab/ef_gunsmoke" />
+		<SOUND delay="1600" sound="challenge_quest/researchlab/ef_gunsmoke" />
+		<SOUND delay="1650" sound="challenge_quest/researchlab/ef_gunsmoke" />
+		<SOUND delay="1700" sound="challenge_quest/researchlab/ef_gunsmoke" />
+		<SOUND delay="1750" sound="challenge_quest/researchlab/ef_gunsmoke" />
+		<SOUND delay="1800" sound="challenge_quest/researchlab/ef_gunsmoke" />
+		<SOUND delay="1850" sound="challenge_quest/researchlab/ef_gunsmoke" />
+		<SOUND delay="1900" sound="challenge_quest/researchlab/ef_gunsmoke" />
+		<SOUND delay="1950" sound="challenge_quest/researchlab/ef_gunsmoke" />
+		<SOUND delay="0" sound="challenge_quest/researchlab/lab_tower_shot" />
+	</ACTION>
+	
+	<ACTION name="tower_summon" animation="summon" >
+		<SUMMON name="shooter2" delay="900" range="350" angle="0" adjustplayernum="true" drop="C2"/>
+		<SUMMON name="shooter2" delay="900" range="350" angle="90" adjustplayernum="true" drop="C2"/>
+		<SUMMON name="shooter2" delay="900" range="350" angle="180" adjustplayernum="true" drop="C2"/>
+		<SUMMON name="shooter2" delay="900" range="350" angle="270" adjustplayernum="true" drop="C2"/>
+		<EFFECT delay="900" mesh="ef_dust_2m" posparts="" posmod="0 0 0" dirmod="0 0 0" scale="1.4"/>
+		<SOUND delay="0" sound="challenge_quest/researchlab/lab_tower_summon" />
+	</ACTION>
+	
+	<ACTION name="tower_summon2" animation="summon" >
+		<SUMMON name="charger2" delay="900" range="350" angle="0" adjustplayernum="true" drop="C2"/>
+		<SUMMON name="charger2" delay="900" range="350" angle="90" adjustplayernum="true" drop="C2"/>
+		<SUMMON name="charger2" delay="900" range="350" angle="180" adjustplayernum="true" drop="C2"/>
+		<SUMMON name="charger2" delay="900" range="350" angle="270" adjustplayernum="true" drop="C2"/>
+		<EFFECT delay="900" mesh="ef_dust_2m" posparts="" posmod="0 0 0" dirmod="0 0 0" scale="1.4"/>
+		<SOUND delay="0" sound="challenge_quest/researchlab/lab_tower_summon" />
+	</ACTION>
+	
+		<ACTION name="tower_summon3" animation="summon" >
+		<SUMMON name="shooter3" delay="900" range="350" angle="0" adjustplayernum="true" drop="C2"/>
+		<SUMMON name="shooter3" delay="900" range="350" angle="90" adjustplayernum="true" drop="C2"/>
+		<SUMMON name="shooter3" delay="900" range="350" angle="180" adjustplayernum="true" drop="C2"/>
+		<SUMMON name="shooter3" delay="900" range="350" angle="270" adjustplayernum="true" drop="C2"/>
+		<EFFECT delay="900" mesh="ef_dust_2m" posparts="" posmod="0 0 0" dirmod="0 0 0" scale="1.4"/>
+		<SOUND delay="0" sound="challenge_quest/researchlab/lab_tower_summon" />
+	</ACTION>
+	
+	<ACTION name="tower_summon4" animation="summon" >
+		<SUMMON name="charger3" delay="900" range="350" angle="0" adjustplayernum="true" drop="C2"/>
+		<SUMMON name="charger3" delay="900" range="350" angle="90" adjustplayernum="true" drop="C2"/>
+		<SUMMON name="charger3" delay="900" range="350" angle="180" adjustplayernum="true" drop="C2"/>
+		<SUMMON name="charger3" delay="900" range="350" angle="270" adjustplayernum="true" drop="C2"/>
+		<EFFECT delay="900" mesh="ef_dust_2m" posparts="" posmod="0 0 0" dirmod="0 0 0" scale="1.4"/>
+		<SOUND delay="0" sound="challenge_quest/researchlab/lab_tower_summon" />
+	</ACTION>
+	
+	
+	<ACTION name="tower_suffer1" animation="suffer1" >
+		<SOUND delay="0" sound="challenge_quest/researchlab/lab_tower_suffer" />
+	</ACTION>
+	
+	<!--> 
+	어새신 스킬
+	</-->
+	<ACTION name="assassin_arrive" animation="arrive" >
+		<EFFECT delay="0" mesh="ef_dust_2m" posparts="" posmod="0 0 0" dirmod="0 0 0" scale="0.6"/>
+		<EFFECT delay="200" mesh="ef_dust_2m" posparts="" posmod="0 0 0" dirmod="0 0 0" scale="0.8"/>
+		<EFFECT delay="400" mesh="ef_dust_2m" posparts="" posmod="0 0 0" dirmod="0 0 0" scale="1.0"/>
+		<SOUND delay="0" sound="challenge_quest/guerilla_robot/guerilla_robot_arrive" />	
+	</ACTION>
+	
+	<ACTION name="assassin_run" animation="run" >
+	</ACTION>
+	
+	<ACTION name="assassin_spinslash" animation="spinslash" movinganimation="true" >
+		<MELEESHOT delay="900" damage="25" range="650" angle="360" pierce="0" sound="" />
+		<MELEESHOT delay="1200" damage="25" range="650" angle="360" pierce="0" sound="" uppercut="true"/>
+		<EFFECT delay="0" mesh="ef_guide_10m" posparts="" posmod="0 0 0" dirmod="0 0 0" scale="1.2"/>
+		<EFFECT delay="866" mesh="ef_wave120" posparts="" posmod="0 0 0" zaxis="0" scale="0.9"/>
+		<EFFECT delay="866" mesh="ef_wave120" posparts="" posmod="0 0 0" zaxis="90" scale="0.9"/>
+		<EFFECT delay="866" mesh="ef_wave120" posparts="" posmod="0 0 0" zaxis="180" scale="0.9"/>
+		<EFFECT delay="866" mesh="ef_wave120" posparts="" posmod="0 0 0" zaxis="270" scale="0.9"/>
+		<SOUND delay="0" sound="challenge_quest/researchlab/lab_assasin_spinslash" />
+	</ACTION>
+	
+	<ACTION name="assassin_dashleft" animation="dashleft" movinganimation="true" >
+		<RANGESHOT delay="666" damage="8" pierce="50" sound="hitsound" mesh="ef_bullet" speed="3000" collradius="1" zaxis="12" posparts="lhand" dirtarget="true"/>
+		<RANGESHOT delay="666" damage="8" pierce="50" sound="hitsound" mesh="ef_bullet" speed="3000" collradius="1" zaxis="9" posparts="lhand" dirtarget="true"/>
+		<RANGESHOT delay="666" damage="8" pierce="50" sound="hitsound" mesh="ef_bullet" speed="3000" collradius="1" zaxis="6" posparts="lhand" dirtarget="true"/>
+		<RANGESHOT delay="666" damage="8" pierce="50" sound="hitsound" mesh="ef_bullet" speed="3000" collradius="1" zaxis="3" posparts="lhand" dirtarget="true"/>
+		<RANGESHOT delay="666" damage="8" pierce="50" sound="hitsound" mesh="ef_bullet" speed="3000" collradius="1" zaxis="0" posparts="lhand" dirtarget="true"/>
+		<RANGESHOT delay="666" damage="8" pierce="50" sound="hitsound" mesh="ef_bullet" speed="3000" collradius="1" zaxis="-3" posparts="lhand" dirtarget="true"/>
+		<RANGESHOT delay="666" damage="8" pierce="50" sound="hitsound" mesh="ef_bullet" speed="3000" collradius="1" zaxis="-6" posparts="lhand" dirtarget="true"/>
+		<RANGESHOT delay="666" damage="8" pierce="50" sound="hitsound" mesh="ef_bullet" speed="3000" collradius="1" zaxis="-9" posparts="lhand" dirtarget="true"/>
+		<RANGESHOT delay="666" damage="8" pierce="50" sound="hitsound" mesh="ef_bullet" speed="3000" collradius="1" zaxis="-12" posparts="lhand" dirtarget="true"/>
+		<EFFECT delay="666" mesh="flame_rifle" posparts="lhand" posmod="0 20 0" dirmod="0 0 0" scale="0.6"/>
+		<SOUND delay="666" sound="challenge_quest/guerilla_rifleman/guerilla_rifleman_shoot" />
+		<SOUND delay="0" sound="challenge_quest/researchlab/lab_assasin_dash_a" />
+	</ACTION>
+	
+	<ACTION name="assassin_dashright" animation="dashright" movinganimation="true" >
+		<RANGESHOT delay="733" damage="8" pierce="50" sound="hitsound" mesh="ef_bullet" speed="3000" collradius="1" zaxis="12" posparts="lhand" dirtarget="true"/>
+		<RANGESHOT delay="733" damage="8" pierce="50" sound="hitsound" mesh="ef_bullet" speed="3000" collradius="1" zaxis="9" posparts="lhand" dirtarget="true"/>
+		<RANGESHOT delay="733" damage="8" pierce="50" sound="hitsound" mesh="ef_bullet" speed="3000" collradius="1" zaxis="6" posparts="lhand" dirtarget="true"/>
+		<RANGESHOT delay="733" damage="8" pierce="50" sound="hitsound" mesh="ef_bullet" speed="3000" collradius="1" zaxis="3" posparts="lhand" dirtarget="true"/>
+		<RANGESHOT delay="733" damage="8" pierce="50" sound="hitsound" mesh="ef_bullet" speed="3000" collradius="1" zaxis="0" posparts="lhand" dirtarget="true"/>
+		<RANGESHOT delay="733" damage="8" pierce="50" sound="hitsound" mesh="ef_bullet" speed="3000" collradius="1" zaxis="-3" posparts="lhand" dirtarget="true"/>
+		<RANGESHOT delay="733" damage="8" pierce="50" sound="hitsound" mesh="ef_bullet" speed="3000" collradius="1" zaxis="-6" posparts="lhand" dirtarget="true"/>
+		<RANGESHOT delay="733" damage="8" pierce="50" sound="hitsound" mesh="ef_bullet" speed="3000" collradius="1" zaxis="-9" posparts="lhand" dirtarget="true"/>
+		<RANGESHOT delay="733" damage="8" pierce="50" sound="hitsound" mesh="ef_bullet" speed="3000" collradius="1" zaxis="-12" posparts="lhand" dirtarget="true"/>
+		<EFFECT delay="733" mesh="flame_rifle" posparts="lhand" posmod="0 20 0" dirmod="0 0 0" scale="0.6"/>
+		<SOUND delay="733" sound="challenge_quest/guerilla_rifleman/guerilla_rifleman_shoot" />
+		<SOUND delay="0" sound="challenge_quest/researchlab/lab_assasin_dash_a" />
+	</ACTION>
+	
+		<ACTION name="assassin_dashleft2" animation="dashleft2" movinganimation="true" >
+		<RANGESHOT delay="666" damage="8" pierce="50" sound="hitsound" mesh="ef_bullet" speed="3000" collradius="1" zaxis="12" posparts="lhand" dirtarget="true"/>
+		<RANGESHOT delay="666" damage="8" pierce="50" sound="hitsound" mesh="ef_bullet" speed="3000" collradius="1" zaxis="9" posparts="lhand" dirtarget="true"/>
+		<RANGESHOT delay="666" damage="8" pierce="50" sound="hitsound" mesh="ef_bullet" speed="3000" collradius="1" zaxis="6" posparts="lhand" dirtarget="true"/>
+		<RANGESHOT delay="666" damage="8" pierce="50" sound="hitsound" mesh="ef_bullet" speed="3000" collradius="1" zaxis="3" posparts="lhand" dirtarget="true"/>
+		<RANGESHOT delay="666" damage="8" pierce="50" sound="hitsound" mesh="ef_bullet" speed="3000" collradius="1" zaxis="0" posparts="lhand" dirtarget="true"/>
+		<RANGESHOT delay="666" damage="8" pierce="50" sound="hitsound" mesh="ef_bullet" speed="3000" collradius="1" zaxis="-3" posparts="lhand" dirtarget="true"/>
+		<RANGESHOT delay="666" damage="8" pierce="50" sound="hitsound" mesh="ef_bullet" speed="3000" collradius="1" zaxis="-6" posparts="lhand" dirtarget="true"/>
+		<RANGESHOT delay="666" damage="8" pierce="50" sound="hitsound" mesh="ef_bullet" speed="3000" collradius="1" zaxis="-9" posparts="lhand" dirtarget="true"/>
+		<RANGESHOT delay="666" damage="8" pierce="50" sound="hitsound" mesh="ef_bullet" speed="3000" collradius="1" zaxis="-12" posparts="lhand" dirtarget="true"/>
+		<EFFECT delay="666" mesh="flame_rifle" posparts="lhand" posmod="0 20 0" dirmod="0 0 0" scale="0.6"/>
+		<SOUND delay="666" sound="challenge_quest/guerilla_rifleman/guerilla_rifleman_shoot" />
+		<SOUND delay="0" sound="challenge_quest/researchlab/lab_assasin_dash_a" />
+	</ACTION>
+	
+	<ACTION name="assassin_dashright2" animation="dashright2" movinganimation="true" >
+		<RANGESHOT delay="733" damage="8" pierce="50" sound="hitsound" mesh="ef_bullet" speed="3000" collradius="1" zaxis="12" posparts="lhand" dirtarget="true"/>
+		<RANGESHOT delay="733" damage="8" pierce="50" sound="hitsound" mesh="ef_bullet" speed="3000" collradius="1" zaxis="9" posparts="lhand" dirtarget="true"/>
+		<RANGESHOT delay="733" damage="8" pierce="50" sound="hitsound" mesh="ef_bullet" speed="3000" collradius="1" zaxis="6" posparts="lhand" dirtarget="true"/>
+		<RANGESHOT delay="733" damage="8" pierce="50" sound="hitsound" mesh="ef_bullet" speed="3000" collradius="1" zaxis="3" posparts="lhand" dirtarget="true"/>
+		<RANGESHOT delay="733" damage="8" pierce="50" sound="hitsound" mesh="ef_bullet" speed="3000" collradius="1" zaxis="0" posparts="lhand" dirtarget="true"/>
+		<RANGESHOT delay="733" damage="8" pierce="50" sound="hitsound" mesh="ef_bullet" speed="3000" collradius="1" zaxis="-3" posparts="lhand" dirtarget="true"/>
+		<RANGESHOT delay="733" damage="8" pierce="50" sound="hitsound" mesh="ef_bullet" speed="3000" collradius="1" zaxis="-6" posparts="lhand" dirtarget="true"/>
+		<RANGESHOT delay="733" damage="8" pierce="50" sound="hitsound" mesh="ef_bullet" speed="3000" collradius="1" zaxis="-9" posparts="lhand" dirtarget="true"/>
+		<RANGESHOT delay="733" damage="8" pierce="50" sound="hitsound" mesh="ef_bullet" speed="3000" collradius="1" zaxis="-12" posparts="lhand" dirtarget="true"/>
+		<EFFECT delay="733" mesh="flame_rifle" posparts="lhand" posmod="0 20 0" dirmod="0 0 0" scale="0.6"/>
+		<SOUND delay="733" sound="challenge_quest/guerilla_rifleman/guerilla_rifleman_shoot" />
+		<SOUND delay="0" sound="challenge_quest/researchlab/lab_assasin_dash_a" />
+	</ACTION>
+	
+	<ACTION name="assassin_pierce" animation="pierce" movinganimation="true" >
+		<MELEESHOT delay="100" damage="20" range="200" angle="180" pierce="0" sound="" uppercut="true"/>
+		<MELEESHOT delay="200" damage="20" range="200" angle="180" pierce="0" sound="" uppercut="true"/>
+		<MELEESHOT delay="300" damage="20" range="200" angle="180" pierce="0" sound="" uppercut="true"/>
+		<MELEESHOT delay="400" damage="20" range="200" angle="180" pierce="0" sound="" uppercut="true"/>
+		<MELEESHOT delay="500" damage="20" range="200" angle="180" pierce="0" sound="" uppercut="true"/>	
+		<MELEESHOT delay="600" damage="20" range="350" angle="30" pierce="0" sound="challenge_quest/guerilla_robot/guerilla_robot_hit_player" uppercut="true"/>		
+		<MELEESHOT delay="900" damage="20" range="350" angle="30" pierce="0" sound="challenge_quest/guerilla_robot/guerilla_robot_hit_player" thrust="true"/>			
+		<EFFECT delay="100" mesh="ef_dust_2m" posparts="" posmod="0 150 0" dirmod="0 0 0" scale="0.7"/>
+		<EFFECT delay="200" mesh="ef_dust_2m" posparts="" posmod="0 150 0" dirmod="0 0 0" scale="0.7"/>
+		<EFFECT delay="300" mesh="ef_dust_2m" posparts="" posmod="0 150 0" dirmod="0 0 0" scale="0.7"/>
+		<EFFECT delay="400" mesh="ef_dust_2m" posparts="" posmod="0 150 0" dirmod="0 0 0" scale="0.7"/>
+		<EFFECT delay="500" mesh="ef_dust_2m" posparts="" posmod="0 150 0" dirmod="0 0 0" scale="0.7"/>
+		<EFFECT delay="600" mesh="ef_dust_2m" posparts="" posmod="0 150 0" dirmod="0 0 0" scale="0.7"/>
+		<EFFECT delay="700" mesh="ef_dust_2m" posparts="" posmod="0 100 0" dirmod="0 0 0" scale="0.7"/>
+		<SOUND delay="0" sound="challenge_quest/researchlab/lab_assasin_pierce" />
+	</ACTION>
+	
+	<ACTION name="assassin_strafe" animation="strafe" movinganimation="true" >
+		<RANGESHOT delay="533" damage="8" pierce="50" sound="hitsound" mesh="ef_bullet" speed="3000" collradius="1" zaxis="-52" yaxis="-1" posparts="lhand" dirtarget="true"/>
+		<RANGESHOT delay="533" damage="8" pierce="50" sound="hitsound" mesh="ef_bullet" speed="3000" collradius="1" zaxis="-49" yaxis="-1" posparts="lhand" dirtarget="true"/>
+		<RANGESHOT delay="533" damage="8" pierce="50" sound="hitsound" mesh="ef_bullet" speed="3000" collradius="1" zaxis="-46" yaxis="-1" posparts="lhand" dirtarget="true"/>
+		<RANGESHOT delay="533" damage="8" pierce="50" sound="hitsound" mesh="ef_bullet" speed="3000" collradius="1" zaxis="-43" yaxis="-1" posparts="lhand" dirtarget="true"/>
+		<RANGESHOT delay="533" damage="8" pierce="50" sound="hitsound" mesh="ef_bullet" speed="3000" collradius="1" zaxis="-40" yaxis="-1" posparts="lhand" dirtarget="true"/>
+		<RANGESHOT delay="533" damage="8" pierce="50" sound="hitsound" mesh="ef_bullet" speed="3000" collradius="1" zaxis="-37" yaxis="-1" posparts="lhand" dirtarget="true"/>
+		<RANGESHOT delay="533" damage="8" pierce="50" sound="hitsound" mesh="ef_bullet" speed="3000" collradius="1" zaxis="-34" yaxis="-1" posparts="lhand" dirtarget="true"/>
+		<RANGESHOT delay="533" damage="8" pierce="50" sound="hitsound" mesh="ef_bullet" speed="3000" collradius="1" zaxis="-31" yaxis="-1" posparts="lhand" dirtarget="true"/>
+		<RANGESHOT delay="533" damage="8" pierce="50" sound="hitsound" mesh="ef_bullet" speed="3000" collradius="1" zaxis="-28" yaxis="-1" posparts="lhand" dirtarget="true"/>
+		<EFFECT delay="533" mesh="flame_rifle" posparts="lhand" posmod="0 20 0" dirmod="0 0 0" scale="0.6"/>
+		<SOUND delay="533" sound="challenge_quest/guerilla_rifleman/guerilla_rifleman_shoot" />
+		<RANGESHOT delay="666" damage="8" pierce="50" sound="hitsound" mesh="ef_bullet" speed="3000" collradius="1" zaxis="-32" yaxis="-1" posparts="lhand" dirtarget="true"/>
+		<RANGESHOT delay="666" damage="8" pierce="50" sound="hitsound" mesh="ef_bullet" speed="3000" collradius="1" zaxis="-29" yaxis="-1" posparts="lhand" dirtarget="true"/>
+		<RANGESHOT delay="666" damage="8" pierce="50" sound="hitsound" mesh="ef_bullet" speed="3000" collradius="1" zaxis="-26" yaxis="-1" posparts="lhand" dirtarget="true"/>
+		<RANGESHOT delay="666" damage="8" pierce="50" sound="hitsound" mesh="ef_bullet" speed="3000" collradius="1" zaxis="-23" yaxis="-1" posparts="lhand" dirtarget="true"/>
+		<RANGESHOT delay="666" damage="8" pierce="50" sound="hitsound" mesh="ef_bullet" speed="3000" collradius="1" zaxis="-20" yaxis="-1" posparts="lhand" dirtarget="true"/>
+		<RANGESHOT delay="666" damage="8" pierce="50" sound="hitsound" mesh="ef_bullet" speed="3000" collradius="1" zaxis="-17" yaxis="-1" posparts="lhand" dirtarget="true"/>
+		<RANGESHOT delay="666" damage="8" pierce="50" sound="hitsound" mesh="ef_bullet" speed="3000" collradius="1" zaxis="-14" yaxis="-1" posparts="lhand" dirtarget="true"/>
+		<RANGESHOT delay="666" damage="8" pierce="50" sound="hitsound" mesh="ef_bullet" speed="3000" collradius="1" zaxis="-11" yaxis="-1" posparts="lhand" dirtarget="true"/>
+		<RANGESHOT delay="666" damage="8" pierce="50" sound="hitsound" mesh="ef_bullet" speed="3000" collradius="1" zaxis="-8" yaxis="-1" posparts="lhand" dirtarget="true"/>
+		<EFFECT delay="666" mesh="flame_rifle" posparts="lhand" posmod="0 20 0" dirmod="0 0 0" scale="0.6"/>
+		<SOUND delay="666" sound="challenge_quest/guerilla_rifleman/guerilla_rifleman_shoot" />
+		<RANGESHOT delay="800" damage="8" pierce="50" sound="hitsound" mesh="ef_bullet" speed="3000" collradius="1" zaxis="-12" yaxis="-1" posparts="lhand" dirtarget="true"/>
+		<RANGESHOT delay="800" damage="8" pierce="50" sound="hitsound" mesh="ef_bullet" speed="3000" collradius="1" zaxis="-9" yaxis="-1" posparts="lhand" dirtarget="true"/>
+		<RANGESHOT delay="800" damage="8" pierce="50" sound="hitsound" mesh="ef_bullet" speed="3000" collradius="1" zaxis="-6" yaxis="-1" posparts="lhand" dirtarget="true"/>
+		<RANGESHOT delay="800" damage="8" pierce="50" sound="hitsound" mesh="ef_bullet" speed="3000" collradius="1" zaxis="-3" yaxis="-1" posparts="lhand" dirtarget="true"/>
+		<RANGESHOT delay="800" damage="8" pierce="50" sound="hitsound" mesh="ef_bullet" speed="3000" collradius="1" zaxis="0" yaxis="-1" posparts="lhand" dirtarget="true"/>
+		<RANGESHOT delay="800" damage="8" pierce="50" sound="hitsound" mesh="ef_bullet" speed="3000" collradius="1" zaxis="3" yaxis="-1" posparts="lhand" dirtarget="true"/>
+		<RANGESHOT delay="800" damage="8" pierce="50" sound="hitsound" mesh="ef_bullet" speed="3000" collradius="1" zaxis="6" yaxis="-1" posparts="lhand" dirtarget="true"/>
+		<RANGESHOT delay="800" damage="8" pierce="50" sound="hitsound" mesh="ef_bullet" speed="3000" collradius="1" zaxis="9" yaxis="-1" posparts="lhand" dirtarget="true"/>
+		<RANGESHOT delay="800" damage="8" pierce="50" sound="hitsound" mesh="ef_bullet" speed="3000" collradius="1" zaxis="12" yaxis="-1" posparts="lhand" dirtarget="true"/>
+		<EFFECT delay="800" mesh="flame_rifle" posparts="lhand" posmod="0 20 0" dirmod="0 0 0" scale="0.6"/>
+		<SOUND delay="800" sound="challenge_quest/guerilla_rifleman/guerilla_rifleman_shoot" />
+		<RANGESHOT delay="933" damage="8" pierce="50" sound="hitsound" mesh="ef_bullet" speed="3000" collradius="1" zaxis="32" yaxis="-1" posparts="lhand" dirtarget="true"/>
+		<RANGESHOT delay="933" damage="8" pierce="50" sound="hitsound" mesh="ef_bullet" speed="3000" collradius="1" zaxis="29" yaxis="-1" posparts="lhand" dirtarget="true"/>
+		<RANGESHOT delay="933" damage="8" pierce="50" sound="hitsound" mesh="ef_bullet" speed="3000" collradius="1" zaxis="26" yaxis="-1" posparts="lhand" dirtarget="true"/>
+		<RANGESHOT delay="933" damage="8" pierce="50" sound="hitsound" mesh="ef_bullet" speed="3000" collradius="1" zaxis="23" yaxis="-1" posparts="lhand" dirtarget="true"/>
+		<RANGESHOT delay="933" damage="8" pierce="50" sound="hitsound" mesh="ef_bullet" speed="3000" collradius="1" zaxis="20" yaxis="-1" posparts="lhand" dirtarget="true"/>
+		<RANGESHOT delay="933" damage="8" pierce="50" sound="hitsound" mesh="ef_bullet" speed="3000" collradius="1" zaxis="17" yaxis="-1" posparts="lhand" dirtarget="true"/>
+		<RANGESHOT delay="933" damage="8" pierce="50" sound="hitsound" mesh="ef_bullet" speed="3000" collradius="1" zaxis="14" yaxis="-1" posparts="lhand" dirtarget="true"/>
+		<RANGESHOT delay="933" damage="8" pierce="50" sound="hitsound" mesh="ef_bullet" speed="3000" collradius="1" zaxis="11" yaxis="-1" posparts="lhand" dirtarget="true"/>
+		<RANGESHOT delay="933" damage="8" pierce="50" sound="hitsound" mesh="ef_bullet" speed="3000" collradius="1" zaxis="8" yaxis="-1" posparts="lhand" dirtarget="true"/>
+		<EFFECT delay="933" mesh="flame_rifle" posparts="lhand" posmod="0 20 0" dirmod="0 0 0" scale="0.6"/>
+		<SOUND delay="933" sound="challenge_quest/guerilla_rifleman/guerilla_rifleman_shoot" />
+		<RANGESHOT delay="1066" damage="8" pierce="50" sound="hitsound" mesh="ef_bullet" speed="3000" collradius="1" zaxis="52" yaxis="-1" posparts="lhand" dirtarget="true"/>
+		<RANGESHOT delay="1066" damage="8" pierce="50" sound="hitsound" mesh="ef_bullet" speed="3000" collradius="1" zaxis="49" yaxis="-1" posparts="lhand" dirtarget="true"/>
+		<RANGESHOT delay="1066" damage="8" pierce="50" sound="hitsound" mesh="ef_bullet" speed="3000" collradius="1" zaxis="46" yaxis="-1" posparts="lhand" dirtarget="true"/>
+		<RANGESHOT delay="1066" damage="8" pierce="50" sound="hitsound" mesh="ef_bullet" speed="3000" collradius="1" zaxis="43" yaxis="-1" posparts="lhand" dirtarget="true"/>
+		<RANGESHOT delay="1066" damage="8" pierce="50" sound="hitsound" mesh="ef_bullet" speed="3000" collradius="1" zaxis="40" yaxis="-1" posparts="lhand" dirtarget="true"/>
+		<RANGESHOT delay="1066" damage="8" pierce="50" sound="hitsound" mesh="ef_bullet" speed="3000" collradius="1" zaxis="37" yaxis="-1" posparts="lhand" dirtarget="true"/>
+		<RANGESHOT delay="1066" damage="8" pierce="50" sound="hitsound" mesh="ef_bullet" speed="3000" collradius="1" zaxis="34" yaxis="-1" posparts="lhand" dirtarget="true"/>
+		<RANGESHOT delay="1066" damage="8" pierce="50" sound="hitsound" mesh="ef_bullet" speed="3000" collradius="1" zaxis="31" yaxis="-1" posparts="lhand" dirtarget="true"/>
+		<RANGESHOT delay="1066" damage="8" pierce="50" sound="hitsound" mesh="ef_bullet" speed="3000" collradius="1" zaxis="28" yaxis="-1" posparts="lhand" dirtarget="true"/>
+		<EFFECT delay="1066" mesh="flame_rifle" posparts="lhand" posmod="0 20 0" dirmod="0 0 0" scale="0.6"/>
+		<SOUND delay="1066" sound="challenge_quest/guerilla_rifleman/guerilla_rifleman_shoot" />
+		<SOUND delay="0" sound="challenge_quest/researchlab/lab_assasin_strafe" />
+	</ACTION>
+	
+		<ACTION name="assassin_strafe2" animation="strafe" movinganimation="true" >
+		<RANGESHOT delay="533" damage="8" pierce="50" sound="hitsound" mesh="ef_bullet" speed="3000" collradius="1" zaxis="-52" yaxis="-1" posparts="lhand" dirtarget="true"/>
+		<RANGESHOT delay="533" damage="8" pierce="50" sound="hitsound" mesh="ef_bullet" speed="3000" collradius="1" zaxis="-49" yaxis="-1" posparts="lhand" dirtarget="true"/>
+		<RANGESHOT delay="533" damage="8" pierce="50" sound="hitsound" mesh="ef_bullet" speed="3000" collradius="1" zaxis="-46" yaxis="-1" posparts="lhand" dirtarget="true"/>
+		<RANGESHOT delay="533" damage="8" pierce="50" sound="hitsound" mesh="ef_bullet" speed="3000" collradius="1" zaxis="-43" yaxis="-1" posparts="lhand" dirtarget="true"/>
+		<RANGESHOT delay="533" damage="8" pierce="50" sound="hitsound" mesh="ef_bullet" speed="3000" collradius="1" zaxis="-40" yaxis="-1" posparts="lhand" dirtarget="true"/>
+		<RANGESHOT delay="533" damage="8" pierce="50" sound="hitsound" mesh="ef_bullet" speed="3000" collradius="1" zaxis="-37" yaxis="-1" posparts="lhand" dirtarget="true"/>
+		<RANGESHOT delay="533" damage="8" pierce="50" sound="hitsound" mesh="ef_bullet" speed="3000" collradius="1" zaxis="-34" yaxis="-1" posparts="lhand" dirtarget="true"/>
+		<RANGESHOT delay="533" damage="8" pierce="50" sound="hitsound" mesh="ef_bullet" speed="3000" collradius="1" zaxis="-31" yaxis="-1" posparts="lhand" dirtarget="true"/>
+		<RANGESHOT delay="533" damage="8" pierce="50" sound="hitsound" mesh="ef_bullet" speed="3000" collradius="1" zaxis="-28" yaxis="-1" posparts="lhand" dirtarget="true"/>
+		<EFFECT delay="533" mesh="flame_rifle" posparts="lhand" posmod="0 20 0" dirmod="0 0 0" scale="0.6"/>
+		<SOUND delay="533" sound="challenge_quest/guerilla_rifleman/guerilla_rifleman_shoot" />
+		<RANGESHOT delay="666" damage="8" pierce="50" sound="hitsound" mesh="ef_bullet" speed="3000" collradius="1" zaxis="-32" yaxis="-1" posparts="lhand" dirtarget="true"/>
+		<RANGESHOT delay="666" damage="8" pierce="50" sound="hitsound" mesh="ef_bullet" speed="3000" collradius="1" zaxis="-29" yaxis="-1" posparts="lhand" dirtarget="true"/>
+		<RANGESHOT delay="666" damage="8" pierce="50" sound="hitsound" mesh="ef_bullet" speed="3000" collradius="1" zaxis="-26" yaxis="-1" posparts="lhand" dirtarget="true"/>
+		<RANGESHOT delay="666" damage="8" pierce="50" sound="hitsound" mesh="ef_bullet" speed="3000" collradius="1" zaxis="-23" yaxis="-1" posparts="lhand" dirtarget="true"/>
+		<RANGESHOT delay="666" damage="8" pierce="50" sound="hitsound" mesh="ef_bullet" speed="3000" collradius="1" zaxis="-20" yaxis="-1" posparts="lhand" dirtarget="true"/>
+		<RANGESHOT delay="666" damage="8" pierce="50" sound="hitsound" mesh="ef_bullet" speed="3000" collradius="1" zaxis="-17" yaxis="-1" posparts="lhand" dirtarget="true"/>
+		<RANGESHOT delay="666" damage="8" pierce="50" sound="hitsound" mesh="ef_bullet" speed="3000" collradius="1" zaxis="-14" yaxis="-1" posparts="lhand" dirtarget="true"/>
+		<RANGESHOT delay="666" damage="8" pierce="50" sound="hitsound" mesh="ef_bullet" speed="3000" collradius="1" zaxis="-11" yaxis="-1" posparts="lhand" dirtarget="true"/>
+		<RANGESHOT delay="666" damage="8" pierce="50" sound="hitsound" mesh="ef_bullet" speed="3000" collradius="1" zaxis="-8" yaxis="-1" posparts="lhand" dirtarget="true"/>
+		<EFFECT delay="666" mesh="flame_rifle" posparts="lhand" posmod="0 20 0" dirmod="0 0 0" scale="0.6"/>
+		<SOUND delay="666" sound="challenge_quest/guerilla_rifleman/guerilla_rifleman_shoot" />
+		<RANGESHOT delay="800" damage="8" pierce="50" sound="hitsound" mesh="ef_bullet" speed="3000" collradius="1" zaxis="-12" yaxis="-1" posparts="lhand" dirtarget="true"/>
+		<RANGESHOT delay="800" damage="8" pierce="50" sound="hitsound" mesh="ef_bullet" speed="3000" collradius="1" zaxis="-9" yaxis="-1" posparts="lhand" dirtarget="true"/>
+		<RANGESHOT delay="800" damage="8" pierce="50" sound="hitsound" mesh="ef_bullet" speed="3000" collradius="1" zaxis="-6" yaxis="-1" posparts="lhand" dirtarget="true"/>
+		<RANGESHOT delay="800" damage="8" pierce="50" sound="hitsound" mesh="ef_bullet" speed="3000" collradius="1" zaxis="-3" yaxis="-1" posparts="lhand" dirtarget="true"/>
+		<RANGESHOT delay="800" damage="8" pierce="50" sound="hitsound" mesh="ef_bullet" speed="3000" collradius="1" zaxis="0" yaxis="-1" posparts="lhand" dirtarget="true"/>
+		<RANGESHOT delay="800" damage="8" pierce="50" sound="hitsound" mesh="ef_bullet" speed="3000" collradius="1" zaxis="3" yaxis="-1" posparts="lhand" dirtarget="true"/>
+		<RANGESHOT delay="800" damage="8" pierce="50" sound="hitsound" mesh="ef_bullet" speed="3000" collradius="1" zaxis="6" yaxis="-1" posparts="lhand" dirtarget="true"/>
+		<RANGESHOT delay="800" damage="8" pierce="50" sound="hitsound" mesh="ef_bullet" speed="3000" collradius="1" zaxis="9" yaxis="-1" posparts="lhand" dirtarget="true"/>
+		<RANGESHOT delay="800" damage="8" pierce="50" sound="hitsound" mesh="ef_bullet" speed="3000" collradius="1" zaxis="12" yaxis="-1" posparts="lhand" dirtarget="true"/>
+		<EFFECT delay="800" mesh="flame_rifle" posparts="lhand" posmod="0 20 0" dirmod="0 0 0" scale="0.6"/>
+		<SOUND delay="800" sound="challenge_quest/guerilla_rifleman/guerilla_rifleman_shoot" />
+		<RANGESHOT delay="933" damage="8" pierce="50" sound="hitsound" mesh="ef_bullet" speed="3000" collradius="1" zaxis="32" yaxis="-1" posparts="lhand" dirtarget="true"/>
+		<RANGESHOT delay="933" damage="8" pierce="50" sound="hitsound" mesh="ef_bullet" speed="3000" collradius="1" zaxis="29" yaxis="-1" posparts="lhand" dirtarget="true"/>
+		<RANGESHOT delay="933" damage="8" pierce="50" sound="hitsound" mesh="ef_bullet" speed="3000" collradius="1" zaxis="26" yaxis="-1" posparts="lhand" dirtarget="true"/>
+		<RANGESHOT delay="933" damage="8" pierce="50" sound="hitsound" mesh="ef_bullet" speed="3000" collradius="1" zaxis="23" yaxis="-1" posparts="lhand" dirtarget="true"/>
+		<RANGESHOT delay="933" damage="8" pierce="50" sound="hitsound" mesh="ef_bullet" speed="3000" collradius="1" zaxis="20" yaxis="-1" posparts="lhand" dirtarget="true"/>
+		<RANGESHOT delay="933" damage="8" pierce="50" sound="hitsound" mesh="ef_bullet" speed="3000" collradius="1" zaxis="17" yaxis="-1" posparts="lhand" dirtarget="true"/>
+		<RANGESHOT delay="933" damage="8" pierce="50" sound="hitsound" mesh="ef_bullet" speed="3000" collradius="1" zaxis="14" yaxis="-1" posparts="lhand" dirtarget="true"/>
+		<RANGESHOT delay="933" damage="8" pierce="50" sound="hitsound" mesh="ef_bullet" speed="3000" collradius="1" zaxis="11" yaxis="-1" posparts="lhand" dirtarget="true"/>
+		<RANGESHOT delay="933" damage="8" pierce="50" sound="hitsound" mesh="ef_bullet" speed="3000" collradius="1" zaxis="8" yaxis="-1" posparts="lhand" dirtarget="true"/>
+		<EFFECT delay="933" mesh="flame_rifle" posparts="lhand" posmod="0 20 0" dirmod="0 0 0" scale="0.6"/>
+		<SOUND delay="933" sound="challenge_quest/guerilla_rifleman/guerilla_rifleman_shoot" />
+		<RANGESHOT delay="1066" damage="8" pierce="50" sound="hitsound" mesh="ef_bullet" speed="3000" collradius="1" zaxis="52" yaxis="-1" posparts="lhand" dirtarget="true"/>
+		<RANGESHOT delay="1066" damage="8" pierce="50" sound="hitsound" mesh="ef_bullet" speed="3000" collradius="1" zaxis="49" yaxis="-1" posparts="lhand" dirtarget="true"/>
+		<RANGESHOT delay="1066" damage="8" pierce="50" sound="hitsound" mesh="ef_bullet" speed="3000" collradius="1" zaxis="46" yaxis="-1" posparts="lhand" dirtarget="true"/>
+		<RANGESHOT delay="1066" damage="8" pierce="50" sound="hitsound" mesh="ef_bullet" speed="3000" collradius="1" zaxis="43" yaxis="-1" posparts="lhand" dirtarget="true"/>
+		<RANGESHOT delay="1066" damage="8" pierce="50" sound="hitsound" mesh="ef_bullet" speed="3000" collradius="1" zaxis="40" yaxis="-1" posparts="lhand" dirtarget="true"/>
+		<RANGESHOT delay="1066" damage="8" pierce="50" sound="hitsound" mesh="ef_bullet" speed="3000" collradius="1" zaxis="37" yaxis="-1" posparts="lhand" dirtarget="true"/>
+		<RANGESHOT delay="1066" damage="8" pierce="50" sound="hitsound" mesh="ef_bullet" speed="3000" collradius="1" zaxis="34" yaxis="-1" posparts="lhand" dirtarget="true"/>
+		<RANGESHOT delay="1066" damage="8" pierce="50" sound="hitsound" mesh="ef_bullet" speed="3000" collradius="1" zaxis="31" yaxis="-1" posparts="lhand" dirtarget="true"/>
+		<RANGESHOT delay="1066" damage="8" pierce="50" sound="hitsound" mesh="ef_bullet" speed="3000" collradius="1" zaxis="28" yaxis="-1" posparts="lhand" dirtarget="true"/>
+		<EFFECT delay="1066" mesh="flame_rifle" posparts="lhand" posmod="0 20 0" dirmod="0 0 0" scale="0.6"/>
+		<SOUND delay="1066" sound="challenge_quest/guerilla_rifleman/guerilla_rifleman_shoot" />
+		<SOUND delay="0" sound="challenge_quest/researchlab/lab_assasin_strafe" />
+		<SUMMON name="shooter3" delay="1200" range="400" angle="240" adjustplayernum="true" drop="C2"/>
+		<SUMMON name="shooter3" delay="1200" range="400" angle="120" adjustplayernum="true" drop="C2"/>
+		<EFFECT delay="1200" mesh="ef_dust_2m" posparts="" posmod="0 0 0" dirmod="0 0 0" scale="1.2"/>
+		<SOUND delay="0" sound="challenge_quest/researchlab/lab_assasin_summon" />
+	</ACTION>
+	
+	<ACTION name="assassin_dashfront" animation="dashfront" movinganimation="true" >
+		<EFFECT delay="30" mesh="ef_dust_1m" posparts="" posmod="0 40 0" dirmod="0 0 0" scale="1.5"/>
+		<EFFECT delay="90" mesh="ef_dust_1m" posparts="" posmod="0 -30 0" dirmod="0 0 0" scale="1.8"/>
+		<EFFECT delay="180" mesh="ef_dust_1m" posparts="" posmod="20 0 0" dirmod="0 0 0" scale="1.5"/>
+		<EFFECT delay="300" mesh="ef_dust_1m" posparts="" posmod="-10 0 0" dirmod="0 0 0" scale="1.8"/>
+		<EFFECT delay="450" mesh="ef_dust_1m" posparts="" posmod="0 0 0" dirmod="0 0 0" scale="1.5"/>
+		<SOUND delay="0" sound="challenge_quest/researchlab/lab_assasin_dash_b" />
+	</ACTION>
+	
+	<ACTION name="assassin_dashback" animation="dashback" movinganimation="true" >
+		<EFFECT delay="30" mesh="ef_dust_1m" posparts="" posmod="0 40 0" dirmod="0 0 0" scale="1.5"/>
+		<EFFECT delay="90" mesh="ef_dust_1m" posparts="" posmod="0 -30 0" dirmod="0 0 0" scale="1.8"/>
+		<EFFECT delay="180" mesh="ef_dust_1m" posparts="" posmod="20 0 0" dirmod="0 0 0" scale="1.5"/>
+		<EFFECT delay="300" mesh="ef_dust_1m" posparts="" posmod="-10 0 0" dirmod="0 0 0" scale="1.8"/>
+		<EFFECT delay="450" mesh="ef_dust_1m" posparts="" posmod="0 0 0" dirmod="0 0 0" scale="1.5"/>
+		<SOUND delay="0" sound="challenge_quest/researchlab/lab_assasin_dash_b" />
+	</ACTION>
+	
+	<ACTION name="assassin_summon" animation="summon" movinganimation="true" >
+		<SUMMON name="shooter3" delay="1200" range="400" angle="240" adjustplayernum="true" drop="C2"/>
+		<SUMMON name="shooter3" delay="1200" range="400" angle="120" adjustplayernum="true" drop="C2"/>
+		<EFFECT delay="1200" mesh="ef_dust_2m" posparts="" posmod="0 0 0" dirmod="0 0 0" scale="1.2"/>
+		<SOUND delay="0" sound="challenge_quest/researchlab/lab_assasin_summon" />
+	</ACTION>
+	
+	<ACTION name="assassin_suffer1" animation="suffer1" movinganimation="true" >
+		<SOUND delay="0" sound="challenge_quest/researchlab/lab_chaser_suffer1" />
+	</ACTION>
+	<ACTION name="assassin_suffer2" animation="suffer2" movinganimation="true" >	
+		<SOUND delay="0" sound="challenge_quest/researchlab/lab_chaser_suffer2" />
+	</ACTION>
+	<ACTION name="assassin_suffer3" animation="suffer3" movinganimation="true" >
+		<SOUND delay="0" sound="challenge_quest/researchlab/lab_assasin_suffer3" />
+	</ACTION>
+	
+</XML>
