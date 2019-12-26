@@ -15,7 +15,7 @@ using std::map;
 using std::string;
 
 
-#define EVENT_LIST_XML_FILE_NAME "EventList.xml"
+#define EVENT_LIST_XML_FILE_NAME "XML/Event/EventList.xml"
 
 
 struct EventServerType
@@ -95,8 +95,8 @@ public :
 	MMatchEventFactoryManager();
 	~MMatchEventFactoryManager();
 
-	bool LoadEventListXML( MZFileSystem* pFileSystem, const string& strFileName );
-	bool LoadEventListXML( const string& strFileName );
+	bool LoadEventListXML( MZFileSystem* pFileSystem, const char* strFileName );
+	bool LoadEventListXML(const char* strFileName );
 
 	bool		GetEventList( const DWORD dwGameType, const EVENT_TYPE EventType, EventPtrVec& EvnPtrVec );
 	const WORD	GetLoadEventSize() const { return m_LoadEventSize; }

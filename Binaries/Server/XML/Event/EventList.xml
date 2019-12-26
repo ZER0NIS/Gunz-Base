@@ -84,7 +84,7 @@
 -->
 
 
-<Locale country="usa">
+<Locale country="USA">
 	<Event id="1" EventID="2" name="EVENT_NAME_2" event_type="100" announce="EVENT_ANNOUNCE_2" xp_bonus_ratio="50">
 		<ServerType order="1" type="100" />
 		<GameType order="1" type="100" />
@@ -92,7 +92,7 @@
 		<EndTime year="2008" month="09" day="14" hour="23" />
 	</Event>
 </Locale>
-<Locale country="usa">
+<Locale country="USA">
 	<Event id="2" EventID="2" name="EVENT_NAME_2" event_type="100" announce="EVENT_ANNOUNCE_2" xp_bonus_ratio="50">
 		<ServerType order="1" type="100" />
 		<GameType order="1" type="100" />
@@ -100,7 +100,7 @@
 		<EndTime year="2008" month="09" day="21" hour="23" />
 	</Event>
 </Locale>
-<Locale country="usa">
+<Locale country="USA">
 	<Event id="3" EventID="2" name="EVENT_NAME_2" event_type="100" announce="EVENT_ANNOUNCE_2" xp_bonus_ratio="50">
 		<ServerType order="1" type="100" />
 		<GameType order="1" type="100" />
@@ -109,7 +109,7 @@
 	</Event>
 </Locale>
 
-<Locale country="usa">
+<Locale country="USA">
 	<Event id="4" EventID="2" name="EVENT_NAME_2" event_type="100" announce="EVENT_ANNOUNCE_2" xp_bonus_ratio="50">
 		<ServerType order="1" type="100" />
 		<GameType order="1" type="100" />
@@ -117,7 +117,7 @@
 		<EndTime year="2008" month="10" day="05" hour="23" />
 	</Event>
 </Locale>
-<Locale country="usa">
+<Locale country="USA">
 	<Event id="5" EventID="2" name="EVENT_NAME_2" event_type="100" announce="EVENT_ANNOUNCE_2" xp_bonus_ratio="50">
 		<ServerType order="1" type="100" />
 		<GameType order="1" type="100" />
@@ -125,7 +125,7 @@
 		<EndTime year="2008" month="10" day="12" hour="23" />
 	</Event>
 </Locale>
-<Locale country="usa">
+<Locale country="USA">
 	<Event id="6" EventID="2" name="EVENT_NAME_2" event_type="100" announce="EVENT_ANNOUNCE_2" xp_bonus_ratio="50">
 		<ServerType order="1" type="100" />
 		<GameType order="1" type="100" />
@@ -133,7 +133,7 @@
 		<EndTime year="2008" month="10" day="19" hour="23" />
 	</Event>
 </Locale>
-<Locale country="usa">
+<Locale country="USA">
 	<Event id="7" EventID="2" name="EVENT_NAME_2" event_type="100" announce="EVENT_ANNOUNCE_2" xp_bonus_ratio="50">
 		<ServerType order="1" type="100" />
 		<GameType order="1" type="100" />
@@ -143,12 +143,12 @@
 </Locale>
 
 <!-- GunzDay(건즈 데이) -->
-<Locale country="usa">
+<Locale country="USA">
 	<Event id="8" EventID="2" name="EVENT_NAME_2" event_type="100" announce="EVENT_ANNOUNCE_2" xp_bonus_ratio="50">
 		<ServerType order="1" type="100" />
 		<GameType order="1" type="100" />
-		<StartTime year="2010" month="07" day="01" hour="0" />
-		<EndTime year="2010" month="07" day="31" hour="23" />
+		<StartTime year="2019" month="12" day="01" hour="0" />
+		<EndTime year="2019" month="12" day="31" hour="23" />
 	</Event>
 </Locale>
 

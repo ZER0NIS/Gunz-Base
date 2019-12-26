@@ -225,47 +225,13 @@ void MMatchEventDescManager::ClearEventDesc()
 	MMatchEventDescManager::clear();
 }
 
-bool MMatchEventDescManager::LoadEventXML( MZFileSystem* pFileSystem, const string& strFileName )
+bool MMatchEventDescManager::LoadEventXML( MZFileSystem* pFileSystem, const char* strFileName )
 {
-	MXmlDocument	xmlIniData;
-	xmlIniData.Create();
-
-	//	<-----------------
-	char *buffer;
-	MZFile mzf;
-
-	if(pFileSystem) 
+	MXmlDocument xmlIniData;
+	if (!xmlIniData.LoadFromFile(strFileName, pFileSystem))
 	{
-		if(!mzf.Open(strFileName.c_str(),pFileSystem)) 
-		{
-			if(!mzf.Open(strFileName.c_str())) 
-			{
-				xmlIniData.Destroy();
-				return false;
-			}
-		}
-	} 
-	else 
-	{
-		if(!mzf.Open(strFileName.c_str()))
-		{
-			xmlIniData.Destroy();
-			return false;
-		}
-	}
-
-	buffer = new char[mzf.GetLength()+1];
-	buffer[mzf.GetLength()] = 0;
-	mzf.Read(buffer,mzf.GetLength());
-
-	if(!xmlIniData.LoadFromMemory(buffer))
-	{
-		xmlIniData.Destroy();
 		return false;
 	}
-	delete[] buffer;
-	mzf.Close();
-	//	<------------------
 
 	MXmlElement rootElement, chrElement, attrElement;
 	char szTagName[256];
@@ -291,13 +257,13 @@ bool MMatchEventDescManager::LoadEventXML( MZFileSystem* pFileSystem, const stri
 }
 
 
-bool MMatchEventDescManager::LoadEventXML( const string& strFileName )
+bool MMatchEventDescManager::LoadEventXML(const char* strFileName )
 {
 	MXmlDocument	xmlIniData;
 
 	xmlIniData.Create();
 
-	if (!xmlIniData.LoadFromFile(strFileName.c_str()))
+	if (!xmlIniData.LoadFromFile(strFileName))
 	{
 		xmlIniData.Destroy();
 		return false;

@@ -85,20 +85,6 @@ bool MMatchServer::OnCommand(MCommand* pCommand)
 				void *pLoginBlob = pLoginParam->GetPointer();
 				if( NULL == pLoginBlob )
 				{
-					// Hacker가 Blob의 크기를 조정하면 MCommand를 만들때 Blob데이터가 NULL포인터를 가질수 있다.
-					break;
-				}
-
-				// zeronis : revisar
-				// Custom: Exploit fix (md5 wrong size)
-				if (MGetBlobArraySize(pLoginBlob) != (8 + (MAX_MD5LENGH * 3)) && MGetBlobArraySize(pLoginBlob) != (8 + (MAX_MD5LENGH * 4)) && MGetBlobArraySize(pLoginBlob) != (8 + (MAX_MD5LENGH * 5)))
-				{
-					break;
-				}
-
-				// new update (5 max)
-				if (MGetBlobArrayCount(pLoginBlob) < 3 || MGetBlobArrayCount(pLoginBlob) > 5)
-				{
 					break;
 				}
 

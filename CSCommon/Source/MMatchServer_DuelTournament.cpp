@@ -270,7 +270,7 @@ void MMatchServer::LaunchDuelTournamentMatch(MDUELTOURNAMENTTYPE nType, MDuelTou
 		}
 	}
 	else{
-		//_ASSERT(0);//channelrule.xml 에 듀얼토너먼트용 맵을 추가
+
 		LOG(LOG_PROG, "MMatchServer::LaunchDuelTournamentMatch - Wrong Stage Setting");
 		RouteCmdDuelTournamentCancelMatch(pPickedGroup, MERR_DT_CANNOT_WRONG_STAGE_SETTING);
 	}

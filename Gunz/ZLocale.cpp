@@ -176,6 +176,56 @@ void ZLocale::RouteToWebsite()
 void ZLocale::PostLoginViaHomepage(MUID* pAllocUID)
 {
 	unsigned long nChecksum = 0;
+	nChecksum = nChecksum ^ (*pAllocUID).High ^ (*pAllocUID).Low;
+
+	switch (m_nCountry)
+	{
+#ifdef LOCALE_JAPAN
+	case MC_JAPAN:
+	{
+		char szEncryptMD5Value[MAX_MD5LENGH] = { 0, };
+		ZGetGameClient()->GetEncryptMD5HashValue(szEncryptMD5Value);
+
+		ZGameOnJPAuthInfo* pAuth = (ZGameOnJPAuthInfo*)m_pAuthInfo;
+		ZPostGameOnJPLogin(pAuth->GetString(), pAuth->GetStatIndex(), nChecksum, szEncryptMD5Value);
+
+#ifdef _GAMEGUARD
+		ZGameguard::m_IsResponseFirstGameguardAuth = false;
+#endif	// _GAMEGUARD
+	}
+	break;
+#endif	// LOCALE_JAPAN
+
+#ifdef LOCALE_NHNUSA
+	case MC_NHNUSA:
+	{
+		// Custom: Disable NHN Auth
+		/*
+		ZNHN_USAAuthInfo* pNHNAuth = (ZNHN_USAAuthInfo*)m_pAuthInfo;
+		if( 0 == pNHNAuth )
+		{
+			mlog( "error auth info\n" );
+			return;
+		}
+
+		char szEncryptMD5Value[ MAX_MD5LENGH ] = {0, };
+		ZGetGameClient()->GetEncryptMD5HashValue( szEncryptMD5Value );
+
+		ZPostNHNUSALogin( const_cast<char*>(pNHNAuth->GetUserID().c_str())
+			, const_cast<char*>(pNHNAuth->GetAuthStr())
+			, nChecksum, szEncryptMD5Value);
+		*/
+
+#ifdef _GAMEGUARD
+		ZGameguard::m_IsResponseFirstGameguardAuth = false;
+#endif	// _GAMEGUARD
+	}
+
+	break;
+#endif	// LOCALE_NHNUSA
+
+	default:
+		mlog("LoginViaHomepage - Unknown Locale \n");
+		break;
+	};
 }
-
-

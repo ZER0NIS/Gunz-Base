@@ -40,10 +40,10 @@ protected:
 	virtual bool OnCreate();												///< Create()호출시 불리는 함수
 	virtual void OnDestroy();												///< Destroy()호출시 불리는 함수
 
-	void ProcessNPCDropTableMatching();		// npc.xml의 Droptable을 매칭시킨다.
+	void ProcessNPCDropTableMatching();
 public:
-	MBaseQuest();															///< 생성자
-	virtual ~MBaseQuest();													///< 소멸자
+	MBaseQuest();														
+	virtual ~MBaseQuest();													
 	inline MQuestMapSectorInfo*		GetSectorInfo(int nSectorID);			///< 섹터 정보 반환 - 퀘스트
 	inline MQuestMapSectorInfo*		GetSurvivalSectorInfo(int nSectorID);	///< 섹터 정보 반환 - 서바이벌
 	inline MQuestNPCInfo*			GetNPCInfo(MQUEST_NPC nNPC);			///< NPC 정보 반환

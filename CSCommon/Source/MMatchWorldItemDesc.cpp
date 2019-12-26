@@ -187,7 +187,7 @@ bool MMatchMapsWorldItemSpawnInfo::Read()
 	char szFileName[256];
 	for (int i = 0; i < MMATCH_MAP_COUNT; i++)
 	{
-		sprintf(szFileName, "Maps/%s/%s", MGetMapDescMgr()->GetMapName(i), FILENAME_WORLDITEM_SPAWN);
+		sprintf(szFileName, "XML/Maps/%s/%s", MGetMapDescMgr()->GetMapName(i), FILENAME_WORLDITEM_SPAWN);
 
 			if (IsExist(szFileName))
 			{

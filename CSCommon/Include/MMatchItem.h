@@ -172,7 +172,7 @@ enum MMatchWeaponType
 	MWT_FRAGMENTATION,
 	MWT_SMOKE_GRENADE,
 	MWT_FOOD,
-	MWT_SKILL,				// NPC용 - skill.xml에 기술되어 있는 걸로 공격한다.
+	MWT_SKILL,			
 
 	// custom - enchant
 	MWT_ENCHANT_FIRE,			

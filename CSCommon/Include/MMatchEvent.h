@@ -16,7 +16,7 @@ using std::map;
 class MMatchObject;
 
 
-#define EVENT_XML_FILE_NAME "Event.xml"
+#define EVENT_XML_FILE_NAME "XML/Event/Event.xml"
 
 
 #define EV_EVENT	"Event"
@@ -178,8 +178,8 @@ public :
 		ClearEventDesc();
 	}
 	
-	bool LoadEventXML( MZFileSystem* pFileSystem, const string& strFileName );
-	bool LoadEventXML( const string& strFileName );
+	bool LoadEventXML( MZFileSystem* pFileSystem, const char* strFileName );
+	bool LoadEventXML(const char* strFileName );
 
 	const MMatchEventDesc* Find( const DWORD dwEventID );
 	void ClearEventDesc();

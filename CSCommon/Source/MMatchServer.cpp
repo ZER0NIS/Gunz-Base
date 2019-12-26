@@ -69,15 +69,15 @@
 
 #define MATCHSERVER_DEFAULT_UDP_PORT	7777
 
-#define FILENAME_ITEM_DESC				"zitem.xml"
-#define FILENAME_ITEM_DESC_LOCALE		"zitem_locale.xml"
-#define FILENAME_BUFF_DESC				"zBuff.xml"
-#define FILENAME_SHOP					"shop.xml"
-#define FILENAME_CHANNEL				"channel.xml"
-#define FILENAME_SHUTDOWN_NOTIFY		"shutdown.xml"
-#define FILENAME_WORLDITEM_DESC			"worlditem.xml"
-#define FILENAME_MONSTERGROUP_DESC		"monstergroup.xml"
-#define FILENAME_CHANNELRULE			"channelrule.xml"
+#define FILENAME_ITEM_DESC				"XML/zitem.xml"
+#define FILENAME_ITEM_DESC_LOCALE		"XML/zitem_locale.xml"
+#define FILENAME_BUFF_DESC				"XML/zBuff.xml"
+#define FILENAME_SHOP					"XML/shop.xml"
+#define FILENAME_CHANNEL				"XML/channel.xml"
+#define FILENAME_SHUTDOWN_NOTIFY		"XML/shutdown.xml"
+#define FILENAME_WORLDITEM_DESC			"XML/worlditem.xml"
+#define FILENAME_MONSTERGROUP_DESC		"XML/monstergroup.xml"
+#define FILENAME_CHANNELRULE			"XML/channelrule.xml"
 
 MMatchServer* MMatchServer::m_pInstance = NULL;
 //extern void RcpLog(const char *pFormat,...);
@@ -461,7 +461,7 @@ bool MMatchServer::LoadInitFile()
 		return false;
 	}
 
-	if (!MGetMapDescMgr()->Initialize("map.xml"))
+	if (!MGetMapDescMgr()->Initialize("XML/map.xml"))
 	{
 		Log(LOG_PROG, "Read Map.xml Failed\n");
 		return false;

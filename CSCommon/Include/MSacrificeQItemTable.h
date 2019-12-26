@@ -7,7 +7,7 @@
 class MQuestSacrificeSlot;
 
 
-#define SACRIFICE_TABLE_XML "SacrificeTable.xml"
+#define SACRIFICE_TABLE_XML "XML/Quest/SacrificeTable.xml"
 
 /* MQuestConst.h로 이동.
 #define MSQITRES_NOR  1	// 특별시나리오에 해당하는 희생아이템만 없고, 일반시나리오에 대한 희생 아이템만 있는 상황.

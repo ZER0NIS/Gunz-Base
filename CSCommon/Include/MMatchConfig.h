@@ -233,7 +233,7 @@ inline MMatchConfig* MGetServerConfig() { return MMatchConfig::GetInstance(); }
 inline bool QuestTestServer() { return (MGetServerConfig()->GetServerMode() == MSM_QUEST); }
 
 
-#define SERVER_CONFIG_FILENAME			"./server.ini"
+#define SERVER_CONFIG_FILENAME			"./config/server.ini"
 
 
 #define SERVER_CONFIG_SERVERMODE_NORMAL			"normal"

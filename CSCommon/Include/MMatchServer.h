@@ -74,7 +74,7 @@ private:
 	unsigned long		m_HSCheckCounter;
 
 protected:
-	unsigned long		m_nItemFileChecksum;	// ZItem.xml 의 변조방지 검사
+	unsigned long		m_nItemFileChecksum;	
 
 	MUID				m_NextUseUID;
 	MCriticalSection	m_csUIDGenerateLock;

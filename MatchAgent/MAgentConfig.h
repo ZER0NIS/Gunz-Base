@@ -53,7 +53,7 @@ inline MAgentConfig* MAgentConfig::GetInstance()
 	if (m_pInstance == NULL)
 	{
 		m_pInstance = new MAgentConfig;
-		m_pInstance->LoadFromXML("AgentConfig.xml");
+		m_pInstance->LoadFromXML("Config/AgentConfig.xml");
 	}
 	return m_pInstance;
 }

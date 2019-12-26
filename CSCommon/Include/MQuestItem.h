@@ -18,7 +18,7 @@ using std::map;
 class MMatchObject;
 
 
-#define QUEST_ITEM_FILE_NAME	"zquestitem.xml"
+#define QUEST_ITEM_FILE_NAME	"XML/Quest/zquestitem.xml"
 
 #define MQICTOK_ITEM		"ITEM"
 #define MQICTOK_ID			"id"

@@ -3,7 +3,7 @@
 
 
 
-#define FILENAME_MAP		"map.xml"
+#define FILENAME_MAP		"XML/map.xml"
 
 
 #define MMAP_MAP			"MAP"

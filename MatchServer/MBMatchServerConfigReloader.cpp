@@ -14,7 +14,7 @@ bool MBMatchServerServerIniReloadObj::OnReload()
 		mlog( "MBMatchServerServerIniReloadObj::OnReload - success reload server.ini reload\n" );
 	else
 	{
-		ASSERT( 0 && "Server.ini reload½ÇÆÐ." );
+		ASSERT( 0 && "Server.ini reload." );
 		mlog( "MBMatchServerServerIniReloadObj::OnReload - fail to server.ini reload\n" );
 	}
 
@@ -139,22 +139,19 @@ bool MBMatchServerConfigReloader::Create()
 
 bool MBMatchServerConfigReloader::InitReloadObjMap()
 {
-	if( !InsertReloadMap(string("server.ini"), new MBMatchServerServerIniReloadObj) )
+	if( !InsertReloadMap(string("XML/server.ini"), new MBMatchServerServerIniReloadObj) )
 		return false;
 
-	if( !InsertReloadMap(string("zitem.xml"), new MBMatchServerZItemXmlReloadObj) )
+	if( !InsertReloadMap(string("XML/zitem.xml"), new MBMatchServerZItemXmlReloadObj) )
 		return false;
-
-//	if( !InsertReloadMap(string("hashmap.txt"), new MBMatchServerHashmapTxtReloadObj) )
-//		return false;
 
 	if( !InsertReloadMap(string("filelistcrc.txt"), new MBMatchServerFileListCrcReloadObj) )
 		return false;
 
-	if( !InsertReloadMap(string("event.xml"), new MBMatchServerEventXmlReloadObj) )
+	if( !InsertReloadMap(string("XML/event.xml"), new MBMatchServerEventXmlReloadObj) )
 		return false;
 
-	if( !InsertReloadMap(string("eventlist.xml"), new MBMatchServerEventListXmlReloadObj) )
+	if( !InsertReloadMap(string("XML/eventlist.xml"), new MBMatchServerEventListXmlReloadObj) )
 		return false;
 
 	return true;

@@ -1,13 +1,13 @@
 #include "stdafx.h"
 #include "MMatchQuest.h"
 
-#define FILENAME_NPC_DESC				"npc.xml"
-#define FILENAME_SCENARIO				"scenario.xml"
-#define FILENAME_SURVIVALSCENARIO		"survivalScenario.xml"
-#define FILENAME_QUESTMAP				"questmap.xml"
-#define FILENAME_SURVIVALMAP			"survivalmap.xml"
-#define FILENAME_NPCSET_DESC			"npcset.xml"
-#define FILENAME_DROPTABLE				"droptable.xml"
+#define FILENAME_NPC_DESC				"XML/Quest/npc.xml"
+#define FILENAME_SCENARIO				"XML/Quest/scenario.xml"
+#define FILENAME_SURVIVALSCENARIO		"XML/Quest/survivalScenario.xml"
+#define FILENAME_QUESTMAP				"XML/Quest/questmap.xml"
+#define FILENAME_SURVIVALMAP			"XML/Quest/survivalmap.xml"
+#define FILENAME_NPCSET_DESC			"XML/Quest/npcset.xml"
+#define FILENAME_DROPTABLE				"XML/Quest/droptable.xml"
 
 
 MMatchQuest::MMatchQuest() : MBaseQuest()

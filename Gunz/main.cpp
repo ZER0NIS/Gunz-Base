@@ -852,7 +852,7 @@ int PASCAL WinMain(HINSTANCE this_inst, HINSTANCE prev_inst, LPSTR cmdline, int 
 	// Seed the random number generator rand() from the C standard library
 	srand((unsigned int)time(nullptr));
 
-	mlog("WGUNZ : " STRFILEVER " \n");
+	mlog("Gunz Online : " STRFILEVER " \n");
 	mlog("Build : (" __DATE__ " " __TIME__ ")\n");
 	char szDateRun[128]="";
 	char szTimeRun[128]="";

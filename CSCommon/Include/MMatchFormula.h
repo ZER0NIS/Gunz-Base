@@ -8,7 +8,7 @@ using namespace std;
 
 #include "MMatchItem.h"
 
-#define FILENAME_MATCH_FORMULA		"formula.xml"
+#define FILENAME_MATCH_FORMULA		"XML/formula.xml"
 #define MAX_LEVEL					99		///< 최대 레벨
 
 class MMatchEquipedItem;

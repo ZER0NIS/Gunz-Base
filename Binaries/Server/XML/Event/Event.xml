@@ -10,5 +10,5 @@
 <Event id="2" Description="EVENT_DESC_2" />
 <Event id="3" Description="EVENT_DESC_3" />
 <Event id="3" Description="EVENT_DESC_4" />
-
+<Event id="8" Description="EVENT_DESC_2" />
 </XML>
