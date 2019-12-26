@@ -276,8 +276,8 @@ bool ZApplication::OnCreate(ZLoadingProgress *pLoadingProgress)
 
 #ifdef STARTUP_CACHE_FILES
 	auto CacheArchives = MBeginProfile("Cache archives");
-	const char* CachedFileNames[] = { "system", "model", "sfx",
-		"interface/default", "interface/iconos", "interface/login",
+	const char* CachedFileNames[] = { "system", "model/woman", "model/man", "model/weapon", "model/NPC", "sfx",
+		"interface/default", "interface/iconos","interface/iconos", "interface/login","interface/loading",
 		"sound/bgm", "sound/effect", };
 	for (auto&& File : CachedFileNames)
 		m_FileSystem.CacheArchive(File);
@@ -315,7 +315,6 @@ bool ZApplication::OnCreate(ZLoadingProgress *pLoadingProgress)
 	}
 
 
-
 	if (ZApplication::GetInstance()->GetLaunchMode() == ZApplication::ZLAUNCH_MODE_NETMARBLE)
 		m_nInitialState = GUNZ_DIRECTLOGIN;
 
@@ -340,13 +339,7 @@ bool ZApplication::OnCreate(ZLoadingProgress *pLoadingProgress)
 
 	__EP(2001);
 
-	// mlog("ZApplication::OnCreate : m_SoundEngine.Create\n");
 	mlog( "sound engine create.\n" );
-
-//	ZGetInitialLoading()->SetPercentage( 15.0f );
-//	ZGetInitialLoading()->Draw( MODE_DEFAULT, 0 , true );
-
-//	loadingProgress.UpdateAndDraw(.3f);
 
 	RegisterForbidKey();
 
@@ -355,7 +348,7 @@ bool ZApplication::OnCreate(ZLoadingProgress *pLoadingProgress)
 	ZLoadingProgress giLoading("GameInterface",pLoadingProgress,.35f);
 
 	BEGIN_;
-	m_pGameInterface=new ZGameInterface("GameInterface",Mint::GetInstance()->GetMainFrame(),Mint::GetInstance()->GetMainFrame());
+	m_pGameInterface=new ZGameInterface("Game Interface",Mint::GetInstance()->GetMainFrame(),Mint::GetInstance()->GetMainFrame());
 	m_pGameInterface->m_nInitialState = m_nInitialState;
 	if(!m_pGameInterface->OnCreate(&giLoading))
 	{
@@ -390,7 +383,7 @@ bool ZApplication::OnCreate(ZLoadingProgress *pLoadingProgress)
 	BEGIN_;
 	// zip filesystem 을 사용하기 때문에 꼭 ZGameInterface 다음에 사용한다...
 //	if(m_MeshMgr.LoadXmlList("model/character_lobby.xml")==-1) return false;
-	if(m_MeshMgr.LoadXmlList("model/character.xml",ZProgressCallBack,&meshLoading)==-1)	
+	if(m_MeshMgr.LoadXmlList("system/model_character.xml",ZProgressCallBack,&meshLoading)==-1)	
 		return false;
 
 	mlog( "Load character.xml success,\n" );
@@ -401,7 +394,7 @@ bool ZApplication::OnCreate(ZLoadingProgress *pLoadingProgress)
 //	ZLoadingProgress npcLoading("NPC",pLoadingProgress,.1f);
 #ifdef _QUEST
 	//if(m_NPCMeshMgr.LoadXmlList("model/npc.xml",ZProgressCallBack,&npcLoading) == -1)
-	if(m_NPCMeshMgr.LoadXmlList("model/npc.xml") == -1)
+	if(m_NPCMeshMgr.LoadXmlList("system/model_npc.xml") == -1)
 		return false;
 #endif
 
@@ -418,7 +411,7 @@ bool ZApplication::OnCreate(ZLoadingProgress *pLoadingProgress)
 
 	BEGIN_;
 
-	string strFileNameWeapon("model/weapon.xml");
+	string strFileNameWeapon("system/model_weapon.xml");
 #ifndef _DEBUG
 	strFileNameWeapon += "";
 #endif

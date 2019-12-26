@@ -1,28 +1,15 @@
-/*
-	RealSound.h
-	------
 
-	RealSound is Wave Generating Engine 2.0 Version ( WaGe ).
-	All copyright 1997 (c), MAIET entertainment software
-*/
 #ifndef __RealSound_HEADER__
 #define __RealSound_HEADER__
 
+#include "MUtil.h"
 #include <windows.h>
 #include <mmsystem.h>
 #include <dsound.h>
 #include <math.h>
 
-/*
-#pragma comment( lib, "winmm.lib" )
-#pragma comment( lib, "dxguid.lib" )
-*/
-#pragma comment( lib, "dsound.lib" )
 
-// Wave file handling routine
-//#include "RealSoundWaveFile.h"
-// External Multimedia Timer Handling Routine.
-//#include "MMTimer.h"
+#pragma comment( lib, "dsound.lib" )
 
 class SEObject;
 

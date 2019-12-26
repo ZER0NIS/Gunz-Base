@@ -1805,7 +1805,7 @@ bool ZGameInterface::OnCreate(ZLoadingProgress *pLoadingProgress)
 	}
 	
 	auto ZGameInterfaceInitInterface = MBeginProfile("ZGameInterface::InitInterface");
-	ZLoadingProgress interfaceProgress("interfaceSkin", pLoadingProgress, .7f);
+	ZLoadingProgress interfaceProgress("Interface", pLoadingProgress, .7f);
 	if(!InitInterface(ZGetConfiguration()->GetInterfaceSkinName(),&interfaceProgress))
 	{
 		mlog("ZGameInterface::OnCreate: Failed InitInterface\n");

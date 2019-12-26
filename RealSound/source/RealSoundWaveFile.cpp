@@ -610,20 +610,6 @@ DWORD RSMemWaveFile::GetData( BYTE*& pWaveData, DWORD dwMaxLen )
 }
 
 
-
-
-
-// (SDK root)\samples\C++\Common\Src\dsutil.cpp
-
-//#include <dxerr9.h>
-
-#ifndef SAFE_DELETE
-#define SAFE_DELETE(p)       { if(p) { delete (p);     (p)=NULL; } }
-#define SAFE_DELETE_ARRAY(p) { if(p) { delete[] (p);   (p)=NULL; } }
-#define SAFE_RELEASE(p)      { if(p) { (p)->Release(); (p)=NULL; } }
-#endif
-
-
 //-----------------------------------------------------------------------------
 // Name: CWaveFile::CWaveFile()
 // Desc: Constructs the class.  Call Open() to open a wave file for reading.  

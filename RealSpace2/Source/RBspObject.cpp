@@ -366,7 +366,6 @@ RBspObject::~RBspObject()
 	SAFE_DELETE_ARRAY(m_pConvexNormals);
 	SAFE_DELETE_ARRAY(m_pConvexVertices);
 	SAFE_DELETE_ARRAY(m_pConvexPolygons);
-//	SAFE_DELETE(m_pSourceVertices);
 
 	SAFE_DELETE(m_pColVertices);
 	if(m_pColRoot)
@@ -374,19 +373,6 @@ RBspObject::~RBspObject()
 		delete []m_pColRoot;
 		m_pColRoot=NULL;
 	}
-
-/*
-	if (m_pNavVertices)
-	{
-		delete m_pNavVertices;
-		m_pNavVertices=NULL;
-	}
-	if (m_pNavRoot)
-	{
-		delete[] m_pNavRoot;
-		m_pNavRoot;
-	}
-*/
 
 	SAFE_DELETE(m_pBspInfo);
 	SAFE_DELETE(m_pBspVertices);

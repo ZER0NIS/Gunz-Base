@@ -9,8 +9,6 @@
 #include "MDebug.h"
 #include "DxErr.h"
 
-#define SAFE_RELEASE(p) { if(p) { (p)->Release(); (p)=NULL; } }
-
 struct RSEDSSET{
 public:
 	LPDIRECTSOUNDBUFFER		m_pDSB;

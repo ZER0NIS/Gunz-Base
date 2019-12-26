@@ -553,28 +553,12 @@ void RResetDevice(const RMODEPARAMS *params)
 	//	g_d3dpp.AutoDepthStencilFormat = D3DFMT_D16;
 
 	HRESULT hr=g_pd3dDevice->Reset(&g_d3dpp);
-
-	//LPDIRECT3DSURFACE9 pDepthStencil, pNewDepthStencil;
-	//if(!FAILED(g_pd3dDevice->GetDepthStencilSurface(&pDepthStencil)))
-	//{		
-	//	g_pd3dDevice->CreateDepthStencilSurface( g_d3dpp.BackBufferWidth, g_d3dpp.BackBufferHeight, g_bStencilBuffer?D3DFMT_D24S8:D3DFMT_D16, 
-	//		D3DMULTISAMPLE_NONE, &pNewDepthStencil);
-	//	//mlog("widht:%d,height:%d,fmt:%s\n", g_d3dpp.BackBufferWidth, g_d3dpp.BackBufferHeight, g_bStencilBuffer?"d24s8":"d16");
-	//	LPDIRECT3DSURFACE9 pBackBuffer;
-	//	g_pd3dDevice->GetRenderTarget(&pBackBuffer);
-	//	g_pd3dDevice->SetRenderTarget(pBackBuffer, pNewDepthStencil);
-	//	SAFE_RELEASE(pDepthStencil);
-	//	SAFE_RELEASE(pBackBuffer);
-	//	SAFE_RELEASE(pNewDepthStencil);
-	//}
-
-//	ResetFont();
 	
 	_ASSERT(hr==D3D_OK);
 	if( hr != D3D_OK ) {
 		mlog("device reset failed : %s\n", DXGetErrorString(hr));
 		int *a=0;
-		*a = 1;	// 반드시 체크해보자
+		*a = 1;
 	}
 
 	InitDevice();
@@ -1153,87 +1137,8 @@ void RSetWBuffer(bool bEnable)
 	}
 }
 
-//////////////////////////////////////////////////////////////////////////
-//		FIXED RESOLUTION 
-//////////////////////////////////////////////////////////////////////////
-//void FixedResolutionRenderStart()
-//{
-//	if( g_lpTexture == 0 )
-//	{
-//		D3DDISPLAYMODE mode;
-//		RGetDevice()->GetDisplayMode( &mode );		
-//
-//		if(FAILED( D3DXCreateTexture( RGetDevice(), 1024, 1024, 1, D3DUSAGE_RENDERTARGET, mode.Format, D3DPOOL_DEFAULT, &g_lpTexture))
-//			&& FAILED( D3DXCreateTexture( RGetDevice(), 1024, 1024, 1, D3DUSAGE_DYNAMIC|D3DUSAGE_RENDERTARGET, mode.Format, D3DPOOL_DEFAULT, &g_lpTexture)))
-//		{
-//			mlog("Failed to Create Fixed Resolution Texture...\n");
-//		}
-//		else
-//		{
-//			g_lpTexture->GetSurfaceLevel( 0, &g_lpSurface );
-//			D3DSURFACE_DESC desc;
-//			g_lpSurface->GetDesc( &desc );
-//			RGetDevice()->CreateDepthStencilSurface( desc.Width, desc.Height, D3DFMT_D16, D3DMULTISAMPLE_NONE , &g_lpStencil );
-//		}
-//	}
-//	RGetDevice()->GetRenderTarget( &g_lpSurfaceBackup );
-//	RGetDevice()->GetDepthStencilSurface( &g_lpStencilBackup );
-//	RGetDevice()->SetRenderTarget( g_lpSurface, g_lpStencil );
-//	RGetDevice()->Clear(0,NULL,D3DCLEAR_TARGET|D3DCLEAR_ZBUFFER,0x00000000,1.0f ,0);
-//}
-//void FixedResolutionRenderEnd()
-//{
-//	RGetDevice()->SetRenderTarget( g_lpSurfaceBackup, g_lpStencilBackup );
-//	SAFE_RELEASE( g_lpSurfaceBackup );
-//	SAFE_RELEASE( g_lpStencilBackup );
-//}
-//void FixedResolutionRenderInvalidate()
-//{
-//	SAFE_RELEASE( g_lpSurface);
-//	SAFE_RELEASE( g_lpStencil);
-//	SAFE_RELEASE( g_lpTexture);
-//}
-//void FixedResolutionRenderFlip()
-//{
-//	FixedResolutionRenderEnd();
-//#define CORRECTION 0.01
-//	static RTLVertex g_DummyPlane[4] = 
-//	{
-//		{D3DXVECTOR4( 0.0f - CORRECTION, 0.0f - CORRECTION, 1.0f, 1.0f ),0xFFFFFFFF,0.0f, 0.0f},
-//		{D3DXVECTOR4( 800 + CORRECTION, 0.0f - CORRECTION, 1.0f, 1.0f ),0xFFFFFFFF,0.78125f, 0.0f},
-//		{D3DXVECTOR4( 800 + CORRECTION, 600 + CORRECTION, 1.0f, 1.0f ),0xFFFFFFFF,0.78125f, 0.5859375f},
-//		{D3DXVECTOR4( 0.0f - CORRECTION, 600 + CORRECTION, 1.0f, 1.0f ),0xFFFFFFFF,0.0f, 0.5859375f}
-//	};
-//
-//	g_DummyPlane[0].p = D3DXVECTOR4(0.0f+CORRECTION, 0.0f - CORRECTION, 0.0f, 1.0f );
-//	g_DummyPlane[1].p = D3DXVECTOR4(RGetScreenWidth()+CORRECTION, 0.0f - CORRECTION, 0.0f, 1.0f );
-//	g_DummyPlane[2].p = D3DXVECTOR4(RGetScreenWidth()+CORRECTION, RGetScreenHeight() - CORRECTION, 0.0f, 1.0f );
-//	g_DummyPlane[3].p = D3DXVECTOR4(0.0f+CORRECTION, RGetScreenHeight() - CORRECTION, 0.0f, 1.0f );
-//
-//	RGetDevice()->SetTexture( 0, g_lpTexture );
-//	RGetDevice()->SetTextureStageState( 0, D3DTSS_COLOROP, D3DTOP_SELECTARG1 );
-//	RGetDevice()->SetTextureStageState( 0,  D3DTSS_COLORARG1, D3DTA_TEXTURE );
-//	RGetDevice()->SetFVF( RTLVertexType );
-//
-//	RGetDevice()->DrawPrimitiveUP( D3DPT_TRIANGLEFAN, 2, g_DummyPlane, sizeof(RTLVertex) );
-//
-//	RFlip(true);	
-//	FixedResolutionRenderStart();
-//}
-//bool IsFixedResolution() 
-//{
-//	return g_bFixedResolution;
-//}
-//void SetFixedResolution( bool b )
-//{
-//	g_bFixedResolution = b;
-//	if( b )
-//	{
-//		FixedResolutionRenderStart();
-//	}
-//}
 
-int RGetAdapterModeCount( D3DFORMAT Format , UINT Adapter /* = D3DADAPTER_DEFAULT  */ )
+int RGetAdapterModeCount( D3DFORMAT Format , UINT Adapter)
 {
 	return g_pD3D->GetAdapterModeCount( Adapter,Format );
 }

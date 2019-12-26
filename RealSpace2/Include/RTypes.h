@@ -109,23 +109,7 @@ inline void CrossProduct(rvector *result,const rvector &a,const rvector &b) { D3
 
 void MakeWorldMatrix(rmatrix *pOut,rvector pos,rvector dir,rvector up);			// el 모델의 world matrix 를 만든다.
 
-// 평면 
 
-// FLOAT D3DXPlaneDotCoord( CONST D3DXPLANE *pP, CONST D3DXVECTOR3 *pV);		// ax + by + cz + d  
-// FLOAT D3DXPlaneDotNormal( CONST D3DXPLANE *pP, CONST D3DXVECTOR3 *pV);		// ax + by + cz
-// D3DXPLANE* D3DXPlaneFromPoints ( D3DXPLANE *pOut, CONST D3DXVECTOR3 *pV1, CONST D3DXVECTOR3 *pV2,CONST D3DXVECTOR3 *pV3);	// Construct a plane from 3 points
-
-
-// RELEASE & DELETE 매크로 ( from dxutil.h )
-#ifndef SAFE_DELETE
-#define SAFE_DELETE(p)       { if(p) { delete (p);     (p)=NULL; } }
-#endif
-#ifndef SAFE_DELETE_ARRAY
-#define SAFE_DELETE_ARRAY(p) { if(p) { delete[] (p);   (p)=NULL; } }
-#endif
-#ifndef SAFE_RELEASE
-#define SAFE_RELEASE(p)      { if(p) { (p)->Release(); (p)=NULL; } }
-#endif
 
 // help 펑션들..
 #ifndef TOLER
