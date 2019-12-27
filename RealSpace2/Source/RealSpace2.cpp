@@ -1,4 +1,4 @@
-#include "stdafx.h"
+Ôªø#include "stdafx.h"
 #include "RealSpace2.h"
 #include "MDebug.h"
 #include "RParticleSystem.h"
@@ -30,13 +30,13 @@ LPDIRECT3D9			g_pD3D=NULL;
 LPDIRECT3DDEVICE9	g_pd3dDevice=NULL;
 D3DADAPTER_IDENTIFIER9	g_DeviceID;
 D3DPRESENT_PARAMETERS	g_d3dpp; 
-D3DCAPS9				g_d3dcaps;
+//D3DCAPS9				g_d3dcaps;
 HWND					g_hWnd;
 MZFileSystem			*g_pFileSystem=NULL;
 RParticleSystem			g_ParticleSystem;
 HMODULE					g_hD3DLibrary=NULL;
 //bool g_bStencilBuffer;
-
+D3DCAPS9		m_d3dcaps;
 //Fog
 float g_fFogNear;
 float g_fFogFar;
@@ -152,52 +152,99 @@ void RSetFileSystem(MZFileSystem *pFileSystem) { g_pFileSystem=pFileSystem; }
 
 RParticleSystem *RGetParticleSystem() { return &g_ParticleSystem; }
 
-// √ ±‚»≠ & ¡æ∑·
+// √É√ä¬±√¢√à¬≠ & √Å¬æ¬∑√°
 
-/*
-#include <ddraw.h>
 
-//m_MaxAllocMem = m_pDevice->GetAvailableTextureMem();
+bool QueryFeature(RQUERYFEATURETYPE feature)
+{
+	switch (feature)
+	{
+	case RQF_HARDWARETNL: return (m_d3dcaps.DevCaps & D3DDEVCAPS_HWTRANSFORMANDLIGHT) != 0;
+	case RQF_USERCLIPPLANE: return (m_d3dcaps.MaxUserClipPlanes > 0);
+	case RQF_VS11: return (m_d3dcaps.VertexShaderVersion >= D3DVS_VERSION(1, 1));
+	case RQF_VS20: return (m_d3dcaps.VertexShaderVersion >= D3DVS_VERSION(2, 0));
+	case RQF_PS10: return (m_d3dcaps.PixelShaderVersion >= D3DPS_VERSION(1, 0));
+	case RQF_PS20: return (m_d3dcaps.PixelShaderVersion >= D3DPS_VERSION(2, 0));
+	case RQF_PS30: return (m_d3dcaps.PixelShaderVersion >= D3DPS_VERSION(3, 0));
+		// TODO : DeviceÏóêÏÑú Í≤ÄÏÇ¨ÌïòÎäî Í±∏Î°ú ÏàòÏ†ïÌï†Í≤É
+	case RQF_R32F:
+		return D3D_OK == CheckResourceFormat(D3DFMT_R32F, D3DRTYPE_TEXTURE, D3DUSAGE_RENDERTARGET);
+	case RQF_A32B32G32R32F:
+		return D3D_OK == CheckResourceFormat(D3DFMT_A32B32G32R32F, D3DRTYPE_TEXTURE, D3DUSAGE_RENDERTARGET);
+	case RQF_A16B16G16R16F:
+		return D3D_OK == CheckResourceFormat(D3DFMT_A16B16G16R16F, D3DRTYPE_TEXTURE, D3DUSAGE_RENDERTARGET);
+	case RQF_R16F:
+		return D3D_OK == CheckResourceFormat(D3DFMT_R16F, D3DRTYPE_TEXTURE, D3DUSAGE_RENDERTARGET);
+	case RQF_RGB16:
+		return D3D_OK == CheckResourceFormat(D3DFMT_R5G6B5, D3DRTYPE_TEXTURE, D3DUSAGE_RENDERTARGET);
+	case RQF_G16R16F:
+		return D3D_OK == CheckResourceFormat(D3DFMT_G16R16F, D3DRTYPE_TEXTURE, D3DUSAGE_RENDERTARGET);
+	case RQF_G32R32F:
+		return D3D_OK == CheckResourceFormat(D3DFMT_G32R32F, D3DRTYPE_TEXTURE, D3DUSAGE_RENDERTARGET);
+	case RQF_VERTEXTEXTURE:
+		//			return (m_d3dcaps.VertexTextureFilterCaps & 0x0010000L/*D3DUSAGE_QUERY_VERTEXTEXTURE*/) != 0;
+		return D3D_OK == CheckResourceFormat(D3DFMT_R32F, D3DRTYPE_TEXTURE, D3DUSAGE_QUERY_VERTEXTEXTURE);
+	case RQF_HWSHADOWMAP:
+		//////////////////////////////////////////////////////////////////////////
+		// "Hardware Shadow Support" means that shadow depth maps are automatically sampled using PCF (Percentage Closer Filtering), 
+		//  hardware shadow maps are enabled by creating a texture with a depth format (D16, D24X8, D24S8),
+		//  with usage DEPTHSTENCIL set.
+		return SUCCEEDED(CheckResourceFormat(D3DFMT_D24S8, D3DRTYPE_TEXTURE, D3DUSAGE_DEPTHSTENCIL));
+	case RQF_WFOG: return (m_d3dcaps.RasterCaps & D3DPRASTERCAPS_WFOG) != 0;
+	case RQF_MRTINDEPENDENTBITDEPTHS: return (m_d3dcaps.PrimitiveMiscCaps & D3DPMISCCAPS_MRTINDEPENDENTBITDEPTHS) != 0;
+		// ÌÖçÏä§Ï≥ê ÌïÑÌÑ∞ ÏßÄÏõê Ïó¨Î∂Ä
+		// To check if a format supports texture filter types other than D3DTEXF_POINT (which is always supported), call IDirect3D9::CheckDeviceFormat with D3DUSAGE_QUERY_FILTER.
+		// SUCCEEDED Îß§ÌÅ¨Î°úÎäî ÎÑàÎ¨¥ ÎÑàÍ∑∏ÎüΩÎã§. Î¨¥Ï°∞Í±¥ S_OKÎßå Í±∏Îü¨ÎÇ¥Ïûê.
+	case RQF_RGB16_RTF:
+		return  (S_OK == CheckResourceFormat(D3DFMT_R5G6B5, D3DRTYPE_TEXTURE, D3DUSAGE_QUERY_FILTER));
+	case RQF_R32F_RTF:
+		return (S_OK == CheckResourceFormat(D3DFMT_R32F, D3DRTYPE_TEXTURE, D3DUSAGE_QUERY_FILTER));
+	case RQF_A8R8G8B8_RTF:
+		return (S_OK == CheckResourceFormat(D3DFMT_A8R8G8B8, D3DRTYPE_TEXTURE, D3DUSAGE_QUERY_FILTER));
+	case RQF_A32B32G32R32F_RTF:
+		return (S_OK == CheckResourceFormat(D3DFMT_A32B32G32R32F, D3DRTYPE_TEXTURE, D3DUSAGE_QUERY_FILTER));
+	case RQF_A16B16G16R16F_RTF:
+		return (S_OK == CheckResourceFormat(D3DFMT_A16B16G16R16F, D3DRTYPE_TEXTURE, D3DUSAGE_QUERY_FILTER));
+	case RQF_R16F_RTF:
+		return (S_OK == CheckResourceFormat(D3DFMT_R16F, D3DRTYPE_TEXTURE, D3DUSAGE_QUERY_FILTER));
+	case RQF_G32R32F_RTF:
+		return (S_OK == CheckResourceFormat(D3DFMT_G32R32F, D3DRTYPE_TEXTURE, D3DUSAGE_QUERY_FILTER));
+	case RQF_MRTBLEND_R32F:
+		return (S_OK == CheckResourceFormat(D3DFMT_R32F, D3DRTYPE_TEXTURE, D3DUSAGE_QUERY_POSTPIXELSHADER_BLENDING));
+	case RQF_MRTBLEND_G16R16F:
+		return (S_OK == CheckResourceFormat(D3DFMT_G16R16F, D3DRTYPE_TEXTURE, D3DUSAGE_QUERY_POSTPIXELSHADER_BLENDING));
+	case RQF_MRTBLEND_A8R8G8B8:
+		return (S_OK == CheckResourceFormat(D3DFMT_A8R8G8B8, D3DRTYPE_TEXTURE, D3DUSAGE_QUERY_POSTPIXELSHADER_BLENDING));
 
-BOOL GetVidMemory(DWORD& dwTotal,DWORD& dwFree) {
-
-	LPDIRECTDRAW7 lpDD = NULL;
-	DDSCAPS2      ddsCaps2; 
-	HRESULT       hr; 
-
-	hr = DirectDrawCreateEx(NULL, (VOID**)&lpDD, IID_IDirectDraw7, NULL );
-
-	if (FAILED(hr))
-		return FALSE; 
-
-	ZeroMemory(&ddsCaps2, sizeof(ddsCaps2));
-
-	ddsCaps2.dwCaps = DDSCAPS_VIDEOMEMORY | DDSCAPS_LOCALVIDMEM; 
-
-	hr = lpDD->GetAvailableVidMem(&ddsCaps2, &dwTotal, &dwFree); 
-
-	if (FAILED(hr))
-		return FALSE;
-
-	if(lpDD)
-		lpDD->Release();
-
-	return TRUE;
+	default: _ASSERT(FALSE);
+	}
+	return false;
 }
-*/
+
+HRESULT CheckResourceFormat(D3DFORMAT fmt, D3DRESOURCETYPE resType, DWORD dwUsage)
+{
+	HRESULT hr = S_OK;
+	IDirect3D9* tempD3D = NULL;
+	RGetDevice()->GetDirect3D(&tempD3D);
+	D3DCAPS9 devCaps;
+	RGetDevice()->GetDeviceCaps(&devCaps);
+
+	D3DDISPLAYMODE displayMode;
+	tempD3D->GetAdapterDisplayMode(devCaps.AdapterOrdinal, &displayMode);
+
+	hr = tempD3D->CheckDeviceFormat(devCaps.AdapterOrdinal, devCaps.DeviceType, displayMode.Format, dwUsage, resType, fmt);
+
+	tempD3D->Release(), tempD3D = NULL;
+
+	return hr;
+}
+
 static void InitDevice()
 {
 	g_pd3dDevice->SetRenderState( D3DRS_NORMALIZENORMALS, TRUE );
 	g_pd3dDevice->SetRenderState( D3DRS_LIGHTING, FALSE );
 	g_pd3dDevice->SetRenderState(D3DRS_CULLMODE  , D3DCULL_NONE );
-/*
-	g_pd3dDevice->SetTextureStageState( 0, D3DTSS_MAGFILTER , D3DTEXF_LINEAR);
-	g_pd3dDevice->SetTextureStageState( 0, D3DTSS_MINFILTER , D3DTEXF_LINEAR);
-	g_pd3dDevice->SetTextureStageState( 0, D3DTSS_MIPFILTER , g_bTrilinear ? D3DTEXF_LINEAR : D3DTEXF_NONE );
-	g_pd3dDevice->SetTextureStageState( 1, D3DTSS_MAGFILTER , D3DTEXF_LINEAR);
-	g_pd3dDevice->SetTextureStageState( 1, D3DTSS_MINFILTER , D3DTEXF_LINEAR);
-	g_pd3dDevice->SetTextureStageState( 1, D3DTSS_MIPFILTER , g_bTrilinear ? D3DTEXF_LINEAR : D3DTEXF_NONE );
-*/
+
 	g_pd3dDevice->SetSamplerState( 0, D3DSAMP_MAGFILTER , D3DTEXF_LINEAR);
 	g_pd3dDevice->SetSamplerState( 0, D3DSAMP_MINFILTER , D3DTEXF_LINEAR);
 	g_pd3dDevice->SetSamplerState( 0, D3DSAMP_MIPFILTER , g_bTrilinear ? D3DTEXF_LINEAR : D3DTEXF_NONE );
@@ -205,16 +252,12 @@ static void InitDevice()
 	g_pd3dDevice->SetSamplerState( 1, D3DSAMP_MINFILTER , D3DTEXF_LINEAR);
 	g_pd3dDevice->SetSamplerState( 1, D3DSAMP_MIPFILTER , g_bTrilinear ? D3DTEXF_LINEAR : D3DTEXF_NONE );
 
-//	g_pd3dDevice->SetRenderState(D3DRS_ALPHAREF, (DWORD)0x00000000);
 	g_pd3dDevice->SetRenderState(D3DRS_ALPHAFUNC, D3DCMP_NOTEQUAL );
 
 	RSetWBuffer(true);
 
-//	g_pd3dDevice->SetRenderState(D3DRS_ZFUNC ,D3DCMP_LESSEQUAL);
-
 	float fMaxBias = -1.0f;
-//	g_pd3dDevice->SetTextureStageState( 0 ,D3DTSS_MIPMAPLODBIAS , *(unsigned long*)&fMaxBias);
-//	g_pd3dDevice->SetTextureStageState( 1 ,D3DTSS_MIPMAPLODBIAS , *(unsigned long*)&fMaxBias);
+
 	g_pd3dDevice->SetSamplerState( 0 ,D3DSAMP_MIPMAPLODBIAS , *(unsigned long*)&fMaxBias);
 	g_pd3dDevice->SetSamplerState( 1 ,D3DSAMP_MIPMAPLODBIAS , *(unsigned long*)&fMaxBias);
 
@@ -233,14 +276,6 @@ static void InitDevice()
 		g_bQuery = true;
 
 	RBeginScene();
-
-/*
-	DWORD v1,v2;
-
-	if(GetVidMemory(v1,v2)) {
-		int k=0;
-	}
-*/
 }
 
 void CheckMipFilter()
@@ -276,43 +311,25 @@ bool RInitDisplay(HWND hWnd, const RMODEPARAMS *params)
 		return false;
 	}
 
-#ifdef _HSHIELD
-	char szSysDir[MAX_PATH] = { 0, };
-	GetSystemDirectory(szSysDir, MAX_PATH);
-
-	int nRet = _AhnHS_CheckAPIHooked("d3d9.dll", "Direct3DCreate9", szSysDir);
-	if (nRet == HS_ERR_API_IS_HOOKED)
-	{
-		mlog("d3d9.dll Hooking detected. (Error code = %x)\n", nRet);
-		// Direct3D ∏µ‚¿Ã »ƒ≈∑ ∂«¥¬ ∑°∆€ø° ¿««ÿ ªÁøÎµ«∞Ì ¿÷¿∏π«∑Œ ∞‘¿”¿ª ¡æ∑·«œ∏È µÀ¥œ¥Ÿ. 
-		return false;
-	}
-#endif 
-
-	// ∞°¥…«— ±◊∑°«»ƒ´µÂ µπŸ¿ÃΩ∫ √º≈©
 	if (CheckVideoAdapterSupported()==false)
 	{
 		if (RError(RERROR_INVALID_DEVICE) != R_OK) return false;
 	}
 
-	D3DCAPS9 d3dcaps;
-	g_pD3D->GetDeviceCaps(D3DADAPTER_DEFAULT , D3DDEVTYPE_HAL , &d3dcaps );
-	g_pD3D->GetDeviceCaps(D3DADAPTER_DEFAULT , D3DDEVTYPE_HAL , &g_d3dcaps );	// ƒ≥∆€ ¿¸ø™∫Øºˆ∑Œ ¿˙¿Â
+	g_pD3D->GetDeviceCaps(D3DADAPTER_DEFAULT , D3DDEVTYPE_HAL , &m_d3dcaps);
 	
-	g_bHardwareTNL = (d3dcaps.DevCaps & D3DDEVCAPS_HWTRANSFORMANDLIGHT ) != 0;
-
-//	g_bTrilinear = (d3dcaps)
-//	g_bHardwareTNL = false;
-
-	g_bAvailUserClipPlane = (d3dcaps.MaxUserClipPlanes > 0 )? true : false;
-	if(d3dcaps.RasterCaps & D3DPRASTERCAPS_WFOG) mlog("WFog Enabled Device.\n");
-
-	g_bSupportVS = ( d3dcaps.VertexShaderVersion >= D3DVS_VERSION(1, 1));
+	g_bAvailUserClipPlane = (m_d3dcaps.MaxUserClipPlanes > 0 )? true : false;
 	
-	if(!g_bSupportVS) mlog("Vertex Shader isn't supported\n");
+	if(m_d3dcaps.RasterCaps & D3DPRASTERCAPS_WFOG) mlog("WFog Enabled Device.\n");
+	
+	if (QueryFeature(RQF_WFOG)) mlog("WFog Enabled Device.\n");
+
+	g_bSupportVS = (m_d3dcaps.VertexShaderVersion >= D3DVS_VERSION(1, 1));
+	
+	if (!QueryFeature(RQF_VS11)) mlog("Vertex Shader isn't supported\n");
 	else
 	{
-		if( d3dcaps.MaxVertexShaderConst < 60 )
+		if (m_d3dcaps.MaxVertexShaderConst < 250)
 		{
 			mlog("Too small Constant Number to use Hardware Skinning so Disable Vertex Shader\n");
 			g_bSupportVS = false;
@@ -361,45 +378,32 @@ bool RInitDisplay(HWND hWnd, const RMODEPARAMS *params)
 		g_MultiSample = D3DMULTISAMPLE_NONE;
 
 	g_d3dpp.MultiSampleType =  g_MultiSample;
-//	g_d3dpp.MultiSampleType =  D3DMULTISAMPLE_NONE;
 
-	//g_bStencilBuffer = true;
-	//if(FAILED(g_pD3D->CheckDeviceFormat(D3DADAPTER_DEFAULT,D3DDEVTYPE_HAL,D3DFMT_X8R8G8B8,D3DUSAGE_DEPTHSTENCIL,D3DRTYPE_SURFACE,D3DFMT_D24S8)) ||
-	//	FAILED(g_pD3D->CheckDeviceFormat(D3DADAPTER_DEFAULT,D3DDEVTYPE_HAL,D3DFMT_R5G6B5,D3DUSAGE_DEPTHSTENCIL,D3DRTYPE_SURFACE,D3DFMT_D24S8))) 
-	//{
-	//	mlog("Does not provide D24S8 DepthStencil Buffer Format\n");
-	//	g_bStencilBuffer = false;
-	//}
-	//else if( FAILED(g_pD3D->CheckDepthStencilMatch(D3DADAPTER_DEFAULT,D3DDEVTYPE_HAL,g_PixelFormat,g_PixelFormat,D3DFMT_D24S8)))
-	//{
-	//	mlog("D24S8 DepthStencil Buffer Format doesn't match for current display mode\n");
-	//	g_bStencilBuffer = false;
-	//}
-	//if(g_bStencilBuffer)
-	//	g_d3dpp.AutoDepthStencilFormat = D3DFMT_D24S8;
-	//else
-		g_d3dpp.AutoDepthStencilFormat = D3DFMT_D16;
+	g_d3dpp.AutoDepthStencilFormat = D3DFMT_D16;
 
 	
 	g_d3dpp.Flags=NULL;
 	g_d3dpp.PresentationInterval=
 		params->bFullScreen ? D3DPRESENT_INTERVAL_IMMEDIATE : D3DPRESENT_INTERVAL_DEFAULT;
 
-	DWORD BehaviorFlags=D3DCREATE_FPU_PRESERVE | 
-		(g_bHardwareTNL ? D3DCREATE_HARDWARE_VERTEXPROCESSING : D3DCREATE_SOFTWARE_VERTEXPROCESSING);
+	DWORD BehaviorFlags = D3DCREATE_FPU_PRESERVE |
+		(QueryFeature(RQF_HARDWARETNL) ? D3DCREATE_HARDWARE_VERTEXPROCESSING : D3DCREATE_SOFTWARE_VERTEXPROCESSING);
+
+	D3DDEVTYPE d3dDevType = D3DDEVTYPE_HAL;
 
 	if (IsDynamicResourceLoad())
 		BehaviorFlags |= D3DCREATE_MULTITHREADED;
+	
 
 #ifndef _NVPERFHUD
-	if( FAILED( g_pD3D->CreateDevice( D3DADAPTER_DEFAULT, D3DDEVTYPE_HAL,hWnd,BehaviorFlags,&g_d3dpp,&g_pd3dDevice) ) )
+	hr = g_pD3D->CreateDevice(D3DADAPTER_DEFAULT, d3dDevType, hWnd, BehaviorFlags, &g_d3dpp, &g_pd3dDevice);
+	if (FAILED(hr))
 	{
 		SAFE_RELEASE(g_pD3D);
 		mlog("can't create device\n");
 		return false;
 	}
 #else
-
 	UINT AdapterToUse = D3DADAPTER_DEFAULT;
 	D3DDEVTYPE DeviceType = D3DDEVTYPE_HAL;
 
@@ -490,7 +494,7 @@ void RAdjustWindow(const RMODEPARAMS *pModeParams)
 		winrt.bottom-winrt.top+(pModeParams->nHeight-(rt.bottom-rt.top)),FALSE);
 }
 
-// ∏µÂ¿¸»Ø & «√∏Æ«Œ∞¸∑√
+// ¬∏√∞¬µ√•√Ä√º√à¬Ø & √á√É¬∏¬Æ√á√é¬∞√º¬∑√É
 
 //void ResetFont();
 
@@ -504,7 +508,7 @@ void RResetDevice(const RMODEPARAMS *params)
 	g_bFullScreen=params->bFullScreen;
 	g_nScreenWidth=params->nWidth;
 	g_nScreenHeight=params->nHeight;
-	g_PixelFormat= params->bFullScreen ? params->PixelFormat : g_d3ddm.Format;		// ¿©µµøÏ ∏µÂ¥¬ ø¯∑° ∆˜∏À¿∏∑Œ
+	g_PixelFormat= params->bFullScreen ? params->PixelFormat : g_d3ddm.Format;		// √Ä¬©¬µ¬µ¬ø√¨ ¬∏√∞¬µ√•¬¥√Ç ¬ø√∏¬∑¬° √Ü√∑¬∏√ã√Ä¬∏¬∑√é
 
 	g_d3dpp.Windowed   = !params->bFullScreen;
  	g_d3dpp.BackBufferWidth = g_nScreenWidth;
@@ -650,7 +654,7 @@ void RFlip()
 		g_nFrameCount++;
 		DWORD currentTime=timeGetTime();
 
-		{ // 1√ ¥Á «¡∑π¿” ¡¶«— (¡¶«— ¡æ∑˘: π´¡¶«—, 60fps, 120fps, 240fps)
+		{ // 1√É√ä¬¥√ß √á√Å¬∑¬π√Ä√ì √Å¬¶√á√ë (√Å¬¶√á√ë √Å¬æ¬∑√π: ¬π¬´√Å¬¶√á√ë, 60fps, 120fps, 240fps)
 			float fFrameLimit = 0;
 			if(g_nFrameLimitValue > 0)
 				fFrameLimit = 1000/g_nFrameLimitValue;
@@ -697,7 +701,7 @@ rvector RGetTransformCoord(rvector &coord)
 	return ret;
 }
 
-// ∏ﬁ∏∏Æ∏¶ ªı∑Œ «“¥Á«œπ«∑Œ ¥Ÿ æ≤∏È ¡ˆøˆ¡‡æﬂ«—¥Ÿ.
+// ¬∏√û¬∏√∞¬∏¬Æ¬∏¬¶ ¬ª√µ¬∑√é √á√í¬¥√ß√á√è¬π√á¬∑√é ¬¥√ô ¬æ¬≤¬∏√© √Å√∂¬ø√∂√Å√†¬æ√ü√á√ë¬¥√ô.
 bool SaveMemoryBmp(int x,int y,void *data,void **retmemory,int *nsize)
 {
 	unsigned char *memory=NULL,*dest=NULL;
@@ -802,7 +806,7 @@ bool SaveMemoryBmp(int x,int y,void *data,void **retmemory,int *nsize)
 		return -1;  // Failure
 	} // GetCodecClsid
 
-	// data ¥¬ ARGB 32bit ∆˜∏À
+	// data ¬¥√Ç ARGB 32bit √Ü√∑¬∏√ã
 	bool RSaveAsJpeg(int x,int y,void *data,const char *szFilename)
 	{
 		// Setting up RAW Data
@@ -836,7 +840,7 @@ bool SaveMemoryBmp(int x,int y,void *data,void **retmemory,int *nsize)
 	}
 #endif	// _USE_GDIPLUS
 
-// data ¥¬ ARGB 32bit ∆˜∏À
+// data ¬¥√Ç ARGB 32bit √Ü√∑¬∏√ã
 bool RSaveAsBmp(int x,int y,void *data,const char *szFilename)
 {
 	void *memory;
@@ -857,7 +861,7 @@ bool RSaveAsBmp(int x,int y,void *data,const char *szFilename)
 	return true;
 }
 
-// data ¥¬ ARGB 32bit ∆˜∏À
+// data ¬¥√Ç ARGB 32bit √Ü√∑¬∏√ã
 bool RScreenShot(int x,int y,void *data,const char *szFilename)
 {
 	char szFullFileName[_MAX_DIR];
@@ -967,7 +971,7 @@ LPDIRECT3DSURFACE9 RCreateImageSurface(const char *filename)
 	return pSurface;
 }
 
-// ∞®∏∂∞™ ¡∂¿˝ - ±‚∫ª∞™ = 255
+// ¬∞¬®¬∏¬∂¬∞¬™ √Å¬∂√Ä√Ω - ¬±√¢¬∫¬ª¬∞¬™ = 255
 void RSetGammaRamp(unsigned short nGammaValue)
 {
 	D3DCAPS9 caps; 
@@ -988,7 +992,7 @@ void RSetGammaRamp(unsigned short nGammaValue)
 }
 
 void RSetFrameLimitPerSeceond(unsigned short nFrameLimit)
-{ // 1√ ¥Á «¡∑π¿” ¡¶«— (¡¶«— ¡æ∑˘: π´¡¶«—, 60fps, 120fps, 240fps)
+{ // 1√É√ä¬¥√ß √á√Å¬∑¬π√Ä√ì √Å¬¶√á√ë (√Å¬¶√á√ë √Å¬æ¬∑√π: ¬π¬´√Å¬¶√á√ë, 60fps, 120fps, 240fps)
 	switch( nFrameLimit )
 	{
 	case 0:	{	g_nFrameLimitValue = 0;		}	break;
@@ -1045,8 +1049,8 @@ void RDrawCorn(rvector center,rvector pole,float fRadius,int nSegment)
 		rvector a=fRadius*(x*cos(fAngle)+y*sin(fAngle))+center;
 		rvector b=fRadius*(x*cos(fAngle2)+y*sin(fAngle2))+center;
 
-		RDrawLine(a,pole,0xffff0000);	// ø∑∏È
-		RDrawLine(a,b,0xffff0000);	// πÿ∏È
+		RDrawLine(a,pole,0xffff0000);	// ¬ø¬∑¬∏√©
+		RDrawLine(a,b,0xffff0000);	// ¬π√ò¬∏√©
 	}
 }
 
@@ -1077,7 +1081,7 @@ void RDrawSphere(rvector origin,float fRadius,int nSegment)
 	}
 }
 
-// ≥™¡ﬂø° »≠ªÏ«•≥™ ±◊∑¡¡÷∏È ¡¡∞⁄¥Ÿ -_-;
+// ¬≥¬™√Å√ü¬ø¬° √à¬≠¬ª√¨√á¬•¬≥¬™ ¬±√ó¬∑√Å√Å√ñ¬∏√© √Å√Å¬∞√ö¬¥√ô -_-;
 void RDrawAxis(rvector origin,float fSize)
 {
 	RGetDevice()->SetTexture(0,NULL);
@@ -1125,7 +1129,7 @@ void RDrawArc(rvector origin, float fRadius, float fAngle1, float fAngle2, int n
 void RSetWBuffer(bool bEnable)
 {
 	if (bEnable) {
-		if (g_d3dcaps.RasterCaps & D3DPRASTERCAPS_WBUFFER) {
+		if (m_d3dcaps.RasterCaps & D3DPRASTERCAPS_WBUFFER) {
 			RGetDevice()->SetRenderState(D3DRS_ZENABLE, D3DZB_USEW);
 		}
 		else {
@@ -1186,12 +1190,12 @@ bool CheckVideoAdapterSupported()
 		if(ai->DeviceId==0x7125)	// 82810E
 			bSupported=false;
 
-		// intel 810 , 815  Ω√∏Æ¡Ó
+		// intel 810 , 815  ¬Ω√É¬∏¬Æ√Å√Æ
 		//if(ai->DeviceId==0x7800 || ai->DeviceId==0x7121 || ai->DeviceId==0x7123 || ai->DeviceId==0x7125 || ai->DeviceId==0x1132)
 		//	bSupported=false;
 	}
 /*
-	if(ai->VendorId==0x1039)	// SiS ƒ®º¬
+	if(ai->VendorId==0x1039)	// SiS √Ñ¬®¬º√Ç
 	{
 		bSupported=false;
 	}
@@ -1199,12 +1203,12 @@ bool CheckVideoAdapterSupported()
 		if(ai->DeviceId==0x8a22)
 			bSupported=false;
 	}
-	if(ai->VendorId==0x10de) {	// NVidia ƒ´µÂµÈ
+	if(ai->VendorId==0x10de) {	// NVidia √Ñ¬´¬µ√•¬µ√©
 		if(ai->DeviceId==0x2c || ai->DeviceId==0x2d)
 			bSupported=false;
 	}
 */
-	if(ai->VendorId==0x121a) {	// 3dfx ƒ´µÂµÈ
+	if(ai->VendorId==0x121a) {	// 3dfx √Ñ¬´¬µ√•¬µ√©
 		bSupported=false;
 	}
 

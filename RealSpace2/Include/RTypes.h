@@ -1,4 +1,4 @@
-// types for realspace 2 . 2001-10-4 created.
+ï»¿// types for realspace 2 . 2001-10-4 created.
 #pragma once
 
 #include <string>
@@ -17,6 +17,41 @@ _NAMESPACE_REALSPACE2_BEGIN
 enum rsign { NEGATIVE= -1, ZERO= 0, POSITIVE= 1 };
 
 #define RPIXELFORMAT D3DFORMAT
+
+
+enum RQUERYFEATURETYPE {
+	RQF_HARDWARETNL = 0,
+	RQF_USERCLIPPLANE,
+	RQF_WFOG,
+	RQF_VS11,
+	RQF_VS20,
+	RQF_PS10,
+	RQF_PS11,
+	RQF_PS20,
+	RQF_PS30,
+	RQF_R32F,
+	RQF_A32B32G32R32F,
+	RQF_A16B16G16R16F,
+	RQF_R16F,
+	RQF_RGB16,
+	RQF_G16R16F,
+	RQF_G32R32F,
+	RQF_VERTEXTEXTURE,				// VS30ì˜ Vertex Texture ê¸°ëŠ¥ì´ ì§€ì› ë˜ëŠ”ê°€
+	RQF_HWSHADOWMAP,				// ìƒˆë„ìš°ë§µì—ì„œ í•˜ë“œì›¨ì–´ PCF (Percentage Closer Filtering) ìƒ˜í”Œë§ ì§€ì›
+	RQF_MRTINDEPENDENTBITDEPTHS,	// ì¼ë¶€ ì¹´ë“œì—ì„œ R32F í¬ë©§ì— ëŒ€í•´ POST PIXEL SHADER BLENDING(ë””ë”ë§, ì•ŒíŒŒ í…ŒìŠ¤íŠ¸, í¬ê·¸(ì•ˆê°œ:fog), ë¸”ë Œë“œ, ë˜ìŠ¤í„° ì²˜ë¦¬, ë§ˆìŠ¤í‚¹)ì´ ì•ˆë¨¹í˜. ê·¸ì—ëŒ€í•œ ì§€ì› ìœ ë¬´ http://telnet.or.kr/sec_directx/index.html?init_mode=api_contents_read&api_no=60
+	// í…ìŠ¤ì³ í•„í„° ì§€ì› ì—¬ë¶€
+	// To check if a format supports texture filter types other than D3DTEXF_POINT (which is always supported), call IDirect3D9::CheckDeviceFormat with D3DUSAGE_QUERY_FILTER.
+	RQF_RGB16_RTF,
+	RQF_R32F_RTF,
+	RQF_A8R8G8B8_RTF,					// RFMT_A8R8G8B8
+	RQF_A32B32G32R32F_RTF,
+	RQF_A16B16G16R16F_RTF,
+	RQF_R16F_RTF,
+	RQF_G32R32F_RTF,
+	RQF_MRTBLEND_R32F,
+	RQF_MRTBLEND_G16R16F,
+	RQF_MRTBLEND_A8R8G8B8,
+};
 
 enum RRESULT {
 	R_UNKNOWN = -1,
@@ -95,7 +130,7 @@ public:
 };
 */
 
-// º¤ÅÍ
+// ÂºÂ¤Ã…Ã
 
 inline float Magnitude(const rvector &x) { return D3DXVec3Length(&x); }
 inline float MagnitudeSq(const rvector &x)	{ return D3DXVec3LengthSq(&x); }
@@ -105,13 +140,13 @@ inline void CrossProduct(rvector *result,const rvector &a,const rvector &b) { D3
 
 //void SetPlane(rplane& plane, rvector& point1, rvector& point2, rvector& point3);
 
-// Çà·Ä
+// Ã‡Ã Â·Ã„
 
-void MakeWorldMatrix(rmatrix *pOut,rvector pos,rvector dir,rvector up);			// el ¸ğµ¨ÀÇ world matrix ¸¦ ¸¸µç´Ù.
+void MakeWorldMatrix(rmatrix *pOut,rvector pos,rvector dir,rvector up);			// el Â¸Ã°ÂµÂ¨Ã€Ã‡ world matrix Â¸Â¦ Â¸Â¸ÂµÃ§Â´Ã™.
 
 
 
-// help Æã¼Çµé..
+// help Ã†Ã£Â¼Ã‡ÂµÃ©..
 #ifndef TOLER
 #define TOLER 0.001
 #endif
@@ -121,33 +156,33 @@ void MakeWorldMatrix(rmatrix *pOut,rvector pos,rvector dir,rvector up);			// el 
 #define SIGNOF(a) ( (a)<-TOLER ? NEGATIVE : (a)>TOLER ? POSITIVE : ZERO )
 #define RANDOMFLOAT ((float)rand()/(float)RAND_MAX)
 
-// ÇÑÁ¡¿¡¼­ Á÷¼±±îÁöÀÇ °Å¸®.. line1,line2 ´Â Á÷¼±À§ÀÇ µÎ Á¡.
+// Ã‡Ã‘ÃÂ¡Â¿Â¡Â¼Â­ ÃÃ·Â¼Â±Â±Ã®ÃÃ¶Ã€Ã‡ Â°Ã…Â¸Â®.. line1,line2 Â´Ã‚ ÃÃ·Â¼Â±Ã€Â§Ã€Ã‡ ÂµÃ ÃÂ¡.
 float GetDistance(const rvector &position,const rvector &line1,const rvector &line2);
-// ÇÑÁ¡¿¡¼­ °¡Àå °¡±î¿î ¼±ºĞÀ§ÀÇ Á¡
+// Ã‡Ã‘ÃÂ¡Â¿Â¡Â¼Â­ Â°Â¡Ã€Ã¥ Â°Â¡Â±Ã®Â¿Ã® Â¼Â±ÂºÃÃ€Â§Ã€Ã‡ ÃÂ¡
 rvector GetNearestPoint(const rvector &position,const rvector &a,const rvector &b);
-// ÇÑÁ¡¿¡¼­ ¼±ºĞ±îÁöÀÇ °Å¸®
+// Ã‡Ã‘ÃÂ¡Â¿Â¡Â¼Â­ Â¼Â±ÂºÃÂ±Ã®ÃÃ¶Ã€Ã‡ Â°Ã…Â¸Â®
 float GetDistanceLineSegment(const rvector &position,const rvector &a,const rvector &b);
-// ¼±ºĞ°ú ¼±ºĞ »çÀÌÀÇ °Å¸®.. ¼±ºĞ (a,aa) °ú ¼±ºĞ (c,cc)ÀÇ °Å¸®.
+// Â¼Â±ÂºÃÂ°Ãº Â¼Â±ÂºÃ Â»Ã§Ã€ÃŒÃ€Ã‡ Â°Ã…Â¸Â®.. Â¼Â±ÂºÃ (a,aa) Â°Ãº Â¼Â±ÂºÃ (c,cc)Ã€Ã‡ Â°Ã…Â¸Â®.
 float GetDistanceBetweenLineSegment(const rvector &a,const rvector &aa,const rvector &c,const rvector &cc,rvector *ap,rvector *cp);
-// ÇÑÁ¡¿¡¼­ Æò¸é±îÁöÀÇ °Å¸®
+// Ã‡Ã‘ÃÂ¡Â¿Â¡Â¼Â­ Ã†Ã²Â¸Ã©Â±Ã®ÃÃ¶Ã€Ã‡ Â°Ã…Â¸Â®
 float GetDistance(const rvector &position,const rplane &plane);
-// ¼±ºĞ(a,aa) ¿¡¼­ Æò¸é±îÁöÀÇ °¡Àå °¡±î¿î ¼±ºĞÀ§ÀÇ Á¡.
+// Â¼Â±ÂºÃ(a,aa) Â¿Â¡Â¼Â­ Ã†Ã²Â¸Ã©Â±Ã®ÃÃ¶Ã€Ã‡ Â°Â¡Ã€Ã¥ Â°Â¡Â±Ã®Â¿Ã® Â¼Â±ÂºÃÃ€Â§Ã€Ã‡ ÃÂ¡.
 rvector GetNearestPoint(const rvector &a,const rvector &aa,const rplane &plane);
-// ¼±ºĞ(a,aa) ¿¡¼­ Æò¸é±îÁöÀÇ °Å¸®
+// Â¼Â±ÂºÃ(a,aa) Â¿Â¡Â¼Â­ Ã†Ã²Â¸Ã©Â±Ã®ÃÃ¶Ã€Ã‡ Â°Ã…Â¸Â®
 float GetDistance(const rvector &a,const rvector &aa,const rplane &plane);
-// Æò¸é¿¡¼­ boundingbox¿ÍÀÇ ÃÖ´ë°Å¸®
+// Ã†Ã²Â¸Ã©Â¿Â¡Â¼Â­ boundingboxÂ¿ÃÃ€Ã‡ ÃƒÃ–Â´Ã«Â°Ã…Â¸Â®
 float GetDistance(rboundingbox *bb,rplane *plane);
-// Æò¸é¿¡¼­ boundingbox¿ÍÀÇ ÃÖ¼Ò,ÃÖ´ë°Å¸®
+// Ã†Ã²Â¸Ã©Â¿Â¡Â¼Â­ boundingboxÂ¿ÃÃ€Ã‡ ÃƒÃ–Â¼Ã’,ÃƒÃ–Â´Ã«Â°Ã…Â¸Â®
 void GetDistanceMinMax(rboundingbox &bb,rplane &plane,float *MinDist,float *MaxDist);
-// ÇÑÁ¡°ú boundingboxÀÇ ÃÖ¼Ò°Å¸®
+// Ã‡Ã‘ÃÂ¡Â°Ãº boundingboxÃ€Ã‡ ÃƒÃ–Â¼Ã’Â°Ã…Â¸Â®
 float GetDistance(const rboundingbox &bb,const rvector &point);
-// »ï°¢ÇüÀÇ ¸éÀû
+// Â»Ã¯Â°Â¢Ã‡Ã¼Ã€Ã‡ Â¸Ã©Ã€Ã»
 float GetArea(rvector &v1,rvector &v2,rvector &v3);
 
-// µÎ º¤ÅÍÀÇ x, y»ó¿¡¼­ÀÇ °¢µµ
+// ÂµÃ ÂºÂ¤Ã…ÃÃ€Ã‡ x, yÂ»Ã³Â¿Â¡Â¼Â­Ã€Ã‡ Â°Â¢ÂµÂµ
 float GetAngleOfVectors(rvector &ta,rvector &tb);
 
-// ¿øÇüº¸°£µÈ vector.. a,b´Â normalized µÇ¾îÀÖ¾î¾ßÇÔ.
+// Â¿Ã¸Ã‡Ã¼ÂºÂ¸Â°Â£ÂµÃˆ vector.. a,bÂ´Ã‚ normalized ÂµÃ‡Â¾Ã®Ã€Ã–Â¾Ã®Â¾ÃŸÃ‡Ã”.
 rvector InterpolatedVector(rvector &a,rvector &b,float x);
 
 bool IsIntersect(rboundingbox *bb1,rboundingbox *bb2);
@@ -156,7 +191,7 @@ bool IsInSphere(const rboundingbox &bb,const rvector &point,float radius);
 bool isInViewFrustum(const rvector &point,rplane *plane);
 bool isInViewFrustum(const rvector &point,float radius,rplane *plane);		// bounding sphere
 bool isInViewFrustum(rboundingbox *bb,rplane *plane);
-bool isInViewFrustum(const rvector &point1,const rvector &point2,rplane *planes);	// ¼±ºĞ
+bool isInViewFrustum(const rvector &point1,const rvector &point2,rplane *planes);	// Â¼Â±ÂºÃ
 bool isInViewFrustumWithZ(rboundingbox *bb,rplane *plane);
 bool isInViewFrustumwrtnPlanes(rboundingbox *bb,rplane *plane,int nplane);
 
@@ -165,19 +200,19 @@ bool isLineIntersectBoundingBox(rvector &origin,rvector &dir,rboundingbox &bb);
 bool IsIntersect( rvector& line_begin_, rvector& line_end_, rboundingbox& box_);
 bool IsIntersect(rvector& line_begin_, rvector& line_dir_, rvector& center_, float radius_, float* dist = NULL, rvector* p = NULL );
 
-// ¿ø°ú ¼±ºĞÀÇ ±³Â÷Á¡ ±¸ÇÏ´Â ÇÔ¼ö. dir´Â normalizeµÇ¾î ÀÖ¾î¾ß ÇÑ´Ù
+// Â¿Ã¸Â°Ãº Â¼Â±ÂºÃÃ€Ã‡ Â±Â³Ã‚Ã·ÃÂ¡ Â±Â¸Ã‡ÃÂ´Ã‚ Ã‡Ã”Â¼Ã¶. dirÂ´Ã‚ normalizeÂµÃ‡Â¾Ã® Ã€Ã–Â¾Ã®Â¾ÃŸ Ã‡Ã‘Â´Ã™
 bool IsIntersect(const rvector& orig, const rvector& dir, const rvector& center, const float radius, rvector* p = NULL);
 
-// µÎ Æò¸éÀ» Áö³ª´Â Á÷¼±ÀÇ ¹æÁ¤½ÄÀ» ±¸ÇÑ´Ù 
+// ÂµÃ Ã†Ã²Â¸Ã©Ã€Â» ÃÃ¶Â³ÂªÂ´Ã‚ ÃÃ·Â¼Â±Ã€Ã‡ Â¹Ã¦ÃÂ¤Â½Ã„Ã€Â» Â±Â¸Ã‡Ã‘Â´Ã™ 
 bool GetIntersectionOfTwoPlanes(rvector *pOutDir,rvector *pOutAPoint,rplane &plane1,rplane &plane2);
 
 void MergeBoundingBox(rboundingbox *dest,rboundingbox *src);
 
-// aabb box ¸¦ Æ®·£½ºÆû ÇÑ´Ù. ´õ Ä¿Áø´Ù
+// aabb box Â¸Â¦ Ã†Â®Â·Â£Â½ÂºÃ†Ã» Ã‡Ã‘Â´Ã™. Â´Ãµ Ã„Â¿ÃÃ¸Â´Ã™
 void TransformBox( rboundingbox* result, const rboundingbox& src, const rmatrix& matrix );
 
 
-// º¯È¯ ¸ÅÅ©·Îµé
+// ÂºÂ¯ÃˆÂ¯ Â¸Ã…Ã…Â©Â·ÃÂµÃ©
 
 #define FLOAT2RGB24(r, g, b) ( ( ((long)((r) * 255)) << 16) | (((long)((g) * 255)) << 8) | (long)((b) * 255))
 #define VECTOR2RGB24(v)		FLOAT2RGB24((v).x,(v).y,(v).z)

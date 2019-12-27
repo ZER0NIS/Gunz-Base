@@ -179,6 +179,9 @@ inline rplane *RGetViewFrustum()
 	return RViewFrustum;
 }
 
+ bool			QueryFeature(RQUERYFEATURETYPE feature);
+ HRESULT        CheckResourceFormat(D3DFORMAT fmt, D3DRESOURCETYPE resType, DWORD dwUsage);
+
 
 _NAMESPACE_REALSPACE2_END
 
