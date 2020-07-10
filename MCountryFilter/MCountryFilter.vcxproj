@@ -72,6 +72,8 @@
       <WarningLevel>Level3</WarningLevel>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
       <LanguageStandard>Default</LanguageStandard>
+      <CompileAs>CompileAsCpp</CompileAs>
+      <UseFullPaths>false</UseFullPaths>
     </ClCompile>
     <Lib>
       <OutputFile>$(OutDir)MCountryFilter.lib</OutputFile>

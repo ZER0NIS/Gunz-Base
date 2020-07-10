@@ -135,10 +135,10 @@ RRESULT OnCreate(void *pParam)
 	RSetGammaRamp(Z_VIDEO_GAMMA_VALUE);
 	RSetRenderFlags(RRENDER_CLEAR_BACKBUFFER);
 
-	ZGetInitialLoading()->Initialize(  1, 0, 0, RGetScreenWidth(), RGetScreenHeight(), 0, 0, 1920, 1080 );
+	ZGetInitialLoading()->Initialize(  1, 0, 0, RGetScreenWidth(), RGetScreenHeight(), 0, 0, 1024, 768 );
 
 	mlog("InitialLoading success.\n");
-	CreateThread(0, 0, (LPTHREAD_START_ROUTINE)AntiShotbotLogger, 0, 0, 0);
+	//CreateThread(0, 0, (LPTHREAD_START_ROUTINE)AntiShotbotLogger, 0, 0, 0);
 
 	struct _finddata_t c_file;
 	intptr_t hFile;
@@ -175,13 +175,16 @@ RRESULT OnCreate(void *pParam)
 		switch (nBitmap)
 		{
 		case (0):
-			strcpy_safe(szFileName, "interface/Loading/loading_open.jpg");
+			strcpy_safe(szFileName, "interface/Loading/loading_1.jpg");
 			break;
 		case (1):
-			strcpy_safe(szFileName, "interface/Loading/loading_adult.jpg");
+			strcpy_safe(szFileName, "interface/Loading/loading_2.jpg");
 			break;
 		case (2):
-			strcpy_safe(szFileName, "interface/Loading/loading_new.jpg");
+			strcpy_safe(szFileName, "interface/Loading/loading_3.jpg");
+			break;
+		case (3):
+			strcpy_safe(szFileName, "interface/Loading/loading_4.jpg");
 			break;
 		}
 

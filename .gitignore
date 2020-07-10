@@ -29,6 +29,8 @@ bld/
 !libsodium/**/*
 lib/
 Binaries/Gunz
+Binaries/Server
+Binaries/Server/*
 Output/
 Lib_LTCG/
 cml/MatchServer
@@ -94,6 +96,7 @@ artifacts/
 *.pidb
 *.svclog
 *.scc
+*.exe
 
 # Chutzpah Test files
 _Chutzpah*
@@ -294,3 +297,5 @@ __pycache__/
 
 # Cake - Uncomment if you are using it
 # tools/
+*.exe
+*.exe

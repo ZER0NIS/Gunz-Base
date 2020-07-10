@@ -579,20 +579,18 @@ public:
 	int		m_nLastShotItemID;
 	float	m_fLastShotTime;
 
-	inline void	SetInvincibleTime(int nDuration);
-	inline bool	isInvincible();
+	void	SetInvincibleTime(int nDuration);
+	bool	isInvincible();
 
 	bool IsMan();
 
 	virtual void  OnUpdate(float fDelta);
-
-	//버프정보임시주석 virtual void  UpdateBuff();
 	virtual void  UpdateSpeed();
 	virtual float GetMoveSpeedRatio();
 
-	virtual void UpdateVelocity(float fDelta);	// 적당한 속도로 감속
-	virtual void UpdateHeight(float fDelta);		// 높이와 폴링 데미지를 검사.
-	virtual void UpdateMotion(float fDelta=0.f);	// 허리돌리기등의 애니메이션 상태관련
+	virtual void UpdateVelocity(float fDelta);
+	virtual void UpdateHeight(float fDelta);
+	virtual void UpdateMotion(float fDelta=0.f);
 	virtual void UpdateAnimation();
 
 	int  GetSelectWeaponDelay(MMatchItemDesc* pSelectItemDesc);

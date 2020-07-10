@@ -995,10 +995,10 @@ bool ZGameInterface::OnGameCreate(void)
 	
 	ZLoadingProgress gameLoading("Game");
 
-	ZGetInitialLoading()->Initialize(1, 0, 0, RGetScreenWidth(), RGetScreenHeight(), 0, 0, 1920, 1080, true);
+	ZGetInitialLoading()->Initialize(1, 0, 0, RGetScreenWidth(), RGetScreenHeight(), 0, 0, 1024, 768, true);
 
 	char szFileName[256];
-	int nBitmap = rand() % 8;
+	int nBitmap = rand() % 3;
 	switch (nBitmap)
 	{
 	case (0):

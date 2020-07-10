@@ -3,8 +3,6 @@
 #include "targetver.h"
 
 #define POINTER_64 __ptr64
-#define _CRT_SECURE_NO_WARNINGS
-#define _WINSOCK_DEPRECATED_NO_WARNINGS
 
 #ifdef _WIN32
 #include <afxdb.h>
