@@ -4,7 +4,7 @@
 #include "ZInterface.h"
 #include "MPicture.h"
 
-enum	eLoaindgState
+enum eLoaindgState
 {
 	LOADING_BEGIN,
 	LOADING_ANIMATION,

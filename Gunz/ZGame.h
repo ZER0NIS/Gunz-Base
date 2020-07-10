@@ -97,9 +97,6 @@ struct ReplayInfo_UseSpendItem
 
 #define TIME_ERROR_BETWEEN_RECIEVEDTIME_MYTIME 3.0f
 
-// Custom: Forwarded declaration for GetUserGradeIDColor()
-bool GetUserGradeIDColor(MMatchUserGradeID gid, MCOLOR& UserNameColor, char* sp_name);
-
 class ZGame { 
 protected:
 	enum ZGAME_LASTTIME
@@ -402,6 +399,10 @@ public:
 
 	void CheckZoneTrap(MUID uidOwner,rvector pos,MMatchItemDesc* pItemDesc, MMatchTeam nTeamID);
 	void OnExplosionDynamite(MUID uidOwner, rvector pos, float fDamage, float fRange, float fKnockBack, MMatchTeam nTeamID);
+
+public:
+	bool GetUserGradeIDColor(MMatchUserGradeID gid, MCOLOR& UserNameColor, char* sp_name);
+
 };
 
 

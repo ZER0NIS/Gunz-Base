@@ -1630,15 +1630,6 @@ bool ZGame::OnCommand(MCommand* pCommand)
 		pItem->pCommand = pCommand->Clone();
 
 		m_ReplayCommandList.push_back(pItem);
-
-#ifdef _LOG_ENABLE_RELAY_COMMAND_BUSH_
-		if(pCommand->GetID() != 10012 && pCommand->GetID() != 10014)
-		{ // [ID:10012]:BasicInfo, [ID:10014]:HPAPInfo
-			char buf[256];
-			sprintf(buf,"[RELAY_COMMAND_BUSH:%d]: %s\n", pCommand->GetID(), pCommand->GetDescription());
-			OutputDebugString(buf);
-		}
-#endif
 	}
 
 	if(ZGetGameInterface()->GetCombatInterface()->GetObserverMode())
@@ -1655,9 +1646,7 @@ bool ZGame::OnCommand(MCommand* pCommand)
 	return OnCommand_Immidiate(pCommand);
 }
 
-// 유저 컬러
-
-bool GetUserGradeIDColor(MMatchUserGradeID gid,MCOLOR& UserNameColor,char* sp_name)
+bool ZGame::GetUserGradeIDColor(MMatchUserGradeID gid,MCOLOR& UserNameColor,char* sp_name)
 {
 	// Custom: Different UGrade colours
 	if (gid == MMUG_DEVELOPER)

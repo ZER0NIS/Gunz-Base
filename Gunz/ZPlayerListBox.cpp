@@ -17,7 +17,6 @@
 
 #define PLAYERLIST_ITEM_HEIGHT	23
 
-bool GetUserGradeIDColor(MMatchUserGradeID gid,MCOLOR& UserNameColor,char* sp_name);
 bool GetUserInfoUID(MUID uid,MCOLOR& _color,char* sp_name,MMatchUserGradeID& gid);
 
 void ZPlayerListBoxLook::OnItemDraw2(MDrawContext* pDC, MRECT& r, const char* szText, MCOLOR color, bool bSelected, bool bFocus, int nAdjustWidth)
@@ -491,13 +490,14 @@ void ZPlayerListBox::AddPlayer(MUID& puid, ePlayerState state, int  nLevel,char*
 	char sp_name[256];
 	bool bSpUser = false;
 
-	if(GetUserGradeIDColor(nGrade,_color,sp_name)) {
-//	if(GetUserInfoUID(puid,_color,sp_name,gid)) {
+	if(ZGetGame()->GetUserGradeIDColor(nGrade,_color,sp_name))
+	{
 		sprintf(szLevel,"--");
 		szRefName = sp_name;
 		bSpUser = true;
 	}
-	else {
+	else
+	{
 		sprintf(szLevel,"%2d",nLevel);
 		szRefName = szName;
 	}
@@ -512,11 +512,6 @@ void ZPlayerListBox::AddPlayer(MUID& puid, ePlayerState state, int  nLevel,char*
 	char szDTGradeIconFileName[64];
 	GetDuelTournamentGradeIconFileName(szDTGradeIconFileName, duelTournamentGrade);
 	MBitmap* pBmpDTGradeIcon = MBitmapManager::Get( szDTGradeIconFileName );
-
-	//// Å¬·£ ¿¥ºí·³
-	//MBitmap* pBitmapEmblem = NULL;
-	//if ( strcmp( szClanName, "") != 0)
-	//	pBitmapEmblem = ZGetEmblemInterface()->GetClanEmblem( nClanID );
 
 	ZLobbyPlayerListItem* pItem = new ZLobbyPlayerListItem(puid, MBitmapManager::Get(szFileName), nClanID, szLevel, szRefName, szClanName, state, nGrade, pBmpDTGradeIcon );
 

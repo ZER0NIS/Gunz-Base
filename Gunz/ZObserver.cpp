@@ -14,10 +14,6 @@
 #include "ZRuleDuel.h"
 #include "ZRuleDuelTournament.h"
 
-//#define FREE_OBSERVER_ENABLE
-
-
-////// QuickTarget ///////////////////////////////////
 bool ZObserverQuickTarget::ConvertKeyToIndex(char nKey, int* nIndex) 
 {
 	int nVal = nKey-'0';
@@ -553,8 +549,18 @@ void ZObserver::OnDraw(MDrawContext* pDC)
 	{
 		char szName[128];
 		sprintf(szName, "%s (HP:%d, AP:%d)", m_pTargetCharacter->GetUserName(), (int)m_pTargetCharacter->GetHP(), (int)m_pTargetCharacter->GetAP());
-		if ( m_pTargetCharacter->IsAdminName())
-			pDC->SetColor(MCOLOR(ZCOLOR_ADMIN_NAME));
+		if (m_pTargetCharacter->IsAdminName())
+		{
+			// Custom: Set custom colours
+			MCOLOR gmColor;
+			char szEmpty[4];
+			memset(szEmpty, 0, sizeof(szEmpty));
+
+			if (ZGetGame()->GetUserGradeIDColor(m_pTargetCharacter->GetUserGrade(), gmColor, szEmpty))
+				pDC->SetColor(gmColor);
+			else
+				pDC->SetColor(MCOLOR(ZCOLOR_ADMIN_NAME));
+		}
 		else
 			pDC->SetColor(MCOLOR(0xFFFFFFFF));
 
@@ -574,8 +580,6 @@ void ZObserver::OnDraw(MDrawContext* pDC)
 		ZCamera *pCamera = ZGetGameInterface()->GetCamera();
 
 		const char *szModes[] = { "normal", "user", "free", "minimap" };
-//		TextRelative(pDC, 0.9f, 50.0f/800.0f, szModes[pCamera->GetLookMode()], true);
-
 		char szFileName[ 50];
 		sprintf( szFileName, "camera_%s.tga", szModes[pCamera->GetLookMode()]);
 		pDC->SetBitmap( MBitmapManager::Get( szFileName));
@@ -584,12 +588,8 @@ void ZObserver::OnDraw(MDrawContext* pDC)
 		pDC->Draw( (int)(720.0f * fGain), (int)(7.0f * fGain), (int)(64.0f * fGain), (int)(64.0f * fGain));
 	}
 
-
-
-	// Admin 옵져버일 경우에 남은 인원수 표시
 	if ( ZGetMyInfo()->IsAdminGrade() && !ZGetGameTypeManager()->IsTeamExtremeGame(ZGetGame()->GetMatch()->GetMatchType()))
 	{
-		// 인원수 구하기
 		int nNumOfTotal=0, nNumOfRedTeam=0, nNumOfBlueTeam=0;
 		ZCharacterManager::iterator itor;
 		ZCharacter* pCharacter;
@@ -610,12 +610,10 @@ void ZObserver::OnDraw(MDrawContext* pDC)
 				nNumOfBlueTeam++;
 		}
 
-		// 팀 이미지 표시
 		float sizex = MGetWorkspaceWidth() / 800.f;
 		float sizey = MGetWorkspaceHeight() / 600.f;
 		char szText[128];
 
-		// 배경 표시
 		MCOLOR backgroundcolor;
 
 		if (ZGetGame()->GetMatch()->IsTeamPlay())

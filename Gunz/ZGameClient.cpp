@@ -46,26 +46,6 @@
 #include "MMD5.h"
 #include "ZPlayerManager.h"
 
-
-#ifdef _XTRAP											// Update sgk 0760 start
-#include "./XTrap/Xtrap_C_Interface.h"
-#pragma comment (lib, "XTrap/XTrap4Client_mt.lib")
-#endif													// Update sgk 0760 end
-
-
-#ifdef LOCALE_NHNUSAA
-#include "ZNHN_USA.h"
-#include "ZNHN_USA_Report.h"
-#endif
-
-#ifdef _GAMEGUARD
-#include "ZGameGuard.h"
-#endif
-
-
-
-bool GetUserGradeIDColor(MMatchUserGradeID gid,MCOLOR& UserNameColor,char* sp_name);
-
 MCommand* ZNewCmd(int nID)
 {
 	MCommandDesc* pCmdDesc = ZGetGameClient()->GetCommandManager()->GetCommandDescByID(nID);
@@ -86,10 +66,8 @@ MCommand* ZNewCmd(int nID)
 
 bool GetUserInfoUID(MUID uid,MCOLOR& _color,char* sp_name,MMatchUserGradeID& gid)
 {
-	if( ZGetGameClient() == NULL)
+	if(ZGetGameClient() == NULL)
 		return false;
-
-//	MMatchUserGradeID gid = MMUG_FREE;
 
 	MMatchObjCache* pObjCache = ZGetGameClient()->FindObjCache(uid);
 
@@ -97,7 +75,7 @@ bool GetUserInfoUID(MUID uid,MCOLOR& _color,char* sp_name,MMatchUserGradeID& gid
 		gid = pObjCache->GetUGrade();
 	}
 
-	return GetUserGradeIDColor(gid,_color,sp_name);
+	return ZGetGame()->GetUserGradeIDColor(gid,_color,sp_name);
 }
 
 
@@ -591,7 +569,7 @@ void ZGameClient::OnChannelChat(const MUID& uidChannel, char* szName, char* szCh
 
 	char sp_name[256];
 
-	bool bSpUser = GetUserGradeIDColor(gid,_color,sp_name);
+	bool bSpUser = ZGetGame()->GetUserGradeIDColor(gid,_color,sp_name);
 
 	char szText[512];
 
@@ -916,8 +894,6 @@ void ZGameClient::OnStageMaster(const MUID& uidStage, const MUID& uidChar)
 	m_MatchStageSetting.UpdateCharSetting(uidChar, nTeam, nStageState);
 
 	ZApplication::GetGameInterface()->SerializeStageInterface();
-
-//	ZChatOutput("방장은 '/kick 이름' 또는 ALT + 해당캐릭터 '오른쪽 클릭'으로 강제퇴장을 시킬수 있습니다.", ZChat::CMT_NORMAL, ZChat::CL_STAGE);
 }
 
 void ZGameClient::OnStageChat(const MUID& uidChar, const MUID& uidStage, char* szChat)
@@ -925,11 +901,6 @@ void ZGameClient::OnStageChat(const MUID& uidChar, const MUID& uidStage, char* s
 	if (GetStageUID() != uidStage) return;
 	if(szChat[0]==0) return;
 
-/*
-	ZIDLResource* pResource = ZApplication::GetGameInterface()->GetIDLResource();
-	MListBox* pWidget = (MListBox*)pResource->FindWidget("StageChattingOutput");
-*/
-		
 	string name = GetObjName(uidChar);
 
 	MCOLOR _color = MCOLOR(0,0,0);
@@ -942,20 +913,18 @@ void ZGameClient::OnStageChat(const MUID& uidChar, const MUID& uidStage, char* s
 		gid = pObjCache->GetUGrade();
 	}
 
-//	gid = MMUG_DEVELOPER;
-
 	char sp_name[256];
 
-	bool bSpUser = GetUserGradeIDColor(gid,_color,sp_name);
+	bool bSpUser = ZGetGame()->GetUserGradeIDColor(gid,_color,sp_name);
 
 	char szText[512];
 
-	if(bSpUser)	// 특수유저
+	if(bSpUser)
 	{
 		wsprintf(szText, "%s : %s", sp_name , szChat);
 		ZChatOutput(szText, ZChat::CMT_NORMAL, ZChat::CL_STAGE,_color);
 	}
-	else if ( !ZGetGameClient()->GetRejectNormalChat() ||				// 일반 유저
+	else if ( !ZGetGameClient()->GetRejectNormalChat() ||
 		(strcmp( pObjCache->GetName(), ZGetMyInfo()->GetCharName()) == 0))
 	{
 		wsprintf(szText, "^4%s^9 : %s", name.c_str(), szChat);
@@ -965,12 +934,6 @@ void ZGameClient::OnStageChat(const MUID& uidChar, const MUID& uidStage, char* s
 
 void ZGameClient::OnStageList(int nPrevStageCount, int nNextStageCount, void* pBlob, int nCount)
 {
-#ifdef _DEBUG
-	char szTemp[256];
-	sprintf(szTemp, "OnStageList (nPrevStageCount = %d , nNextStageCount = %d , nCount = %d\n",
-		nPrevStageCount, nNextStageCount, nCount);
-	OutputDebugString(szTemp);
-#endif
 	ZIDLResource* pResource = ZApplication::GetGameInterface()->GetIDLResource();
 	ZRoomListBox* pRoomListBox = (ZRoomListBox*)pResource->FindWidget("Lobby_StageList");
 	if (pRoomListBox == NULL) 
@@ -984,7 +947,6 @@ void ZGameClient::OnStageList(int nPrevStageCount, int nNextStageCount, void* pB
 
 		MTD_StageListNode* pNode = (MTD_StageListNode*)MGetBlobArrayElement(pBlob, i);
 
-		// log debug
 		if( pNode ) 
 		{
 			bool bForcedEntry = false, bPrivate = false, bLimitLevel = false;
@@ -1100,11 +1062,10 @@ void ZGameClient::OnResponseFriendList(void* pBlob, int nCount)
 		
 		if (pList) {
 			pList->AddPlayer(state, pNode->szName, pNode->szDescription);
-//			pList->AttachToolTip(new MToolTip("ToolTipTest", pList));	// 툴팁을 붙이면 BMButton이 맛감
 		} else {
 			if (ZApplication::GetGameInterface()->GetState() != GUNZ_LOBBY )
 			{
-				sprintf(szBuf, "    %s (%s)", pNode->szName, pNode->szDescription);
+				sprintf(szBuf, "%s (%s)", pNode->szName, pNode->szDescription);
 				ZChatOutput(szBuf,  ZChat::CMT_NORMAL, ZChat::CL_CURRENT);
 			}
 		}
@@ -1125,7 +1086,7 @@ void ZGameClient::OnChannelPlayerList(int nTotalPlayerCount, int nPage, void* pB
 
 	if(nCount) {
 		pPlayerListBox->RemoveAll();
-	} else {//아무내용도 없다면~
+	} else {
 		return;
 	}
 
@@ -1320,32 +1281,6 @@ void ZGameClient::OnMatchNotify(unsigned int nMsgID)
 	}
 
 	ZChatOutput(MCOLOR(255,70,70),strMsg.data());
-
-
-	/*
-	GunzState nState = ZApplication::GetGameInterface()->GetState();
-	ZIDLResource* pResource = ZApplication::GetGameInterface()->GetIDLResource();
-	
-	switch(nState) {
-	case GUNZ_LOBBY:
-		{
-			MListBox* pWidget = (MListBox*)pResource->FindWidget("ChannelChattingOutput");
-			if (pWidget) pWidget->Add(strMsg.data(), MCOLOR(255,70,70));
-		}
-		break;
-	case GUNZ_STAGE:
-		{
-			MListBox* pWidget = (MListBox*)pResource->FindWidget("StageChattingOutput");
-			if (pWidget) pWidget->Add(strMsg.data(), MCOLOR(255,70,70));
-		}
-		break;
-	case GUNZ_GAME:
-		{
-			ZApplication::GetGameInterface()->OutputChatMsg(strMsg.data());
-		}
-		break;
-	};
-	*/
 }
 
 
@@ -1361,53 +1296,27 @@ int ZGameClient::OnConnected(SOCKET sock, MUID* pTargetUID, MUID* pAllocUID, uns
 
 	int ret = MMatchClient::OnConnected(sock, pTargetUID, pAllocUID, nTimeStamp);
 
-	if (sock == m_ClientSocket.GetSocket()) {
-		if ( (ZApplication::GetInstance()->GetLaunchMode() == ZApplication::ZLAUNCH_MODE_NETMARBLE) ||
-			 (ZApplication::GetInstance()->GetLaunchMode() == ZApplication::ZLAUNCH_MODE_GAMEON))
-		{	
+	if (sock == m_ClientSocket.GetSocket())
+	{
+		char szID[256];
+		char szPassword[256];
+		ZIDLResource* pResource = ZApplication::GetGameInterface()->GetIDLResource();
+		MWidget* pWidget = pResource->FindWidget("LoginID");
+		if(pWidget==NULL) return true;
+		strcpy(szID, pWidget->GetText());
+		pWidget = pResource->FindWidget("LoginPassword");
+		if(pWidget==NULL) return true;
+		strcpy(szPassword, pWidget->GetText());
 
-			ZGetLocale()->PostLoginViaHomepage(pAllocUID);
+		unsigned long nChecksum = 0;
 
-		} else {
-			char szID[256];
-			char szPassword[256];
-			ZIDLResource* pResource = ZApplication::GetGameInterface()->GetIDLResource();
-			MWidget* pWidget = pResource->FindWidget("LoginID");
-			if(pWidget==NULL) return true;
-			strcpy(szID, pWidget->GetText());
-			pWidget = pResource->FindWidget("LoginPassword");
-			if(pWidget==NULL) return true;
-			strcpy(szPassword, pWidget->GetText());
+        char szEncryptMD5Value[MAX_MD5LENGH] = {0, };
+		GetEncryptMD5HashValue(szEncryptMD5Value);
 
-			#ifdef _BIRDTEST
-				ZChangeGameState(GUNZ_BIRDTEST);
-				return ret;
-			#endif
+		ZPostLogin(szID, szPassword, nChecksum, szEncryptMD5Value);
 
-			unsigned long nChecksum = 0;
-
-            char szEncryptMD5Value[MAX_MD5LENGH] = {0, };
-			GetEncryptMD5HashValue(szEncryptMD5Value);
-
-
-#ifdef LOCALE_NHNUSAA
-			ZPostNHNUSALogin(const_cast<char*>(((ZNHN_USAAuthInfo*)ZGetLocale()->GetAuthInfo())->GetUserID().c_str()), 
-								const_cast<char*>(((ZNHN_USAAuthInfo*)ZGetLocale()->GetAuthInfo())->GetAuthStr()), 
-								nChecksum, szEncryptMD5Value);
-#else
-			ZPostLogin(szID, szPassword, nChecksum, szEncryptMD5Value);
-#endif
-
-
-#ifdef _GAMEGUARD
-			ZGameguard::m_IsResponseFirstGameguardAuth = false;
-#endif
-
-			mlog("Login Posted\n");
-		}
-	} else if (sock == m_AgentSocket.GetSocket()) {
-		
-	}
+		mlog("Login Posted\n");
+	} 
 
 	return ret;
 }
@@ -1470,34 +1379,21 @@ void ZGameClient::OnSockError(SOCKET sock, SOCKET_ERROR_EVENT ErrorEvent, int &E
 
 	ZPOSTCMD1(MC_NET_ONERROR, MCmdParamInt(ErrorCode));
 
-	if (ZApplication::GetInstance()->GetLaunchMode() == ZApplication::ZLAUNCH_MODE_NETMARBLE) {	
-		// 넷마블에서 로그인
-		ZIDLResource* pResource = ZApplication::GetGameInterface()->GetIDLResource();
-		MLabel* pLabel = (MLabel*)pResource->FindWidget("NetmarbleLoginMessage");
-		if (pLabel) {
-//			pLabel->SetText(MGetErrorString(MERR_CLIENT_CONNECT_FAILED));
-			pLabel->SetText(
-				ZErrStr(MERR_CLIENT_CONNECT_FAILED) );
-			pLabel->Show();
-		}
-	} else {
-		ZIDLResource* pResource = ZApplication::GetGameInterface()->GetIDLResource();
-		MButton* pWidget = (MButton*)pResource->FindWidget("LoginOK");
-		if (pWidget) pWidget->Enable(true);
-		MWidget* pLogin = pResource->FindWidget("LoginFrame");
-		if (pLogin) pLogin->Show(true);
-		pLogin = pResource->FindWidget("Login_ConnectingMsg");
-		if (pLogin) pLogin->Show(false);
+	ZIDLResource* pResource = ZApplication::GetGameInterface()->GetIDLResource();
+	MButton* pWidget = (MButton*)pResource->FindWidget("LoginOK");
+	if (pWidget) pWidget->Enable(true);
+	MWidget* pLogin = pResource->FindWidget("LoginFrame");
+	if (pLogin) pLogin->Show(true);
+	pLogin = pResource->FindWidget("Login_ConnectingMsg");
+	if (pLogin) pLogin->Show(false);
 
-		MLabel* pLabel = (MLabel*)pResource->FindWidget("LoginError");
-		if (pLabel) {
-//			pLabel->SetText(MGetErrorString(MERR_CLIENT_CONNECT_FAILED));
-			pLabel->SetText( ZErrStr(MERR_CLIENT_CONNECT_FAILED) );
-
-		}
-
-		ZGetGameInterface()->m_bLoginTimeout = false;
+	MLabel* pLabel = (MLabel*)pResource->FindWidget("LoginError");
+	
+	if (pLabel) {
+		pLabel->SetText( ZErrStr(MERR_CLIENT_CONNECT_FAILED) );
 	}
+
+	ZGetGameInterface()->m_bLoginTimeout = false;
 }
 
 #include "MListBox.h"

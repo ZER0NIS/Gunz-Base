@@ -1571,7 +1571,7 @@ void ZCombatInterface::SetPickTarget(bool bPick, ZCharacter* pCharacter)
 			char szEmpty[4];
 			memset(szEmpty, 0, sizeof(szEmpty));
 
-			if (GetUserGradeIDColor(pCharacter->GetUserGrade(), gmColor, szEmpty))
+			if (ZGetGame()->GetUserGradeIDColor(pCharacter->GetUserGrade(), gmColor, szEmpty))
 				m_pTargetLabel->SetTextColor(gmColor);
 			else
 				m_pTargetLabel->SetTextColor(ZCOLOR_ADMIN_NAME);
@@ -1610,28 +1610,11 @@ void ZCombatInterface::SetItemImageIndex(int nIndex)
 
 	END_WIDGETLIST();
 }
-/*
-void ZCombatInterface::SetMagazine(int nMagazine)
-{
-	if (m_nMagazine == nMagazine) return;
-
-	char szTemp[256];
-	sprintf(szTemp, "%02d", nMagazine);
-	BEGIN_WIDGETLIST("CombatMagazine", ZApplication::GetGameInterface()->GetIDLResource(),
-		MWidget*, pWidget);
-
-	pWidget->SetText(szTemp);
-
-	END_WIDGETLIST();
-
-	m_nMagazine = nMagazine;
-}
-*/
 
 void ZCombatInterface::UpdateCombo(ZCharacter* pCharacter)
 {
 	//ZERONIS : Temporary fix for crash in ZScreenEffectManager::SetCombo.
-	return;
+	//return;
 
 	if(pCharacter==NULL) return;
 
@@ -1685,11 +1668,6 @@ void ZCombatInterface::DrawFriendName(MDrawContext* pDC)
 
 			if (isInViewFrustum(&box, RGetViewFrustum()))
 			{
-				/*
-#define CHARACTER_HEIGHT	185.0f
-				pos.z = pos.z + CHARACTER_HEIGHT;
-				screen_pos = RGetTransformCoord(pos);
-				*/
 				screen_pos = RGetTransformCoord(pCharacter->GetVisualMesh()->GetHeadPosition()+rvector(0,0,30.f));
 
 				MFont *pFont=NULL;
