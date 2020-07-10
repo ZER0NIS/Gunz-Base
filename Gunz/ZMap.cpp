@@ -8,25 +8,14 @@
 
 void ZGetCurrMapPath(char* outPath)
 {
-// 나중에 랜덤맵 구현할때까지 그냥 맵 하나만 사용
-#ifdef _QUEST
-
 
 	if (ZGetGameTypeManager()->IsQuestDerived(ZGetGameClient()->GetMatchStageSetting()->GetGameType()))
 	{
 		strcpy(outPath, PATH_QUEST_MAPS);
 		return;
 	}
-#endif
 
-	if (ZApplication::GetInstance()->GetLaunchMode() == ZApplication::ZLAUNCH_MODE_STANDALONE_QUEST)
-	{
-		strcpy(outPath, PATH_QUEST_MAPS);
-	}
-	else
-	{
-		strcpy(outPath, PATH_GAME_MAPS);
-	}
+	strcpy(outPath, PATH_GAME_MAPS);
 }
 
 bool InitMaps(MWidget *pWidget)

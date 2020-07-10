@@ -62,9 +62,7 @@ void ZMatch::Destroy()
 void ZMatch::SetRound(int nCurrRound)
 {
     m_nCurrRound = nCurrRound;
-//    memset(m_nTeamKillCount, 0, sizeof(m_nTeamKillCount));
 }
-
 
 void ZMatch::Update(float fDelta)
 {
@@ -105,20 +103,17 @@ void ZMatch::ProcessRespawn()
 #ifdef _QUEST
     if (ZGetGameTypeManager()->IsQuestDerived(GetMatchType())) return;
 #endif
-    // µ¥¾²¸??¡?? °?¿? ???¸¸? ¹?·? »?¾?³­´?.
+ 
     if (!IsWaitForRoundEnd() && ZGetGame()->m_pMyCharacter)
     {
         static bool bLastDead = false;
         if (ZGetGame()->m_pMyCharacter->IsDie())
         {
             if (bLastDead == false) {
-                m_nLastDeadTime = m_nNowTime;    // ???÷ ½?°£
+                m_nLastDeadTime = m_nNowTime;  
             }
 
-            //¹?????÷¸??½???¼® 
-            /*ZBuffSummary* pBuffSummary = ZGetGame()->m_pMyCharacter->GetCharacterBuff()->GetBuffSummary();
-            int nDelayAfterDying = pBuffSummary->GetRespawnTime(RESPAWN_DELAYTIME_AFTER_DYING);
-            */
+
             int nDelayAfterDying = RESPAWN_DELAYTIME_AFTER_DYING;
 
             m_nSoloSpawnTime = m_nNowTime - m_nLastDeadTime;
@@ -158,18 +153,6 @@ int ZMatch::GetRoundReadyCount(void)
 void ZMatch::OnDrawGameMessage()
 {
 
-#ifndef _PUBLISH
-    // for debug ½?°£ ?¥½?
-    float fTime=ZGetGame()->GetTime();
-    int nTimeMinute=fTime/60.f;
-    fTime=fmod(fTime,60.f);
-    int nTimeSecond=fTime;
-    fTime=fmod(fTime,1.f);
-
-    char szTimeMessage[256] = "";
-    sprintf(szTimeMessage, "%d:%02d.%02d",nTimeMinute,nTimeSecond,int(fTime*100.f));
-    ZApplication::GetGameInterface()->SetTextWidget("Time", szTimeMessage);
-#endif
 
 #define CENTERMESSAGE    "CenterMessage"
 
@@ -209,7 +192,6 @@ void ZMatch::SoloSpawn()
 {
 	auto MyTeam =ZGetGame()->m_pMyCharacter->GetTeamID();
 	if (GetMatchType() == MMATCH_GAMETYPE_DUEL || MyTeam == MMT_SPECTATOR) return;
-  //  if (GetMatchType() == MMATCH_GAMETYPE_DUEL) return;
     if (GetMatchType() == MMATCH_GAMETYPE_DUELTOURNAMENT) return;
 
     if (ZGetGame()->m_pMyCharacter->IsDie())
@@ -232,26 +214,15 @@ void ZMatch::SoloSpawn()
 
         if (pSpawnData == NULL)
         {
-//            _ASSERT(0);
+
         }
         else
         {
-            if (ZApplication::GetInstance()->GetLaunchMode() == ZApplication::ZLAUNCH_MODE_DEBUG)
-			{
                 if (ZGetGame()->GetSpawnRequested() == false)
 				{
                     ZPostRequestSpawn(ZGetMyUID(), pSpawnData->m_Pos, pSpawnData->m_Dir);
                     ZGetGame()->SetSpawnRequested(true);
-                }
-            }
-			else
-			{
-                if (ZGetGame()->GetSpawnRequested() == false)
-				{
-                    ZPostRequestSpawn(ZGetMyUID(), pSpawnData->m_Pos, pSpawnData->m_Dir);
-                    ZGetGame()->SetSpawnRequested(true);
-                }
-            }    
+                }   
         }
         
         m_nSoloSpawnTime = -1;
@@ -400,41 +371,35 @@ void ZMatch::InitRound()
 
     bool isObserver = false;
 
-if (ZApplication::GetInstance()->GetLaunchMode() == ZApplication::ZLAUNCH_MODE_DEBUG) {
-#ifdef _DEBUG
-ZPostSpawn(pos, dir);
-#endif
-} else {
-        if (ZGetGame()->GetSpawnRequested() == false) 
-		{
-            if (GetMatchType() == MMATCH_GAMETYPE_DUEL)
+    if (ZGetGame()->GetSpawnRequested() == false) 
+    {
+        if (GetMatchType() == MMATCH_GAMETYPE_DUEL)
+        {
+            for (ZCharacterManager::iterator itor = ZGetGame()->m_CharacterManager.begin();
+                itor != ZGetGame()->m_CharacterManager.end(); ++itor)
             {
-                for (ZCharacterManager::iterator itor = ZGetGame()->m_CharacterManager.begin();
-                    itor != ZGetGame()->m_CharacterManager.end(); ++itor)
-                {
-                    ZCharacter* pCharacter = (*itor).second;
-                    pCharacter->ForceDie();
-                    pCharacter->SetVisible(false);
-                }
-            }
-            else if(GetMatchType() == MMATCH_GAMETYPE_DUELTOURNAMENT){
-                for (ZCharacterManager::iterator itor = ZGetGame()->m_CharacterManager.begin();
-                    itor != ZGetGame()->m_CharacterManager.end(); ++itor)
-                {
-                    ZCharacter* pCharacter = (*itor).second;
-                    pCharacter->ForceDie();
-                    pCharacter->SetVisible(false);
-                }
-            }
-            else
-            {
-                ZPostRequestSpawn(ZGetMyUID(), pos, dir);
-                ZGetGame()->SetSpawnRequested(true);
+                ZCharacter* pCharacter = (*itor).second;
+                pCharacter->ForceDie();
+                pCharacter->SetVisible(false);
             }
         }
+        else if(GetMatchType() == MMATCH_GAMETYPE_DUELTOURNAMENT)
+        {
+            for (ZCharacterManager::iterator itor = ZGetGame()->m_CharacterManager.begin();
+                itor != ZGetGame()->m_CharacterManager.end(); ++itor)
+            {
+                ZCharacter* pCharacter = (*itor).second;
+                pCharacter->ForceDie();
+                pCharacter->SetVisible(false);
+            }
+        }
+        else
+        {
+            ZPostRequestSpawn(ZGetMyUID(), pos, dir);
+            ZGetGame()->SetSpawnRequested(true);
+        }
     }
-
-
+   
     MMatchObjCache* pObjCache = ZGetGameClient()->FindObjCache(ZGetMyUID());
     if (pObjCache && pObjCache->CheckFlag(MTD_PlayerFlags_AdminHide))
 	{
