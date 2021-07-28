@@ -5,6 +5,7 @@
 #ifndef _FMOD_H_
 #define _FMOD_H_
 
+#define DLL_EXPORTS
 /* ========================================================================================== */
 /* DEFINITIONS                                                                                */
 /* ========================================================================================== */
@@ -36,7 +37,7 @@
     #endif /* __LCC__ ||  __MINGW32__ || __CYGWIN32__ */
 #endif /* DLL_EXPORTS */
 
-#define FMOD_VERSION    3.74f
+#define FMOD_VERSION    3.75f
 
 /* 
     FMOD defined types 
@@ -133,6 +134,7 @@ enum FSOUND_OUTPUTTYPES
     FSOUND_OUTPUT_PS2,        /* PlayStation 2 driver */
     FSOUND_OUTPUT_MAC,        /* Mac SoundManager driver */
     FSOUND_OUTPUT_GC,         /* Gamecube driver */
+    FSOUND_OUTPUT_PSP,        /* PlayStation Portable driver */
 
     FSOUND_OUTPUT_NOSOUND_NONREALTIME   /* This is the same as nosound, but the sound generation is driven by FSOUND_Update */
 };
@@ -488,7 +490,7 @@ typedef struct _FSOUND_REVERB_PROPERTIES /* MIN     MAX    DEFAULT   DESCRIPTION
 #define FSOUND_PRESET_DIZZY            {24,	1.8f,	0.60f, -1000,  -400,   0,   17.23f, 0.56f, 1.0f,  -1713, 0.020f, { 0.0f,0.0f,0.0f },  -613, 0.030f, { 0.0f,0.0f,0.0f }, 0.250f, 1.00f, 0.81f, 0.310f, -5.0f, 5000.0f, 250.0f, 0.0f, 100.0f, 100.0f, 0x1f }
 #define FSOUND_PRESET_PSYCHOTIC        {25,	1.0f,	0.50f, -1000,  -151,   0,   7.56f,  0.91f, 1.0f,  -626,  0.020f, { 0.0f,0.0f,0.0f },   774, 0.030f, { 0.0f,0.0f,0.0f }, 0.250f, 0.00f, 4.00f, 1.000f, -5.0f, 5000.0f, 250.0f, 0.0f, 100.0f, 100.0f, 0x1f }
 
-/* PlayStation 2 Only presets */
+/* PlayStation 2 and PlayStation Portable only presets */
 
 #define FSOUND_PRESET_PS2_ROOM         {1,	0,	    0,         0,  0,      0,   0.0f,   0.0f,  0.0f,     0,  0.000f, { 0.0f,0.0f,0.0f },     0, 0.000f, { 0.0f,0.0f,0.0f }, 0.000f, 0.00f, 0.00f, 0.000f,  0.0f, 0000.0f,   0.0f, 0.0f,   0.0f,   0.0f, 0x31f }
 #define FSOUND_PRESET_PS2_STUDIO_A     {2,	0,	    0,         0,  0,      0,   0.0f,   0.0f,  0.0f,     0,  0.000f, { 0.0f,0.0f,0.0f },     0, 0.000f, { 0.0f,0.0f,0.0f }, 0.000f, 0.00f, 0.00f, 0.000f,  0.0f, 0000.0f,   0.0f, 0.0f,   0.0f,   0.0f, 0x31f }
@@ -671,6 +673,8 @@ enum FSOUND_SPEAKERMODES
 #define FSOUND_INIT_DSOUND_DEFERRED         0x0800    /* Win32 only - For DirectSound output.  3D commands are batched together and executed at FSOUND_Update. */
 #define FSOUND_INIT_DSOUND_HRTF_LIGHT       0x1000    /* Win32 only - For DirectSound output.  FSOUND_HW3D buffers use a slightly higher quality algorithm when 3d hardware acceleration is not present. */
 #define FSOUND_INIT_DSOUND_HRTF_FULL        0x2000    /* Win32 only - For DirectSound output.  FSOUND_HW3D buffers use full quality 3d playback when 3d hardware acceleration is not present. */
+#define FSOUND_INIT_XBOX_REMOVEHEADROOM     0x4000    /* XBox only - By default directsound attenuates all sound by 6db to avoid clipping/distortion.  CAUTION.  If you use this flag you are responsible for the final mix to make sure clipping / distortion doesn't happen. */
+#define FSOUND_INIT_PSP_SILENCEONUNDERRUN   0x8000    /* PSP only - If streams skip / stutter when device is powered on, either increase stream buffersize, or use this flag instead to play silence while the UMD is recovering. */
 /* [DEFINE_END] */
 
 
@@ -833,6 +837,7 @@ DLL_API signed char     F_API FSOUND_GetDriverCaps(int id, unsigned int *caps);
 DLL_API int             F_API FSOUND_GetOutputRate();
 DLL_API int             F_API FSOUND_GetMaxChannels();
 DLL_API int             F_API FSOUND_GetMaxSamples();
+DLL_API unsigned int    F_API FSOUND_GetSpeakerMode();
 DLL_API int             F_API FSOUND_GetSFXMasterVolume();
 DLL_API signed char     F_API FSOUND_GetNumHWChannels(int *num2d, int *num3d, int *total);
 DLL_API int             F_API FSOUND_GetChannelsPlaying();
@@ -1041,6 +1046,7 @@ DLL_API signed char        F_API FSOUND_Stream_FindTagField(FSOUND_STREAM *strea
 */
 
 DLL_API signed char        F_API FSOUND_Stream_Net_SetProxy(const char *proxy);
+DLL_API signed char        F_API FSOUND_Stream_Net_SetTimeout(int timeout);
 DLL_API char *             F_API FSOUND_Stream_Net_GetLastServerStatus();
 DLL_API signed char        F_API FSOUND_Stream_Net_SetBufferProperties(int buffersize, int prebuffer_percent, int rebuffer_percent);
 DLL_API signed char        F_API FSOUND_Stream_Net_GetBufferProperties(int *buffersize, int *prebuffer_percent, int *rebuffer_percent);

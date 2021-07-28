@@ -43,7 +43,6 @@
 #include "RShaderMgr.h"
 #endif
 
-//#include "mempool.h"
 #include "RLenzFlare.h"
 #include "ZLocale.h"
 #include "MSysInfo.h"
@@ -58,43 +57,38 @@
 #include "RGMain.h"
 #include "RGGlobal.h"
 
-RMODEPARAMS	g_ModeParams={800,600,true,D3DFMT_R5G6B5};
-
+RMODEPARAMS	g_ModeParams = { 800,600,true,D3DFMT_R5G6B5 };
 
 #ifndef _DEBUG
 #define SUPPORT_EXCEPTIONHANDLING
 #endif
 
 void AntiShotbotLogger();
-RRESULT RenderScene(void *pParam);
+RRESULT RenderScene(void* pParam);
 
 #define RD_STRING_LENGTH 512
-char cstrReleaseDate[512];// = "ReleaseDate : 12/22/2003";
+char cstrReleaseDate[512];
 
 ZApplication	g_App;
 MDrawContextR2* g_pDC = NULL;
-MFontR2*		g_pDefFont = NULL;
+MFontR2* g_pDefFont = NULL;
 ZDirectInput	g_DInput;
-ZInput*			g_pInput = NULL;
+ZInput* g_pInput = NULL;
 Mint4Gunz		g_Mint;
 
-HRESULT GetDirectXVersionViaDxDiag( DWORD* pdwDirectXVersionMajor, DWORD* pdwDirectXVersionMinor, TCHAR* pcDirectXVersionLetter );
+HRESULT GetDirectXVersionViaDxDiag(DWORD* pdwDirectXVersionMajor, DWORD* pdwDirectXVersionMinor, TCHAR* pcDirectXVersionLetter);
 
 void zexit(int returnCode)
 {
-	// 게임가드는 제대로 delete되어야 오류발생시 자체 로그를 올바르게 남길 수 있다.
-	// 그냥 exit()해도 ZGameGuard를 싱글턴으로 만들었기 때문에 소멸자에서 게임가드가 delete되지만 어째서인지 그때 크래시가 일어난다.
-	// exit()하기 전에 게임가드를 수동으로 해제하면 그런 문제가 일어나지 않는다.
-	// 해킹 검출 등의 이유로 클라이언트 종료시 exit하지말고 zexit를 쓰자.
 #ifdef _GAMEGUARD
 	GetZGameguard().Release();
 #endif
 	exit(returnCode);
 }
 
-void CrcFailExitApp() { 
+void CrcFailExitApp() {
 #ifdef _PUBLISH
-	PostMessage(g_hWnd, WM_CLOSE, 0, 0); 
+	PostMessage(g_hWnd, WM_CLOSE, 0, 0);
 #else
 	int* crash = NULL;
 	*crash = 0;
@@ -111,9 +105,7 @@ void _ZChangeGameState(int nIndex)
 	}
 }
 
-//list<HANDLE>	g_FontMemHandles;
-
-RRESULT OnCreate(void *pParam)
+RRESULT OnCreate(void* pParam)
 {
 	g_App.PreCheckArguments();
 
@@ -128,40 +120,38 @@ RRESULT OnCreate(void *pParam)
 
 	RBspObject::CreateShadeMap("sfx/water_splash.bmp");
 
-	sprintf_safe( cstrReleaseDate, "Version : (" __DATE__ " " __TIME__ ")");
+	sprintf_safe(cstrReleaseDate, "Version : (" __DATE__ " " __TIME__ ")");
 	g_DInput.Create(g_hWnd, FALSE, FALSE);
 	g_pInput = new ZInput(&g_DInput);
 
 	RSetGammaRamp(Z_VIDEO_GAMMA_VALUE);
 	RSetRenderFlags(RRENDER_CLEAR_BACKBUFFER);
 
-	ZGetInitialLoading()->Initialize(  1, 0, 0, RGetScreenWidth(), RGetScreenHeight(), 0, 0, 1024, 768 );
+	ZGetInitialLoading()->Initialize(1, 0, 0, RGetScreenWidth(), RGetScreenHeight(), 0, 0, 1024, 768);
 
 	mlog("InitialLoading success.\n");
-	//CreateThread(0, 0, (LPTHREAD_START_ROUTINE)AntiShotbotLogger, 0, 0, 0);
-
 	struct _finddata_t c_file;
 	intptr_t hFile;
 	char szFileName[256];
 #define FONT_DIR	"Font/"
 #define FONT_EXT	"ttf"
-	if( (hFile = _findfirst(FONT_DIR "*." FONT_EXT, &c_file )) != -1L ){
-		do{
+	if ((hFile = _findfirst(FONT_DIR "*." FONT_EXT, &c_file)) != -1L) {
+		do {
 			strcpy(szFileName, FONT_DIR);
 			strcat(szFileName, c_file.name);
 			AddFontResource(szFileName);
-		}while( _findnext( hFile, &c_file ) == 0 );
+		} while (_findnext(hFile, &c_file) == 0);
 		_findclose(hFile);
 	}
 
 	g_pDefFont = new MFontR2;
 
-	if( !g_pDefFont->Create("Default", Z_LOCALE_DEFAULT_FONT, DEFAULT_FONT_HEIGHT, 1.0f) )
+	if (!g_pDefFont->Create("Default", Z_LOCALE_DEFAULT_FONT, DEFAULT_FONT_HEIGHT, 1.0f))
 	{
-		mlog("Fail to Create defualt font : MFontR2 / main.cpp.. onCreate\n" );
+		mlog("Fail to Create defualt font : MFontR2 / main.cpp.. onCreate\n");
 		g_pDefFont->Destroy();
-		SAFE_DELETE( g_pDefFont );
-		g_pDefFont	= NULL;
+		SAFE_DELETE(g_pDefFont);
+		g_pDefFont = NULL;
 	}
 
 	g_pDC = new MDrawContextR2(RGetDevice());
@@ -169,7 +159,6 @@ RRESULT OnCreate(void *pParam)
 #ifndef _FASTDEBUG
 	if (ZGetInitialLoading()->IsUseEnable())
 	{
-
 		char szFileName[256];
 		int nBitmap = rand() % 3;
 		switch (nBitmap)
@@ -203,7 +192,7 @@ RRESULT OnCreate(void *pParam)
 	mlog("interface Initialize success\n");
 
 	ZLoadingProgress appLoading("application");
-	if(!g_App.OnCreate(&appLoading))
+	if (!g_App.OnCreate(&appLoading))
 	{
 		ZGetInitialLoading()->Release();
 		return R_ERROR_LOADING;
@@ -218,11 +207,11 @@ RRESULT OnCreate(void *pParam)
 	g_Mint.GetMainFrame()->SetSize(g_ModeParams.nWidth, g_ModeParams.nHeight);
 	ZGetOptionInterface()->Resize(g_ModeParams.nWidth, g_ModeParams.nHeight);
 
-	for(int i=0; i<ZACTION_COUNT; i++)
+	for (int i = 0; i < ZACTION_COUNT; i++)
 	{
 		ZACTIONKEYDESCRIPTION& keyDesc = ZGetConfiguration()->GetKeyboard()->ActionKeys[i];
 		g_pInput->RegisterActionKey(i, keyDesc.nVirtualKey);
-		if(keyDesc.nVirtualKeyAlt!=-1)
+		if (keyDesc.nVirtualKeyAlt != -1)
 			g_pInput->RegisterActionKey(i, keyDesc.nVirtualKeyAlt);
 	}
 
@@ -230,20 +219,20 @@ RRESULT OnCreate(void *pParam)
 
 	ZGetFlashBangEffect()->SetDrawCopyScreen(true);
 
-	static const char *szDone = "Done.";
+	static const char* szDone = "Done.";
 	ZGetInitialLoading()->SetLoadingStr(szDone);
-	if( ZGetInitialLoading()->IsUseEnable() )
+	if (ZGetInitialLoading()->IsUseEnable())
 	{
 #ifndef _FASTDEBUG
-		ZGetInitialLoading()->SetPercentage( 100.f );
-		ZGetInitialLoading()->Draw( MODE_FADEOUT, 0 ,true  );
+		ZGetInitialLoading()->SetPercentage(100.f);
+		ZGetInitialLoading()->Draw(MODE_FADEOUT, 0, true);
 #endif
 		ZGetInitialLoading()->Release();
 	}
 
-		ChangeAA(ZGetConfiguration()->GetVideo()->nAntiAlias);
-		RMODEPARAMS ModeParams={ RGetScreenWidth(),RGetScreenHeight(),RIsFullScreen(),RGetPixelFormat() };
-		RResetDevice(&ModeParams);
+	ChangeAA(ZGetConfiguration()->GetVideo()->nAntiAlias);
+	RMODEPARAMS ModeParams = { RGetScreenWidth(),RGetScreenHeight(),RIsFullScreen(),RGetPixelFormat() };
+	RResetDevice(&ModeParams);
 
 	mlog("main : OnCreate() done\n");
 
@@ -251,7 +240,6 @@ RRESULT OnCreate(void *pParam)
 
 	return R_OK;
 }
-
 
 bool CheckDll(char* fileName, BYTE* SHA1_Value)
 {
@@ -261,10 +249,10 @@ bool CheckDll(char* fileName, BYTE* SHA1_Value)
 	memset(Key, 0, 20);
 	memcpy(Key, GUNZ_HMAC_KEY, strlen(GUNZ_HMAC_KEY));
 
-	CHMAC_SHA1 HMAC_SHA1 ;
-	HMAC_SHA1.HMAC_SHA1_file(fileName, Key, GUNZ_HMAC_KEY_LENGTH, digest) ;
+	CHMAC_SHA1 HMAC_SHA1;
+	HMAC_SHA1.HMAC_SHA1_file(fileName, Key, GUNZ_HMAC_KEY_LENGTH, digest);
 
-	if(memcmp(digest, SHA1_Value, 20) ==0)
+	if (memcmp(digest, SHA1_Value, 20) == 0)
 	{
 		return true;
 	}
@@ -272,9 +260,7 @@ bool CheckDll(char* fileName, BYTE* SHA1_Value)
 	return false;
 }
 
-
-
-RRESULT OnDestroy(void *pParam)
+RRESULT OnDestroy(void* pParam)
 {
 	mlog("Destroy gunz\n");
 
@@ -293,10 +279,6 @@ RRESULT OnDestroy(void *pParam)
 
 	RGetShaderMgr()->Release();
 
-//	g_App.OnDestroy();
-
-	// mlog("main : g_App.OnDestroy()\n");
-
 	ZGetConfiguration()->Destroy();
 
 	mlog("game gonfiguration destroy.\n");
@@ -308,12 +290,12 @@ RRESULT OnDestroy(void *pParam)
 	char szFileName[256];
 #define FONT_DIR	"Font/"
 #define FONT_EXT	"ttf"
-	if( (hFile = _findfirst(FONT_DIR "*." FONT_EXT, &c_file )) != -1L ){
-		do{
+	if ((hFile = _findfirst(FONT_DIR "*." FONT_EXT, &c_file)) != -1L) {
+		do {
 			strcpy(szFileName, FONT_DIR);
 			strcat(szFileName, c_file.name);
 			RemoveFontResource(szFileName);
-		}while( _findnext( hFile, &c_file ) == 0 );
+		} while (_findnext(hFile, &c_file) == 0);
 		_findclose(hFile);
 	}
 
@@ -323,36 +305,14 @@ RRESULT OnDestroy(void *pParam)
 
 	mlog("Bitmap manager destroy Animation bitmap.\n");
 
-	/*
-	for(list<HANDLE>::iterator i=g_FontMemHandles.begin(); i!=g_FontMemHandles.end(); i++){
-		RemoveFontMemResourceEx(*i);
-	}
-	*/
-
-	//ReleaseMemPool(RealSoundEffectPlay);
-	//UninitMemPool(RealSoundEffectPlay);
-
-	//ReleaseMemPool(RealSoundEffect);
-	//UninitMemPool(RealSoundEffect);
-
-	//ReleaseMemPool(RealSoundEffectFx);
-	//UninitMemPool(RealSoundEffectFx);
-
-	//mlog("main : UninitMemPool(RealSoundEffectFx)\n");
-
-	// 메모리풀 헤제
-	ZBasicInfoItem::Release(); // 할당되어 있는 메모리 해제
-//	ZHPInfoItem::Release();
-
+	ZBasicInfoItem::Release();
 	ZGetStencilLight()->Destroy();
 	LightSource::Release();
-
-//	ZStencilLight::GetInstance()->Destroy();
 
 	RBspObject::DestroyShadeMap();
 	RDestroyLenzFlare();
 	RAnimationFileMgr::GetInstance()->Destroy();
-	
+
 	ZStringResManager::ResetInstance();
 
 	GetMeshManager()->Destroy();
@@ -364,7 +324,6 @@ RRESULT OnDestroy(void *pParam)
 
 RRESULT OnUpdate(void* pParam)
 {
-
 	auto prof = MBeginProfile("main::OnUpdate");
 
 	g_pInput->Update();
@@ -378,11 +337,11 @@ RRESULT OnUpdate(void* pParam)
 	return R_OK;
 }
 
-RRESULT OnRender(void *pParam)
+RRESULT OnRender(void* pParam)
 {
 	auto mainOnRender = MBeginProfile("main::OnRender");
 
-	if( !RIsActive() && RIsFullScreen() )
+	if (!RIsActive() && RIsFullScreen())
 		return R_NOTREADY;
 
 	g_App.OnDraw();
@@ -392,18 +351,18 @@ RRESULT OnRender(void *pParam)
 	return R_OK;
 }
 
-RRESULT OnInvalidate(void *pParam)
+RRESULT OnInvalidate(void* pParam)
 {
-	MBitmapR2::m_dwStateBlock=NULL;
+	MBitmapR2::m_dwStateBlock = NULL;
 
 	g_App.OnInvalidate();
-	
+
 	return R_OK;
 }
 
-RRESULT OnRestore(void *pParam)
+RRESULT OnRestore(void* pParam)
 {
-	for(int i=0; i<MBitmapManager::GetCount(); i++){
+	for (int i = 0; i < MBitmapManager::GetCount(); i++) {
 		MBitmapR2* pBitmap = (MBitmapR2*)MBitmapManager::Get(i);
 		pBitmap->OnLostDevice();
 	}
@@ -413,52 +372,51 @@ RRESULT OnRestore(void *pParam)
 	return R_OK;
 }
 
-RRESULT OnActivate(void *pParam)
+RRESULT OnActivate(void* pParam)
 {
 	if (ZGetGameInterface() && ZGetGameClient() && Z_ETC_BOOST)
 		ZGetGameClient()->PriorityBoost(true);
 	return R_OK;
 }
 
-RRESULT OnDeActivate(void *pParam)
+RRESULT OnDeActivate(void* pParam)
 {
 	if (ZGetGameInterface() && ZGetGameClient())
 		ZGetGameClient()->PriorityBoost(false);
 	return R_OK;
 }
 
-RRESULT OnError(void *pParam)
+RRESULT OnError(void* pParam)
 {
 	mlog("RealSpace::OnError(%d) \n", RGetLastError());
 
 	switch (RGetLastError())
 	{
 	case RERROR_INVALID_DEVICE:
-		{
-			D3DADAPTER_IDENTIFIER9 *ai=RGetAdapterID();
-			char szLog[512];
-			ZTransMsg( szLog, MSG_DONOTSUPPORT_GPCARD, 1, ai->Description);
+	{
+		D3DADAPTER_IDENTIFIER9* ai = RGetAdapterID();
+		char szLog[512];
+		ZTransMsg(szLog, MSG_DONOTSUPPORT_GPCARD, 1, ai->Description);
 
-			int ret=MessageBox(NULL, szLog, ZMsg( MSG_WARNING), MB_YESNO);
-			if(ret!=IDYES)
-				return R_UNKNOWN;
-		}
-		break;
+		int ret = MessageBox(NULL, szLog, ZMsg(MSG_WARNING), MB_YESNO);
+		if (ret != IDYES)
+			return R_UNKNOWN;
+	}
+	break;
 	case RERROR_CANNOT_CREATE_D3D:
+	{
+		ShowCursor(TRUE);
+
+		char szLog[512];
+		sprintf(szLog, ZMsg(MSG_DIRECTX_NOT_INSTALL));
+
+		int ret = MessageBox(NULL, szLog, ZMsg(MSG_WARNING), MB_YESNO);
+		if (ret == IDYES)
 		{
-			ShowCursor(TRUE);
-
-			char szLog[512];
-			sprintf(szLog, ZMsg( MSG_DIRECTX_NOT_INSTALL));
-
-			int ret=MessageBox(NULL, szLog, ZMsg( MSG_WARNING), MB_YESNO);
-			if(ret==IDYES)
-			{
-				ShellExecute(g_hWnd, "open", ZMsg( MSG_DIRECTX_DOWNLOAD_URL), NULL, NULL, SW_SHOWNORMAL); 
-			}
+			ShellExecute(g_hWnd, "open", ZMsg(MSG_DIRECTX_DOWNLOAD_URL), NULL, NULL, SW_SHOWNORMAL);
 		}
-		break;
-
+	}
+	break;
 	};
 
 	return R_OK;
@@ -469,26 +427,20 @@ void SetModeParams()
 	g_ModeParams.bFullScreen = ZGetConfiguration()->GetVideo()->bFullScreen;
 	g_ModeParams.nWidth = ZGetConfiguration()->GetVideo()->nWidth;
 	g_ModeParams.nHeight = ZGetConfiguration()->GetVideo()->nHeight;
-	ZGetConfiguration()->GetVideo()->nColorBits == 32 ? 
-		g_ModeParams.PixelFormat = D3DFMT_X8R8G8B8 : g_ModeParams.PixelFormat = D3DFMT_R5G6B5 ;
+	ZGetConfiguration()->GetVideo()->nColorBits == 32 ?
+		g_ModeParams.PixelFormat = D3DFMT_X8R8G8B8 : g_ModeParams.PixelFormat = D3DFMT_R5G6B5;
 }
 
 void ResetAppResource()
 {
-	// (거의)모든 리소스를 제거하고 다시 로딩한다
-	//_ASSERTE( _CrtCheckMemory( ) );
-
-	// save user id
 #ifdef LOCALE_NHNUSAA
 	ZNHN_USAAuthInfo* pUSAAuthInfo = (ZNHN_USAAuthInfo*)ZGetLocale()->GetAuthInfo();
 	string strUserID = pUSAAuthInfo->GetUserID();
 #endif
 
-	// Reset GameInterface except its gameclient object. the account connection must be alive.
-	ZGetGameInterface()->m_sbRemainClientConnectionForResetApp = true;	// let GameInterface don't clear its gameclient object. (why this interface object has network object???)
-	ZGetGameInterface()->GetGameClient()->Destroy();	// but must clear queued messages
+	ZGetGameInterface()->m_sbRemainClientConnectionForResetApp = true;
+	ZGetGameInterface()->GetGameClient()->Destroy();
 
-	// whole client resource reload
 	OnDestroy(0);
 
 	ZGetConfiguration()->Destroy();
@@ -496,7 +448,7 @@ void ResetAppResource()
 
 	SetModeParams();
 
-	if( !ZApplication::GetInstance()->InitLocale() )
+	if (!ZApplication::GetInstance()->InitLocale())
 		MLog("In changing language... InitLocale error !!!\n");
 
 	ZGetConfiguration()->Load_StringResDependent();
@@ -511,10 +463,10 @@ void ResetAppResource()
 	ZGetGameInterface()->UpdateDuelTournamantMyCharInfoPreviousUI();
 }
 
-int FindStringPos(char* str,char* word)
+int FindStringPos(char* str, char* word)
 {
-	if(!str || str[0]==0)	return -1;
-	if(!word || word[0]==0)	return -1;
+	if (!str || str[0] == 0)	return -1;
+	if (!word || word[0] == 0)	return -1;
 
 	int str_len = (int)strlen(str);
 	int word_len = (int)strlen(word);
@@ -522,71 +474,64 @@ int FindStringPos(char* str,char* word)
 	char c;
 	bool bCheck = false;
 
-	for(int i=0;i<str_len;i++) {
+	for (int i = 0; i < str_len; i++) {
 		c = str[i];
-		if(c == word[0]) {
-
+		if (c == word[0]) {
 			bCheck = true;
 
-			for(int j=1;j<word_len;j++) {
-				if(str[i+j]!=word[j]) {
+			for (int j = 1; j < word_len; j++) {
+				if (str[i + j] != word[j]) {
 					bCheck = false;
 					break;
 				}
 			}
 
-			if(bCheck) {
+			if (bCheck) {
 				return i;
 			}
 		}
-	}
+}
 	return -1;
 }
 
 bool FindCrashFunc(char* pName)
 {
-//	Function Name
-//	File Name 
-	if(!pName) return false;
+	if (!pName) return false;
 
-	FILE *fp;
-	fp = fopen( "mlog.txt", "r" );
-	if(fp==NULL)  return false;
+	FILE* fp;
+	fp = fopen("mlog.txt", "r");
+	if (fp == NULL)  return false;
 
-	fseek(fp,0,SEEK_END);
+	fseek(fp, 0, SEEK_END);
 	int size = ftell(fp);
-	fseek(fp,0,SEEK_SET);
+	fseek(fp, 0, SEEK_SET);
 
-	char* pBuffer = new char [size];
+	char* pBuffer = new char[size];
 
-	fread(pBuffer,1,size,fp);
+	fread(pBuffer, 1, size, fp);
 
 	fclose(fp);
 
-	// 우리 쏘스에서 찾는다.
-	int posSource = FindStringPos(pBuffer,"ublish");
-	if(posSource==-1) return false;
+	int posSource = FindStringPos(pBuffer, "ublish");
+	if (posSource == -1) return false;
 
-	int posA = FindStringPos(pBuffer+posSource,"Function Name");
-//	int posB = FindStringPos(pBuffer,"File Name");	
-	// filename 이 없는 경우도 있어서 이렇게 바꿨다
-	int posB = posA + FindStringPos(pBuffer+posSource+posA,"\n");
+	int posA = FindStringPos(pBuffer + posSource, "Function Name");
+	int posB = posA + FindStringPos(pBuffer + posSource + posA, "\n");
 
-	if(posA==-1) return false;
-	if(posB==-1) return false;
+	if (posA == -1) return false;
+	if (posB == -1) return false;
 
 	posA += 16;
 
-//	int memsize = posB-posA-6;
-	int memsize = posB-posA;
-	memcpy(pName,&pBuffer[posA+posSource],memsize);
+	int memsize = posB - posA;
+	memcpy(pName, &pBuffer[posA + posSource], memsize);
 
 	pName[memsize] = 0;
 
-	delete [] pBuffer;
+	delete[] pBuffer;
 
-	for(int i=0;i<memsize;i++) {
-		if(pName[i]==':') {
+	for (int i = 0; i < memsize; i++) {
+		if (pName[i] == ':') {
 			pName[i] = '-';
 		}
 	}
@@ -599,69 +544,58 @@ long FAR PASCAL WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 	switch (message)
 	{
 #ifdef LOCALE_JAPAN
-		case WM_COPYDATA:
-			{
-				ZBaseAuthInfo* pAuth = ZGetLocale()->GetAuthInfo();
-				if( ((ZGameOnJPAuthInfo*)pAuth)->NewLogin(wParam, lParam) )
-				{
-					MessageBox(g_hWnd, "Same id accessing from a different PC", NULL, MB_OK);
-					zexit(-1);
-				}
-			}
-			break;
+	case WM_COPYDATA:
+	{
+		ZBaseAuthInfo* pAuth = ZGetLocale()->GetAuthInfo();
+		if (((ZGameOnJPAuthInfo*)pAuth)->NewLogin(wParam, lParam))
+		{
+			MessageBox(g_hWnd, "Same id accessing from a different PC", NULL, MB_OK);
+			zexit(-1);
+		}
+	}
+	break;
 #endif
 
-		case WM_SYSCHAR:
-			if(ZIsLaunchDevelop() && wParam==VK_RETURN)
-			{
+	case WM_SYSCHAR:
+		if (wParam == VK_RETURN)
+		{
 #ifndef _PUBLISH
-				RFrame_ToggleFullScreen();
+			RFrame_ToggleFullScreen();
 #endif
-				return 0;
-			}
-			break;
+			return 0;
+		}
+		break;
 
-		case WM_CREATE:
-			if (strlen(Z_LOCALE_HOMEPAGE_TITLE) > 0)
-			{
-				ShowIExplorer(false, Z_LOCALE_HOMEPAGE_TITLE);
-			}
-			break;
-		case WM_DESTROY:
-			if (strlen(Z_LOCALE_HOMEPAGE_TITLE) > 0)
-			{
-				ShowIExplorer(true, Z_LOCALE_HOMEPAGE_TITLE);
-			}
-			break;
-		case WM_SETCURSOR:
-			if(ZApplication::GetGameInterface())
-				ZApplication::GetGameInterface()->OnResetCursor();
-			return TRUE; // prevent Windows from setting cursor to window class cursor
+	case WM_CREATE:
+		if (strlen(Z_LOCALE_HOMEPAGE_TITLE) > 0)
+		{
+			ShowIExplorer(false, Z_LOCALE_HOMEPAGE_TITLE);
+		}
+		break;
+	case WM_DESTROY:
+		if (strlen(Z_LOCALE_HOMEPAGE_TITLE) > 0)
+		{
+			ShowIExplorer(true, Z_LOCALE_HOMEPAGE_TITLE);
+		}
+		break;
+	case WM_SETCURSOR:
+		if (ZApplication::GetGameInterface())
+			ZApplication::GetGameInterface()->OnResetCursor();
+		return TRUE;
 
-		case WM_ENTERIDLE:
-			// 모달 대화상자가 코드를 블럭하고 있을 때 부모에게 보내는 idle 통지메시지
-			// (일본 IME에 모달 대화상자가 있어서 넣었음)
-			// 모달 대화상자로 업데이트 루프를 블럭해서 무적 어뷰즈로 악용되기 때문에 여기서 업데이트를 실행한다
-			RFrame_UpdateRender();
-			break;
+	case WM_ENTERIDLE:
+		RFrame_UpdateRender();
+		break;
 
-			/*
-		case  WM_LBUTTONDOWN:
-			SetCapture(hWnd);
-			return TRUE;
-		case WM_LBUTTONUP:
-			ReleaseCapture();
-			return TRUE;
-			*/
-		case WM_KEYDOWN:
-			{
-				bool b = false;
-			}
+	case WM_KEYDOWN:
+	{
+		bool b = false;
+	}
 	}
 
-	if(Mint::GetInstance()->ProcessEvent(hWnd, message, wParam, lParam)==true)
+	if (Mint::GetInstance()->ProcessEvent(hWnd, message, wParam, lParam) == true)
 	{
-		if (ZGetGameInterface() && ZGetGameInterface()->IsReservedResetApp())	// for language changing
+		if (ZGetGameInterface() && ZGetGameInterface()->IsReservedResetApp())
 		{
 			ZGetGameInterface()->ReserveResetApp(false);
 			ResetAppResource();
@@ -670,47 +604,15 @@ long FAR PASCAL WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 		return 0;
 	}
 
-	// thread safe하기위해 넣음
 	if (message == WM_CHANGE_GAMESTATE)
 	{
 		_ZChangeGameState(wParam);
 	}
 
-
 	return DefWindowProc(hWnd, message, wParam, lParam);
-}
+	}
 
-/*
-class mtrl {
-public:
-
-};
-
-class node {
-public:
-	int		m_nIndex[5];
-};
-
-
-class _map{
-public:
-	mtrl* GetMtrl(node* node,int index) { return GetMtrl(node->m_nIndex[index]); }
-	mtrl* GetMtrl(int id) { return m_pIndex[id]; }
-
-	mtrl*	m_pIndex[5];
-};
-
-class game {
-public:
-	_map m_map;	
-};
-
-game _game;
-game* g_game;
-*/
-
-
-enum RBASE_FONT{
+enum RBASE_FONT {
 	RBASE_FONT_GULIM = 0,
 	RBASE_FONT_BATANG = 1,
 
@@ -722,67 +624,44 @@ static char g_UserDefineFont[256];
 
 bool _GetFileFontName(char* pUserDefineFont)
 {
-	if(pUserDefineFont==NULL) return false;
+	if (pUserDefineFont == NULL) return false;
 
 	FILE* fp = fopen("_Font", "rt");
 	if (fp) {
-		fgets(pUserDefineFont,256, fp);
+		fgets(pUserDefineFont, 256, fp);
 		fclose(fp);
 		return true;
 	}
 	return false;
 }
 
-
 bool CheckFont()
 {
 	char FontPath[MAX_PATH];
-	char FontNames[MAX_PATH+100];
+	char FontNames[MAX_PATH + 100];
 
 	::GetWindowsDirectory(FontPath, MAX_PATH);
 
-	strcpy(FontNames,FontPath);
+	strcpy(FontNames, FontPath);
 	strcat(FontNames, "\\Fonts\\gulim.ttc");
 
-	if (_access(FontNames,0) != -1)	{ g_base_font[RBASE_FONT_GULIM] = 1; }
-	else							{ g_base_font[RBASE_FONT_GULIM] = 0; }
+	if (_access(FontNames, 0) != -1) { g_base_font[RBASE_FONT_GULIM] = 1; }
+	else { g_base_font[RBASE_FONT_GULIM] = 0; }
 
-	strcpy(FontNames,FontPath);
+	strcpy(FontNames, FontPath);
 	strcat(FontNames, "\\Fonts\\batang.ttc");
 
-	if (_access(FontNames,0) != -1)	{ g_base_font[RBASE_FONT_BATANG] = 1; }
-	else							{ g_base_font[RBASE_FONT_BATANG] = 0; }
+	if (_access(FontNames, 0) != -1) { g_base_font[RBASE_FONT_BATANG] = 1; }
+	else { g_base_font[RBASE_FONT_BATANG] = 0; }
 
-	//	strcpy(FontNames,FontPath);
-	//	strcat(FontNames, "\\Fonts\\System.ttc");
-	//	if (_access(FontNames,0) != -1)	{ g_font[RBASE_FONT_BATANG] = 1; }
-	//	else							{ g_font[RBASE_FONT_BATANG] = 0; }
-
-	if(g_base_font[RBASE_FONT_GULIM]==0 && g_base_font[RBASE_FONT_BATANG]==0) {//둘다없으면..
-
-		if( _access("_Font",0) != -1) { // 이미 기록되어 있다면..
-			_GetFileFontName( g_UserDefineFont );
+	if (g_base_font[RBASE_FONT_GULIM] == 0 && g_base_font[RBASE_FONT_BATANG] == 0) {
+		if (_access("_Font", 0) != -1) {
+			_GetFileFontName(g_UserDefineFont);
 		}
 		else {
-
 			int hr = IDOK;
 
-			//hr = ::MessageBox(NULL,"귀하의 컴퓨터에는 건즈가 사용하는 (굴림,돋움) 폰트가 없는 것 같습니다.\n 다른 폰트를 선택 하시겠습니까?","알림",MB_OKCANCEL);
-			//hr = ::MessageBox(NULL,"귀하의 컴퓨터에는 건즈가 사용하는 (굴림,돋움) 폰트가 없는 것 같습니다.\n 계속 진행 하시겠습니까?","알림",MB_OKCANCEL);
-
-			if(hr==IDOK) {
-				/*			
-				CFontDialog dlg;
-				if(dlg.DoModal()==IDOK) {
-				CString facename = dlg.GetFaceName();
-				lstrcpy((LPSTR)g_UserDefineFont,(LPSTR)facename.operator const char*());
-
-				hr = ::MessageBox(NULL,"선택하신 폰트를 저장 하시겠습니까?","알림",MB_OKCANCEL);
-
-				if(hr==IDOK)
-				_SetFileFontName(g_UserDefineFont);
-				}
-				*/
+			if (hr == IDOK) {
 				return true;
 			}
 			else {
@@ -799,24 +678,22 @@ void CheckFileAssociation()
 {
 #define GUNZ_REPLAY_CLASS_NAME	"GunzReplay"
 
-	// 체크해봐서 등록이 안되어있으면 등록한다. 사용자에게 물어볼수도 있겠다.
 	char szValue[256];
-	if(!MRegistry::Read(HKEY_CLASSES_ROOT,"." GUNZ_REC_FILE_EXT,NULL,szValue))
+	if (!MRegistry::Read(HKEY_CLASSES_ROOT, "." GUNZ_REC_FILE_EXT, NULL, szValue))
 	{
-		MRegistry::Write(HKEY_CLASSES_ROOT,"." GUNZ_REC_FILE_EXT,NULL,GUNZ_REPLAY_CLASS_NAME);
+		MRegistry::Write(HKEY_CLASSES_ROOT, "." GUNZ_REC_FILE_EXT, NULL, GUNZ_REPLAY_CLASS_NAME);
 
-		char szModuleFileName[_MAX_PATH] = {0,};
+		char szModuleFileName[_MAX_PATH] = { 0, };
 		GetModuleFileName(NULL, szModuleFileName, _MAX_DIR);
 
 		char szCommand[_MAX_PATH];
-		sprintf(szCommand,"\"%s\" \"%%1\"",szModuleFileName);
+		sprintf(szCommand, "\"%s\" \"%%1\"", szModuleFileName);
 
-		MRegistry::Write(HKEY_CLASSES_ROOT,GUNZ_REPLAY_CLASS_NAME"\\shell\\open\\command",NULL,szCommand);
+		MRegistry::Write(HKEY_CLASSES_ROOT, GUNZ_REPLAY_CLASS_NAME"\\shell\\open\\command", NULL, szCommand);
 
 		SHChangeNotify(SHCNE_ASSOCCHANGED, SHCNF_FLUSH, NULL, NULL);
 	}
 }
-
 
 HANDLE Mutex = 0;
 DWORD g_dwMainThreadID;
@@ -830,41 +707,38 @@ int PASCAL WinMain(HINSTANCE this_inst, HINSTANCE prev_inst, LPSTR cmdline, int 
 		const wchar_t* file,
 		unsigned int line,
 		uintptr_t pReserved)
-	{
-		MLog("Invalid parameter detected in function %s.\n"
-			"File: %s, line: %d.\nExpression: %s.\n",
-			function, file, line, expression);
-		assert(false);
-	});
+		{
+			MLog("Invalid parameter detected in function %s.\n"
+				"File: %s, line: %d.\nExpression: %s.\n",
+				function, file, line, expression);
+			assert(false);
+		});
 
 	g_dwMainThreadID = GetCurrentThreadId();
-	
+
 #ifdef _MTRACEMEMORY
 	MInitTraceMemory();
 #endif
 
-	char szModuleFileName[_MAX_DIR] = {0,};
+	char szModuleFileName[_MAX_DIR] = { 0, };
 	GetModuleFileName(NULL, szModuleFileName, _MAX_DIR);
 	PathRemoveFileSpec(szModuleFileName);
 	SetCurrentDirectory(szModuleFileName);
 
-
-	// Initialize MLog. Can't call it before this point.
 	InitLog(MLOGSTYLE_DEBUGSTRING | MLOGSTYLE_FILE);
 
-	// Seed the random number generator rand() from the C standard library
 	srand((unsigned int)time(nullptr));
 
 	mlog("Gunz Online : " STRFILEVER " \n");
 	mlog("Build : (" __DATE__ " " __TIME__ ")\n");
-	char szDateRun[128]="";
-	char szTimeRun[128]="";
-	_strdate( szDateRun );
-	_strtime( szTimeRun );
+	char szDateRun[128] = "";
+	char szTimeRun[128] = "";
+	_strdate(szDateRun);
+	_strtime(szTimeRun);
 	mlog("Log time (%s %s)\n", szDateRun, szTimeRun);
 
 #ifndef _PUBLISH
-	mlog("cmdline = %s\n",cmdline);
+	mlog("cmdline = %s\n", cmdline);
 
 #endif
 
@@ -872,7 +746,7 @@ int PASCAL WinMain(HINSTANCE this_inst, HINSTANCE prev_inst, LPSTR cmdline, int 
 
 	CheckFileAssociation();
 
-	MRegistry::szApplicationName=APPLICATION_NAME;
+	MRegistry::szApplicationName = APPLICATION_NAME;
 
 	g_App.InitFileSystem();
 
@@ -889,7 +763,7 @@ int PASCAL WinMain(HINSTANCE this_inst, HINSTANCE prev_inst, LPSTR cmdline, int 
 	CreateRGMain();
 
 	ZStringResManager::MakeInstance();
-	if( !ZApplication::GetInstance()->InitLocale() )
+	if (!ZApplication::GetInstance()->InitLocale())
 	{
 		MLog("Locale Init error !!!\n");
 		return false;
@@ -897,52 +771,51 @@ int PASCAL WinMain(HINSTANCE this_inst, HINSTANCE prev_inst, LPSTR cmdline, int 
 
 	ZGetConfiguration()->Load_StringResDependent();
 
-	if( !ZGetConfiguration()->LateStringConvert() )
+	if (!ZGetConfiguration()->LateStringConvert())
 	{
-		MLog( "main.cpp - Late string convert fale.\n" );
+		MLog("main.cpp - Late string convert fale.\n");
 		return false;
 	}
 
-	if(!InitializeNotify(ZApplication::GetFileSystem())) {
+	if (!InitializeNotify(ZApplication::GetFileSystem())) {
 		MLog("Check notify.xml\n");
 		return 0;
 	}
-	else 
+	else
 	{
-		mlog( "InitializeNotify ok.\n" );
+		mlog("InitializeNotify ok.\n");
 	}
 
-
-	if(CheckFont()==false) {
+	if (CheckFont() == false) {
 		MLog("폰트가 없는 유저가 폰트 선택을 취소\n");
 		return 0;
 	}
 
-	RSetFunction(RF_CREATE	,	OnCreate);
-	RSetFunction(RF_RENDER	,	OnRender);
-	RSetFunction(RF_UPDATE	,	OnUpdate);
-	RSetFunction(RF_DESTROY ,	OnDestroy);
-	RSetFunction(RF_INVALIDATE,	OnInvalidate);
-	RSetFunction(RF_RESTORE,	OnRestore);
-	RSetFunction(RF_ACTIVATE,	OnActivate);
-	RSetFunction(RF_DEACTIVATE,	OnDeActivate);
-	RSetFunction(RF_ERROR,		OnError);
+	RSetFunction(RF_CREATE, OnCreate);
+	RSetFunction(RF_RENDER, OnRender);
+	RSetFunction(RF_UPDATE, OnUpdate);
+	RSetFunction(RF_DESTROY, OnDestroy);
+	RSetFunction(RF_INVALIDATE, OnInvalidate);
+	RSetFunction(RF_RESTORE, OnRestore);
+	RSetFunction(RF_ACTIVATE, OnActivate);
+	RSetFunction(RF_DEACTIVATE, OnDeActivate);
+	RSetFunction(RF_ERROR, OnError);
 
 	SetModeParams();
 
-	const int nRMainReturn = RMain(APPLICATION_NAME,this_inst,prev_inst,cmdline,cmdshow,&g_ModeParams,WndProc,IDI_ICON1);
-	if( 0 != nRMainReturn )
+	const int nRMainReturn = RMain(APPLICATION_NAME, this_inst, prev_inst, cmdline, cmdshow, &g_ModeParams, WndProc, IDI_ICON1);
+	if (0 != nRMainReturn)
 		return nRMainReturn;
 
-	if( 0 != RInitD3D(&g_ModeParams) )
+	if (0 != RInitD3D(&g_ModeParams))
 	{
 		MessageBox(g_hWnd, "fail to initialize DirectX", NULL, MB_OK);
-		mlog( "error init RInitD3D\n" );
+		mlog("error init RInitD3D\n");
 		return 0;
 	}
 
 	const int nRRunReturn = RRun();
-	
+
 	ShowWindow(g_hWnd, SW_MINIMIZE);
 
 	ZStringResManager::FreeInstance();

@@ -31,11 +31,11 @@ class MBmButton;
 class MMenuItem;
 class MBmLabel;
 class MTextArea;
+class MTextAreaChat;
 class MTabCtrl;
 class MPanel;
 class MButtonGroup;
 
-// Look&Feel
 class MBLabelLook;
 class MBButtonLook;
 class MBGroupLook;
@@ -50,11 +50,9 @@ class MBSliderLook;
 class MBGroupLook;
 class MBitmap;
 class MHotKey;
-//class MActionKey;
 class MBTextAreaLook;
 class MBSliderThumbLook;
 class MBTabCtrlLook;
-
 
 #define IDL_ROOT	"XML"
 
@@ -72,10 +70,10 @@ class MBTabCtrlLook;
 class MWidgetMMap : public multimap<string, MWidget*>
 {
 public:
-	virtual ~MWidgetMMap(void){ Clear(); }
+	virtual ~MWidgetMMap(void) { Clear(); }
 
 	void Clear() {
-		while(empty()==false)
+		while (empty() == false)
 		{
 			delete (*begin()).second;
 			erase(begin());
@@ -85,13 +83,12 @@ public:
 
 class MWidgetList : public list<MWidget*> { };
 
-/// Maiet Interface Definition Language Resource
 class MIDLResource
 {
 private:
 
 protected:
-	MWidget*						m_pParent;		///< 추가될 최상위 위젯
+	MWidget* m_pParent;
 
 	map<string, MBLabelLook*>		m_LabelLookMap;
 	map<string, MBButtonLook*>		m_ButtonLookMap;
@@ -112,57 +109,53 @@ protected:
 
 	map<string, MButtonGroup*>		m_ButtonGroupMap;
 
-	// 기본요소
 	MPOINT			GetPoint(MXmlElement& element);
 	MRECT			GetRect(MXmlElement& element);
 	MSIZE			GetSize(MXmlElement& element);
 	MCOLOR			GetColor(MXmlElement& element);
-	MBitmap*		GetBitmap(MXmlElement& element);
-	MBitmap*		GetBitmapAlias(MXmlElement& element);	// 부분bitmap을 특정 이름으로 alias
+	MBitmap* GetBitmap(MXmlElement& element);
+	MBitmap* GetBitmapAlias(MXmlElement& element);
 	MAnchors		GetAnchors(MXmlElement& element);
 	MAlignmentMode	GetAlignmentMode(MXmlElement& element);
 
-	// Widget
-	MWidget*		GetParentWidget(MXmlElement& element);
-	MFrame*			GetFrame(MXmlElement& element);
-	MLabel*			GetLabel(MXmlElement& element);
-	MButton*		GetButton(MXmlElement& element);
-	MBmButton*		GetBmButton(MXmlElement& element);
-	MEdit*			GetEdit(MXmlElement& element);
-	MListBox*		GetListBox(MXmlElement& element);
-	MPicture*		GetPicture(MXmlElement& element);
-	MScrollBar*		GetScrollBar(MXmlElement& element);
-	MSlider*		GetSlider(MXmlElement& element);
-	MGroup*			GetGroup(MXmlElement& element);
-	MComboBox*		GetComboBox(MXmlElement& element);
-	MPopupMenu*		GetPopupMenu(MXmlElement& element);
-	MAniBitmap*		GetAniBitmap(MXmlElement& element);
-	MAnimation*		GetAnimation(MXmlElement& element);
-	MCursor*		GetCursor(MXmlElement& element);
-	MBmLabel*		GetBmLabel(MXmlElement& element);
-	MFont*			GetFont(MXmlElement& element);
-	MHotKey*		GetHotKey(MXmlElement& element);
-//	MActionKey*		GetActionKey(MXmlElement& element);
-	MTextArea*		GetTextArea(MXmlElement& element);
-	MTabCtrl*		GetTabCtrl(MXmlElement& element);
-	MPanel*			GetPanel(MXmlElement& element);
+	MWidget* GetParentWidget(MXmlElement& element);
+	MFrame* GetFrame(MXmlElement& element);
+	MLabel* GetLabel(MXmlElement& element);
+	MButton* GetButton(MXmlElement& element);
+	MBmButton* GetBmButton(MXmlElement& element);
+	MEdit* GetEdit(MXmlElement& element);
+	MListBox* GetListBox(MXmlElement& element);
+	MPicture* GetPicture(MXmlElement& element);
+	MScrollBar* GetScrollBar(MXmlElement& element);
+	MSlider* GetSlider(MXmlElement& element);
+	MGroup* GetGroup(MXmlElement& element);
+	MComboBox* GetComboBox(MXmlElement& element);
+	MPopupMenu* GetPopupMenu(MXmlElement& element);
+	MAniBitmap* GetAniBitmap(MXmlElement& element);
+	MAnimation* GetAnimation(MXmlElement& element);
+	MCursor* GetCursor(MXmlElement& element);
+	MBmLabel* GetBmLabel(MXmlElement& element);
+	MFont* GetFont(MXmlElement& element);
+	MHotKey* GetHotKey(MXmlElement& element);
+	MTextArea* GetTextArea(MXmlElement& element);
+	MTextAreaChat* GetTextAreaChat(MXmlElement& element);
+	MTabCtrl* GetTabCtrl(MXmlElement& element);
+	MPanel* GetPanel(MXmlElement& element);
 
-	// Look&Feel
-	MBLabelLook*	GetLabelLook(MXmlElement& element);
-	MBButtonLook*	GetButtonLook(MXmlElement& element);
-	MBGroupLook*	GetGroupLook(MXmlElement& element);
-	MBFrameLook*	GetFrameLook(MXmlElement& element);
-	MBEditLook*		GetEditLook(MXmlElement& element);
-	MBListBoxLook*	GetListBoxLook(MXmlElement& element, int nType);	///< nType: 0=ListBox, 1=ComboListBox
+	MBLabelLook* GetLabelLook(MXmlElement& element);
+	MBButtonLook* GetButtonLook(MXmlElement& element);
+	MBGroupLook* GetGroupLook(MXmlElement& element);
+	MBFrameLook* GetFrameLook(MXmlElement& element);
+	MBEditLook* GetEditLook(MXmlElement& element);
+	MBListBoxLook* GetListBoxLook(MXmlElement& element, int nType);
 	MBScrollBarLook* GetScrollBarLook(MXmlElement& element);
-	MBArrowLook*	GetArrowLook(MXmlElement& element);
-	MBThumbLook*	GetThumbLook(MXmlElement& element);
-	MBSliderLook*	GetSliderLook(MXmlElement& element);
-	MBTextAreaLook*	GetTextAreaLook(MXmlElement& element);
+	MBArrowLook* GetArrowLook(MXmlElement& element);
+	MBThumbLook* GetThumbLook(MXmlElement& element);
+	MBSliderLook* GetSliderLook(MXmlElement& element);
+	MBTextAreaLook* GetTextAreaLook(MXmlElement& element);
 	MBSliderThumbLook* GetSliderThumbLook(MXmlElement& element);
-	MBTabCtrlLook*	GetTabCtrlLook(MXmlElement& element);
+	MBTabCtrlLook* GetTabCtrlLook(MXmlElement& element);
 
-	// Helper
 	MPopupMenu* GetSubMenu(MMenuItem* pParentMenuItem, MXmlElement& element);
 	MMenuItem* GetMenuItem(MPopupMenu* pPopupMenu, MXmlElement& element);
 	void GetRebounds(MXmlElement& element);
@@ -171,27 +164,26 @@ protected:
 	void GetBmButtonBitmaps(MBitmap** ppBitmaps, MXmlElement& element);
 	void GetBitmaps(MBitmap** ppBitmaps, MXmlElement& element, const int nBitmapCount);
 	void InsertWidget(MXmlElement& element, MWidget* pWidget);
-	void InsertWidget( const char* pItemName, MWidget* pWidget );
+	void InsertWidget(const char* pItemName, MWidget* pWidget);
 	bool GetCommonWidgetProperty(MWidget* pWidget, MXmlElement& element, const char* szTagName);
 	void ClearLooks();
 
-	// 저장 관련 - 나중에 필요할때 만들자.
 	void SetLabel(MXmlElement& element, MLabel* pLabel);
 	void SetPoint(MXmlElement& element, MPOINT* pPoint, const char* szTagName);
 	void SetRect(MXmlElement& element, MRECT* pRect, const char* szTagName);
 	void SetSize(MXmlElement& element, MSIZE* pSize, const char* szTagName);
 	void SetColor(MXmlElement& element, MCOLOR* pColor, const char* szTagName);
 
-	virtual MFrame*	CreateFrame(const char* szName=NULL, MWidget* pParent=NULL, MListener* pListener=NULL);
-	virtual MFont* CreateFont(char* szAliasName, char* szFontName, int nHeight, 
-		bool bBold = false, bool bItalic = false, int nOutlineStyle = 1, bool bAntialiasing = false, DWORD nColorArg1=0, DWORD nColorArg2=0);
+	virtual MFrame* CreateFrame(const char* szName = NULL, MWidget* pParent = NULL, MListener* pListener = NULL);
+	virtual MFont* CreateFont(char* szAliasName, char* szFontName, int nHeight,
+		bool bBold = false, bool bItalic = false, int nOutlineStyle = 1, bool bAntialiasing = false, DWORD nColorArg1 = 0, DWORD nColorArg2 = 0);
 
 	virtual void Parse(MXmlElement& element);
-	virtual void TransText(char* szSrc, char* szOut);		// 국제화를 위한 함수
+	virtual void TransText(char* szSrc, char* szOut);
 public:
 	MIDLResource();
 	virtual ~MIDLResource();
-	bool LoadFromFile(const char* szFileName, MWidget* pParent=NULL,MZFileSystem *pfs=NULL);
+	bool LoadFromFile(const char* szFileName, MWidget* pParent = NULL, MZFileSystem* pfs = NULL);
 	bool SaveToFile(const char* szFileName);
 	virtual void Clear();
 	MWidgetMMap* GetWidgetMap() { return &m_WidgetMap; }
@@ -199,8 +191,6 @@ public:
 	void FindWidgets(MWidgetList& widgetList, string szItem);
 
 	MBFrameLook* FindFrameLook(string szItem);
-
-	
 };
 
 #endif

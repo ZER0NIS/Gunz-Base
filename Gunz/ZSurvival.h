@@ -1,13 +1,11 @@
-#ifndef _ZSURVIVAL_H
-#define _ZSURVIVAL_H
+#pragma once
 
 #include "ZBaseQuest.h"
 
-// 서바이벌 관련 전역 클래스
 class ZSurvival : public ZBaseQuest
 {
 private:
-	set<MUID>	m_CharactersGone;	// 다음섹터로 이동한 캐릭터들
+	set<MUID>	m_CharactersGone;
 
 	ZQuestGameInfo		m_GameInfo;
 	bool	m_Cheet[ZQUEST_CHEET_MAX];
@@ -15,38 +13,37 @@ private:
 	bool	m_bLoaded;
 	bool	m_bIsQuestComplete;
 	bool	m_bIsRoundClear;
-	DWORD	m_tRemainedTime;					// 라운드가 끝나고 다음 라운드로 넘어가기까지 남은 시간
+	DWORD	m_tRemainedTime;
 	float	m_fLastWeightTime;
 
 	MQuestCombatState	m_QuestCombatState;
 
 	ZNPCInfoFromServerManager m_NPCInfoFromServerMgr;
 
-
 #ifdef _QUEST_ITEM
-	int				m_nRewardXP;				// 라운드당 받은 XP 누적
-	int				m_nRewardBP;				// 라운드당 받은 BP 누적
-	int				m_nReachedRound;			// 도달한 라운드 (결과 커맨드에서 세팅됨)
-	int				m_nPoint;					// 게임 점수
-	
-	virtual bool OnRewardQuest( MCommand* pCmd ) { return true; }		// 서바이벌에서 사용않음
-	virtual bool OnNewMonsterInfo( MCommand* pCmd );	// 몬스터 모감에 등록될 새로 습득한 몬스터 정보.
+	int				m_nRewardXP;
+	int				m_nRewardBP;
+	int				m_nReachedRound;
+	int				m_nPoint;
+
+	virtual bool OnRewardQuest(MCommand* pCmd) { return true; }
+	virtual bool OnNewMonsterInfo(MCommand* pCmd);
 	bool OnSurvivalResult(MCommand* pCmd);
 	bool OnSurvivalRankingList(MCommand* pCmd);
 	bool OnSurvivalPrivateRanking(MCommand* pCmd);
 
-	virtual void GetMyObtainQuestItemList( int nRewardXP, int nRewardBP, void* pMyObtainQuestItemListBlob, void* pMyObtainZItemListBlob );
+	virtual void GetMyObtainQuestItemList(int nRewardXP, int nRewardBP, void* pMyObtainQuestItemListBlob, void* pMyObtainZItemListBlob);
 
-public :
-	virtual int GetRewardXP( void)							{ return m_nRewardXP; }
-	virtual int GetRewardBP( void)							{ return m_nRewardBP; }
-			int GetReachedRound( void)						{ return m_nReachedRound; }
-			int GetPoint( void)								{ return m_nPoint; }
-	virtual bool IsQuestComplete( void)						{ return m_bIsQuestComplete; }
-	virtual bool IsRoundClear( void)						{ return m_bIsRoundClear; }
-	virtual DWORD GetRemainedTime( void)					{ return m_tRemainedTime; }
+public:
+	virtual int GetRewardXP(void) { return m_nRewardXP; }
+	virtual int GetRewardBP(void) { return m_nRewardBP; }
+	int GetReachedRound(void) { return m_nReachedRound; }
+	int GetPoint(void) { return m_nPoint; }
+	virtual bool IsQuestComplete(void) { return m_bIsQuestComplete; }
+	virtual bool IsRoundClear(void) { return m_bIsRoundClear; }
+	virtual DWORD GetRemainedTime(void) { return m_tRemainedTime; }
 
-	virtual MQuestCombatState GetQuestState()				{ return m_QuestCombatState; }
+	virtual MQuestCombatState GetQuestState() { return m_QuestCombatState; }
 
 	virtual ZNPCInfoFromServerManager& GetNPCInfoFromServerMgr() { return m_NPCInfoFromServerMgr; }
 
@@ -79,8 +76,6 @@ public :
 	virtual bool OnQuestFailed(MCommand* pCommand);
 	virtual bool OnQuestPing(MCommand* pCommand);
 
-
-	//ZQuestMap			m_Map;
 	virtual void LoadNPCMeshes();
 	virtual void LoadNPCSounds();
 	virtual void MoveToNextSector();
@@ -97,8 +92,8 @@ public:
 	virtual void OnGameCreate();
 	virtual void OnGameDestroy();
 	virtual void OnGameUpdate(float fElapsed);
-	virtual bool OnCommand(MCommand* pCommand);				///< 게임 이외에 날라오는 커맨드 처리
-	virtual bool OnGameCommand(MCommand* pCommand);			///< 게임중 날라오는 커맨드 처리
+	virtual bool OnCommand(MCommand* pCommand);
+	virtual bool OnGameCommand(MCommand* pCommand);
 
 	virtual void SetCheet(ZQuestCheetType nCheetType, bool bValue);
 	virtual bool GetCheet(ZQuestCheetType nCheetType);
@@ -106,34 +101,21 @@ public:
 	virtual void Reload();
 	virtual bool Load();
 
-	
-	// interface
-	virtual ZQuestGameInfo* GetGameInfo()		{ return &m_GameInfo; }
+	virtual ZQuestGameInfo* GetGameInfo() { return &m_GameInfo; }
 
-	// 상태에 상관없이 사용될수 있는 퀘스트 관련된 커맨드.
-	virtual bool OnSetMonsterBibleInfo( MCommand* pCmd );
+	virtual bool OnSetMonsterBibleInfo(MCommand* pCmd);
 
+	virtual bool OnPrePeerNPCAttackMelee(MCommand* pCommand);
 
-	virtual bool OnPrePeerNPCAttackMelee(MCommand* pCommand);	// 실제로 처리하는건 한타이밍 늦다
-	
+	void MoveToRealSector(int sectorindex);
 };
 
-
-
-
-/////////////////////////////////////////////////////////////////////
-
-inline void ZSurvival::SetCheet(ZQuestCheetType nCheetType, bool bValue) 
-{ 
-	m_Cheet[nCheetType] = bValue; 
+inline void ZSurvival::SetCheet(ZQuestCheetType nCheetType, bool bValue)
+{
+	m_Cheet[nCheetType] = bValue;
 }
 
-inline bool ZSurvival::GetCheet(ZQuestCheetType nCheetType) 
-{ 
-	if (!ZIsLaunchDevelop()) return false;
+inline bool ZSurvival::GetCheet(ZQuestCheetType nCheetType)
+{
 	return m_Cheet[nCheetType];
 }
-
-
-
-#endif

@@ -5,15 +5,15 @@
 class ZTimerEvent
 {
 private:
-	unsigned long int			m_nUpdatedTime;				///< 시간계산하기 위해 내부에서만 사용하는 변수
-	unsigned long int			m_nElapse;					///< 사용자가 설정한 시간(1000 - 1초)
-	bool						m_bOnce;					///< true로 설정되면 한번만 타이머 이벤트가 발생한다.
-	void*						m_pParam;					///< Event Callback의 파라메터
+	unsigned long int			m_nUpdatedTime;
+	unsigned long int			m_nElapse;
+	bool						m_bOnce;
+	void* m_pParam;
 public:
-	ZTimerEvent() { m_nUpdatedTime = 0; m_nElapse = 0; m_bOnce = false; m_fnTimerEventCallBack = NULL; m_pParam=NULL; }
+	ZTimerEvent() { m_nUpdatedTime = 0; m_nElapse = 0; m_bOnce = false; m_fnTimerEventCallBack = NULL; m_pParam = NULL; }
 	bool UpdateTick(unsigned long int nDelta)
 	{
-		if (m_nElapse<0) return false;
+		if (m_nElapse < 0) return false;
 
 		m_nUpdatedTime += nDelta;
 
@@ -37,11 +37,8 @@ public:
 		m_bOnce = bTimerOnce;
 	}
 
-	ZGameTimerEventCallback*	m_fnTimerEventCallBack;		///< Event Callback 포인터
+	ZGameTimerEventCallback* m_fnTimerEventCallBack;
 };
-
-
-/////////////////////////////////////////////////////////////////////////////////////////////////////
 
 ZTimer::ZTimer()
 {
@@ -77,23 +74,23 @@ ZTimer::~ZTimer()
 
 void ZTimer::ResetFrame()
 {
-	m_bInitialized=false;
+	m_bInitialized = false;
 }
 
 float ZTimer::UpdateFrame()
 {
 	LARGE_INTEGER qwTime;
 
-	if(!m_bInitialized)
+	if (!m_bInitialized)
 	{
 		m_bInitialized = true;
 		LARGE_INTEGER qwTicksPerSec;
-		(*m_pbUsingQPF) = QueryPerformanceFrequency( &qwTicksPerSec );
-		if( (*m_pbUsingQPF) )
+		(*m_pbUsingQPF) = QueryPerformanceFrequency(&qwTicksPerSec);
+		if ((*m_pbUsingQPF))
 		{
 			(*m_pllQPFTicksPerSec) = qwTicksPerSec.QuadPart;
 
-			QueryPerformanceCounter( &qwTime );
+			QueryPerformanceCounter(&qwTime);
 
 			(*m_pllLastElapsedTime) = qwTime.QuadPart;
 		}
@@ -105,11 +102,11 @@ float ZTimer::UpdateFrame()
 
 	float fElapsed;
 
-	if( (*m_pbUsingQPF) )
+	if ((*m_pbUsingQPF))
 	{
-		QueryPerformanceCounter( &qwTime );
+		QueryPerformanceCounter(&qwTime);
 
-		fElapsed = (float)((double) ( qwTime.QuadPart - (*m_pllLastElapsedTime) ) / (double) (*m_pllQPFTicksPerSec));
+		fElapsed = (float)((double)(qwTime.QuadPart - (*m_pllLastElapsedTime)) / (double)(*m_pllQPFTicksPerSec));
 		(*m_pllLastElapsedTime) = qwTime.QuadPart;
 	}
 	else
@@ -118,45 +115,12 @@ float ZTimer::UpdateFrame()
 		(*m_pElapsed) = (*m_pThistime) - (*m_pLasttime);
 		(*m_pLasttime) = (*m_pThistime);
 
-		fElapsed=.001f*(float)(*m_pElapsed);
+		fElapsed = .001f * (float)(*m_pElapsed);
 	}
 
-	
-	UpdateEvents();			// 타이머 이벤트들 업데이트
-
-	ShiftFugitiveValues();
+	UpdateEvents();
 
 	return fElapsed;
-}
-
-void ZTimer::ShiftFugitiveValues()
-{
-	// 메모리핵을 피하기 위해 관련 변수의 힙 위치를 옮긴다
-
-	BOOL* pBool1 = m_pbUsingQPF;
-	m_pbUsingQPF = new BOOL(*pBool1);
-
-	LONGLONG* pll1 = m_pllQPFTicksPerSec;
-	m_pllQPFTicksPerSec = new LONGLONG(*pll1);
-
-	LONGLONG* pll2 = m_pllLastElapsedTime;
-	m_pllLastElapsedTime = new LONGLONG(*pll2);
-
-	DWORD* pDword1 = m_pThistime;
-	m_pThistime = new DWORD(*pDword1);
-
-	DWORD* pDword2 = m_pLasttime;
-	m_pLasttime = new DWORD(*pDword2);
-
-	DWORD* pDword3 = m_pElapsed;
-	m_pElapsed = new DWORD(*pDword3);
-
-	delete pBool1;
-	delete pll1;
-	delete pll2;
-	delete pDword1;
-	delete pDword2;
-	delete pDword3;
 }
 
 void ZTimer::UpdateEvents()
@@ -208,7 +172,4 @@ void ZTimer::ClearTimerEvent(ZGameTimerEventCallback* fnTimerEventCallback)
 			++itor;
 		}
 	}
-
 }
-
-

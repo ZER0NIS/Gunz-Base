@@ -4,7 +4,6 @@
 #include "ZGame.h"
 #include "ZSoundEngine.h"
 #include "MDebug.h"
-//#include "RealSoundEffect.h"
 #include "RealSpace2.h"
 #include "MMatchItem.h"
 #include "ZConfiguration.h"
@@ -17,453 +16,48 @@
 
 _USING_NAMESPACE_REALSPACE2
 
-extern ZGame* m_gGame;
-
-#define ZDEF_MINDISTANCE	300.0f						//	3m 
-#define ZDEF_MAXDISTANCE	4000.f						//	40m
-#define ZDEF_MAXDISTANCESQ	16000000.F
-#define ZDEF_MAX_DISTANCE_PRIORITY	100
-#define ZDEF_ROLLFACTOR		1.0f
+constexpr auto ZDEF_MINDISTANCE = 300.0f;					//	3m
+constexpr auto ZDEF_MAXDISTANCE = 4000.f;				//	40m
+constexpr auto ZDEF_MAXDISTANCESQ = 16000000.F;
+constexpr auto ZDEF_MAX_DISTANCE_PRIORITY = 100;
+constexpr auto ZDEF_ROLLFACTOR = 1.0f;
 
 // Sound FX
-#define SOUNDEFFECT_DIR	"sound/effect/"
-#define SOUNDEFFECT_EXT	"*.wav"
-#define SOUND_OPTION_FILE_NAME	"SoundOption.xml"
-#define SOUNDEFFECT_XML "sound/effect/effect.xml"
-#define SOUNDNPC_DIR	"sound/npc/"
+constexpr auto SOUNDEFFECT_DIR = "sound/effect/";
+constexpr auto SOUNDEFFECT_EXT = ".wav";
+constexpr auto SOUND_OPTION_FILE_NAME = "SoundOption.xml";
+constexpr auto SOUNDEFFECT_XML = "sound/effect/effect.xml";
+constexpr auto SOUNDNPC_DIR = "sound/npc/";
+constexpr auto DEFAULT_SOUND_FRAME = 30;
 
-#define DEFAULT_SOUND_FRAME	30
-
-
-#ifdef _BIRDSOUND
-
-void ZSoundEngine::OnCreate()
+FSOUND_SAMPLE* ZSoundEngine::GetFS(const char* szName, bool bHero)
 {
-	SetRollFactor(1.0f);
-	SetDistanceFactor(100.0f);
-	SetDopplerFactor(1.0f);	
-
-	if( !LoadResource( SOUNDEFFECT_XML ) )
-	{
-		mlog("fail to load sound effect\n");
-	}
-
-}
-
-bool ZSoundEngine::LoadResource(char* pFileName)
-{
-	MXmlDocument Data;
-
-	MZFile mzf;
-	if(!mzf.Open(pFileName, m_pZFileSystem)) return false;
-
-	char *buffer;
-	buffer=new char[mzf.GetLength()+1];
-	mzf.Read(buffer,mzf.GetLength());
-	buffer[mzf.GetLength()]=0;
-
-	Data.Create();
-	if(!Data.LoadFromMemory(buffer))
-	{
-		delete buffer;
-		return false;
-	}
-	delete buffer;
-	mzf.Close();
-
-
-	MXmlElement root, chr, attr;
-
-	char szSoundName[256];
-	char szSoundFileName[256];
-
-
-	root		= Data.GetDocumentElement();
-	int iCount	= root.GetChildNodeCount();
-
-	for( int i = 0 ; i < iCount; ++i )
-	{
-		chr		= root.GetChildNode(i);
-		chr.GetTagName( szSoundName );
-		if( szSoundName[0] == '#' ) continue;
-
-		chr.GetAttribute( szSoundName, "name" );
-		strcpy( szSoundFileName, SOUNDEFFECT_DIR );
-		strcat( szSoundFileName, szSoundName );
-		strcat( szSoundFileName, ".wav" );
-
-		char szType[64] = "";
-		chr.GetAttribute(szType, "type", "3d");
-
-
-		float min = ZDEF_MINDISTANCE;
-		float max = ZDEF_MAXDISTANCE;
-		float fTemp;
-		if( chr.GetAttribute( &fTemp, "MINDISTANCE" )) min = fTemp;
-		if( chr.GetAttribute( &fTemp, "MAXDISTANCE" )) max = fTemp;
-
-		bool bLoop = false;
-		chr.GetAttribute(&bLoop, "loop");
-
-		float fDefaultVolume = 1.0f;
-		chr.GetAttribute(&fDefaultVolume, "volume", 1.0f);
-
-		unsigned long int nFlags=0;
-
-		if (bLoop) nFlags |= RSOUND_LOOP_NORMAL;
-		else nFlags |= RSOUND_LOOP_OFF;
-
-		if (!stricmp(szType, "2d"))
-		{
-			OpenSound(szSoundFileName, RSOUND_2D | nFlags);
-
-			if (!IS_EQ(fDefaultVolume, 1.0f))
-			{
-				RBaseSoundSource* pSoundSource = GetSoundSource(szSoundFileName, RSOUND_]2D);
-				if (pSoundSource)
-				{
-					SetDefaultVolume(pSoundSource, fDefaultVolume);
-				}
-			}
-		}
-		else
-		{
-			OpenSound(szSoundFileName, RSOUND_3D | nFlags);
-
-			RBaseSoundSource* pSoundSource = GetSoundSource(szSoundFileName, RSOUND_3D);
-			if (pSoundSource) 
-			{
-				SetMinMaxDistance( pSoundSource, min, max);
-
-				if (!IS_EQ(fDefaultVolume, 1.0f))
-				{
-					SetDefaultVolume(pSoundSource, fDefaultVolume);
-				}
-			}
-		}
-
-	}
-
-	return true;
-
-}
-
-void ZSoundEngine::GetSoundName(const char* szSrcSoundName, char* out)
-{
-	strcpy(out, SOUNDEFFECT_DIR);
-	strcat(out, szSrcSoundName);
-	strcat(out, ".wav");
-}
-
-bool ZSoundEngine::OpenMusic(int nBgmIndex)
-{
-//	if( !m_bSoundEnable ) return false;
-
-	// 가짜
-	static char m_stSndFileName[MAX_BGM][64] = {"Intro Retake2(D-R).ogg", 
-												"Theme Rock(D).ogg", 
-												"HardBgm3 Vanessa Retake(D).ogg", 
-												"HardTech(D).ogg", 
-												"HardCore(D).ogg",
-												"Ryswick style.ogg",
-												"El-tracaz.ogg",
-												"Industrial technolism.ogg",
-												"TRANCE mission_tmix.ogg",
-												"Vague words.ogg",
-												"X-Fighter.ogg",
-												"Fin.ogg" };
-												
-	char szFileName[256] = "";
-#define BGM_FOLDER		"Sound/BGM/"
-
-	int nRealBgmIndex = nBgmIndex;
-	if ((nBgmIndex >= BGMID_BATTLE) && (nBgmIndex < BGMID_FIN)) nRealBgmIndex = RandomNumber(BGMID_BATTLE, BGMID_BATTLE+2);
-
-	sprintf(szFileName, "%s%s", BGM_FOLDER, m_stSndFileName[nRealBgmIndex]);
-
-	return RealSound2::OpenMusic((const char*)szFileName);
-}
-
-
-class ZPlayingChannels : public list<int>
-{
-
-} g_Channels;
-
-int ZSoundEngine::PlaySoundCharacter(const char* szSoundName, rvector& pos, bool bHero, int nPriority)
-{
-	char key[256] = "";
-	GetSoundName(szSoundName, key);
-
-	int nChannel = -1;
-
-	if (bHero)
-	{
-		//nChannel= RealSound2::PlaySound(key, nPriority);
-		return RealSound2::PlaySound(key, nPriority);
-	}
-	else
-	{
-		float p[3];
-		p[0] = pos.x;
-		p[1] = pos.y;
-		p[2] = pos.z;
-
-		nChannel= RealSound2::PlaySound(key, p, NULL, nPriority);
-		g_Channels.push_back(nChannel);
-	}
-/*
-	char temp[256];
-	sprintf(temp, "Play Channel:%4d\n", nChannel);
-	mlog(temp);
-*/
-
-
-	return nChannel;
-}
-
-/*
-int ZSoundEngine::PlaySound(const char* szSoundName, rvector& pos, int nPriority, DWORD dwDelay)
-{
-	float p[3];
-	p[0] = pos.x;
-	p[1] = pos.y;
-	p[2] = pos.z;
-
-	return RealSound2::PlaySound(szSoundName, p, NULL, nPriority);
-}
-*/
-// 이건 나중에 삭제될 것
-void ZSoundEngine::PlaySound(char* Name,rvector& pos,bool bHero, bool bLoop, DWORD dwDelay)
-{
-//	if( !m_bSoundEnable )	return;
-//	if( !m_b3DSoundUpdate ) return;
-	
-	//Culling
-#ifdef _DEBUG
-	// 너무 많이 남아서 주석 처리 했음. - by SungE 2007-04-17
-	// mlog("ZSoundEngine::PlaySound - %s, pos=%.1f %.1f %.1f, delay = %u\n", Name, pos.x, pos.y, pos.z, dwDelay);
-#endif
-	// SetPriority
-	if( dwDelay > 0 )
-	{
-		//_ASSERT(0);
-/*
-		DelaySound DS;
-		DS.dwDelay = dwDelay + timeGetTime();
-		DS.pSS = pSS;
-		DS.pos = pos;
-		DS.priority = priority;
-		DS.bPlayer = bHero;
-		m_DelaySoundList.push_back(DS);
-		return;
-*/
-	}
-
-//	char key[256] = "";
-//	GetSoundName(Name, key);
-
-	PlaySoundCharacter((const char*)Name, pos, bHero);
-}
-
-int ZSoundEngine::PlaySound(const char* szSoundName, int nPriority)
-{
-	char key[256] = "";
-	GetSoundName(szSoundName, key);
-
-	return RealSound2::PlaySound(key, nPriority);
-}
-
-int ZSoundEngine::PlaySound(const char* szSoundName, float* pos, float* vel, int nPriority)
-{
-	char key[256] = "";
-	GetSoundName(szSoundName, key);
-
-	return RealSound2::PlaySound(key, pos, vel, nPriority);
-}
-
-#include "fmod.h"
-
-void ZSoundEngine::OnUpdate()
-{
-/*
-	DWORD currentTime = timeGetTime();
-	if( (currentTime - m_Time) < m_DelayTime ) return;
-	m_Time = currentTime;
-*/
-	if(ZGetGame())
-	{
-		rvector Pos = RCameraPosition;
-		ZCharacter* pInterestCharacter = ZGetGameInterface()->GetCombatInterface()->GetTargetCharacter();
-		if(pInterestCharacter != NULL)
-		{
-			Pos = pInterestCharacter->GetPosition();
-			Pos.z += 170.f;
-		}
-
-		rvector Orientation = Pos - RCameraPosition;
-		D3DXVec3Normalize(&Orientation, &Orientation);
-
-		rvector right;
-		D3DXVec3Cross(&right, &Orientation, &RCameraUp);
-
-//		UpdateAmbSound(Pos, right);
-
-		rvector m_ListenerPos = Pos;
-		
-		float pos[3];
-		float forward[3];
-		float vel[3] = {0.0f, 0.0f, 0.0f};
-		float top[3] = {0.0f, 0.0f, 1.0f};
-
-		pos[0] = Pos.x;	pos[1] = Pos.y;	pos[2] = Pos.z;
-		forward[0] = Orientation.x;	forward[1] = Orientation.y;	forward[2] = Orientation.z;
-
-		for (ZPlayingChannels::iterator itor=g_Channels.begin(); itor != g_Channels.end(); )
-		{
-			int nChannel = (*itor);
-			if (FSOUND_IsPlaying(nChannel) == FALSE)
-			{
-				itor = g_Channels.erase(itor);
-			}
-			else
-			{
-				FSOUND_3D_SetAttributes(nChannel, pos, vel);
-				++itor;
-			}
-		}
-
-		m_pAudio->SetListener( pos, vel, forward, top);
-	}
-}
-
-void ZSoundEngine::SetEffectVolume(float fVolume)
-{
-	m_pAudio->SetVolume(fVolume);
-}
-
-void ZSoundEngine::SetEffectMute(bool bMute)
-{
-	m_pAudio->SetMute(bMute);
-}
-
-
-void ZSoundEngine::PlaySEFire(MMatchItemDesc *pDesc, float x, float y, float z, bool bHero)
-{
-	if( !pDesc ) return;
-
-	if( pDesc->m_nType == MMIT_RANGE || pDesc->m_nType == MMIT_CUSTOM  )
-	{
-		char* szSndName = pDesc->m_szFireSndName;
-
-		rvector pos = rvector(x,y,z);
-		PlaySoundCharacter(szSndName, pos, bHero, 200);
-		return;
-
-		// 자기 자신이면 총소리는 2d로 낸다.
-		if (bHero)
-		{
-			char szFireSndName[256];
-			sprintf(szFireSndName, "%s%s", szSndName, "_2d");
-
-			char key[256] = "";
-			GetSoundName(szFireSndName, key);
-			
-			RealSound2::PlaySound(key, 200);
-		}
-		else
-		{
-			rvector pos = rvector(x,y,z);
-			PlaySoundCharacter(szSndName, pos, bHero, 200);
-		}
-	}
-
-}
-
-void ZSoundEngine::PlaySEDryFire(MMatchItemDesc *pDesc, float x, float y, float z, bool bHero)
-{
-
-}
-
-void ZSoundEngine::PlaySEReload(MMatchItemDesc *pDesc, float x, float y, float z, bool bHero)
-{
-	if(!pDesc )	return;
-
-	if(pDesc->m_nType == MMIT_RANGE)
-	{
-		char* szSndName = pDesc->m_szReloadSndName;
-		if(bHero)
-		{
-			char szBuffer[64];
-			sprintf( szBuffer, "%s_2d", szSndName );
-
-			char key[256] = "";
-			GetSoundName(szBuffer, key);
-			
-			RealSound2::PlaySound(key, 200);
-		}
-		else
-		{
-			rvector pos = rvector(x,y,z);
-			PlaySoundCharacter(szSndName, pos, bHero, 200);
-		}
-		//PlaySoundElseDefault(szSndName,"we_rifle_reload",rvector(x,y,z),bPlayer);
-	}
-
-}
-
-void ZSoundEngine::PlaySERicochet(float x, float y, float z)
-{
-
-}
-
-void ZSoundEngine::PlaySEHitObject( float x, float y, float z, RBSPPICKINFO& info_ )
-{
-
-}
-
-void ZSoundEngine::PlaySEHitBody(float x, float y, float z)
-{
-
-}
-
-
-
-
-
-////////////////////////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////////////////////////
-#else // _BIRDSOUND
-
-FSOUND_SAMPLE* ZSoundEngine::GetFS( const char* szName, bool bHero )
-{
-	SoundSource* pSS = GetSoundSource( szName, bHero );	
-	if(pSS != NULL ) return pSS->pFS;
+	SoundSource* pSS = GetSoundSource(szName, bHero);
+	if (pSS != NULL) return pSS->pFS;
 	return NULL;
 }
 
-SoundSource* ZSoundEngine::GetSoundSource( const char* szName, bool bHero )
+SoundSource* ZSoundEngine::GetSoundSource(const char* szName, bool bHero)
 {
 	SESMAP::iterator i;
-	if( !bHero )
+	if (!bHero)
 	{
 		i = m_SoundEffectSource.find(string(szName));
-		if( i == m_SoundEffectSource.end() )
+		if (i == m_SoundEffectSource.end())
 		{
 			i = m_SoundEffectSource2D.find(string(szName));
-			if( i == m_SoundEffectSource2D.end() ) return NULL;
+			if (i == m_SoundEffectSource2D.end()) return NULL;
 		}
 	}
 	else
 	{
 		i = m_SoundEffectSource2D.find(string(szName));
-		if( i == m_SoundEffectSource2D.end() ) 
+		if (i == m_SoundEffectSource2D.end())
 		{
 			i = m_SoundEffectSource.find(string(szName));
-			if( i == m_SoundEffectSource.end() ) return NULL;
+			if (i == m_SoundEffectSource.end()) return NULL;
 		}
 	}
-
 
 	SoundSource* pRetSource = (SoundSource*)(i->second);
 	return pRetSource;
@@ -472,18 +66,18 @@ SoundSource* ZSoundEngine::GetSoundSource( const char* szName, bool bHero )
 ZSoundEngine::ZSoundEngine()
 {
 	m_pMusicBuffer = NULL;
-	
+
 	m_fEffectVolume = 1.0f;
 	m_fMusicVolume = 0.0f;
 
 	m_bEffectMute = false;
 	m_szOpenedMusicName[0] = 0;
-	m_bSoundEnable	= false;
-	m_b3DSound	= true;
+	m_bSoundEnable = false;
+	m_b3DSound = true;
 	m_b3DSoundUpdate = false;
 	m_bHWMixing = true;
 
-	m_ListenerPos = rvector(0,0,0);
+	m_ListenerPos = rvector(0, 0, 0);
 
 	m_bEffectVolControl = false;
 	m_bBGMVolControl = false;
@@ -492,34 +86,32 @@ ZSoundEngine::ZSoundEngine()
 	m_fBGMVolFactor = 0;
 	m_fBGMVolEnd = 0;
 
-	m_bBattleMusic=false;
+	m_bBattleMusic = false;
 	m_pfs = NULL;
 }
 
 ZSoundEngine::~ZSoundEngine()
 {
-
 }
-
 
 void ZSoundEngine::SetEffectVolume(float fVolume)
 {
-	m_fEffectVolume=fVolume;
-	ZGetSoundFMod()->SetVolume( m_fEffectVolume * 255 );
+	m_fEffectVolume = fVolume;
+	ZGetSoundFMod()->SetVolume(m_fEffectVolume * 255);
 }
 
-void ZSoundEngine::SetEffectVolume( int iChnnel, float fVolume )
+void ZSoundEngine::SetEffectVolume(int iChnnel, float fVolume)
 {
-	ZGetSoundFMod()->SetVolume( iChnnel, (int)(fVolume * 255) );
+	ZGetSoundFMod()->SetVolume(iChnnel, (int)(fVolume * 255));
 }
 
-bool ZSoundEngine::Create(HWND hwnd, bool bHWMixing, ZLoadingProgress *pLoadingProgress )
+bool ZSoundEngine::Create(HWND hwnd, bool bHWMixing, ZLoadingProgress* pLoadingProgress)
 {
-	m_bSoundEnable = ZGetSoundFMod()->Create( hwnd, FSOUND_OUTPUT_DSOUND, 44100, bHWMixing?16:1024, bHWMixing?16:0, bHWMixing?16:32, 0 );
-	if(!m_bSoundEnable && bHWMixing)
+	m_bSoundEnable = ZGetSoundFMod()->Create(hwnd, FSOUND_OUTPUT_DSOUND, 44100, bHWMixing ? 16 : 1024, bHWMixing ? 16 : 0, bHWMixing ? 16 : 32, 0);
+	if (!m_bSoundEnable && bHWMixing)
 	{
-		m_bSoundEnable = ZGetSoundFMod()->Create( hwnd, FSOUND_OUTPUT_DSOUND, 44100, 0, 0, 32, 0 ); // try software mode
-		if( !m_bSoundEnable )
+		m_bSoundEnable = ZGetSoundFMod()->Create(hwnd, FSOUND_OUTPUT_DSOUND, 44100, 0, 0, 32, 0);
+		if (!m_bSoundEnable)
 		{
 			mlog("Fail to Create Sound Engine..\n");
 			return false;
@@ -533,52 +125,52 @@ bool ZSoundEngine::Create(HWND hwnd, bool bHWMixing, ZLoadingProgress *pLoadingP
 	}
 	m_b8Bits = Z_AUDIO_8BITSOUND;
 
-	if( !LoadResource( SOUNDEFFECT_XML, pLoadingProgress ) )
+	if (!LoadResource(const_cast<char*>(SOUNDEFFECT_XML), pLoadingProgress))
 	{
 		mlog("fail to load sound effect\n");
 	}
 
 	ZGetSoundFMod()->SetRollFactor(3.f);
 	ZGetSoundFMod()->SetDistanceFactor(100.f);
-	ZGetSoundFMod()->SetDopplerFactor(1.f);	
+	ZGetSoundFMod()->SetDopplerFactor(1.f);
 
 	ZGetSoundFMod()->SetMusicEndCallback(MusicEndCallback, this);
 
 	SetEffectVolume(m_fEffectVolume);
 	SetMusicVolume(m_fMusicVolume);
-	ZGetSoundFMod()->SetMute( Z_AUDIO_EFFECT_MUTE );
-	ZGetSoundFMod()->SetMusicMute( Z_AUDIO_BGM_MUTE );
+	ZGetSoundFMod()->SetMute(Z_AUDIO_EFFECT_MUTE);
+	ZGetSoundFMod()->SetMusicMute(Z_AUDIO_BGM_MUTE);
 
-	SetFramePerSecond( DEFAULT_SOUND_FRAME );
-	SetInverseSound( Z_AUDIO_INVERSE );
+	SetFramePerSecond(DEFAULT_SOUND_FRAME);
+	SetInverseSound(Z_AUDIO_INVERSE);
 
 	m_bHWMixing = Z_AUDIO_HWMIXING;
 
 	return true;
 }
 
-bool ZSoundEngine::Reset( HWND hwnd, bool bHWMixing )
+bool ZSoundEngine::Reset(HWND hwnd, bool bHWMixing)
 {
-	if(m_bHWMixing == bHWMixing ) return false;
+	if (m_bHWMixing == bHWMixing) return false;
 	m_bHWMixing = bHWMixing;
 
 	char szBuffer[128];
-	strcpy(szBuffer, m_szOpenedMusicName );
+	strcpy(szBuffer, m_szOpenedMusicName);
 
 	Destroy();
 	m_bSoundEnable = Create(hwnd, bHWMixing);
-	if(!m_bSoundEnable)	return false;
+	if (!m_bSoundEnable)	return false;
 
-	if(ZGetGame() != NULL)
+	if (ZGetGame() != NULL)
 	{
 		list<AmbSndInfo*> aslist = ZGetGame()->GetWorld()->GetBsp()->GetAmbSndList();
-		for( list<AmbSndInfo*>::iterator iter = aslist.begin(); iter!= aslist.end(); ++iter )
+		for (list<AmbSndInfo*>::iterator iter = aslist.begin(); iter != aslist.end(); ++iter)
 		{
 			AmbSndInfo* pAS = *iter;
-			if( pAS->itype & AS_AABB)
-				ZGetSoundEngine()->SetAmbientSoundBox(pAS->szSoundName, pAS->min, pAS->max, (pAS->itype&AS_2D)?true:false );
-			else if( pAS->itype & AS_SPHERE )
-				ZGetSoundEngine()->SetAmbientSoundSphere(pAS->szSoundName, pAS->center, pAS->radius, (pAS->itype&AS_2D)?true:false );
+			if (pAS->itype & AS_AABB)
+				ZGetSoundEngine()->SetAmbientSoundBox(pAS->szSoundName, pAS->min, pAS->max, (pAS->itype & AS_2D) ? true : false);
+			else if (pAS->itype & AS_SPHERE)
+				ZGetSoundEngine()->SetAmbientSoundSphere(pAS->szSoundName, pAS->center, pAS->radius, (pAS->itype & AS_2D) ? true : false);
 		}
 	}
 
@@ -590,19 +182,19 @@ bool ZSoundEngine::Reset( HWND hwnd, bool bHWMixing )
 void ZSoundEngine::Destroy()
 {
 	mlog("Destroy sound engine.\n");
-	for( SESMAP::iterator iter = m_SoundEffectSource.begin(); iter != m_SoundEffectSource.end(); ++iter )
+	for (SESMAP::iterator iter = m_SoundEffectSource.begin(); iter != m_SoundEffectSource.end(); ++iter)
 	{
 		SoundSource* pSS = iter->second;
-		if( pSS != NULL && pSS->pFS != NULL )
+		if (pSS != NULL && pSS->pFS != NULL)
 			FSOUND_Sample_Free(pSS->pFS);
 		SAFE_DELETE(pSS);
 	}
 	m_SoundEffectSource.clear();
 
-	for( SESMAP::iterator iter = m_SoundEffectSource2D.begin(); iter != m_SoundEffectSource2D.end(); ++iter )
+	for (SESMAP::iterator iter = m_SoundEffectSource2D.begin(); iter != m_SoundEffectSource2D.end(); ++iter)
 	{
 		SoundSource* pSS = iter->second;
-		if( pSS != NULL && pSS->pFS != NULL )
+		if (pSS != NULL && pSS->pFS != NULL)
 			FSOUND_Sample_Free(pSS->pFS);
 		SAFE_DELETE(pSS);
 	}
@@ -613,50 +205,49 @@ void ZSoundEngine::Destroy()
 	StopMusic();
 	CloseMusic();
 
-	//mlog("ZSoundEngine::Destroy() : Close FMod\n");
 	ZGetSoundFMod()->Close();
 
 	mlog("Destroy sound engine. success\n");
 }
 
-bool ZSoundEngine::SetSamplingBits( bool b8Bits )
+bool ZSoundEngine::SetSamplingBits(bool b8Bits)
 {
-	if( b8Bits == m_b8Bits ) return true; 
+	if (b8Bits == m_b8Bits) return true;
 	m_b8Bits = b8Bits;
 	return Reload();
 }
 
 bool ZSoundEngine::OpenMusic(const char* szFileName, MZFileSystem* pfs)
 {
-    if( !m_bSoundEnable ) return false;
+	if (!m_bSoundEnable) return false;
 
-    m_pfs = pfs;
-    if (!strcmp(m_szOpenedMusicName, szFileName)) return false;
-    if (m_szOpenedMusicName[0] != 0) CloseMusic();
-    strcpy(m_szOpenedMusicName, szFileName);
-    
-    MZFile mzf;
-    mzf.SetReadMode(MZIPREADFLAG_ZIP | MZIPREADFLAG_MRS | MZIPREADFLAG_MRS2 | MZIPREADFLAG_FILE);
-    if(!mzf.Open(szFileName, pfs)) return false;
-    m_pMusicBuffer = new char[mzf.GetLength()+1];
-    mzf.Read(m_pMusicBuffer, mzf.GetLength());
-    m_pMusicBuffer[mzf.GetLength()] = 0;
+	m_pfs = pfs;
+	if (!strcmp(m_szOpenedMusicName, szFileName)) return false;
+	if (m_szOpenedMusicName[0] != 0) CloseMusic();
+	strcpy(m_szOpenedMusicName, szFileName);
 
-    int len = mzf.GetLength();
+	MZFile mzf;
+	mzf.SetReadMode(MZIPREADFLAG_ZIP | MZIPREADFLAG_MRS | MZIPREADFLAG_MRS2 | MZIPREADFLAG_FILE);
+	if (!mzf.Open(szFileName, pfs)) return false;
+	m_pMusicBuffer = new char[mzf.GetLength() + 1];
+	mzf.Read(m_pMusicBuffer, mzf.GetLength());
+	m_pMusicBuffer[mzf.GetLength()] = 0;
 
-    return ZGetSoundFMod()->OpenStream( m_pMusicBuffer, len );
+	int len = mzf.GetLength();
+
+	return ZGetSoundFMod()->OpenStream(m_pMusicBuffer, len);
 }
 
 void ZSoundEngine::CloseMusic()
-{	
-	if( !m_bSoundEnable ) return;
+{
+	if (!m_bSoundEnable) return;
 
 	if (m_szOpenedMusicName[0] == 0) return;
 	m_szOpenedMusicName[0] = 0;
 
 	ZGetSoundFMod()->CloseMusic();
-    
-	if (m_pMusicBuffer) 
+
+	if (m_pMusicBuffer)
 	{
 		delete m_pMusicBuffer; m_pMusicBuffer = NULL;
 	}
@@ -664,13 +255,13 @@ void ZSoundEngine::CloseMusic()
 
 void ZSoundEngine::SetMusicVolume(float fVolume)
 {
-	if( !m_bSoundEnable ) return;
+	if (!m_bSoundEnable) return;
 
 	m_fMusicVolume = fVolume;
-	ZGetSoundFMod()->SetMusicVolume( fVolume * 255 );
+	ZGetSoundFMod()->SetMusicVolume(fVolume * 255);
 }
 
-float ZSoundEngine::GetMusicVolume( void)
+float ZSoundEngine::GetMusicVolume(void)
 {
 	return m_fMusicVolume;
 }
@@ -687,52 +278,49 @@ void ZSoundEngine::MusicEndCallback(void* pCallbackContext)
 
 void ZSoundEngine::PlayMusic(bool bLoop)
 {
-	if( !m_bSoundEnable || m_bMusicMute ) return;
+	if (!m_bSoundEnable || m_bMusicMute) return;
 
 	if (m_bBattleMusic)
 	{
-		// 전투중에는 배경음악이 루핑되지 않고 다음노래로 넘어간다.
-		ZGetSoundFMod()->PlayMusic( false );
+		ZGetSoundFMod()->PlayMusic(false);
 	}
 	else
 	{
-		ZGetSoundFMod()->PlayMusic( bLoop );
+		ZGetSoundFMod()->PlayMusic(bLoop);
 	}
 
-
-
-	SetMusicVolume( m_fMusicVolume );
+	SetMusicVolume(m_fMusicVolume);
 }
 
 void ZSoundEngine::StopMusic()
 {
-	if( !m_bSoundEnable ) return;
+	if (!m_bSoundEnable) return;
 	ZGetSoundFMod()->StopMusic();
 }
 
-void ZSoundEngine::PlaySoundBladeConcrete(MMatchItemDesc *pDesc, rvector pos)
+void ZSoundEngine::PlaySoundBladeConcrete(MMatchItemDesc* pDesc, rvector pos)
 {
-	if(strcmp("rubber", pDesc->m_szWeaponByFiber) == 0)
+	if (pDesc != nullptr && strcmp("rubber", pDesc->m_szWeaponByFiber) == 0)
 	{
-		PlaySound("rubber_concrete", pos );	// 고무로 벽긁는 소리(플런쳐X:502009)
+		PlaySound("rubber_concrete", pos);
 		return;
 	}
 
-	PlaySound("blade_concrete", pos );	// 디폴트 쇠로 벽긁는 소리
+	PlaySound("blade_concrete", pos);
 }
-void ZSoundEngine::PlaySoundBladeDamage(MMatchItemDesc *pDesc, rvector& pos)
+void ZSoundEngine::PlaySoundBladeDamage(MMatchItemDesc* pDesc, rvector& pos)
 {
-	if(strcmp("rubber", pDesc->m_szWeaponByFiber) == 0)
+	if (pDesc != nullptr && strcmp("rubber", pDesc->m_szWeaponByFiber) == 0)
 	{
-		PlaySound("rubber_damage", pos );	// 고무로 피격 소리(플런쳐X:502009)
+		PlaySound("rubber_damage", pos);
 		return;
 	}
 
-	PlaySound( "blade_damage", pos);	// 디폴트 쇠로 피격 소리
+	PlaySound("blade_damage", pos);
 }
-void ZSoundEngine::PlaySoundHangOnWall(MMatchItemDesc *pDesc, rvector& pos)
+void ZSoundEngine::PlaySoundHangOnWall(MMatchItemDesc* pDesc, rvector& pos)
 {
-	if(strcmp("rubber", pDesc->m_szWeaponByFiber) == 0)
+	if (pDesc != nullptr && strcmp("rubber", pDesc->m_szWeaponByFiber) == 0)
 	{
 		PlaySound("rubber_hangonwall", pos);
 		return;
@@ -740,189 +328,181 @@ void ZSoundEngine::PlaySoundHangOnWall(MMatchItemDesc *pDesc, rvector& pos)
 
 	PlaySound("hangonwall", pos);
 }
-void ZSoundEngine::PlaySoundChargeComplete(MMatchItemDesc *pDesc, const rvector& pos)
+void ZSoundEngine::PlaySoundChargeComplete(MMatchItemDesc* pDesc, const rvector& pos)
 {
-	if(strcmp("rubber", pDesc->m_szWeaponByFiber) == 0)
+	if (pDesc != nullptr && strcmp("rubber", pDesc->m_szWeaponByFiber) == 0)
 	{
-		PlaySound("fx2/FX_rubber_ChargeComplete", pos );	// 고무로 벽긁는 소리(플런쳐X:502009)
+		PlaySound("fx2/FX_rubber_ChargeComplete", pos);
 		return;
 	}
 
-	PlaySound("fx2/FX_ChargeComplete", pos );	// 디폴트 쇠로 벽긁는 소리
+	PlaySound("fx2/FX_ChargeComplete", pos);
 }
-void ZSoundEngine::PlaySoundSmash(MMatchItemDesc *pDesc, rvector& pos, bool bObserverTarget)
+void ZSoundEngine::PlaySoundSmash(MMatchItemDesc* pDesc, rvector& pos, bool bObserverTarget)
 {
-	if(strcmp("rubber", pDesc->m_szWeaponByFiber) == 0)
+	if (pDesc != nullptr && strcmp("rubber", pDesc->m_szWeaponByFiber) == 0)
 	{
-		PlaySound(bObserverTarget ? "we_rubber_smash_2d" : "we_rubber_smash", pos );
+		PlaySound(bObserverTarget ? "we_rubber_smash_2d" : "we_rubber_smash", pos);
 		return;
 	}
 
-	PlaySound(bObserverTarget ? "we_smash_2d" : "we_smash", pos );
+	PlaySound(bObserverTarget ? "we_smash_2d" : "we_smash", pos);
 }
 
-void ZSoundEngine::PlaySoundSheath(MMatchItemDesc *pDesc, const rvector& pos, bool bObserverTarget)
+void ZSoundEngine::PlaySoundSheath(MMatchItemDesc* pDesc, const rvector& pos, bool bObserverTarget)
 {
-	if(strcmp("rubber", pDesc->m_szWeaponByFiber) == 0)
+	if (pDesc != nullptr && strcmp("rubber", pDesc->m_szWeaponByFiber) == 0)
 	{
-		PlaySound("fx_rubber_sheath", pos, bObserverTarget );	// 고무 무기 꺼내는 소리(플런쳐X:502009)
+		PlaySound("fx_rubber_sheath", pos, bObserverTarget);
 		return;
 	}
 
-	PlaySound("fx_blade_sheath", pos, bObserverTarget );	// 디폴트 쇠 무기 꺼내는 소리
+	PlaySound("fx_blade_sheath", pos, bObserverTarget);
 }
 
-void ZSoundEngine::PlaySEFire(MMatchItemDesc *pDesc, float x, float y, float z, bool bPlayer)
+void ZSoundEngine::PlaySEFire(MMatchItemDesc* pDesc, float x, float y, float z, bool bPlayer)
 {
-	if( !m_bSoundEnable || !pDesc )	return;
+	if (!m_bSoundEnable || !pDesc)	return;
 
-	if( pDesc->m_nType.Ref() == MMIT_RANGE || pDesc->m_nType.Ref() == MMIT_CUSTOM )
+	if (pDesc->m_nType.Ref() == MMIT_RANGE || pDesc->m_nType.Ref() == MMIT_CUSTOM)
 	{
 		char* szSndName = pDesc->m_szFireSndName;
-		if(bPlayer)
+		if (bPlayer)
 		{
 			char szBuffer[64];
-			sprintf( szBuffer, "%s_2d", szSndName );
+			sprintf(szBuffer, "%s_2d", szSndName);
 #ifdef _SOUND_LOG
-			mlog("%s stereo 2d sound is played..\n",szBuffer);
+			mlog("%s stereo 2d sound is played..\n", szBuffer);
 #endif
 			char* szDefault;
 			if (pDesc->m_nType.Ref() == MMIT_RANGE)
 				szDefault = "we_rifle_fire_2d";
-			else 
+			else
 				szDefault = szSndName;
 
-			PlaySoundElseDefault(szBuffer,szDefault,rvector(x,y,z),bPlayer);
+			PlaySoundElseDefault(szBuffer, szDefault, rvector(x, y, z), bPlayer);
 			return;
 		}
-		PlaySoundElseDefault(szSndName,"we_rifle_fire",rvector(x,y,z),bPlayer);
+		PlaySoundElseDefault(szSndName, "we_rifle_fire", rvector(x, y, z), bPlayer);
 	}
 }
 
-void ZSoundEngine::PlaySEDryFire(MMatchItemDesc *pDesc, float x, float y, float z, bool bPlayer)
+void ZSoundEngine::PlaySEDryFire(MMatchItemDesc* pDesc, float x, float y, float z, bool bPlayer)
 {
-	if( !m_bSoundEnable || !pDesc )	return;
+	if (!m_bSoundEnable || !pDesc)	return;
 
-	if( pDesc->m_nType.Ref() == MMIT_RANGE || pDesc->m_nType.Ref() == MMIT_CUSTOM )
+	if (pDesc->m_nType.Ref() == MMIT_RANGE || pDesc->m_nType.Ref() == MMIT_CUSTOM)
 	{
 		char* szSndName = pDesc->m_szDryfireSndName;
 		SoundSource* pSS = GetSoundSource(szSndName, bPlayer);
-		if(pSS == 0 )
-			PlaySound("762arifle_dryfire", rvector(x,y,z), bPlayer, false );
+		if (pSS == 0)
+			PlaySound("762arifle_dryfire", rvector(x, y, z), bPlayer, false);
 		else
-			PlaySound(szSndName, rvector(x,y,z), bPlayer, false );
+			PlaySound(szSndName, rvector(x, y, z), bPlayer, false);
 	}
-	//PlaySound("762arifle_dryfire", rvector(x,y,z), bPlayer, false );
 }
 
-void ZSoundEngine::PlaySEReload(MMatchItemDesc *pDesc, float x, float y, float z, bool bPlayer)
+void ZSoundEngine::PlaySEReload(MMatchItemDesc* pDesc, float x, float y, float z, bool bPlayer)
 {
-	if( !m_bSoundEnable || !pDesc )	return;
+	if (!m_bSoundEnable || !pDesc)	return;
 
-	if(pDesc->m_nType.Ref() == MMIT_RANGE)
+	if (pDesc->m_nType.Ref() == MMIT_RANGE)
 	{
 		char* szSndName = pDesc->m_szReloadSndName;
-		if(bPlayer)
+		if (bPlayer)
 		{
 			char szBuffer[64];
-			sprintf( szBuffer, "%s_2d", szSndName );
+			sprintf(szBuffer, "%s_2d", szSndName);
 #ifdef _SOUND_LOG
-			mlog("%s stereo 2d sound is played..\n",szBuffer);
+			mlog("%s stereo 2d sound is played..\n", szBuffer);
 #endif
-			PlaySoundElseDefault(szBuffer,"we_rifle_reload_2d",rvector(x,y,z),bPlayer);
+			PlaySoundElseDefault(szBuffer, "we_rifle_reload_2d", rvector(x, y, z), bPlayer);
 		}
-		PlaySoundElseDefault(szSndName,"we_rifle_reload",rvector(x,y,z),bPlayer);
+		PlaySoundElseDefault(szSndName, "we_rifle_reload", rvector(x, y, z), bPlayer);
 	}
 }
 
 void ZSoundEngine::PlaySERicochet(float x, float y, float z)
 {
-	if( !m_bSoundEnable)	return;
-	PlaySound("ricochet_concrete01",rvector(x,y,z), false, false );
+	if (!m_bSoundEnable)	return;
+	PlaySound("ricochet_concrete01", rvector(x, y, z), false, false);
 }
 
-void ZSoundEngine::PlaySEHitObject( float x, float y, float z, RBSPPICKINFO& info_ )
+void ZSoundEngine::PlaySEHitObject(float x, float y, float z, RBSPPICKINFO& info_)
 {
-	if( !m_bSoundEnable )	return;
+	if (!m_bSoundEnable)	return;
 
-	static const char* base_snd_name	= "fx_bullethit_mt_";
+	static const char* base_snd_name = "fx_bullethit_mt_";
 	FSOUND_SAMPLE* pFS = NULL;
 	static char	buffer[256];
 
-	if( info_.pNode==NULL ) {
-		// OutputDebugString("ZSoundEngine::PlaySEHitObject 엉뚱한곳이 picking ?\n");
+	if (info_.pNode == NULL) {
 		return;
 	}
-	RMATERIAL*	material_info = ZGetGame()->GetWorld()->GetBsp()->GetMaterial( info_.pNode, info_.nIndex );
+	RMATERIAL* material_info = ZGetGame()->GetWorld()->GetBsp()->GetMaterial(info_.pNode, info_.nIndex);
 
-	if(material_info==NULL) {
-		// OutputDebugString("ZSoundEngine::PlaySEHitObject ( material_info==NULL ) ?\n");
+	if (material_info == NULL) {
 		return;
 	}
 
-	const char* temp			= material_info->Name.c_str();
-	size_t	size				= strlen(temp);
+	const char* temp = material_info->Name.c_str();
+	size_t	size = strlen(temp);
 
-	// Compare string...
-	int index		= (int) (size - 1);
-	while( index >= 2 )
+	int index = (int)(size - 1);
+	while (index >= 2)
 	{
-		if( temp[index--] == 't' && temp[index--] == 'm' )
+		if (temp[index--] == 't' && temp[index--] == 'm')
 		{
-			index += 4; // _mt_
+			index += 4;
 			break;
 		}
 	}
 
-	if( index <= 2 )
+	if (index <= 2)
 	{
-		// 기본 소리 출력
-		PlaySound("fx_bullethit_mt_con", rvector(x,y,z), false, false );
+		PlaySound("fx_bullethit_mt_con", rvector(x, y, z), false, false);
 		return;
 	}
 
-	if( strcpy( buffer, base_snd_name ) == NULL )
+	if (strcpy(buffer, base_snd_name) == NULL)
 	{
-		// 기본 소리 출력
-		PlaySound("fx_bullethit_mt_con", rvector(x,y,z), false, false );
+		PlaySound("fx_bullethit_mt_con", rvector(x, y, z), false, false);
 	}
-	if( strncat( buffer, temp + index, size - index ) == NULL )
+	if (strncat(buffer, temp + index, size - index) == NULL)
 	{
-		// 기본 소리 출력
-		PlaySound("fx_bullethit_mt_con", rvector(x,y,z), false, false );
+		PlaySound("fx_bullethit_mt_con", rvector(x, y, z), false, false);
 	}
 
-	PlaySoundElseDefault(buffer, "fx_bullethit_mt_con", rvector(x,y,z) );
+	PlaySoundElseDefault(buffer, "fx_bullethit_mt_con", rvector(x, y, z));
 }
 
 void ZSoundEngine::PlaySEHitBody(float x, float y, float z)
 {
-	if( !m_bSoundEnable )	return;
-	PlaySound("fx_bullethit_mt_fsh", rvector(x,y,z), false, false );
+	if (!m_bSoundEnable)	return;
+	PlaySound("fx_bullethit_mt_fsh", rvector(x, y, z), false, false);
 }
 
 bool ZSoundEngine::isPlayAble(char* name)
 {
-	if( !m_bSoundEnable )	return false;
+	if (!m_bSoundEnable)	return false;
 
 	SESMAP::iterator i = m_SoundEffectSource.find(name);
 
-	if(i==m_SoundEffectSource.end())
+	if (i == m_SoundEffectSource.end())
 	{
 		i = m_SoundEffectSource2D.find(name);
-		if( i == m_SoundEffectSource2D.end() )
+		if (i == m_SoundEffectSource2D.end())
 			return false;
 	}
 	return true;
 }
 
-bool ZSoundEngine::isPlayAbleMtrl(char* name)//특수목적용~
+bool ZSoundEngine::isPlayAbleMtrl(char* name)
 {
-	
-	if( !m_bSoundEnable )	return false;
-	
-	if(!name)		return false;
-	if(!name[0])	return false;
+	if (!m_bSoundEnable)	return false;
+
+	if (!name)		return false;
+	if (!name[0])	return false;
 
 	int len = (int)strlen(name);
 
@@ -930,52 +510,46 @@ bool ZSoundEngine::isPlayAbleMtrl(char* name)//특수목적용~
 	FSOUND_SAMPLE* pFS = NULL;
 	char filename[256];
 
-	for(node = m_SoundEffectSource.begin(); node != m_SoundEffectSource.end(); ++node) 
+	for (node = m_SoundEffectSource.begin(); node != m_SoundEffectSource.end(); ++node)
 	{
-		strcpy( filename, ((string)((*node).first)).c_str());
+		strcpy(filename, ((string)((*node).first)).c_str());
 
-		if(strncmp(filename,name,len)==0)
+		if (strncmp(filename, name, len) == 0)
 			return true;
 	}
-	
-	for(node = m_SoundEffectSource2D.begin(); node != m_SoundEffectSource2D.end(); ++node) 
-	{
-		strcpy( filename, ((string)((*node).first)).c_str());
 
-		if(strncmp(filename,name,len)==0)
+	for (node = m_SoundEffectSource2D.begin(); node != m_SoundEffectSource2D.end(); ++node)
+	{
+		strcpy(filename, ((string)((*node).first)).c_str());
+
+		if (strncmp(filename, name, len) == 0)
 			return true;
 	}
 
 	return false;
 }
 
-int ZSoundEngine::PlaySound(char* Name,const rvector& pos,bool bHero, bool bLoop, DWORD dwDelay ) 
+int ZSoundEngine::PlaySound(char* Name, const rvector& pos, bool bHero, bool bLoop, DWORD dwDelay)
 {
-	if( !m_bSoundEnable )	return 0;
-	if( !m_b3DSoundUpdate ) return 0;
-	
-	// Find Sound Source
+	if (!m_bSoundEnable)	return 0;
+	if (!m_b3DSoundUpdate) return 0;
+
 	SoundSource* pSS = GetSoundSource(Name, bHero);
-	if(pSS == 0 )
+	if (pSS == 0)
 	{
 #ifdef _SOUND_LOG
-		mlog("No %sSound Source[%s]\n", bHero?"2d":"3d", Name);
+		mlog("No %sSound Source[%s]\n", bHero ? "2d" : "3d", Name);
 #endif
 		return 0;
 	}
 
-	//Culling
-	int priority=0;
+	int priority = 0;
 	if (!CheckCulling(Name, pSS, pos, bHero, &priority)) return 0;
 
-//	priority = 50;
 #ifdef _DEBUG
-	// 너무 많이 남아서 주석 처리 했음. - by SungE 2007-04-17
-	// mlog("ZSoundEngine::PlaySound - %s, priority=%d, pos=(%.1f %.1f %.1f) , delay=%u\n", Name, priority, pos.x, pos.y, pos.z, dwDelay);
 #endif
 
-
-	if( dwDelay > 0 )
+	if (dwDelay > 0)
 	{
 		DelaySound DS;
 		DS.dwDelay = dwDelay + timeGetTime();
@@ -987,44 +561,42 @@ int ZSoundEngine::PlaySound(char* Name,const rvector& pos,bool bHero, bool bLoop
 		return 0;
 	}
 
-	//Play
 	FSOUND_SAMPLE* pFS = pSS->pFS;
-	if(pFS == NULL)
+	if (pFS == NULL)
 	{
 #ifdef _SOUND_LOG
 		mlog("FSOUND_SAMPLE is Null for Sound Source[%s]\n", Name);
 #endif
 		return 0;
 	}
-	return PlaySE( pFS, pos, priority, bHero, bLoop );	
+	return PlaySE(pFS, pos, priority, bHero, bLoop);
 }
 
-void ZSoundEngine::PlaySoundElseDefault(char* Name,char* NameDefault,rvector& pos,bool bHero,bool bLoop, DWORD dwDelay ) 
+void ZSoundEngine::PlaySoundElseDefault(char* Name, char* NameDefault, rvector& pos, bool bHero, bool bLoop, DWORD dwDelay)
 {
-	if( !m_bSoundEnable )	return;
- 	if( !m_b3DSoundUpdate ) return;
-	
+	if (!m_bSoundEnable)	return;
+	if (!m_b3DSoundUpdate) return;
+
 	SoundSource* pSS = GetSoundSource(Name, bHero);
-	if(pSS == 0 )
+	if (pSS == 0)
 	{
 		pSS = GetSoundSource(NameDefault, bHero);
-		if(pSS == 0)
+		if (pSS == 0)
 		{
 #ifdef _SOUND_LOG
-			mlog("No %sSound Source[%s] even Default Sound Source[%s]\n", bHero?"2d":"3d", Name, NameDefault);
+			mlog("No %sSound Source[%s] even Default Sound Source[%s]\n", bHero ? "2d" : "3d", Name, NameDefault);
 #endif
 			return;
 		}
 #ifdef _SOUND_LOG
-		mlog("No %sSound Source[%s] so Use Default Sound Source[%s]\n", bHero?"2d":"3d", Name, NameDefault);
+		mlog("No %sSound Source[%s] so Use Default Sound Source[%s]\n", bHero ? "2d" : "3d", Name, NameDefault);
 #endif
 	}
 
-	//Culling
-	int priority=0;
+	int priority = 0;
 	if (!CheckCulling(Name, pSS, pos, bHero, &priority)) return;
 
-	if( dwDelay > 0 )
+	if (dwDelay > 0)
 	{
 		DelaySound DS;
 		DS.dwDelay = dwDelay + timeGetTime();
@@ -1037,7 +609,7 @@ void ZSoundEngine::PlaySoundElseDefault(char* Name,char* NameDefault,rvector& po
 	}
 
 	FSOUND_SAMPLE* pFS = pSS->pFS;
-	if(pFS == NULL)
+	if (pFS == NULL)
 	{
 #ifdef _SOUND_LOG
 		mlog("FSOUND_SAMPLE is Null for Sound Source[%s]\n", Name);
@@ -1045,15 +617,15 @@ void ZSoundEngine::PlaySoundElseDefault(char* Name,char* NameDefault,rvector& po
 		return;
 	}
 
-	PlaySE( pFS, pos, priority, bHero, bLoop );	
+	PlaySE(pFS, pos, priority, bHero, bLoop);
 }
 
-int ZSoundEngine::PlaySound( char* Name, bool bLoop, DWORD dwDelay )
+int ZSoundEngine::PlaySound(char* Name, bool bLoop, DWORD dwDelay)
 {
-	if( !m_bSoundEnable )	return 0;
+	if (!m_bSoundEnable)	return 0;
 
 	SoundSource* pSS = GetSoundSource(Name, true);
-	if(pSS == 0 )
+	if (pSS == 0)
 	{
 #ifdef _SOUND_LOG
 		mlog("No 2DSound Source[%s]\n", Name);
@@ -1061,7 +633,7 @@ int ZSoundEngine::PlaySound( char* Name, bool bLoop, DWORD dwDelay )
 		return 0;
 	}
 
-	if( dwDelay > 0 )
+	if (dwDelay > 0)
 	{
 		DelaySound DS;
 		DS.dwDelay = dwDelay + timeGetTime();
@@ -1073,32 +645,32 @@ int ZSoundEngine::PlaySound( char* Name, bool bLoop, DWORD dwDelay )
 	}
 
 	FSOUND_SAMPLE* pFS = pSS->pFS;
-	if(pFS == NULL)
+	if (pFS == NULL)
 	{
 #ifdef _SOUND_LOG
 		mlog("FSOUND_SAMPLE is Null for Sound Source[%s]\n", Name);
 #endif
 		return 0;
 	}
-	return PlaySE( pFS, rvector(0,0,0), 200, true, bLoop );
+	return PlaySE(pFS, rvector(0, 0, 0), 200, true, bLoop);
 }
 
 void ZSoundEngine::Run(void)
 {
 	DWORD currentTime = timeGetTime();
-	if( (currentTime - m_Time) < m_DelayTime ) return;
+	if ((currentTime - m_Time) < m_DelayTime) return;
 	m_Time = currentTime;
 
 	auto ZSoundEngineRun = MBeginProfile("ZSoundEngine::Run");
 
-	if( !m_bSoundEnable )	return;
-	if( !m_b3DSoundUpdate )	return;
+	if (!m_bSoundEnable)	return;
+	if (!m_b3DSoundUpdate)	return;
 
-	if(ZGetGame())
+	if (ZGetGame())
 	{
 		rvector Pos = RCameraPosition;
 		ZCharacter* pInterestCharacter = ZGetGameInterface()->GetCombatInterface()->GetTargetCharacter();
-		if(pInterestCharacter != NULL)
+		if (pInterestCharacter != NULL)
 		{
 			Pos = pInterestCharacter->GetPosition();
 			Pos.z += 170.f;
@@ -1112,27 +684,26 @@ void ZSoundEngine::Run(void)
 
 		UpdateAmbSound(Pos, right);
 
-
-		for( DSLIST::iterator iter = m_DelaySoundList.begin(); iter != m_DelaySoundList.end();)
+		for (DSLIST::iterator iter = m_DelaySoundList.begin(); iter != m_DelaySoundList.end();)
 		{
 			DelaySound DS = *iter;
-			if( DS.dwDelay < m_Time )
+			if (DS.dwDelay < m_Time)
 			{
-				PlaySE( DS.pSS->pFS, DS.pos, DS.priority, DS.bPlayer );
-				iter = m_DelaySoundList.erase( iter );
+				PlaySE(DS.pSS->pFS, DS.pos, DS.priority, DS.bPlayer);
+				iter = m_DelaySoundList.erase(iter);
 				continue;
 			}
 			++iter;
 		}
 
 		m_ListenerPos = Pos;
-		
+
 		MBeginProfile(1004, "ZSoundEngine::Run : SetListener");
-		if(m_bInverse)
-			ZGetSoundFMod()->SetListener( &Pos, NULL, -Orientation.x, -Orientation.y, Orientation.z, 0, 0, 1 );
+		if (m_bInverse)
+			ZGetSoundFMod()->SetListener(&Pos, NULL, -Orientation.x, -Orientation.y, Orientation.z, 0, 0, 1);
 		else
-			ZGetSoundFMod()->SetListener( &Pos, NULL, Orientation.x, Orientation.y, Orientation.z, 0, 0, 1 );
-	
+			ZGetSoundFMod()->SetListener(&Pos, NULL, Orientation.x, Orientation.y, Orientation.z, 0, 0, 1);
+
 		MEndProfile(1004);
 		MBeginProfile(33, "ZSoundEngine::Run : Update");
 		ZGetSoundFMod()->Update();
@@ -1142,17 +713,16 @@ void ZSoundEngine::Run(void)
 	MEndProfile(ZSoundEngineRun);
 }
 
-
 const char* ZSoundEngine::GetBGMFileName(int nBgmIndex)
 {
-	static char m_stSndFileName[MAX_BGM][64] = {"Intro Retake2(D-R).ogg", 
-												"Theme Rock(D).ogg", 
-												"HardBgm3 Vanessa Retake(D).ogg", 
+	static char m_stSndFileName[MAX_BGM][64] = { "Intro Retake2(D-R).ogg",
+												"Theme Rock(D).ogg",
+												"HardBgm3 Vanessa Retake(D).ogg",
 												"HardBgm(D).ogg",
-												"HardTech(D).ogg", 
+												"HardTech(D).ogg",
 												"HardCore(D).ogg",
-												"Ryswick style.ogg", 
-												"El-tracaz.ogg", 
+												"Ryswick style.ogg",
+												"El-tracaz.ogg",
 												"Industrial technolism.ogg",
 												"TRANCE mission_tmix.ogg",
 												"Vague words.ogg",
@@ -1163,7 +733,7 @@ const char* ZSoundEngine::GetBGMFileName(int nBgmIndex)
 #define BGM_FOLDER		"Sound/BGM/"
 
 	int nRealBgmIndex = nBgmIndex;
-	if ((nBgmIndex >= BGMID_BATTLE) && (nBgmIndex < BGMID_FIN)) nRealBgmIndex = RandomNumber(BGMID_BATTLE, BGMID_FIN-1);
+	if ((nBgmIndex >= BGMID_BATTLE) && (nBgmIndex < BGMID_FIN)) nRealBgmIndex = RandomNumber(BGMID_BATTLE, BGMID_FIN - 1);
 	sprintf(szFileName, "%s%s", BGM_FOLDER, m_stSndFileName[nRealBgmIndex]);
 
 	return szFileName;
@@ -1171,9 +741,9 @@ const char* ZSoundEngine::GetBGMFileName(int nBgmIndex)
 
 bool ZSoundEngine::OpenMusic(int nBgmIndex, MZFileSystem* pfs)
 {
-	if( !m_bSoundEnable ) return false;
+	if (!m_bSoundEnable) return false;
 
-	m_pfs=pfs;
+	m_pfs = pfs;
 	if (nBgmIndex == BGMID_BATTLE) m_bBattleMusic = true;
 	else m_bBattleMusic = false;
 
@@ -1183,10 +753,10 @@ bool ZSoundEngine::OpenMusic(int nBgmIndex, MZFileSystem* pfs)
 	return OpenMusic(szFileName, pfs);
 }
 
-bool ZSoundEngine::LoadResource( char* pFileName_ ,ZLoadingProgress *pLoading )
+bool ZSoundEngine::LoadResource(char* pFileName_, ZLoadingProgress* pLoading)
 {
-	if( !m_bSoundEnable )
- 	{
+	if (!m_bSoundEnable)
+	{
 		return false;
 	}
 
@@ -1203,132 +773,119 @@ bool ZSoundEngine::LoadResource( char* pFileName_ ,ZLoadingProgress *pLoading )
 	char szSoundFileName[256];
 	int iType = 0;
 
-	root		= Data.GetDocumentElement();
-	int iCount	= root.GetChildNodeCount();
+	root = Data.GetDocumentElement();
+	int iCount = root.GetChildNodeCount();
 
-	for( int i = 0 ; i < iCount; ++i )
+	for (int i = 0; i < iCount; ++i)
 	{
-		// loading 화면 갱신. 가끔 한번씩만.
-		if(pLoading && (i%10==0)) pLoading->UpdateAndDraw(float(i)/float(iCount));
-		chr		= root.GetChildNode(i);
-		chr.GetTagName( szSoundName );
-		if( szSoundName[0] == '#' )
+		if (pLoading && (i % 10 == 0)) pLoading->UpdateAndDraw(float(i) / float(iCount));
+		chr = root.GetChildNode(i);
+		chr.GetTagName(szSoundName);
+		if (szSoundName[0] == '#')
 		{
 			continue;
 		}
-		chr.GetAttribute( szSoundName, "NAME" );
-		strcpy( szSoundFileName, SOUNDEFFECT_DIR );
-		strcat( szSoundFileName, szSoundName );
-		strcat( szSoundFileName, ".wav" );
+		chr.GetAttribute(szSoundName, "NAME");
+		strcpy(szSoundFileName, SOUNDEFFECT_DIR);
+		strcat(szSoundFileName, szSoundName);
+		strcat(szSoundFileName, SOUNDEFFECT_EXT);
 
-		chr.GetAttribute( &iType, "type", 0 );
+		chr.GetAttribute(&iType, "type", 0);
 
 		FSOUND_SAMPLE* pFS = NULL;
 		FSOUND_SAMPLE* pFS2 = NULL;
 
-		int flag = FSOUND_SIGNED|FSOUND_MONO;
-		
-		// 8Bits 사운드
-		//if(m_b8Bits) flag |= FSOUND_8BITS;
-		//else flag |= FSOUND_16BITS;
-		flag |= FSOUND_16BITS;
+		int flag = FSOUND_SIGNED | FSOUND_MONO;
 
-		switch( iType ) 
+		// 8Bits
+		if (m_b8Bits) flag |= FSOUND_8BITS;
+		else flag |= FSOUND_16BITS;
+
+		switch (iType)
 		{
 		case 0:
-			
-			if(m_bHWMixing)
+
+			if (m_bHWMixing)
 				flag |= FSOUND_HW3D;
-			pFS = ZGetSoundFMod()->LoadWave( szSoundFileName, flag );
-			
+			pFS = ZGetSoundFMod()->LoadWave(szSoundFileName, flag);
+
 			break;
-		
+
 		case 1:
-			
-			if(m_bHWMixing)
-				flag |= FSOUND_HW2D; 
-			else flag |= FSOUND_2D;			
-			pFS = ZGetSoundFMod()->LoadWave( szSoundFileName, flag );
-			
+
+			if (m_bHWMixing)
+				flag |= FSOUND_HW2D;
+			else flag |= FSOUND_2D;
+			pFS = ZGetSoundFMod()->LoadWave(szSoundFileName, flag);
+
 			break;
-		
+
 		case 2:
-						
-			if(m_bHWMixing) 
+
+			if (m_bHWMixing)
 				flag |= FSOUND_HW3D;
-			pFS = ZGetSoundFMod()->LoadWave( szSoundFileName, flag );
-			
-			if(m_bHWMixing) 
+			pFS = ZGetSoundFMod()->LoadWave(szSoundFileName, flag);
+
+			if (m_bHWMixing)
 			{
 				flag &= ~FSOUND_HW3D;
-				flag |= FSOUND_HW2D; 
+				flag |= FSOUND_HW2D;
 			}
-			else flag |= FSOUND_2D;		
-			pFS2 = ZGetSoundFMod()->LoadWave( szSoundFileName, flag );
-			
+			else flag |= FSOUND_2D;
+			pFS2 = ZGetSoundFMod()->LoadWave(szSoundFileName, flag);
+
 			break;
-		
+
 		case 3:
 
 			flag &= ~FSOUND_MONO;
 			flag |= FSOUND_STEREO;
-			
-			if(m_bHWMixing) flag |= FSOUND_HW2D;
+
+			if (m_bHWMixing) flag |= FSOUND_HW2D;
 			else flag |= FSOUND_2D;
-			
-			pFS2 = ZGetSoundFMod()->LoadWave( szSoundFileName, flag );
-			
+
+			pFS2 = ZGetSoundFMod()->LoadWave(szSoundFileName, flag);
+
 			break;
-		
+
 		case 4:
 
-  			pFS2 = ZGetSoundFMod()->LoadWave( szSoundFileName, FSOUND_LOOP_NORMAL|FSOUND_NORMAL|FSOUND_2D );
+			pFS2 = ZGetSoundFMod()->LoadWave(szSoundFileName, FSOUND_LOOP_NORMAL | FSOUND_NORMAL | FSOUND_2D);
 			break;
 
 		case 5:
-			pFS2 = ZGetSoundFMod()->LoadWave( szSoundFileName, FSOUND_LOOP_NORMAL|FSOUND_SIGNED|FSOUND_STEREO|FSOUND_16BITS|FSOUND_2D );
+			pFS2 = ZGetSoundFMod()->LoadWave(szSoundFileName, FSOUND_LOOP_NORMAL | FSOUND_SIGNED | FSOUND_STEREO | FSOUND_16BITS | FSOUND_2D);
 			break;
 
 		case 6:
-			pFS = ZGetSoundFMod()->LoadWave( szSoundFileName, FSOUND_LOOP_NORMAL|FSOUND_NORMAL );
+			pFS = ZGetSoundFMod()->LoadWave(szSoundFileName, FSOUND_LOOP_NORMAL | FSOUND_NORMAL);
 			break;
 		}
 
 		SoundSource* pSS = NULL;
-		
-		if( pFS != NULL )
-		{			
+
+		if (pFS != NULL)
+		{
 			float min = ZDEF_MINDISTANCE;
 			float max = ZDEF_MAXDISTANCE;
-			if( chr.GetAttribute( &fTemp, "MINDISTANCE" ))
+			if (chr.GetAttribute(&fTemp, "MINDISTANCE"))
 				min = fTemp;
 			pSS = new SoundSource;
 			pSS->pFS = pFS;
 			pSS->fMaxDistance = max;
-			ZGetSoundFMod()->SetMinMaxDistance( pFS, min, 1000000000.0f );
-			
-#ifdef _DEBUG
-			//_ASSERT(m_SoundEffectSource.find(szSoundName)==m_SoundEffectSource.end());
-#endif
-			m_SoundEffectSource.insert(SESMAP::value_type(szSoundName, pSS ));			
+			ZGetSoundFMod()->SetMinMaxDistance(pFS, min, 1000000000.0f);
+
+			m_SoundEffectSource.insert(SESMAP::value_type(szSoundName, pSS));
 		}
-		if( pFS2 != NULL )
+		if (pFS2 != NULL)
 		{
 			pSS = new SoundSource;
 			pSS->pFS = pFS2;
-#ifdef _DEBUG
-			//_ASSERT(m_SoundEffectSource2D.find(szSoundName)==m_SoundEffectSource2D.end());
-#endif
-			m_SoundEffectSource2D.insert(SESMAP::value_type(szSoundName, pSS ) );
-		}
 
-#ifdef _DEBUG
-		if(pFS==NULL && pFS2==NULL) {
-			mlog("cannot create sound : %s\n",szSoundName);
+			m_SoundEffectSource2D.insert(SESMAP::value_type(szSoundName, pSS));
 		}
-#endif
 	}
-	strcpy( m_SoundFileName, pFileName_ );
+	strcpy(m_SoundFileName, pFileName_);
 	return true;
 }
 
@@ -1337,67 +894,48 @@ int ZSoundEngine::GetEnumDeviceCount()
 	return ZGetSoundFMod()->GetNumDriver();
 }
 
-const char* ZSoundEngine::GetDeviceDescription( int index )
+const char* ZSoundEngine::GetDeviceDescription(int index)
 {
-	return ZGetSoundFMod()->GetDriverName( index );
+	return ZGetSoundFMod()->GetDriverName(index);
 }
 
-void ZSoundEngine::SetMusicMute( bool b )
+void ZSoundEngine::SetMusicMute(bool b)
 {
- 	if( b == m_bMusicMute ) return;
+	if (b == m_bMusicMute) return;
 
 	m_bMusicMute = b;
 
-	if( !m_bSoundEnable ) return;
+	if (!m_bSoundEnable) return;
 
-	ZGetSoundFMod()->SetMusicMute( b );
-	if( !b )	SetMusicVolume( m_fMusicVolume );
+	ZGetSoundFMod()->SetMusicMute(b);
+	if (!b)	SetMusicVolume(m_fMusicVolume);
 }
 
-
-//int ZSoundEngine::PlaySE(FSOUND_SAMPLE* pFS, rvector& pos, bool bPlayer, bool bLoop )
-//{
-//	if( !m_bSoundEnable || m_bEffectMute ) return false;
-//	if( !m_b3DSoundUpdate ) return false;
-//
-//	if(pFS == NULL) return -1;
-//
-//	return ZGetSoundFMod()->Play( pFS, &pos, 0, (int)(m_fEffectVolume * 255.f), 0, bPlayer );
-//}
-
-//int ZSoundEngine::PlaySE(FSOUND_SAMPLE* pFS, bool bLoop )
-//{
-//	if( !m_bSoundEnable || m_bEffectMute ) return false;
-//	if(pFS == NULL) return -1;
-//	return ZGetSoundFMod()->Play( pFS, m_fEffectVolume * 255 );
-//}
-
-int ZSoundEngine::PlaySE(FSOUND_SAMPLE* pFS, const rvector& pos, int Priority, bool bPlayer /* = false */, bool bLoop /* = false  */)
+int ZSoundEngine::PlaySE(FSOUND_SAMPLE* pFS, const rvector& pos, int Priority, bool bPlayer, bool bLoop)
 {
-	if(!m_bSoundEnable||m_bEffectMute||pFS==NULL) return -1;
-	return ZGetSoundFMod()->Play(pFS, &pos, NULL, m_fEffectVolume*255,Priority,bPlayer,bLoop);
+	if (!m_bSoundEnable || m_bEffectMute || pFS == NULL) return -1;
+	return ZGetSoundFMod()->Play(pFS, &pos, NULL, m_fEffectVolume * 255, Priority, bPlayer, bLoop);
 }
 
 void ZSoundEngine::StopLoopSound()
 {
-
 }
 
-void ZSoundEngine::StopSound( int iChannel )
+void ZSoundEngine::StopSound(int iChannel)
 {
-	if(!m_bSoundEnable) return;
-	ZGetSoundFMod()->StopSound( iChannel );
+	if (!m_bSoundEnable) return;
+	ZGetSoundFMod()->StopSound(iChannel);
 }
 
-void ZSoundEngine::SetEffectMute( bool b )
+void ZSoundEngine::SetEffectMute(bool b)
 {
 	m_bEffectMute = b;
 }
 
-void ZSoundEngine::Set3DSoundUpdate(bool b) 
+void ZSoundEngine::Set3DSoundUpdate(bool b)
 {
-	m_b3DSoundUpdate = b; 
-	if( !b )
+	m_b3DSoundUpdate = b;
+	if (!b)
 	{
 		ZGetSoundFMod()->StopSound();
 	}
@@ -1406,29 +944,29 @@ void ZSoundEngine::Set3DSoundUpdate(bool b)
 bool ZSoundEngine::Reload()
 {
 	mlog("Reload Sound Sources...\n");
-	for( SESMAP::iterator iter = m_SoundEffectSource.begin(); iter != m_SoundEffectSource.end(); ++iter )
+	for (SESMAP::iterator iter = m_SoundEffectSource.begin(); iter != m_SoundEffectSource.end(); ++iter)
 	{
 		SoundSource* pSS = iter->second;
 		SAFE_DELETE(pSS);
 	}
 	m_SoundEffectSource.clear();
-	for( SESMAP::iterator iter = m_SoundEffectSource2D.begin(); iter != m_SoundEffectSource2D.end(); ++iter )
+	for (SESMAP::iterator iter = m_SoundEffectSource2D.begin(); iter != m_SoundEffectSource2D.end(); ++iter)
 	{
 		SoundSource* pSS = iter->second;
 		SAFE_DELETE(pSS);
 	}
 	m_SoundEffectSource2D.clear();
-	return LoadResource( m_SoundFileName );
+	return LoadResource(m_SoundFileName);
 }
 
-void ZSoundEngine::SetAmbientSoundBox( char* Name, rvector& pos1, rvector& pos2, bool b2d )
+void ZSoundEngine::SetAmbientSoundBox(char* Name, rvector& pos1, rvector& pos2, bool b2d)
 {
 	AmbSound AS;
 	AS.type = AS_AABB;
-	if(b2d) AS.type |= AS_2D;
+	if (b2d) AS.type |= AS_2D;
 	else AS.type |= AS_3D;
 	AS.pSS = GetSoundSource(Name, b2d);
-	if(AS.pSS == NULL)
+	if (AS.pSS == NULL)
 	{
 		return;
 	}
@@ -1436,26 +974,26 @@ void ZSoundEngine::SetAmbientSoundBox( char* Name, rvector& pos1, rvector& pos2,
 	AS.iChannel = -1;
 	AS.pos[0] = pos1;
 	AS.pos[1] = pos2;
-	AS.center = ( pos1 + pos2 ) * 0.5f;
+	AS.center = (pos1 + pos2) * 0.5f;
 	AS.dx = AS.pos[1].x - AS.center.x;
 	AS.dy = AS.pos[1].y - AS.center.y;
 	AS.dz = AS.pos[1].z - AS.center.z;
 	m_AmbientSoundList.push_back(AS);
-	if(!b2d) 
+	if (!b2d)
 	{
 		float length = D3DXVec3Length(&rvector(AS.dx, AS.dy, AS.dz));
-		FSOUND_Sample_SetMinMaxDistance( AS.pSS->pFS, length * 0.1f, length );
+		FSOUND_Sample_SetMinMaxDistance(AS.pSS->pFS, length * 0.1f, length);
 	}
 }
 
-void ZSoundEngine::SetAmbientSoundSphere( char* Name, rvector& pos, float radius, bool b2d )
+void ZSoundEngine::SetAmbientSoundSphere(char* Name, rvector& pos, float radius, bool b2d)
 {
 	AmbSound AS;
 	AS.type = AS_SPHERE;
-	if(b2d) AS.type |= AS_2D;
+	if (b2d) AS.type |= AS_2D;
 	else AS.type |= AS_3D;
 	AS.pSS = GetSoundSource(Name, b2d);
-	if(AS.pSS == NULL)
+	if (AS.pSS == NULL)
 	{
 		return;
 	}
@@ -1464,130 +1002,117 @@ void ZSoundEngine::SetAmbientSoundSphere( char* Name, rvector& pos, float radius
 	AS.radius = radius;
 	AS.center = pos;
 	m_AmbientSoundList.push_back(AS);
-	if(!b2d) FSOUND_Sample_SetMinMaxDistance( AS.pSS->pFS, radius * 0.1f, radius );
+	if (!b2d) FSOUND_Sample_SetMinMaxDistance(AS.pSS->pFS, radius * 0.1f, radius);
 }
 
 void ZSoundEngine::ClearAmbientSound()
 {
-	for(ASLIST::iterator iter = m_AmbientSoundList.begin(); iter != m_AmbientSoundList.end(); )
+	for (ASLIST::iterator iter = m_AmbientSoundList.begin(); iter != m_AmbientSoundList.end(); )
 	{
 		AmbSound* AS = &(*iter);
-		
-		if(AS->iChannel != -1) 
+
+		if (AS->iChannel != -1)
 		{
 			ZGetSoundFMod()->StopSound(AS->iChannel);
-			SetEffectVolume( AS->iChannel, m_fEffectVolume );
+			SetEffectVolume(AS->iChannel, m_fEffectVolume);
 			AS->iChannel = -1;
 		}
 		iter = m_AmbientSoundList.erase(iter);
-	}	
+	}
 }
 
-void ZSoundEngine::UpdateAmbSound(rvector& Pos,	rvector& Ori)
+void ZSoundEngine::UpdateAmbSound(rvector& Pos, rvector& Ori)
 {
-	// 환경 사운드 처리
-	for( ASLIST::iterator iter = m_AmbientSoundList.begin(); iter != m_AmbientSoundList.end(); ++iter )
+	for (ASLIST::iterator iter = m_AmbientSoundList.begin(); iter != m_AmbientSoundList.end(); ++iter)
 	{
- 		AmbSound* AS = &(*iter);
+		AmbSound* AS = &(*iter);
 
-		if(AS == NULL) continue;
+		if (AS == NULL) continue;
 
-		float t = GetArea(Pos, *AS );
+		float t = GetArea(Pos, *AS);
 
-		if( t <=0 ) 
+		if (t <= 0)
 		{
-			if( AS->iChannel != -1 )
+			if (AS->iChannel != -1)
 			{
-				SetEffectVolume(AS->iChannel,m_fEffectVolume);
+				SetEffectVolume(AS->iChannel, m_fEffectVolume);
 				StopSound(AS->iChannel);
 				AS->iChannel = -1;
 			}
 			continue;
 		}
 
-		if(AS->iChannel == -1)
+		if (AS->iChannel == -1)
 		{
-			AS->iChannel = PlaySE(AS->pSS->pFS, AS->center, 150, true );
+			AS->iChannel = PlaySE(AS->pSS->pFS, AS->center, 150, true);
 		}
 
-		if(AS->iChannel != -1 )
+		if (AS->iChannel != -1)
 		{
 			float vol = m_fEffectVolume * t;
-			SetEffectVolume(AS->iChannel,vol);
+			SetEffectVolume(AS->iChannel, vol);
 		}
 	}
 }
 
 #define AS_TA_ATTENUATION_RATIO_SQ 0.7f
-#define AS_TB_ATTENUATION_RATIO_SQ 0.1f // 10 percent
+#define AS_TB_ATTENUATION_RATIO_SQ 0.1f
 
 #define AS_TA_AMP_COEFFICIENT 5.0f
 #define AS_TB_AMP_COEFFICIENT 1.5f
 
-float ZSoundEngine::GetArea( rvector& Pos, AmbSound& a )
+float ZSoundEngine::GetArea(rvector& Pos, AmbSound& a)
 {
-	// box
- 	if(a.type & AS_AABB)
+	if (a.type & AS_AABB)
 	{
 		float dX = fabs(Pos.x - a.center.x);
 		float dY = fabs(Pos.y - a.center.y);
 		float dZ = fabs(Pos.z - a.center.z);
-		if(dX < a.dx && dY < a.dy && dZ < a.dz )
+		if (dX < a.dx && dY < a.dy && dZ < a.dz)
 		{
-			return min((a.dx-dX)/a.dx * (a.dy-dY)/a.dy * (a.dz-dZ)/a.dz * ((a.type&AS_2D)?AS_TA_AMP_COEFFICIENT:AS_TB_AMP_COEFFICIENT), 1.0f );
+			return min((a.dx - dX) / a.dx * (a.dy - dY) / a.dy * (a.dz - dZ) / a.dz * ((a.type & AS_2D) ? AS_TA_AMP_COEFFICIENT : AS_TB_AMP_COEFFICIENT), 1.0f);
 		}
 		return -1;
 	}
-	// sphere 
-	else if( a.type & AS_SPHERE )
+	else if (a.type & AS_SPHERE)
 	{
-		/*
-		float lengthsq = D3DXVec3LengthSq(&(a.center - Pos));
-		float radiussq = a.radius*a.radius;
-		if( lengthsq >= radiussq ) return -1;
-		float sacred = radiussq*((a.type&AS_2D)?AS_TA_ATTENUATION_RATIO_SQ:AS_TB_ATTENUATION_RATIO_SQ); // 감쇄 없는 거리
-		if( lengthsq <= sacred ) return 1;
-		return (radiussq - lengthsq)/(radiussq-sacred);
-		//*/
- 		float length = D3DXVec3Length(&(a.center - Pos));
+		float length = D3DXVec3Length(&(a.center - Pos));
 		float radius = a.radius;
-		if( length >= radius ) return -1;
-		float sacred = radius*((a.type&AS_2D)?AS_TA_ATTENUATION_RATIO_SQ:AS_TB_ATTENUATION_RATIO_SQ); // 감쇄 없는 거리
-		if( length <= sacred ) return 1;
-		return (radius - length)/(radius-sacred);
+		if (length >= radius) return -1;
+		float sacred = radius * ((a.type & AS_2D) ? AS_TA_ATTENUATION_RATIO_SQ : AS_TB_ATTENUATION_RATIO_SQ);
+		if (length <= sacred) return 1;
+		return (radius - length) / (radius - sacred);
 	}
 	return -1;
 }
 
-void ZSoundEngine::SetVolumeControlwithDuration( float fStartPercent, float fEndPercent, DWORD dwDuration, bool bEffect, bool bBGM )
+void ZSoundEngine::SetVolumeControlwithDuration(float fStartPercent, float fEndPercent, DWORD dwDuration, bool bEffect, bool bBGM)
 {
 	m_bEffectVolControl = bEffect;
 	m_bBGMVolControl = bBGM;
 
 	DWORD currentTime = timeGetTime();
 	DWORD endTime = currentTime + dwDuration;
-	int nUpdate = ( endTime - currentTime ) / m_DelayTime;
-	
+	int nUpdate = (endTime - currentTime) / m_DelayTime;
+
 	float startEffectVol, startBGMVol;
 
-	if( bEffect && !m_bEffectMute )
+	if (bEffect && !m_bEffectMute)
 	{
-		startEffectVol = fStartPercent*m_fEffectVolume;
-		m_fEffectVolEnd = fEndPercent*m_fEffectVolume;
-		m_fEffectVolFactor = ( m_fEffectVolEnd - startEffectVol ) / nUpdate;
+		startEffectVol = fStartPercent * m_fEffectVolume;
+		m_fEffectVolEnd = fEndPercent * m_fEffectVolume;
+		m_fEffectVolFactor = (m_fEffectVolEnd - startEffectVol) / nUpdate;
 		m_fEffectVolume = startEffectVol;
-	}	
+	}
 
-	if( bBGM && !m_bMusicMute )
+	if (bBGM && !m_bMusicMute)
 	{
-		startBGMVol = fStartPercent*m_fMusicVolume;
-		m_fBGMVolEnd = fEndPercent*m_fMusicVolume;
-		m_fBGMVolFactor = ( m_fBGMVolEnd - startBGMVol ) / nUpdate;
+		startBGMVol = fStartPercent * m_fMusicVolume;
+		m_fBGMVolEnd = fEndPercent * m_fMusicVolume;
+		m_fBGMVolFactor = (m_fBGMVolEnd - startBGMVol) / nUpdate;
 		m_fMusicVolume = startBGMVol;
 	}
 }
-
-//#define _VOICE_EFFECT
 
 void ZSoundEngine::PlayVoiceSound(char* szName)
 {
@@ -1595,21 +1120,20 @@ void ZSoundEngine::PlayVoiceSound(char* szName)
 	return;
 #endif
 
-	if( !m_bSoundEnable )	return;
+	if (!m_bSoundEnable)	return;
 
 	SoundSource* pSS = GetSoundSource(szName, true);
-	if(pSS == 0 )
+	if (pSS == 0)
 	{
 		return;
 	}
 
 	FSOUND_SAMPLE* pFS = pSS->pFS;
-	if(pFS == NULL)
+	if (pFS == NULL)
 	{
 		return;
 	}
-	PlaySE( pFS, rvector(0,0,0), 254, true, false );
-
+	PlaySE(pFS, rvector(0, 0, 0), 254, true, false);
 }
 
 bool ZSoundEngine::LoadNPCResource(MQUEST_NPC nNPC, ZLoadingProgress* pLoading)
@@ -1617,7 +1141,7 @@ bool ZSoundEngine::LoadNPCResource(MQUEST_NPC nNPC, ZLoadingProgress* pLoading)
 	FSOUND_SAMPLE* pFS = NULL;
 	FSOUND_SAMPLE* pFS2 = NULL;
 
-	int flag = FSOUND_SIGNED|FSOUND_MONO | FSOUND_16BITS;
+	int flag = FSOUND_SIGNED | FSOUND_MONO | FSOUND_16BITS;
 	if (m_bHWMixing) flag |= FSOUND_HW3D;
 
 	for (int i = 0; i < NPC_SOUND_END; i++)
@@ -1627,24 +1151,24 @@ bool ZSoundEngine::LoadNPCResource(MQUEST_NPC nNPC, ZLoadingProgress* pLoading)
 
 		if (pNPCInfo->szSoundName[i][0] == 0) continue;
 		char szSoundFileName[256] = "";
-		
-		strcpy(szSoundFileName, SOUNDNPC_DIR);
-		strcat(szSoundFileName, pNPCInfo->szSoundName[i] );
-		strcat(szSoundFileName, ".wav" );
 
-		pFS = ZGetSoundFMod()->LoadWave( szSoundFileName, flag );
+		strcpy(szSoundFileName, const_cast<char*>(SOUNDNPC_DIR));
+		strcat(szSoundFileName, pNPCInfo->szSoundName[i]);
+		strcat(szSoundFileName, const_cast<char*>(SOUNDEFFECT_EXT));
 
-		if( pFS != NULL )
-		{			
+		pFS = ZGetSoundFMod()->LoadWave(szSoundFileName, flag);
+
+		if (pFS != NULL)
+		{
 			float min = 500.0f;
 			float max = ZDEF_MAXDISTANCE;
 
 			SoundSource* pSS = new SoundSource;
 			pSS->pFS = pFS;
 			pSS->fMaxDistance = max;
-			ZGetSoundFMod()->SetMinMaxDistance( pFS, min, 1000000000.0f );
-			
-			m_SoundEffectSource.insert(SESMAP::value_type(szSoundFileName, pSS ));
+			ZGetSoundFMod()->SetMinMaxDistance(pFS, min, 1000000000.0f);
+
+			m_SoundEffectSource.insert(SESMAP::value_type(szSoundFileName, pSS));
 		}
 	}
 
@@ -1655,7 +1179,6 @@ bool ZSoundEngine::LoadNPCResource(MQUEST_NPC nNPC, ZLoadingProgress* pLoading)
 
 void ZSoundEngine::ReleaseNPCResources()
 {
-
 }
 
 void ZSoundEngine::PlayNPCSound(MQUEST_NPC nNPC, MQUEST_NPC_SOUND nSound, rvector& pos, bool bMyKill)
@@ -1666,10 +1189,9 @@ void ZSoundEngine::PlayNPCSound(MQUEST_NPC nNPC, MQUEST_NPC_SOUND nSound, rvecto
 	if (pNPCInfo->szSoundName[nSound][0] != 0)
 	{
 		char szSoundFileName[256] = "";
-		strcpy(szSoundFileName, SOUNDNPC_DIR);
-		strcat(szSoundFileName, pNPCInfo->szSoundName[nSound] );
-		strcat(szSoundFileName, ".wav" );
-
+		strcpy(szSoundFileName, const_cast<char*>(SOUNDNPC_DIR));
+		strcat(szSoundFileName, pNPCInfo->szSoundName[nSound]);
+		strcat(szSoundFileName, const_cast<char*>(SOUNDEFFECT_EXT));
 
 		int nChannel = PlaySound(szSoundFileName, pos, false, false);
 		if (nChannel != 0)
@@ -1686,34 +1208,27 @@ void ZSoundEngine::PlayNPCSound(MQUEST_NPC nNPC, MQUEST_NPC_SOUND nSound, rvecto
 	}
 }
 
-// 컬링 여부 결정
 bool ZSoundEngine::CheckCulling(char* szName, SoundSource* pSS, const rvector& vSoundPos, bool bHero, int* pnoutPriority)
 {
-	float fDistSq = D3DXVec3LengthSq(&(vSoundPos-m_ListenerPos));
-//	float fDistSq = D3DXVec3Length(&(vSoundPos-m_ListenerPos));
-
-	if(!bHero) // 2d사운드의 경우 컬링하지 않음
+	float fDistSq = D3DXVec3LengthSq(&(vSoundPos - m_ListenerPos));
+	if (!bHero)
 	{
-		if( fDistSq > (pSS->fMaxDistance*pSS->fMaxDistance) ) 
+		if (fDistSq > (pSS->fMaxDistance * pSS->fMaxDistance))
 		{
 #ifdef _SOUND_LOG
 			mlog("Cull by Distance[%s]\n", szName);
 #endif
 			return false;
-		}
 	}
-
+}
 
 	unsigned long int nNowTime = timeGetTime();
 
 	if ((nNowTime - pSS->nLastPlayedTime) < 10)
 	{
-		// dash만 중복컬링에서 예외....하드코딩..OTL - bird
 		if (strncmp("fx_dash", szName, 7))
 		{
 #ifdef _DEBUG
-			// 너무 많이 남아서 주석 처리 함. -- by SungE 2007-04-17
-			// mlog("--------- 복수 sound 출력(%s, %u)\n", szName, nNowTime - pSS->nLastPlayedTime);
 #endif
 			return false;
 		}
@@ -1721,16 +1236,10 @@ bool ZSoundEngine::CheckCulling(char* szName, SoundSource* pSS, const rvector& v
 
 	pSS->nLastPlayedTime = nNowTime;
 
-
-
 	if (pnoutPriority)
 	{
-		*pnoutPriority = ((1-fDistSq/pSS->fMaxDistance)*ZDEF_MAX_DISTANCE_PRIORITY ); // 0~100
-//		*pnoutPriority = 0;
+		*pnoutPriority = ((1 - fDistSq / pSS->fMaxDistance) * ZDEF_MAX_DISTANCE_PRIORITY);
 	}
 
 	return true;
 }
-
-
-#endif

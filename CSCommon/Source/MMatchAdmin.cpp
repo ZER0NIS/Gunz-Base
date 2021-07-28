@@ -10,14 +10,12 @@
 
 MMatchAdmin::MMatchAdmin()
 {
-	m_pMatchServer= NULL;
+	m_pMatchServer = NULL;
 }
 
 MMatchAdmin::~MMatchAdmin()
 {
-
 }
-
 
 bool MMatchAdmin::Create(MMatchServer* pServer)
 {
@@ -28,7 +26,6 @@ bool MMatchAdmin::Create(MMatchServer* pServer)
 
 void MMatchAdmin::Destroy()
 {
-
 }
 
 bool MMatchAdmin::Execute(const MUID& uidAdmin, const char* szStr)
@@ -68,7 +65,7 @@ bool MMatchAdmin::MakeArgv(char* szStr, MAdminArgvInfo* pAi)
 	char* dlim;
 	char* arg;
 
-	int iArgcMax = (sizeof(pAi->cargv) / sizeof(char *));
+	int iArgcMax = (sizeof(pAi->cargv) / sizeof(char*));
 
 	scp = szStr;
 	dcp = pAi->argbuf;
@@ -76,13 +73,13 @@ bool MMatchAdmin::MakeArgv(char* szStr, MAdminArgvInfo* pAi)
 
 	for (pAi->cargc = 0; pAi->cargc < iArgcMax; )
 	{
-		for ( ; ; scp++)
+		for (; ; scp++)
 		{
 			c = *scp;
-			if (!isascii(c)) continue;	// 한글처리
+			if (!isascii(c)) continue;
 			if (isspace(c)) continue;
 
-			if ( (c == '\0') || (c == ';') || (c == '\n') )
+			if ((c == '\0') || (c == ';') || (c == '\n'))
 			{
 				pAi->cargv[pAi->cargc] = NULL;
 				return true;
@@ -94,10 +91,10 @@ bool MMatchAdmin::MakeArgv(char* szStr, MAdminArgvInfo* pAi)
 		pAi->cargv[pAi->cargc] = arg;
 		(pAi->cargc)++;
 
-		for ( ; ; )
+		for (; ; )
 		{
 			c = *scp;
-			if ( (c == '\0') || (!isascii(c)) || (isspace(c)) || (c == ';') || (c == '\n') ) break;
+			if ((c == '\0') || (!isascii(c)) || (isspace(c)) || (c == ';') || (c == '\n')) break;
 
 			scp++;
 
@@ -109,19 +106,14 @@ bool MMatchAdmin::MakeArgv(char* szStr, MAdminArgvInfo* pAi)
 	}
 
 	return false;
-
 }
 
-
-
-////////////////////////////////////////////////////////////////////////////////////////////
 bool MMatchServer::OnAdminExecute(MAdminArgvInfo* pAI, char* szOut)
 {
 	szOut[0] = 0;
 
 	if (pAI->cargc <= 0) return false;
 
-	// wall
 	if (!_stricmp(pAI->cargv[0], "wall"))
 	{
 		if (pAI->cargc < 3)
@@ -136,9 +128,8 @@ bool MMatchServer::OnAdminExecute(MAdminArgvInfo* pAI, char* szOut)
 		strcpy(szMsg, pAI->cargv[1]);
 		nMsgType = atoi(pAI->cargv[2]);
 
-
-		MCommand* pCmd = CreateCommand(MC_ADMIN_ANNOUNCE, MUID(0,0));
-		pCmd->AddParameter(new MCmdParamUID(MUID(0,0)));
+		MCommand* pCmd = CreateCommand(MC_ADMIN_ANNOUNCE, MUID(0, 0));
+		pCmd->AddParameter(new MCmdParamUID(MUID(0, 0)));
 		pCmd->AddParameter(new MCmdParamStr(szMsg));
 		pCmd->AddParameter(new MCmdParamUInt(nMsgType));
 
@@ -148,27 +139,24 @@ bool MMatchServer::OnAdminExecute(MAdminArgvInfo* pAI, char* szOut)
 	{
 		sprintf(szOut, "%s: no such command", pAI->cargv[0]);
 	}
-	
+
 	return true;
 }
-
 
 void MMatchServer::AdminTerminalOutput(const MUID& uidAdmin, const char* szText)
 {
 	MMatchObject* pObj = GetObject(uidAdmin);
 	if (pObj == NULL) return;
 
-	// 관리자 권한을 가진 사람이 아니면 연결을 끊는다.
 	if (pObj->GetAccountInfo()->m_nUGrade != MMUG_ADMIN)
 	{
-//		DisconnectObject(uidAdmin);		
 		return;
 	}
 
 	char szMsg[65535];
 	strcpy(szMsg, szText);
 
-	MCommand* pCmd = CreateCommand(MC_ADMIN_TERMINAL, MUID(0,0));
+	MCommand* pCmd = CreateCommand(MC_ADMIN_TERMINAL, MUID(0, 0));
 	pCmd->AddParameter(new MCmdParamUID(uidAdmin));
 	pCmd->AddParameter(new MCmdParamStr(szMsg));
 

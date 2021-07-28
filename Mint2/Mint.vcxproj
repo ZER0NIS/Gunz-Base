@@ -152,6 +152,7 @@
     <ClCompile Include="Source\MSlider.cpp" />
     <ClCompile Include="Source\MTabCtrl.cpp" />
     <ClCompile Include="Source\MTextArea.cpp" />
+    <ClCompile Include="Source\MTextAreaChat.cpp" />
     <ClCompile Include="Source\MToolTip.cpp" />
     <ClCompile Include="Source\MTypes.cpp" />
     <ClCompile Include="Source\MWidget.cpp" />
@@ -214,6 +215,7 @@
     <ClInclude Include="Include\MSlider.h" />
     <ClInclude Include="Include\MTabCtrl.h" />
     <ClInclude Include="Include\MTextArea.h" />
+    <ClInclude Include="Include\MTextAreaChat.h" />
     <ClInclude Include="Include\MToolTip.h" />
     <ClInclude Include="Include\MTypes.h" />
     <ClInclude Include="Include\MWidget.h" />

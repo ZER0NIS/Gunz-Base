@@ -4,9 +4,19 @@
 #include "MLadderGroup.h"
 #include "MLadderStatistics.h"
 #include <vector>
+#include <list>
 
 class MMatchObject;
 
+struct LadderGameMapVoteInfo
+{
+	MLadderGroup* pGroupA;
+	MLadderGroup* pGroupB;
+	int Maps[3];
+	int Votes[3];
+	int SelectedMap;
+	unsigned long int RegisterTime;
+};
 
 class MLadderMgr {
 protected:
@@ -14,12 +24,17 @@ protected:
 	unsigned long		m_nLastTick;
 
 	MLadderGroupMap		m_WaitingMaps[MLADDERTYPE_MAX];
-	list<MLadderGroup*>	m_GroupList;
+	std::list<MLadderGroup*>	m_GroupList;
 
 	MLadderStatistics	m_Stat;
 protected:
-	unsigned long GetLastTick()	{ return m_nLastTick; }
-	void SetLastTick(unsigned long nTick)	{ m_nLastTick = nTick; }
+	unsigned long int counter;
+	std::map<unsigned long int, LadderGameMapVoteInfo*> WaitingMapSelectionGames;
+
+	unsigned long GetLastTick() { return m_nLastTick; }
+	void SetLastTick(unsigned long nTick) { m_nLastTick = nTick; }
+
+	void UpdateMapCountDown(unsigned long int NowTime);
 
 	inline MLadderGroupMap* GetWaitGroupContainer(MLADDERTYPE nLadderType);
 
@@ -32,6 +47,7 @@ protected:
 public:
 	MLadderMgr() {
 		m_idGenerate = 0;
+		counter = 0;
 	}
 	bool Init();
 	MLadderGroup* CreateLadderGroup();
@@ -39,21 +55,17 @@ public:
 	bool Challenge(MLadderGroup* pGroup);
 	void CancelChallenge(int nGroupID, const char* pszCancelName);
 
+	void UpdatePlayerVote(int VoteID, MMatchObject* pObj);
+
 	void Tick(unsigned long nTick);
-	int GenerateID()	{ return ++m_idGenerate; }	
+	int GenerateID() { return ++m_idGenerate; }
 	int GetNeedMemberCount(MLADDERTYPE nLadderType);
 	int GetTotalGroupCount();
 	unsigned long GetChecksum(int nFirstIndex, int nGroupCount);
 
-	void DebugTest();
-	
-	list<MLadderGroup*>::iterator GetGroupListBegin()		{ return m_GroupList.begin(); }
-	list<MLadderGroup*>::iterator GetGroupListEnd()			{ return m_GroupList.end(); }
-	size_t GetGroupCount()									{ return m_GroupList.size(); }
+	auto GetGroupListBegin() { return m_GroupList.begin(); }
+	auto GetGroupListEnd() { return m_GroupList.end(); }
+	size_t GetGroupCount() { return m_GroupList.size(); }
 
-	MLadderStatistics*	GetStatistics()						{ return &m_Stat; }
+	MLadderStatistics* GetStatistics() { return &m_Stat; }
 };
-
-
-
-

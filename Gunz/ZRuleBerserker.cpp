@@ -1,60 +1,52 @@
 #include "stdafx.h"
 #include "ZRuleBerserker.h"
 
-
-#define BERSERKER_UPDATE_HEALTH_TIME		5.0f		// 버서커는 5초마다 피가 10씩 준다.
+#define BERSERKER_UPDATE_HEALTH_TIME		5.0f
 #define BERSERKER_UPDATE_HEALTH				10
-#define BERSERKER_BONUS_HEALTH				50			// 버서커는 적을 죽이면 50의 피가 찬다.
+#define BERSERKER_BONUS_HEALTH				50
 
-ZRuleBerserker::ZRuleBerserker(ZMatch* pMatch) : ZRule(pMatch), m_uidBerserker(0,0)
-{
+ZRuleBerserker::ZRuleBerserker(ZMatch* pMatch) : ZRule(pMatch), m_uidBerserker(0, 0) { }
 
-}
-
-ZRuleBerserker::~ZRuleBerserker()
-{
-
-
-}
+ZRuleBerserker::~ZRuleBerserker() { }
 
 bool ZRuleBerserker::OnCommand(MCommand* pCommand)
 {
-	if (!ZGetGame()) return false;
+	if (!ZGetGame())
+		return false;
 
 	switch (pCommand->GetID())
 	{
 	case MC_MATCH_ASSIGN_BERSERKER:
-		{
-			MUID uidBerserker;
-			pCommand->GetParameter(&uidBerserker,		0, MPT_UID);
+	{
+		MUID uidBerserker;
+		pCommand->GetParameter(&uidBerserker, 0, MPT_UID);
 
-			AssignBerserker(uidBerserker);
-		}
-		break;
+		AssignBerserker(uidBerserker);
+	}
+	break;
 	case MC_MATCH_GAME_DEAD:
+	{
+		MUID uidAttacker, uidVictim;
+		unsigned long int nAttackerArg, nVictimArg;
+
+		pCommand->GetParameter(&uidAttacker, 0, MPT_UID);
+		pCommand->GetParameter(&nAttackerArg, 1, MPT_UINT);
+		pCommand->GetParameter(&uidVictim, 2, MPT_UID);
+		pCommand->GetParameter(&nVictimArg, 3, MPT_UINT);
+
+		bool bSuicide = false;
+		if (uidAttacker == uidVictim) bSuicide = true;
+
+		if ((uidAttacker != MUID(0, 0)) && (uidAttacker == m_uidBerserker))
 		{
-			MUID uidAttacker, uidVictim;
-			unsigned long int nAttackerArg, nVictimArg;
-
-			pCommand->GetParameter(&uidAttacker, 0, MPT_UID);
-			pCommand->GetParameter(&nAttackerArg, 1, MPT_UINT);
-			pCommand->GetParameter(&uidVictim, 2, MPT_UID);
-			pCommand->GetParameter(&nVictimArg, 3, MPT_UINT);
-
-
-			bool bSuicide = false;
-			if (uidAttacker == uidVictim) bSuicide = true;
-
-			if ((uidAttacker != MUID(0,0)) && (uidAttacker == m_uidBerserker))
+			if (!bSuicide)
 			{
-				if (!bSuicide)
-				{
-					ZCharacter* pAttacker = ZGetGame()->m_CharacterManager.Find(uidAttacker);
-					BonusHealth(pAttacker);
-				}
+				ZCharacter* pAttacker = ZGetGame()->m_CharacterManager.Find(uidAttacker);
+				BonusHealth(pAttacker);
 			}
 		}
-		break;
+	}
+	break;
 	}
 
 	return false;
@@ -65,7 +57,6 @@ void ZRuleBerserker::OnResponseRuleInfo(MTD_RuleInfo* pInfo)
 	MTD_RuleInfo_Berserker* pBerserkerRule = (MTD_RuleInfo_Berserker*)pInfo;
 	AssignBerserker(pBerserkerRule->uidBerserker);
 }
-
 
 void ZRuleBerserker::AssignBerserker(MUID& uidBerserker)
 {
@@ -83,8 +74,7 @@ void ZRuleBerserker::AssignBerserker(MUID& uidBerserker)
 	{
 		ZGetEffectManager()->AddBerserkerIcon(pBerserkerChar);
 		pBerserkerChar->SetTagger(true);
-		
-		// 버서커가 되면 피가 꽉 찬다.
+
 		if (!pBerserkerChar->IsDie())
 		{
 			float fMaxHP = pBerserkerChar->GetMaxHP();
@@ -93,13 +83,11 @@ void ZRuleBerserker::AssignBerserker(MUID& uidBerserker)
 			pBerserkerChar->SetHP(fMaxHP);
 			pBerserkerChar->SetAP(fMaxAP);
 
-
-			if ( uidBerserker == ZGetMyUID())
-				ZGetGameInterface()->PlayVoiceSound( VOICE_GOT_BERSERKER, 1600);
+			if (uidBerserker == ZGetMyUID())
+				ZGetGameInterface()->PlayVoiceSound(VOICE_GOT_BERSERKER, 1600);
 			else
-				ZGetGameInterface()->PlayVoiceSound( VOICE_BERSERKER_DOWN, 1200);
+				ZGetGameInterface()->PlayVoiceSound(VOICE_BERSERKER_DOWN, 1200);
 		}
-
 	}
 
 	m_uidBerserker = uidBerserker;
@@ -123,11 +111,8 @@ void ZRuleBerserker::BonusHealth(ZCharacter* pBerserker)
 {
 	if (pBerserker)
 	{
-		if (pBerserker->IsDie()) 
-		{
-			CHECK_RETURN_CALLSTACK(BonusHealth);
+		if (pBerserker->IsDie())
 			return;
-		}
 
 		float fBonusAP = 0.0f;
 		float fBonusHP = BERSERKER_BONUS_HEALTH;
@@ -142,7 +127,6 @@ void ZRuleBerserker::BonusHealth(ZCharacter* pBerserker)
 		pBerserker->SetHP(pBerserker->GetHP() + fBonusHP);
 		pBerserker->SetAP(pBerserker->GetAP() + fBonusAP);
 	}
-	CHECK_RETURN_CALLSTACK(BonusHealth);
 }
 
 void ZRuleBerserker::PenaltyHealth(ZCharacter* pBerserker)
@@ -156,9 +140,8 @@ void ZRuleBerserker::PenaltyHealth(ZCharacter* pBerserker)
 		}
 		else
 		{
-			// 피가 모잘라도 1까지만 빼준다.
 			float fHP = max(1.0f, pBerserker->GetHP() - BERSERKER_UPDATE_HEALTH);
-            pBerserker->SetHP(fHP);
+			pBerserker->SetHP(fHP);
 		}
 
 		pBerserker->SetLastAttacker(pBerserker->GetUID());

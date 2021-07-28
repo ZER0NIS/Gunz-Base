@@ -3,10 +3,10 @@
 
 #include "MTextArea.h"
 
-class MBTextAreaLook : public MTextAreaLook{
+class MBTextAreaLook : public MTextAreaLook {
 public:
-	MFont*		m_pFont;
-	MBitmap*	m_pFrameBitmaps[9];
+	MFont* m_pFont;
+	MBitmap* m_pFrameBitmaps[9];
 
 public:
 	MBTextAreaLook(void);

@@ -7,14 +7,13 @@ MCommandDesc::MCommandDesc(int nID, const char* szName, const char* szDescriptio
 {
 	m_nID = nID;
 	strcpy(m_szName, szName);
-	//_strupr(m_szName);
 	strcpy(m_szDescription, szDescription);
 	m_nFlag = nFlag;
 }
 
 MCommandDesc::~MCommandDesc(void)
 {
-	for(int i=0; i<(int)m_ParamDescs.size(); i++){
+	for (int i = 0; i < (int)m_ParamDescs.size(); i++) {
 		delete m_ParamDescs[i];
 	}
 	m_ParamDescs.clear();
@@ -27,7 +26,7 @@ void MCommandDesc::AddParamDesc(MCommandParameterDesc* pParamDesc)
 
 bool MCommandDesc::IsFlag(int nFlag) const
 {
-	return ((m_nFlag&nFlag)==nFlag);
+	return ((m_nFlag & nFlag) == nFlag);
 }
 
 MCommandDesc* MCommandDesc::Clone()
@@ -39,14 +38,15 @@ MCommandDesc* MCommandDesc::Clone()
 		MCommandParameterDesc* pParamDesc = new MCommandParameterDesc(pSrcParamDesc->GetType(), (char*)pSrcParamDesc->GetDescription());
 		pNewDesc->AddParamDesc(pSrcParamDesc);
 	}
-	
+
 	return pNewDesc;
 }
-////////////////////////////////////////////////////////////////////////
 void MCommand::Reset(void)
 {
 	m_pCommandDesc = NULL;
 	m_nSerialNumber = 0;
+	m_dwPostTime = GetTickCount(); // Custom: Command post time
+	m_nCommandType = MSGID_COMMAND;
 	m_Sender.SetZero();
 	m_Receiver.SetZero();
 	ClearParam();
@@ -55,7 +55,7 @@ void MCommand::Reset(void)
 void MCommand::ClearParam(void)
 {
 	const int nParamCount = GetParameterCount();
-	for(int i=0; i<nParamCount; ++i){
+	for (int i = 0; i < nParamCount; ++i) {
 		delete m_Params[i];
 	}
 	m_Params.clear();
@@ -63,7 +63,6 @@ void MCommand::ClearParam(void)
 
 void MCommand::ClearParam(int i)
 {
-	//_ASSERT(GetParameterCount() >= i);
 	delete m_Params[i];
 	m_Params.erase(m_Params.begin() + i);
 }
@@ -89,7 +88,6 @@ MCommand::MCommand(int nID, MUID Sender, MUID Receiver, MCommandManager* pComman
 	m_Receiver = Receiver;
 }
 
-
 MCommand::~MCommand(void)
 {
 	ClearParam();
@@ -98,32 +96,24 @@ MCommand::~MCommand(void)
 void MCommand::SetID(const MCommandDesc* pCommandDesc)
 {
 	m_pCommandDesc = pCommandDesc;
-	//_ASSERT(m_pCommandDesc!=NULL);
-	m_Params.reserve(pCommandDesc->GetParameterDescCount());	// 공간 확보
+	m_Params.reserve(pCommandDesc->GetParameterDescCount());
 }
-
 
 void MCommand::SetID(int nID, MCommandManager* pCommandManager)
 {
 	m_pCommandDesc = pCommandManager->GetCommandDescByID(nID);
-	//_ASSERT(m_pCommandDesc!=NULL);
-	m_Params.reserve(m_pCommandDesc->GetParameterDescCount());	// 공간 확보
+	m_Params.reserve(m_pCommandDesc->GetParameterDescCount());
 }
-
 
 bool MCommand::AddParameter(MCommandParameter* pParam)
 {
-	//_ASSERT(m_Params.capacity()==m_pCommandDesc->GetParameterDescCount());	// 미리 공간이 확보되어 있어야 한다.
-
 	int nCount = (int)m_Params.size();
 	int nParamDescCount = m_pCommandDesc->GetParameterDescCount();
 
-	//_ASSERT(nCount<nParamDescCount);				// Debug Mode 에서는 Assert로 엄격하게 체크한다.
-	if(nCount>=nParamDescCount) return false;
+	if (nCount >= nParamDescCount) return false;
 
 	MCommandParameterDesc* pParamDesc = m_pCommandDesc->GetParameterDesc(nCount);
-	//_ASSERT(pParam->GetType()==pParamDesc->GetType());	// 명시된 파라미터여야 한다.
-	if(pParam->GetType()!=pParamDesc->GetType()) return false;
+	if (pParam->GetType() != pParamDesc->GetType()) return false;
 
 	m_Params.push_back(pParam);
 
@@ -137,46 +127,44 @@ int MCommand::GetParameterCount(void) const
 
 MCommandParameter* MCommand::GetParameter(int i) const
 {
-	if(i<0 || i>=(int)m_Params.size()) return NULL;
+	if (i < 0 || i >= (int)m_Params.size()) return NULL;
 
 	return m_Params[i];
 }
 
 bool MCommand::GetParameter(void* pValue, int i, MCommandParameterType t, int nBufferSize) const
 {
-	if( 0 == pValue ) return false;
+	if (0 == pValue) return false;
 
 	MCommandParameter* pParam = GetParameter(i);
-	if(pParam==NULL) return false;
+	if (pParam == NULL) return false;
 
-	if(pParam->GetType()!=t) return false;
+	if (pParam->GetType() != t) return false;
 
 #ifdef _DEBUG
-	// 스트링과 blob 은 버퍼오버플로우 체크를 할 필요가 있다.
-	if(pParam->GetType()==MPT_STR && nBufferSize < 0 ) {
-		// string 파라미터는 꼭 buffer size를 적어주세요
-		//_ASSERT(FALSE);
+	if (pParam->GetType() == MPT_STR && nBufferSize < 0) {
 	}
 #endif
 
-	if(pParam->GetType()==MPT_STR && nBufferSize>=0 ) {
-		char *szParamString = *(char**)pParam->GetPointer();
-		if( 0 == szParamString )
+	if (pParam->GetType() == MPT_STR && nBufferSize >= 0) {
+		char* szParamString = *(char**)pParam->GetPointer();
+		if (0 == szParamString)
 		{
-			ASSERT( 0 && "NULL 포인터 스트링" );
-			strcpy( (char*)pValue, "\0" );		
+			ASSERT(0 && "NULL 포인터 스트링");
+			strcpy((char*)pValue, "\0");
 			return true;
 		}
 
 		int nLength = (int)strlen(szParamString);
-		if(nLength>=nBufferSize-1) {
-//			mlog("buffer overflow command id %d, sender uid(%d,%d)\n", GetID(), m_Sender.High, m_Sender.Low);
-			strncpy((char*)pValue,szParamString,nBufferSize-1);
-			((char*)pValue)[nBufferSize-1]=0;
-		}else{
+		if (nLength >= nBufferSize - 1) {
+			strncpy((char*)pValue, szParamString, nBufferSize - 1);
+			((char*)pValue)[nBufferSize - 1] = 0;
+		}
+		else {
 			pParam->GetValue(pValue);
 		}
-	}else {
+	}
+	else {
 		pParam->GetValue(pValue);
 	}
 
@@ -185,41 +173,39 @@ bool MCommand::GetParameter(void* pValue, int i, MCommandParameterType t, int nB
 
 MCommand* MCommand::Clone(void) const
 {
-	if(m_pCommandDesc==NULL) return NULL;
+	if (m_pCommandDesc == NULL) return NULL;
 	MCommand* pClone = new MCommand(m_pCommandDesc, m_Receiver, m_Sender);
-	if( 0 == pClone ) return NULL;
+	if (0 == pClone) return NULL;
 	const int nParamCount = GetParameterCount();
-	for(int i=0; i<nParamCount; ++i){
+	for (int i = 0; i < nParamCount; ++i) {
 		MCommandParameter* pParameter = GetParameter(i);
-		if(pClone->AddParameter(pParameter->Clone())==false){
+		if (pClone->AddParameter(pParameter->Clone()) == false) {
 			delete pClone;
 			return NULL;
 		}
-	}	
+	}
 
 	return pClone;
 }
 
 bool MCommand::CheckRule(void)
 {
-	//_ASSERT(m_pCommandDesc!=NULL);
-	if(m_pCommandDesc==NULL) return false;
+	if (m_pCommandDesc == NULL) return false;
 
 	int nCount = GetParameterCount();
-	if(nCount!=m_pCommandDesc->GetParameterDescCount()) return false;
+	if (nCount != m_pCommandDesc->GetParameterDescCount()) return false;
 
-	for(int i=0; i<nCount; ++i){
+	for (int i = 0; i < nCount; ++i) {
 		MCommandParameter* pParam = GetParameter(i);
 		MCommandParameterDesc* pParamDesc = m_pCommandDesc->GetParameterDesc(i);
-		if(pParam->GetType()!=pParamDesc->GetType()) return false;
+		if (pParam->GetType() != pParamDesc->GetType()) return false;
 
-		// 제약조건 체크
 		if (pParamDesc->HasConditions())
 		{
 			for (int j = 0; j < pParamDesc->GetConditionCount(); j++)
 			{
 				MCommandParamCondition* pCondition = pParamDesc->GetCondition(j);
-				if (!pCondition->Check(pParam)) 
+				if (!pCondition->Check(pParam))
 				{
 					mlog("Cmd Param Condition Check Error(CMID = %d)\n", m_pCommandDesc->GetID());
 					return false;
@@ -233,34 +219,24 @@ bool MCommand::CheckRule(void)
 
 int MCommand::GetData(char* pData, int nSize)
 {
-	if(m_pCommandDesc==NULL) return 0;
+	if (m_pCommandDesc == NULL) return 0;
 
 	int nParamCount = GetParameterCount();
 
 	unsigned short int nDataCount = sizeof(nDataCount);
 
-	// Command id
 	unsigned short int nCommandID = m_pCommandDesc->GetID();
-	memcpy(pData+nDataCount, &(nCommandID), sizeof(nCommandID));
+	memcpy(pData + nDataCount, &(nCommandID), sizeof(nCommandID));
 	nDataCount += sizeof(nCommandID);
 
-	// serial number
-	memcpy(pData+nDataCount, &(m_nSerialNumber), sizeof(m_nSerialNumber));
+	memcpy(pData + nDataCount, &(m_nSerialNumber), sizeof(m_nSerialNumber));
 	nDataCount += sizeof(m_nSerialNumber);
 
-	// Parameters
-//	memcpy(pData+nDataCount, &nParamCount, sizeof(nParamCount));
-//	nDataCount += sizeof(nParamCount);
-
-	for(int i=0; i<nParamCount; ++i){
+	for (int i = 0; i < nParamCount; ++i) {
 		MCommandParameter* pParam = GetParameter(i);
-		//BYTE pt = (BYTE)pParam->GetType();
-		//memcpy(pData+nDataCount, &(pt), sizeof(pt));
-		//nDataCount += sizeof(pt);
-		nDataCount += pParam->GetData(pData+nDataCount, nSize-nDataCount);
+		nDataCount += pParam->GetData(pData + nDataCount, nSize - nDataCount);
 	}
 
-	// Write Total Size
 	memcpy(pData, &nDataCount, sizeof(nDataCount));
 
 	return nDataCount;
@@ -272,7 +248,6 @@ bool MCommand::SetData(char* pData, MCommandManager* pCM, unsigned short nDataLe
 
 	unsigned short int nDataCount = 0;
 
-	// Get Total Size
 	unsigned short nTotalSize = 0;
 	memcpy(&nTotalSize, pData, sizeof(nTotalSize));
 
@@ -280,41 +255,27 @@ bool MCommand::SetData(char* pData, MCommandManager* pCM, unsigned short nDataLe
 
 	nDataCount += sizeof(nTotalSize);
 
-	// Command
 	unsigned short int nCommandID = 0;
-	memcpy(&nCommandID, pData+nDataCount, sizeof(nCommandID));
+	memcpy(&nCommandID, pData + nDataCount, sizeof(nCommandID));
 	nDataCount += sizeof(nCommandID);
 
 	MCommandDesc* pDesc = pCM->GetCommandDescByID(nCommandID);
 	if (pDesc == NULL)
 	{
-		//_ASSERT(0);
-
 		return false;
 	}
 	SetID(pDesc);
 
-	// serial number
-	memcpy(&m_nSerialNumber, pData+nDataCount, sizeof(m_nSerialNumber));
+	memcpy(&m_nSerialNumber, pData + nDataCount, sizeof(m_nSerialNumber));
 	nDataCount += sizeof(m_nSerialNumber);
 
-
-	// Parameters
 	int nParamCount = pDesc->GetParameterDescCount();
 
-	//memcpy(&nParamCount, pData+nDataCount, sizeof(nParamCount));
-	//if (nParamCount != pDesc->GetParameterDescCount()) return false;
-	//nDataCount += sizeof(nParamCount);
-
-	for(int i=0; i<nParamCount; ++i){
-		//BYTE nType;
-		//memcpy(&nType, pData+nDataCount, sizeof(BYTE));
-		//nDataCount += sizeof(BYTE);
-
+	for (int i = 0; i < nParamCount; ++i) {
 		MCommandParameterType nParamType = pDesc->GetParameterType(i);
 
 		MCommandParameter* pParam = NULL;
-		switch(nParamType){
+		switch (nParamType) {
 		case MPT_INT:
 			pParam = new MCommandParameterInt;
 			break;
@@ -328,8 +289,8 @@ bool MCommand::SetData(char* pData, MCommandManager* pCM, unsigned short nDataLe
 			pParam = new MCommandParameterString;
 			{
 				unsigned short checkSize = 0;
-				memcpy(&checkSize, pData+nDataCount, sizeof(checkSize));
-				if( checkSize > nDataLen || checkSize == 0)
+				memcpy(&checkSize, pData + nDataCount, sizeof(checkSize));
+				if (checkSize > nDataLen || checkSize == 0)
 				{
 					return false;
 				}
@@ -356,9 +317,9 @@ bool MCommand::SetData(char* pData, MCommandManager* pCM, unsigned short nDataLe
 		case MPT_BLOB:
 			pParam = new MCommandParameterBlob;
 			{
-				unsigned int checkSize = 0;				
-				memcpy(&checkSize, pData+nDataCount, sizeof(checkSize));
-				if( checkSize > nDataLen || checkSize == 0)
+				unsigned int checkSize = 0;
+				memcpy(&checkSize, pData + nDataCount, sizeof(checkSize));
+				if (checkSize > nDataLen || checkSize == 0)
 				{
 					return false;
 				}
@@ -386,13 +347,11 @@ bool MCommand::SetData(char* pData, MCommandManager* pCM, unsigned short nDataLe
 			pParam = new MCommandParameterShortVector;
 			break;
 		default:
-			//mlog("Error(MCommand::SetData): Wrong Param Type\n");
-			//_ASSERT(false);		// Unknow Parameter!!!
 			return false;
 			break;
 		}
 
-		nDataCount += pParam->SetData(pData+nDataCount);
+		nDataCount += pParam->SetData(pData + nDataCount);
 
 		m_Params.push_back(pParam);
 
@@ -412,20 +371,15 @@ bool MCommand::SetData(char* pData, MCommandManager* pCM, unsigned short nDataLe
 
 int MCommand::GetSize()
 {
-	if(m_pCommandDesc==NULL) return 0;
+	if (m_pCommandDesc == NULL) return 0;
 
 	int nSize = 0;
 
-	// size + command id + serial number
 	nSize = sizeof(unsigned short int) + sizeof(unsigned short int) + sizeof(m_nSerialNumber);
 
 	int nParamCount = (int)m_Params.size();
 
-	// Parameter Types
-	//nSize += (sizeof(BYTE) * nParamCount);
-
-	// Parameters
-	for(int i=0; i<nParamCount; i++)
+	for (int i = 0; i < nParamCount; i++)
 	{
 		MCommandParameter* pParam = GetParameter(i);
 		nSize += (pParam->GetSize());
@@ -434,18 +388,14 @@ int MCommand::GetSize()
 	return nSize;
 }
 
-////////////////////////////////////////////////////////////////////////////////////
-// MCommandSNChecker ///////////////////////////////////////////////////////////////
 #define DEFAULT_COMMAND_SNCHECKER_CAPICITY	50
 
 MCommandSNChecker::MCommandSNChecker() : m_nCapacity(DEFAULT_COMMAND_SNCHECKER_CAPICITY)
 {
-
 }
 
 MCommandSNChecker::~MCommandSNChecker()
 {
-
 }
 
 void MCommandSNChecker::InitCapacity(int nCapacity)
@@ -460,16 +410,11 @@ bool MCommandSNChecker::CheckValidate(int nSerialNumber)
 	set<int>::iterator itorSet = m_SNSet.find(nSerialNumber);
 	if (itorSet != m_SNSet.end())
 	{
-		// 중복된 커맨드이다.
 		return false;
 	}
 
-	//_ASSERT(m_nCapacity > 0);
-
-	// 중복되지 않은 것이면 등록한다.
 	if ((int)m_SNQueue.size() >= m_nCapacity)
 	{
-		// 용량의 한계를 넘으면 제일 처음에 들어온 것을 빼준다.
 		int nFirst = m_SNQueue.front();
 		m_SNQueue.pop_front();
 

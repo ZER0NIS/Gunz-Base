@@ -43,7 +43,7 @@ void ZMeshView::DrawTestScene(void)
 	*/
 
 	RSetProjection(D3DX_PI/4, 1.0f, 1.0f, 1000.0f);
-	RSetCamera(D3DXVECTOR3(0.0f, 3.0f, -5.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f), D3DXVECTOR3(0.0f, 1.0f, 0.0f));
+	RSetCamera(rvector(0.0f, 3.0f, -5.0f), rvector(0.0f, 0.0f, 0.0f), rvector(0.0f, 1.0f, 0.0f));
 
 	rmatrix World;
 	D3DXMatrixIdentity(&World);

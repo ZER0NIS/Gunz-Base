@@ -60,7 +60,7 @@ bool IsWaitingClanCreatingAgree()
 {
 	ZIDLResource* pResource = ZApplication::GetGameInterface()->GetIDLResource();
 	MWidget* pWidget = pResource->FindWidget("ClanSponsorAgreementWait");
-	if(pWidget!=NULL)
+	if (pWidget != NULL)
 	{
 		return pWidget->IsVisible();
 	}
@@ -72,7 +72,7 @@ bool IsWaitingClanJoiningAgree()
 {
 	ZIDLResource* pResource = ZApplication::GetGameInterface()->GetIDLResource();
 	MWidget* pWidget = pResource->FindWidget("ClanJoinerAgreementWait");
-	if(pWidget!=NULL)
+	if (pWidget != NULL)
 	{
 		return pWidget->IsVisible();
 	}
@@ -81,47 +81,20 @@ bool IsWaitingClanJoiningAgree()
 
 void ShowClanSponsorAgreeWaitFrame_OnExpire()
 {
-	ZChatOutput( ZMsg(MSG_CANCELED) );
+	ZChatOutput(ZMsg(MSG_CANCELED));
 }
 
 void ShowClanSponsorAgreeWaitFrame(bool bVisible)
 {
 	ZIDLResource* pResource = ZApplication::GetGameInterface()->GetIDLResource();
 	MWidget* pWidget = pResource->FindWidget("ClanSponsorAgreementWait");
-	if(pWidget!=NULL)
+	if (pWidget != NULL)
 	{
 		if (bVisible)
 		{
-			static ZCOUNTDOWN countDown = {30,"ClanSponsorAgreementWait_Remain",
-				"ClanSponsorAgreementWait",ShowClanSponsorAgreeWaitFrame_OnExpire};
-			countDown.nSeconds=30;	// static 이므로 재설정
-			ZApplication::GetTimer()->SetTimerEvent(0, &OnTimer_CountDown, &countDown, true);
-
-			pWidget->Show(true, true);
-		}
-		else
-		{
-            pWidget->Show(false);
-		}
-	}
-}
-
-void ShowClanJoinerAgreeWaitFrame_OnExpire()
-{
-	ZChatOutput( ZMsg(MSG_CANCELED) );
-}
-
-void ShowClanJoinerAgreeWaitFrame(bool bVisible)
-{
-	ZIDLResource* pResource = ZApplication::GetGameInterface()->GetIDLResource();
-	MWidget* pWidget = pResource->FindWidget("ClanJoinerAgreementWait");
-	if(pWidget!=NULL)
-	{
-		if (bVisible)
-		{
-			static ZCOUNTDOWN countDown = {30,"ClanJoinerAgreementWait_Remain",
-				"ClanJoinerAgreementWait",ShowClanJoinerAgreeWaitFrame_OnExpire};
-			countDown.nSeconds=30;	// static 이므로 재설정
+			static ZCOUNTDOWN countDown = { 30,"ClanSponsorAgreementWait_Remain",
+				"ClanSponsorAgreementWait",ShowClanSponsorAgreeWaitFrame_OnExpire };
+			countDown.nSeconds = 30;	// static 이므로 재설정
 			ZApplication::GetTimer()->SetTimerEvent(0, &OnTimer_CountDown, &countDown, true);
 
 			pWidget->Show(true, true);
@@ -133,7 +106,32 @@ void ShowClanJoinerAgreeWaitFrame(bool bVisible)
 	}
 }
 
+void ShowClanJoinerAgreeWaitFrame_OnExpire()
+{
+	ZChatOutput(ZMsg(MSG_CANCELED));
+}
 
+void ShowClanJoinerAgreeWaitFrame(bool bVisible)
+{
+	ZIDLResource* pResource = ZApplication::GetGameInterface()->GetIDLResource();
+	MWidget* pWidget = pResource->FindWidget("ClanJoinerAgreementWait");
+	if (pWidget != NULL)
+	{
+		if (bVisible)
+		{
+			static ZCOUNTDOWN countDown = { 30,"ClanJoinerAgreementWait_Remain",
+				"ClanJoinerAgreementWait",ShowClanJoinerAgreeWaitFrame_OnExpire };
+			countDown.nSeconds = 30;	// static 이므로 재설정
+			ZApplication::GetTimer()->SetTimerEvent(0, &OnTimer_CountDown, &countDown, true);
+
+			pWidget->Show(true, true);
+		}
+		else
+		{
+			pWidget->Show(false);
+		}
+	}
+}
 
 ///////////////////////////////////////////////////////////////////////////////////////
 
@@ -143,19 +141,17 @@ void ZGameClient::OnResponseCreateClan(const int nResult, const int nRequestID)
 	{
 		return;
 	}
-	
+
 	if (nResult == MOK)
 	{
 		// 클랜생성멤버들이 동의할동안 기다리라는 메세지창을 띄운다.
 		ShowClanSponsorAgreeWaitFrame(true);
 	}
-	else 
+	else
 	{
-		ZApplication::GetGameInterface()->ShowErrorMessage( nResult );
+		ZApplication::GetGameInterface()->ShowErrorMessage(nResult);
 	}
 }
-
-
 
 void ZGameClient::OnResponseAgreedCreateClan(const int nResult)
 {
@@ -164,24 +160,24 @@ void ZGameClient::OnResponseAgreedCreateClan(const int nResult)
 
 	if (nResult == MOK)
 	{
-		ZApplication::GetGameInterface()->ShowMessage( MSG_CLAN_CREATED );
+		ZApplication::GetGameInterface()->ShowMessage(MSG_CLAN_CREATED);
 	}
-	else 
+	else
 	{
-		ZApplication::GetGameInterface()->ShowErrorMessage( nResult );
+		ZApplication::GetGameInterface()->ShowErrorMessage(nResult);
 	}
 }
 
 void OnClanAskSponsorAgreement_OnExpire()
 {
-	ZChatOutput( ZMsg(MSG_CANCELED) );
+	ZChatOutput(ZMsg(MSG_CANCELED));
 	ZGetGameClient()->AnswerSponsorAgreement(false);
 }
 
 void ZGameClient::OnClanAskSponsorAgreement(const int nRequestID, const char* szClanName, MUID& uidMasterObject, const char* szMasterName)
 {
 	// 받을수 없는 상황이면 무시
-	if(!ZGetGameInterface()->IsReadyToPropose()) return;
+	if (!ZGetGameInterface()->IsReadyToPropose()) return;
 
 	m_nRequestID = nRequestID;
 	m_uidRequestPlayer = uidMasterObject;
@@ -196,11 +192,11 @@ void ZGameClient::OnClanAskSponsorAgreement(const int nRequestID, const char* sz
 	}
 
 	MWidget* pWidget = pResource->FindWidget("ClanSponsorAgreementConfirm");
-	if(pWidget!=NULL)
+	if (pWidget != NULL)
 	{
-		static ZCOUNTDOWN countDown = {30,"ClanSponsorAgreementConfirm_Remain",
-			"ClanSponsorAgreementConfirm",OnClanAskSponsorAgreement_OnExpire};
-		countDown.nSeconds=30;	// static 이므로 재설정
+		static ZCOUNTDOWN countDown = { 30,"ClanSponsorAgreementConfirm_Remain",
+			"ClanSponsorAgreementConfirm",OnClanAskSponsorAgreement_OnExpire };
+		countDown.nSeconds = 30;	// static 이므로 재설정
 		ZApplication::GetTimer()->SetTimerEvent(0, &OnTimer_CountDown, &countDown, true);
 
 		pWidget->Show(true, true);
@@ -250,14 +246,13 @@ void ZGameClient::OnClanAnswerSponsorAgreement(const int nRequestID, const MUID&
 	if (bAllAgreed)
 	{
 		// 여기서 정말로 클랜 생성 요청
-		if (strlen(ClanSponsorsTicket.szClanName) >=4 )
+		if (strlen(ClanSponsorsTicket.szClanName) >= 4)
 		{
 			char* ppSponsorCharName[CLAN_SPONSORS_COUNT];
 			for (int i = 0; i < CLAN_SPONSORS_COUNT; i++) ppSponsorCharName[i] = ClanSponsorsTicket.szSponsorCharName[i];
-			
+
 			ZPostRequestAgreedCreateClan(GetPlayerUID(), ClanSponsorsTicket.szClanName, ppSponsorCharName, CLAN_SPONSORS_COUNT);
 		}
-
 
 		memset(&ClanSponsorsTicket, 0, sizeof(Clan_Sponsors_Ticket));
 	}
@@ -294,25 +289,24 @@ void ZGameClient::RequestCreateClan(char* szClanName, char** ppMemberCharNames)
 	if (ZGetMyInfo()->IsClanJoined())
 	{
 		ZChatOutput(
-			ZMsg(MSG_CLAN_JOINED_ALREADY), 
-			ZChat::CMT_SYSTEM );
+			ZMsg(MSG_CLAN_JOINED_ALREADY),
+			ZChat::CMT_SYSTEM);
 		return;
 	}
 
 	// 로비에서만 신청할 수 있다.
 	if (ZApplication::GetGameInterface()->GetState() != GUNZ_LOBBY)
 	{
-		ZChatOutput( ZMsg(MSG_MUST_EXECUTE_LOBBY) );
+		ZChatOutput(ZMsg(MSG_MUST_EXECUTE_LOBBY));
 		return;
 	}
-
 
 	m_nRequestID++;
 
 	memset(&ClanSponsorsTicket, 0, sizeof(Clan_Sponsors_Ticket));
 	ClanSponsorsTicket.nRequestID = m_nRequestID;
 	strcpy(ClanSponsorsTicket.szClanName, szClanName);
-	
+
 	for (int i = 0; i < CLAN_SPONSORS_COUNT; i++)
 	{
 		strcpy(ClanSponsorsTicket.szSponsorCharName[i], ppMemberCharNames[i]);
@@ -321,24 +315,22 @@ void ZGameClient::RequestCreateClan(char* szClanName, char** ppMemberCharNames)
 	ZPostRequestCreateClan(GetPlayerUID(), m_nRequestID, szClanName, ppMemberCharNames, CLAN_SPONSORS_COUNT);
 }
 
-
 void ZGameClient::OnClanResponseCloseClan(const int nResult)
 {
 	if (nResult == MOK)
 	{
-		char szDay[ 4 ] = "";
+		char szDay[4] = "";
 		char szText[256] = "";
 
-		sprintf( szDay, "%u", DAY_OF_DELETE_CLAN );
-		ZTransMsg( szText, MSG_CLAN_CLOSE_RESERVED, 1, szDay );
+		sprintf(szDay, "%u", DAY_OF_DELETE_CLAN);
+		ZTransMsg(szText, MSG_CLAN_CLOSE_RESERVED, 1, szDay);
 
-		ZApplication::GetGameInterface()->ShowMessage( szText );
+		ZApplication::GetGameInterface()->ShowMessage(szText);
 	}
-	else 
+	else
 	{
-		ZApplication::GetGameInterface()->ShowErrorMessage( nResult );
+		ZApplication::GetGameInterface()->ShowErrorMessage(nResult);
 	}
-	
 }
 
 void ZGameClient::OnClanResponseJoinClan(const int nResult)
@@ -350,20 +342,20 @@ void ZGameClient::OnClanResponseJoinClan(const int nResult)
 	}
 	else
 	{
-		ZApplication::GetGameInterface()->ShowErrorMessage( nResult );
+		ZApplication::GetGameInterface()->ShowErrorMessage(nResult);
 	}
 }
 
 void OnClanAskJoinAgreement_OnExpire()
 {
-	ZChatOutput( ZMsg(MSG_CANCELED), ZChat::CMT_SYSTEM);
+	ZChatOutput(ZMsg(MSG_CANCELED), ZChat::CMT_SYSTEM);
 	ZGetGameClient()->AnswerJoinerAgreement(false);
 }
 
 void ZGameClient::OnClanAskJoinAgreement(const char* szClanName, MUID& uidClanAdmin, const char* szClanAdmin)
 {
 	// 받을수 없는 상황이면 무시
-	if(!ZGetGameInterface()->IsReadyToPropose()) return;
+	if (!ZGetGameInterface()->IsReadyToPropose()) return;
 
 	m_uidRequestPlayer = uidClanAdmin;
 
@@ -372,22 +364,21 @@ void ZGameClient::OnClanAskJoinAgreement(const char* szClanName, MUID& uidClanAd
 	if (pTextEdit)
 	{
 		char szTemp[256];
-//		ZTransMsg(szTemp, MSG_CLAN_JOINER_AGREEMENT_LABEL, 1, szClanName);
+		//		ZTransMsg(szTemp, MSG_CLAN_JOINER_AGREEMENT_LABEL, 1, szClanName);
 		ZTransMsg(szTemp, MSG_CLAN_JOINER_AGREEMENT_LABEL, 1, szClanName);
 		pTextEdit->SetText(szTemp);
 	}
 
 	MWidget* pWidget = pResource->FindWidget("ClanJoinerAgreementConfirm");
-	if(pWidget!=NULL)
+	if (pWidget != NULL)
 	{
-		static ZCOUNTDOWN countDown = {30,"ClanJoinerAgreementConfirm_Remain",
-			"ClanJoinerAgreementConfirm",OnClanAskJoinAgreement_OnExpire};
-		countDown.nSeconds=30;	// static 이므로 재설정
+		static ZCOUNTDOWN countDown = { 30,"ClanJoinerAgreementConfirm_Remain",
+			"ClanJoinerAgreementConfirm",OnClanAskJoinAgreement_OnExpire };
+		countDown.nSeconds = 30;	// static 이므로 재설정
 		ZApplication::GetTimer()->SetTimerEvent(0, &OnTimer_CountDown, &countDown, true);
 
 		pWidget->Show(true, true);
 	}
-
 }
 
 void ZGameClient::OnClanAnswerJoinAgreement(const MUID& uidClanAdmin, const char* szJoiner, const bool bAnswer)
@@ -395,7 +386,6 @@ void ZGameClient::OnClanAnswerJoinAgreement(const MUID& uidClanAdmin, const char
 	if (!IsWaitingClanJoiningAgree()) return;
 
 	if (ZGetGameClient()->GetPlayerUID() != uidClanAdmin) return;
-
 
 	if (bAnswer)
 	{
@@ -411,9 +401,9 @@ void ZGameClient::OnClanAnswerJoinAgreement(const MUID& uidClanAdmin, const char
 		// 동의창 지워줘야 한다.
 		ShowClanJoinerAgreeWaitFrame(false);
 
-		m_uidRequestPlayer = MUID(0,0);
+		m_uidRequestPlayer = MUID(0, 0);
 
-		ZApplication::GetGameInterface()->ShowMessage( MSG_CLAN_JOINER_AGREEMENT_REJECT );
+		ZApplication::GetGameInterface()->ShowMessage(MSG_CLAN_JOINER_AGREEMENT_REJECT);
 	}
 }
 
@@ -423,19 +413,17 @@ void ZGameClient::OnClanResponseAgreedJoinClan(const int nResult)
 
 	// 대기창을 없애야한다.
 	ShowClanJoinerAgreeWaitFrame(false);
-	m_uidRequestPlayer = MUID(0,0);
+	m_uidRequestPlayer = MUID(0, 0);
 
 	if (nResult == MOK)
 	{
 		// 클랜 마스터
-		ZApplication::GetGameInterface()->ShowMessage( MSG_CLAN_JOINED_NEW_MEMBER );
+		ZApplication::GetGameInterface()->ShowMessage(MSG_CLAN_JOINED_NEW_MEMBER);
 	}
-	else 
+	else
 	{
-		ZApplication::GetGameInterface()->ShowErrorMessage( nResult );
+		ZApplication::GetGameInterface()->ShowErrorMessage(nResult);
 	}
-
-	
 }
 
 ZPlayerListBox* GetProperClanListOutput()
@@ -443,25 +431,25 @@ ZPlayerListBox* GetProperClanListOutput()
 	ZIDLResource* pIDLResource = ZApplication::GetGameInterface()->GetIDLResource();
 
 	GunzState nState = ZApplication::GetGameInterface()->GetState();
-	switch(nState) {
+	switch (nState) {
 	case GUNZ_LOBBY:
-		{
-			ZPlayerListBox* pList = (ZPlayerListBox*)pIDLResource->FindWidget("LobbyChannelPlayerList");
-			if (pList && pList->GetMode() == ZPlayerListBox::PLAYERLISTMODE_CHANNEL_CLAN)
-				return pList;
-			else
-				return NULL;
-		}
-		break;
-	case GUNZ_STAGE:	
-		{
-			ZPlayerListBox* pList = (ZPlayerListBox*)pIDLResource->FindWidget("StagePlayerList_");
-			if (pList && pList->GetMode() == ZPlayerListBox::PLAYERLISTMODE_STAGE_CLAN)
-				return pList;
-			else
-				return NULL;
-		}
-		break;
+	{
+		ZPlayerListBox* pList = (ZPlayerListBox*)pIDLResource->FindWidget("LobbyChannelPlayerList");
+		if (pList && pList->GetMode() == ZPlayerListBox::PLAYERLISTMODE_CHANNEL_CLAN)
+			return pList;
+		else
+			return NULL;
+	}
+	break;
+	case GUNZ_STAGE:
+	{
+		ZPlayerListBox* pList = (ZPlayerListBox*)pIDLResource->FindWidget("StagePlayerList_");
+		if (pList && pList->GetMode() == ZPlayerListBox::PLAYERLISTMODE_STAGE_CLAN)
+			return pList;
+		else
+			return NULL;
+	}
+	break;
 	};
 	return NULL;
 }
@@ -480,12 +468,12 @@ void ZGameClient::OnClanUpdateCharClanInfo(void* pBlob)
 	if (ZGetGameClient()->IsConnected())
 		ZPostRequestClanMemberList(ZGetGameClient()->GetPlayerUID());
 
-	ZPlayerListBox *pList = GetProperClanListOutput();
-	if(pList) {
-		if( !ZGetMyInfo()->IsClanJoined() )
+	ZPlayerListBox* pList = GetProperClanListOutput();
+	if (pList) {
+		if (!ZGetMyInfo()->IsClanJoined())
 		{
 			ZPlayerListBox* pWidget = (ZPlayerListBox*)ZApplication::GetGameInterface()->GetIDLResource()->FindWidget("LobbyChannelPlayerList");
-			if(pWidget) {
+			if (pWidget) {
 				pWidget->RemoveAll();
 			}
 		}
@@ -494,16 +482,15 @@ void ZGameClient::OnClanUpdateCharClanInfo(void* pBlob)
 	}
 }
 
-
 void ZGameClient::OnClanResponseLeaveClan(const int nResult)
 {
 	if (nResult == MOK)
 	{
-		ZApplication::GetGameInterface()->ShowMessage( MSG_CLAN_LEAVED );
+		ZApplication::GetGameInterface()->ShowMessage(MSG_CLAN_LEAVED);
 	}
-	else 
+	else
 	{
-		ZApplication::GetGameInterface()->ShowErrorMessage( nResult );
+		ZApplication::GetGameInterface()->ShowErrorMessage(nResult);
 	}
 }
 
@@ -511,11 +498,11 @@ void ZGameClient::OnClanResponseChangeGrade(const int nResult)
 {
 	if (nResult == MOK)
 	{
-		ZApplication::GetGameInterface()->ShowMessage( MSG_CLAN_CHANGED_GRADE );
+		ZApplication::GetGameInterface()->ShowMessage(MSG_CLAN_CHANGED_GRADE);
 	}
-	else 
+	else
 	{
-		ZApplication::GetGameInterface()->ShowErrorMessage( nResult );
+		ZApplication::GetGameInterface()->ShowErrorMessage(nResult);
 	}
 }
 
@@ -523,27 +510,26 @@ void ZGameClient::OnClanResponseExpelMember(const int nResult)
 {
 	if (nResult == MOK)
 	{
-		ZApplication::GetGameInterface()->ShowMessage( MSG_CLAN_EXPEL_MEMBER );
+		ZApplication::GetGameInterface()->ShowMessage(MSG_CLAN_EXPEL_MEMBER);
 	}
-	else 
+	else
 	{
-		ZApplication::GetGameInterface()->ShowErrorMessage( nResult );
+		ZApplication::GetGameInterface()->ShowErrorMessage(nResult);
 	}
 }
 
 void ZGameClient::OnClanMsg(const char* szSenderName, const char* szMsg)
 {
 	char szText[512];
-	sprintf(szText, "%s(%s) : %s", ZMsg( MSG_CHARINFO_CLAN), szSenderName, szMsg);
+	sprintf(szText, "%s(%s) : %s", ZMsg(MSG_CHARINFO_CLAN), szSenderName, szMsg);
 
-	if ( ZGetGame())
+	if (ZGetGame())
 	{
-		if ( (ZGetGame()->GetMatch()->GetMatchType() == MMATCH_GAMETYPE_DUEL)	&& !ZGetGame()->m_pMyCharacter->IsDie())
-			sprintf(szText, "%s(%s) : %s", ZMsg( MSG_CHARINFO_CLAN), szSenderName, ". . . . .");
+		if ((ZGetGame()->GetMatch()->GetMatchType() == MMATCH_GAMETYPE_DUEL) && !ZGetGame()->m_pMyCharacter->IsDie())
+			sprintf(szText, "%s(%s) : %s", ZMsg(MSG_CHARINFO_CLAN), szSenderName, ". . . . .");
 	}
 
 	ZChatOutput(MCOLOR(ZCOLOR_CHAT_CLANMSG), szText);
-
 }
 
 void ZGameClient::OnClanMemberList(void* pBlob)
@@ -557,13 +543,14 @@ void ZGameClient::OnClanMemberList(void* pBlob)
 
 	int nCount = MGetBlobArrayCount(pBlob);
 
-	if(nCount) {
+	if (nCount) {
 		pPlayerListBox->RemoveAll();
-	} else {//아무내용도 없다면~
+	}
+	else {//아무내용도 없다면~
 		return;
 	}
 
-	for(int i=0; i<nCount; i++) 
+	for (int i = 0; i < nCount; i++)
 	{
 		MTD_ClanMemberListNode* pNode = (MTD_ClanMemberListNode*)MGetBlobArrayElement(pBlob, i);
 
@@ -583,34 +570,33 @@ void ZGameClient::OnClanMemberList(void* pBlob)
 	pPlayerListBox->SelectPlayer(selUID);
 }
 
-
 void ZGameClient::OnClanResponseClanInfo(void* pBlob)
 {
 	int nCount = MGetBlobArrayCount(pBlob);
-	if(nCount != 1) return;
+	if (nCount != 1) return;
 
 	MTD_ClanInfo* pClanInfo = (MTD_ClanInfo*)MGetBlobArrayElement(pBlob, 0);
-	
+
 	// 이미 emblem을 가지고 있었으면 emblem interface 에 통보해준다
 	int nOldClanID = ZGetNetRepository()->GetClanInfo()->nCLID;
 
 	// repository에 클랜정보를 보관한다
-	memcpy(ZGetNetRepository()->GetClanInfo(),pClanInfo,sizeof(MTD_ClanInfo));
+	memcpy(ZGetNetRepository()->GetClanInfo(), pClanInfo, sizeof(MTD_ClanInfo));
 
-//	mlog("OnClanResponseClanInfo : ");
+	//	mlog("OnClanResponseClanInfo : ");
 
-	// emblem interface 에 통보한다
-	ZGetEmblemInterface()->AddClanInfo(pClanInfo->nCLID);	
+		// emblem interface 에 통보한다
+	ZGetEmblemInterface()->AddClanInfo(pClanInfo->nCLID);
 
-	if(nOldClanID!=0) {
+	if (nOldClanID != 0) {
 		ZGetEmblemInterface()->DeleteClanInfo(nOldClanID);
 	}
 
 	ZIDLResource* pRes = ZApplication::GetGameInterface()->GetIDLResource();
 
-	MPicture* pPicture= (MPicture*)pRes->FindWidget( "Lobby_ClanInfoEmblem" );
-	if ( pPicture)
-		pPicture->SetBitmap( ZGetEmblemInterface()->GetClanEmblem2( pClanInfo->nCLID));
+	MPicture* pPicture = (MPicture*)pRes->FindWidget("Lobby_ClanInfoEmblem");
+	if (pPicture)
+		pPicture->SetBitmap(ZGetEmblemInterface()->GetClanEmblem2(pClanInfo->nCLID));
 
 	// 클랜 이름
 	MLabel* pLabel = (MLabel*)pRes->FindWidget("Lobby_ClanInfoName");
@@ -618,45 +604,45 @@ void ZGameClient::OnClanResponseClanInfo(void* pBlob)
 
 	// 접속된 사람수
 	char szCount[16];
-	sprintf(szCount,"%d",ZGetNetRepository()->GetClanInfo()->nConnedMember);
+	sprintf(szCount, "%d", ZGetNetRepository()->GetClanInfo()->nConnedMember);
 
 	char szOutput[256];
-//	ZTranslateMessage(szOutput,MSG_LOBBY_CLAN_DETAIL,2,
-//		ZGetNetRepository()->GetClanInfo()->szMaster,szCount);
-	ZTransMsg(szOutput,MSG_LOBBY_CLAN_DETAIL,2,
-		ZGetNetRepository()->GetClanInfo()->szMaster,szCount);
+	//	ZTranslateMessage(szOutput,MSG_LOBBY_CLAN_DETAIL,2,
+	//		ZGetNetRepository()->GetClanInfo()->szMaster,szCount);
+	ZTransMsg(szOutput, MSG_LOBBY_CLAN_DETAIL, 2,
+		ZGetNetRepository()->GetClanInfo()->szMaster, szCount);
 
 	pLabel = (MLabel*)pRes->FindWidget("Lobby_ClanInfoDetail");
 	pLabel->SetText(szOutput);
 
-
-	sprintf(szOutput,"%d/%d",ZGetNetRepository()->GetClanInfo()->nWins,ZGetNetRepository()->GetClanInfo()->nLosses);
-	ZBmNumLabel *pNumLabel = (ZBmNumLabel*)pRes->FindWidget("Lobby_ClanInfoWinLose");
+	sprintf(szOutput, "%d/%d", ZGetNetRepository()->GetClanInfo()->nWins, ZGetNetRepository()->GetClanInfo()->nLosses);
+	ZBmNumLabel* pNumLabel = (ZBmNumLabel*)pRes->FindWidget("Lobby_ClanInfoWinLose");
 	pNumLabel->SetText(szOutput);
 
-	sprintf(szOutput,"%d", ZGetNetRepository()->GetClanInfo()->nPoint);
+	sprintf(szOutput, "%d", ZGetNetRepository()->GetClanInfo()->nPoint);
 	pNumLabel = (ZBmNumLabel*)pRes->FindWidget("Lobby_ClanInfoPoints");
 	pNumLabel->SetText(szOutput);
 
 	pNumLabel = (ZBmNumLabel*)pRes->FindWidget("Lobby_ClanInfoTotalPoints");
 	//		sprintf(szOutput,"%d",ZGetNetRepository()->GetClanInfo()->nWins,ZGetNetRepository()->GetClanInfo()->nXP);
 	//		pNumLabel->SetText(szOutput);
-	pNumLabel->SetNumber(ZGetNetRepository()->GetClanInfo()->nTotalPoint,true);
+	pNumLabel->SetNumber(ZGetNetRepository()->GetClanInfo()->nTotalPoint, true);
 
 	int nRanking = pClanInfo->nRanking;
 
 	pNumLabel = (ZBmNumLabel*)pRes->FindWidget("Lobby_ClanInfoRanking");
 	pNumLabel->SetIndexOffset(16);	// 아래쪽 색다른 글씨로 찍는다
-	MWidget *pUnranked = pRes->FindWidget("Lobby_ClanInfoUnranked");
-	if(nRanking == 0) {
+	MWidget* pUnranked = pRes->FindWidget("Lobby_ClanInfoUnranked");
+	if (nRanking == 0) {
 		pNumLabel->Show(false);
-		if ( pUnranked)
+		if (pUnranked)
 			pUnranked->Show(true);
-	}else
+	}
+	else
 	{
 		pNumLabel->Show(true);
 		pNumLabel->SetNumber(nRanking);
-		if ( pUnranked)
+		if (pUnranked)
 			pUnranked->Show(false);
 	}
 
@@ -666,7 +652,6 @@ void ZGameClient::OnClanResponseClanInfo(void* pBlob)
 	char szText[256];
 	sprintf(szText, "클랜명: %s", pClanInfo->szClanName);
 	ZChatOutput(MCOLOR(ZCOLOR_CHAT_CLANMSG), szText);
-
 
 	sprintf(szText, "레벨: %d", pClanInfo->nLevel);
 	ZChatOutput(MCOLOR(ZCOLOR_CHAT_CLANMSG), szText);
@@ -699,31 +684,31 @@ void ZGameClient::OnClanStandbyClanList(int nPrevStageCount, int nNextStageCount
 	pListBox->ClearAll();
 	vector< int > vecClanID;
 
-	for(int i=0; i<nCount; i++) 
+	for (int i = 0; i < nCount; i++)
 	{
 		MTD_StandbyClanList* pNode = (MTD_StandbyClanList*)MGetBlobArrayElement(pBlob, i);
 
 		//_ASSERT(i<4);
-		pListBox->SetInfo(i,pNode->nCLID,pNode->szClanName,pNode->nPlayers);
+		pListBox->SetInfo(i, pNode->nCLID, pNode->szClanName, pNode->nPlayers);
 		//ProcessEmblem(pNode->nCLID, pNode->nEmblemChecksum);
 
 		// Emblem // 클랜 URL이 없으면 Vector에 쌓는다
 		if (m_EmblemMgr.CheckEmblem(pNode->nCLID, pNode->nEmblemChecksum)) {
 			// Begin Draw
-		} 
+		}
 		else /*if (pNode->nEmblemChecksum != 0)*/ {
-			vecClanID.push_back( pNode->nCLID );
+			vecClanID.push_back(pNode->nCLID);
 		}
 	}
-	
+
 	//// Emblem // 클랜 URL이 없는 vector를 서버에 보낸다.
-	if(vecClanID.size() > 0)
+	if (vecClanID.size() > 0)
 	{
 		void* pBlob = MMakeBlobArray(sizeof(int), (int)vecClanID.size()); /// nOneBlobSize만큼 nBlobCount갯수만큼 배열한 블럭 만들기
 		int nCount = 0;
-		for(vector<int>::iterator it = vecClanID.begin(); it != vecClanID.end(); it++, nCount++)
+		for (vector<int>::iterator it = vecClanID.begin(); it != vecClanID.end(); it++, nCount++)
 		{
-			int *nClanID = (int*)MGetBlobArrayElement(pBlob, nCount);
+			int* nClanID = (int*)MGetBlobArrayElement(pBlob, nCount);
 			*nClanID = *it;
 		}
 
@@ -765,13 +750,10 @@ void ZGameClient::OnClanMemberConnected(const char* szMember)
 	if (!strcmp(ZGetMyInfo()->GetCharName(), szMember)) return;
 
 	char szMsg[256];
-//	ZTransMsg(szMsg, MSG_CLAN_MEMBER_CONNECTED, 1, szMember);
+
 	ZTransMsg(szMsg, MSG_CLAN_MEMBER_CONNECTED, 1, szMember);
 	ZChatOutput(MCOLOR(ZCOLOR_CHAT_CLANMSG), szMsg);
 }
-
-
-
 
 void ZGameClient::OnBroadcastClanRenewVictories(const char* pszWinnerClanName, const char* pszLoserClanName, int nVictories)
 {
@@ -787,31 +769,31 @@ void ZGameClient::OnBroadcastClanRenewVictories(const char* pszWinnerClanName, c
 	else nStringCode = MSG_CLANBATTLE_BROADCAST_RENEW_VICTORIES_11;
 
 	sprintf(szVic, "%d", nVictories);
-	
+
 	ZTransMsg(szText, nStringCode, 3, pszWinnerClanName, pszLoserClanName, szVic);
 
-//	ZChatOutput(szText, ZChat::CMT_BROADCAST);
+	//	ZChatOutput(szText, ZChat::CMT_BROADCAST);
 
 	switch (nStringCode)
 	{
-		case MSG_CLANBATTLE_BROADCAST_RENEW_VICTORIES_3:
-			ZChatOutput(ZCOLOR_CHAT_CLANVICTORY1, szText);
-			break;
-		case MSG_CLANBATTLE_BROADCAST_RENEW_VICTORIES_5:
-			ZChatOutput(ZCOLOR_CHAT_CLANVICTORY2, szText);
-			break;
-		case MSG_CLANBATTLE_BROADCAST_RENEW_VICTORIES_7:
-			ZChatOutput(ZCOLOR_CHAT_CLANVICTORY3, szText);
-			break;
-		case MSG_CLANBATTLE_BROADCAST_RENEW_VICTORIES_10:
-			ZChatOutput(ZCOLOR_CHAT_CLANVICTORY4, szText);
-			break;
-		case MSG_CLANBATTLE_BROADCAST_RENEW_VICTORIES_11:
-			ZChatOutput(ZCOLOR_CHAT_CLANVICTORY5, szText);
-			break;
-		default:
-			ZChatOutput(szText, ZChat::CMT_BROADCAST);
-			break;
+	case MSG_CLANBATTLE_BROADCAST_RENEW_VICTORIES_3:
+		ZChatOutput(ZCOLOR_CHAT_CLANVICTORY1, szText);
+		break;
+	case MSG_CLANBATTLE_BROADCAST_RENEW_VICTORIES_5:
+		ZChatOutput(ZCOLOR_CHAT_CLANVICTORY2, szText);
+		break;
+	case MSG_CLANBATTLE_BROADCAST_RENEW_VICTORIES_7:
+		ZChatOutput(ZCOLOR_CHAT_CLANVICTORY3, szText);
+		break;
+	case MSG_CLANBATTLE_BROADCAST_RENEW_VICTORIES_10:
+		ZChatOutput(ZCOLOR_CHAT_CLANVICTORY4, szText);
+		break;
+	case MSG_CLANBATTLE_BROADCAST_RENEW_VICTORIES_11:
+		ZChatOutput(ZCOLOR_CHAT_CLANVICTORY5, szText);
+		break;
+	default:
+		ZChatOutput(szText, ZChat::CMT_BROADCAST);
+		break;
 	}
 }
 
@@ -824,7 +806,3 @@ void ZGameClient::OnBroadcastClanInterruptVictories(const char* pszWinnerClanNam
 
 	ZChatOutput(szText, ZChat::CMT_BROADCAST);
 }
-
-
-
-

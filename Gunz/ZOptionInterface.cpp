@@ -14,44 +14,34 @@
 
 #define DEFAULT_GAMMA_SLIDER_MIN	50
 #define DEFAULT_GAMMA_SLIDER_MAX	800
-
-#define LISTBOX_CELL_ARRANGE(pList, feldsize, flsize)   { pList->GetField(1)->nTabSize += (int)( (float)feldsize * flsize) - (int)( (float)feldsize);  }  // 그림칸 크기는 고정, 그부분만큼 2번열에 더함
-
-static	map< int, D3DDISPLAYMODE> gDisplayMode;
 #define DEFAULT_REFRESHRATE			0
 
-template< class F, class S>
-class value_equals
-{
-private:
-	S second;
-public:
-	value_equals(const S& s) : second(s) {}
-	bool operator() (pair<const F, S> elem)
-	{ return elem.second == second; }
-};
+#define LISTBOX_CELL_ARRANGE(pList, feldsize, flsize)   { pList->GetField(1)->nTabSize += (int)( (float)feldsize * flsize) - (int)( (float)feldsize);  }
 
-bool operator == ( D3DDISPLAYMODE lhs, D3DDISPLAYMODE rhs )
+static	std::map<int, D3DDISPLAYMODE> gDisplayMode;
+auto find_ddm(const D3DDISPLAYMODE& ddm)
 {
-	return( lhs.Width == rhs.Width && lhs.Height == rhs.Height && lhs.Format == rhs.Format );
+	return std::find_if(gDisplayMode.begin(), gDisplayMode.end(),
+		[&](auto& val) { return val.second == ddm; });
 }
 
-static int widths[]={ 640,800,1024,1280,1600,1280,1440, 1650, 1920, 2560};
-static int heights[]={ 480,600,768,960,1200,800,900, 1050, 1200, 1600};
+bool operator == (D3DDISPLAYMODE lhs, D3DDISPLAYMODE rhs)
+{
+	return(lhs.Width == rhs.Width && lhs.Height == rhs.Height && lhs.Format == rhs.Format);
+}
 
+static int widths[] = { 640,800,1024,1280,1600,1280,1440, 1650, 1920, 2560 };
+static int heights[] = { 480,600,768,960,1200,800,900, 1050, 1200, 1600 };
 
 ZOptionInterface::ZOptionInterface(void)
 {
 	mbTimer = false;
 
-//	mOldScreenWidth = 0;
-//	mOldScreenHeight = 0;
 	mnOldBpp = D3DFMT_A8R8G8B8;
 	mTimerTime = 0;
 
 	mOldScreenWidth = 800;
 	mOldScreenHeight = 600;
-
 }
 
 ZOptionInterface::~ZOptionInterface(void)
@@ -64,51 +54,43 @@ void ZOptionInterface::InitInterfaceOption(void)
 	ZIDLResource* pResource = ZApplication::GetGameInterface()->GetIDLResource();
 
 	mlog("start InitInterface option\n");
-	/*
-	// Mouse Sensitivity Min/Max (Z_MOUSE_SENSITIVITY_MIN ~ Z_MOUSE_SENSITIVITY_MAX)
-	BEGIN_WIDGETLIST("MouseSensitivitySlider", pResource, MSlider*, pWidget);
-	pWidget->SetMinMax(Z_MOUSE_SENSITIVITY_MIN, Z_MOUSE_SENSITIVITY_MAX);
-	pWidget->SetValue(Z_MOUSE_SENSITIVITY);
-	END_WIDGETLIST();
-	*/
 	MSlider* pWidget = (MSlider*)pResource->FindWidget("MouseSensitivitySlider");
-	if(pWidget)
+	if (pWidget)
 	{
 		pWidget->SetMinMax(MOUSE_SENSITIVITY_MIN, MOUSE_SENSITIVITY_MAX);
-		pWidget->SetValue( ZGetConfiguration()->GetMouseSensitivityInInt());
+		pWidget->SetValue(ZGetConfiguration()->GetMouseSensitivityInInt());
 	}
 
 	pWidget = (MSlider*)pResource->FindWidget("JoystickSensitivitySlider");
-	if(pWidget)
+	if (pWidget)
 	{
 		pWidget->SetMinMax(0, DEFAULT_SLIDER_MAX);
 		pWidget->SetValue(ZGetConfiguration()->GetJoystick()->fSensitivity * DEFAULT_SLIDER_MAX);
 	}
 
 	pWidget = (MSlider*)pResource->FindWidget("BGMVolumeSlider");
-	if(pWidget)
+	if (pWidget)
 	{
 		pWidget->SetMinMax(0, DEFAULT_SLIDER_MAX);
-		pWidget->SetValue(Z_AUDIO_BGM_VOLUME*DEFAULT_SLIDER_MAX);
+		pWidget->SetValue(Z_AUDIO_BGM_VOLUME * DEFAULT_SLIDER_MAX);
 	}
 
 	pWidget = (MSlider*)pResource->FindWidget("EffectVolumeSlider");
-	if(pWidget)
+	if (pWidget)
 	{
 		pWidget->SetMinMax(0, DEFAULT_SLIDER_MAX);
-		pWidget->SetValue(Z_AUDIO_EFFECT_VOLUME*DEFAULT_SLIDER_MAX);
+		pWidget->SetValue(Z_AUDIO_EFFECT_VOLUME * DEFAULT_SLIDER_MAX);
 	}
 
 	pWidget = (MSlider*)pResource->FindWidget("VideoGamma");
-	if(pWidget)
+	if (pWidget)
 	{
 		pWidget->SetMinMax(DEFAULT_GAMMA_SLIDER_MIN, DEFAULT_GAMMA_SLIDER_MAX);
-		pWidget->SetValue(Z_VIDEO_GAMMA_VALUE*DEFAULT_GAMMA_SLIDER_MAX);
+		pWidget->SetValue(Z_VIDEO_GAMMA_VALUE * DEFAULT_GAMMA_SLIDER_MAX);
 		pWidget->SetValue(Z_VIDEO_GAMMA_VALUE);
 	}
 
-	// Action Key
-	for(int i=0; i<ZACTION_COUNT; i++){
+	for (int i = 0; i < ZACTION_COUNT; i++) {
 		char szItemName[256];
 		sprintf(szItemName, "%sActionKey", ZGetConfiguration()->GetKeyboard()->ActionKeys[i].szName);
 
@@ -118,10 +100,9 @@ void ZOptionInterface::InitInterfaceOption(void)
 		END_WIDGETLIST();
 	}
 
-	//	ComboBox
 	{
-		MComboBox *pWidget = (MComboBox*)pResource->FindWidget("ScreenResolution");
-		if(pWidget)
+		MComboBox* pWidget = (MComboBox*)pResource->FindWidget("ScreenResolution");
+		if (pWidget)
 		{
 			pWidget->RemoveAll();
 			gDisplayMode.clear();
@@ -131,37 +112,31 @@ void ZOptionInterface::InitInterfaceOption(void)
 
 			D3DDISPLAYMODE ddm;
 
-			D3DFORMAT format[2] = {
-				D3DFMT_X8R8G8B8,
-					D3DFMT_R5G6B5
+			D3DFORMAT Formats[] =
+			{
+				D3DFMT_X8R8G8B8
 			};
 
-			for( int i=0;i<2;i++) 
+			for (auto& Format : Formats)
 			{
-				int nDM = RGetAdapterModeCount( format[i] );
+				int nDM = RGetAdapterModeCount(Format);
 
-				mlog("Number of Display mode : %d\n", nDM );
+				mlog("Number of display mode for format %d: %d\n", Format, nDM);
 
-				for( int idm = 0 ; idm < nDM; ++idm )
+				for (int idm = 0; idm < nDM; ++idm)
 				{
-					if( REnumAdapterMode( D3DADAPTER_DEFAULT,format[i], idm,  &ddm ))
+					if (REnumAdapterMode(D3DADAPTER_DEFAULT, Format, idm, &ddm))
 					{
-						if( ddm.Width < 640 || ddm.Height < 480 )
-							continue;
-
-						if( ((float)ddm.Height / (float)ddm.Width  != 0.75f) &&  
-							((float)ddm.Height / (float)ddm.Width  != 0.625f) )
-							continue;
-
 						ddm.RefreshRate = DEFAULT_REFRESHRATE;
 
-						if( ddm.Format == D3DFMT_X8R8G8B8 || ddm.Format == D3DFMT_R5G6B5 )
+						if (ddm.Format == D3DFMT_X8R8G8B8)
 						{
-							map<int, D3DDISPLAYMODE>::iterator iter_ = find_if( gDisplayMode.begin(), gDisplayMode.end(), value_equals<int, D3DDISPLAYMODE>(ddm));
-							if( iter_ == gDisplayMode.end() )
+							auto iter_ = find_ddm(ddm);
+							if (iter_ == gDisplayMode.end())
 							{
-								gDisplayMode.insert( map<int, D3DDISPLAYMODE>::value_type( dmIndex++, ddm ) );
-								sprintf( szBuf, "%d x %d %dbpp", ddm.Width, ddm.Height, ddm.Format==D3DFMT_X8R8G8B8?32:16 );
+								gDisplayMode.insert({ dmIndex++, ddm });
+								sprintf_safe(szBuf, "%d x %d %dbpp", ddm.Width, ddm.Height,
+									ddm.Format == D3DFMT_X8R8G8B8 ? 32 : 16);
 								pWidget->Add(szBuf);
 							}
 						}
@@ -169,77 +144,78 @@ void ZOptionInterface::InitInterfaceOption(void)
 				}
 			}
 
-			// 만약 등록된 해상도가 하나도 없을경우 강제로 등록
-			if( gDisplayMode.size() == 0 )
+			if (gDisplayMode.size() == 0)
 			{
-				for( int i = 0 ; i < 10; ++i )
+				for (int i = 0; i < 10; ++i)
 				{
-					ddm.Width	= widths[i/2];
-					ddm.Height	= heights[i/2];
+					ddm.Width = widths[i / 2];
+					ddm.Height = heights[i / 2];
 					ddm.RefreshRate = DEFAULT_REFRESHRATE;
-					ddm.Format	= ( ( i%2 == 1) ? D3DFMT_X8R8G8B8 : D3DFMT_R5G6B5 );
+					ddm.Format = ((i % 2 == 1) ? D3DFMT_X8R8G8B8 : D3DFMT_R5G6B5);
 
-					int bpp = (i%2 == 1)? 32 : 16;
-					gDisplayMode.insert( map<int, D3DDISPLAYMODE>::value_type(i,ddm) );
-					sprintf( szBuf, "%dx%d  %d bpp", ddm.Width, ddm.Height, bpp );
-					pWidget->Add( szBuf );
+					int bpp = (i % 2 == 1) ? 32 : 16;
+					gDisplayMode.insert(map<int, D3DDISPLAYMODE>::value_type(i, ddm));
+					sprintf_safe(szBuf, "%dx%d  %d bpp", ddm.Width, ddm.Height, bpp);
+					pWidget->Add(szBuf);
 				}
 			}
 			ddm.Width = RGetScreenWidth();
 			ddm.Height = RGetScreenHeight();
 			ddm.RefreshRate = DEFAULT_REFRESHRATE;
-			ddm.Format	= RGetPixelFormat();
-			map< int, D3DDISPLAYMODE>::iterator iter = find_if( gDisplayMode.begin(), gDisplayMode.end(), value_equals<int, D3DDISPLAYMODE>(ddm));
-			pWidget->SetSelIndex( iter->first );
+			ddm.Format = RGetPixelFormat();
+			auto iter = find_ddm(ddm);
+
+			// Custom: Iterator crash fix, in case resolution isn't supported
+			if (iter != gDisplayMode.end())
+				pWidget->SetSelIndex(iter->first);
+			else
+				pWidget->SetSelIndex(0);
 		}
 
 		pWidget = (MComboBox*)pResource->FindWidget("CharTexLevel");
-		if(pWidget)	{
+		if (pWidget) {
 			pWidget->SetSelIndex(ZGetConfiguration()->GetVideo()->nCharTexLevel);
 		}
 
 		pWidget = (MComboBox*)pResource->FindWidget("MapTexLevel");
-		if(pWidget)	{
+		if (pWidget) {
 			pWidget->SetSelIndex(ZGetConfiguration()->GetVideo()->nMapTexLevel);
 		}
 
 		pWidget = (MComboBox*)pResource->FindWidget("EffectLevel");
-		if(pWidget)	{
+		if (pWidget) {
 			pWidget->SetSelIndex(ZGetConfiguration()->GetVideo()->nEffectLevel);
 		}
 
 		pWidget = (MComboBox*)pResource->FindWidget("TextureFormat");
-		if(pWidget)	{
+		if (pWidget) {
 			pWidget->SetSelIndex(ZGetConfiguration()->GetVideo()->nTextureFormat);
 		}
 
 		pWidget = (MComboBox*)pResource->FindWidget("AntiAlias");
-		if(pWidget)	{
+		if (pWidget) {
 			pWidget->SetSelIndex(ZGetConfiguration()->GetVideo()->nAntiAlias);
 		}
 
-		// 동영상 캡쳐 20081017... by kam
 		pWidget = (MComboBox*)pResource->FindWidget("MovingPictureResolution");
-		if(pWidget)	{
-			pWidget->SetSelIndex(ZGetConfiguration()->GetMovingPicture()->iResolution); // 동영상 캡쳐 해상도 세팅
+		if (pWidget) {
+			pWidget->SetSelIndex(ZGetConfiguration()->GetMovingPicture()->iResolution);
 		}
-		// 동영상 캡쳐 20081028... by kam
 		pWidget = (MComboBox*)pResource->FindWidget("MovingPictureFileSize");
-		if(pWidget)	{
-			pWidget->SetSelIndex(ZGetConfiguration()->GetMovingPicture()->iFileSize); // 동영상 캡쳐 파일크기(용량제한)
+		if (pWidget) {
+			pWidget->SetSelIndex(ZGetConfiguration()->GetMovingPicture()->iFileSize);
 		}
 
-		// 언어 선택
 		pWidget = (MComboBox*)pResource->FindWidget("LanguageSelectComboBox");
-		if(pWidget)	{
+		if (pWidget) {
 			pWidget->RemoveAll();
 			size_t size = ZGetConfiguration()->GetLocale()->vecSelectableLanguage.size();
 
-			for (unsigned int i=0; i<size; ++i) {
-				pWidget->Add( ZGetConfiguration()->GetLocale()->vecSelectableLanguage[i].strLanguageName.c_str());
+			for (unsigned int i = 0; i < size; ++i) {
+				pWidget->Add(ZGetConfiguration()->GetLocale()->vecSelectableLanguage[i].strLanguageName.c_str());
 			}
 
-			pWidget->SetSelIndex( ZGetConfiguration()->GetSelectedLanguageIndex());
+			pWidget->SetSelIndex(ZGetConfiguration()->GetSelectedLanguageIndex());
 
 			GunzState state = ZApplication::GetGameInterface()->GetState();
 			if (state == GUNZ_GAME || state == GUNZ_STAGE)
@@ -249,48 +225,38 @@ void ZOptionInterface::InitInterfaceOption(void)
 		}
 	}
 
-	//	Button
 	{
 		MButton* pWidget = (MButton*)pResource->FindWidget("Reflection");
-		if( pWidget )
+		if (pWidget)
 		{
 			pWidget->SetCheck(ZGetConfiguration()->GetVideo()->bReflection);
 		}
 
 		pWidget = (MButton*)pResource->FindWidget("LightMap");
-		if( pWidget )
+		if (pWidget)
 		{
-			//if(ZGetConfiguration()->GetVideo()->bTerrible && !RIsHardwareTNL() )
 			{
 				pWidget->SetCheck(ZGetConfiguration()->GetVideo()->bLightMap);
 
-				if(ZGetGame()) {
+				if (ZGetGame()) {
 					ZGetGame()->GetWorld()->GetBsp()->LightMapOnOff(ZGetConfiguration()->GetVideo()->bLightMap);
 				}
 				else {
 					RBspObject::SetDrawLightMap(ZGetConfiguration()->GetVideo()->bLightMap);
 				}
 			}
-			//else
-			//{
-			//	pWidget->SetCheck( true );
-			//	pWidget->Enable( false );
-			//	MLabel* label = (MLabel*)pResource->FindWidget("Lightmap Label");
-			//	if(label) label->SetTextColor( MCOLOR( 64, 64, 64 ));
-			//}
 		}
 
 		pWidget = (MButton*)pResource->FindWidget("DynamicLight");
-		if( pWidget )
+		if (pWidget)
 		{
 			pWidget->SetCheck(ZGetConfiguration()->GetVideo()->bDynamicLight);
 		}
 
 		pWidget = (MButton*)pResource->FindWidget("Shader");
-		if( pWidget )
+		if (pWidget)
 		{
-			//if( !RShaderMgr::shader_enabled )
-			if(!RIsSupportVS())
+			if (!RIsSupportVS())
 			{
 				pWidget->SetCheck(false);
 				pWidget->Enable(false);
@@ -302,64 +268,63 @@ void ZOptionInterface::InitInterfaceOption(void)
 		}
 
 		pWidget = (MButton*)pResource->FindWidget("BGMMute");
-		if(pWidget)
+		if (pWidget)
 		{
-			pWidget->SetCheck( !ZGetConfiguration()->GetAudio()->bBGMMute );
+			pWidget->SetCheck(!ZGetConfiguration()->GetAudio()->bBGMMute);
 		}
 
 		pWidget = (MButton*)pResource->FindWidget("EffectMute");
-		if(pWidget)
+		if (pWidget)
 		{
-			pWidget->SetCheck( !ZGetConfiguration()->GetAudio()->bEffectMute );
+			pWidget->SetCheck(!ZGetConfiguration()->GetAudio()->bEffectMute);
 		}
 
-		pWidget	= (MButton*)pResource->FindWidget("Effect3D");
-		if(pWidget)
+		pWidget = (MButton*)pResource->FindWidget("Effect3D");
+		if (pWidget)
 		{
 			pWidget->SetCheck(ZGetConfiguration()->GetAudio()->b3DSound);
 		}
 
 		pWidget = (MButton*)pResource->FindWidget("8BitSound");
-		if(pWidget)
+		if (pWidget)
 		{
 			pWidget->SetCheck(Z_AUDIO_8BITSOUND);
 			pWidget = (MButton*)pResource->FindWidget("16BitSound");
-			if(pWidget) pWidget->SetCheck(!Z_AUDIO_8BITSOUND);
+			if (pWidget) pWidget->SetCheck(!Z_AUDIO_8BITSOUND);
 		}
 		pWidget = (MButton*)pResource->FindWidget("InverseSound");
-		if(pWidget)
+		if (pWidget)
 		{
 			pWidget->SetCheck(Z_AUDIO_INVERSE);
 		}
 		pWidget = (MButton*)pResource->FindWidget("HWMixing");
-		if(pWidget)
+		if (pWidget)
 		{
 			pWidget->SetCheck(Z_AUDIO_HWMIXING);
 		}
 		pWidget = (MButton*)pResource->FindWidget("HitSound");
-		if(pWidget)
+		if (pWidget)
 		{
 			pWidget->SetCheck(Z_AUDIO_HITSOUND);
 		}
 		pWidget = (MButton*)pResource->FindWidget("NarrationSound");
-		if(pWidget)
+		if (pWidget)
 		{
 			pWidget->SetCheck(Z_AUDIO_NARRATIONSOUND);
 		}
 		pWidget = (MButton*)pResource->FindWidget("InvertMouse");
-		if(pWidget)
+		if (pWidget)
 		{
 			pWidget->SetCheck(Z_MOUSE_INVERT);
 		}
 		pWidget = (MButton*)pResource->FindWidget("InvertJoystick");
-		if(pWidget)
+		if (pWidget)
 		{
 			pWidget->SetCheck(Z_JOYSTICK_INVERT);
 		}
 	}
 
-	// Etc
-	{	
+	{
 		MEdit* pEdit = (MEdit*)pResource->FindWidget("NetworkPort1");
 		if (pEdit)
 		{
@@ -394,7 +359,7 @@ void ZOptionInterface::InitInterfaceOption(void)
 		MButton* pBtnNormalChat = (MButton*)pResource->FindWidget("NormalChatOption");
 		if (pBtnNormalChat)
 		{
-			pBtnNormalChat->SetCheck( Z_ETC_REJECT_NORMALCHAT);
+			pBtnNormalChat->SetCheck(Z_ETC_REJECT_NORMALCHAT);
 		}
 
 		MButton* pBtnTeamChat = (MButton*)pResource->FindWidget("TeamChatOption");
@@ -421,28 +386,26 @@ void ZOptionInterface::InitInterfaceOption(void)
 			pBtnInvite->SetCheck(Z_ETC_REJECT_INVITE);
 		}
 
-		MComboBox *pComboBox = (MComboBox*)pResource->FindWidget("CrossHairComboBox");
-		if(pComboBox)
+		MComboBox* pComboBox = (MComboBox*)pResource->FindWidget("CrossHairComboBox");
+		if (pComboBox)
 		{
 			pComboBox->RemoveAll();
-
-			// 기본 크로스 헤어 하드코딩으로 입력
 
 			for (int i = 0; i < ZCSP_CUSTOM; i++)
 			{
 				char szText[256];
-				sprintf(szText, "%s %d", ZMsg(MSG_WORD_TYPE), i+1);
+				sprintf(szText, "%s %d", ZMsg(MSG_WORD_TYPE), i + 1);
 				pComboBox->Add(szText);
 			}
 			char szCustomFile[256];
 			sprintf(szCustomFile, "%s%s%s", PATH_CUSTOM_CROSSHAIR, FN_CROSSHAIR_HEADER, FN_CROSSHAIR_TAILER);
 			if (IsExist(szCustomFile)) pComboBox->Add("Custom");
 
-			if (Z_ETC_CROSSHAIR >= pComboBox->GetCount())	// 사용자지정이였는데 사용자지정이 없어졌을 경우
+			if (Z_ETC_CROSSHAIR >= pComboBox->GetCount())
 			{
 				Z_ETC_CROSSHAIR = 0;
 			}
-			pComboBox->SetSelIndex(Z_ETC_CROSSHAIR);			
+			pComboBox->SetSelIndex(Z_ETC_CROSSHAIR);
 		}
 
 		ZCanvas* pCrossHairPreview = (ZCanvas*)pResource->FindWidget("CrossHairPreviewCanvas");
@@ -451,19 +414,17 @@ void ZOptionInterface::InitInterfaceOption(void)
 			pCrossHairPreview->SetOnDrawCallback(ZCrossHair::OnDrawOptionCrossHairPreview);
 		}
 
-		// 1초당 프레임 제한
 		pComboBox = (MComboBox*)pResource->FindWidget("FrameLimit_PerSecond");
-		if(pComboBox)	{
-			if (Z_ETC_FRAMELIMIT_PERSECOND >= pComboBox->GetCount())	// 사용자지정이였는데 사용자지정이 없어졌을 경우
+		if (pComboBox) {
+			if (Z_ETC_FRAMELIMIT_PERSECOND >= pComboBox->GetCount())
 			{
 				Z_ETC_FRAMELIMIT_PERSECOND = 0;
 			}
-			pComboBox->SetSelIndex(Z_ETC_FRAMELIMIT_PERSECOND); // 1초당 프레임 제한
+			pComboBox->SetSelIndex(Z_ETC_FRAMELIMIT_PERSECOND);
 			RSetFrameLimitPerSeceond(Z_ETC_FRAMELIMIT_PERSECOND);
 		}
 	}
 
-	//Macro
 	{
 		static char stemp_str[ZCONFIG_MACRO_MAX][80] = {
 			"MacroF1",
@@ -478,14 +439,13 @@ void ZOptionInterface::InitInterfaceOption(void)
 
 		ZCONFIG_MACRO* pMacro = ZGetConfiguration()->GetMacro();
 
-		if(pMacro) {
+		if (pMacro) {
 			MEdit* pEdit = NULL;
-			for(int i=0;i<ZCONFIG_MACRO_MAX;i++) {
-
-				pEdit = (MEdit*) pResource->FindWidget(stemp_str[i]);
+			for (int i = 0; i < ZCONFIG_MACRO_MAX; i++) {
+				pEdit = (MEdit*)pResource->FindWidget(stemp_str[i]);
 
 				if (pEdit) {
-					pEdit->SetText( pMacro->GetString(i) );
+					pEdit->SetText(pMacro->GetString(i));
 				}
 			}
 		}
@@ -498,102 +458,79 @@ bool ZOptionInterface::SaveInterfaceOption(void)
 {
 	ZIDLResource* pResource = ZApplication::GetGameInterface()->GetIDLResource();
 
-	{ // 슬라이더
+	{
 		MSlider* pWidget = (MSlider*)pResource->FindWidget("MouseSensitivitySlider");
-		Z_MOUSE_SENSITIVITY = (float) ((MSlider*)pWidget)->GetValue() / (float)MOUSE_SENSITIVITY_MAX;
+		Z_MOUSE_SENSITIVITY = (float)((MSlider*)pWidget)->GetValue() / (float)MOUSE_SENSITIVITY_MAX;
 
 		pWidget = (MSlider*)pResource->FindWidget("JoystickSensitivitySlider");
-		Z_JOYSTICK_SENSITIVITY = (float) ((MSlider*)pWidget)->GetValue() / (float)DEFAULT_SLIDER_MAX;
+		Z_JOYSTICK_SENSITIVITY = (float)((MSlider*)pWidget)->GetValue() / (float)DEFAULT_SLIDER_MAX;
 
 		pWidget = (MSlider*)pResource->FindWidget("BGMVolumeSlider");
-		if(pWidget)
+		if (pWidget)
 		{
-			Z_AUDIO_BGM_VOLUME = (float) ((MSlider*)pWidget)->GetValue() / (float)DEFAULT_SLIDER_MAX;
-			ZGetSoundEngine()->SetMusicVolume(Z_AUDIO_BGM_VOLUME) ;
+			Z_AUDIO_BGM_VOLUME = (float)((MSlider*)pWidget)->GetValue() / (float)DEFAULT_SLIDER_MAX;
+			ZGetSoundEngine()->SetMusicVolume(Z_AUDIO_BGM_VOLUME);
 		}
 
 		pWidget = (MSlider*)pResource->FindWidget("EffectVolumeSlider");
-		if(pWidget)
+		if (pWidget)
 		{
-			Z_AUDIO_EFFECT_VOLUME = (float) ((MSlider*)pWidget)->GetValue() / (float)DEFAULT_SLIDER_MAX;
+			Z_AUDIO_EFFECT_VOLUME = (float)((MSlider*)pWidget)->GetValue() / (float)DEFAULT_SLIDER_MAX;
 
 			ZGetSoundEngine()->SetEffectVolume(Z_AUDIO_EFFECT_VOLUME);
 		}
-
 	}
 
-	int i=0;
+	int i = 0;
 
-	//for(i=0; i<ZACTION_COUNT; i++) {
-	//	ZGetInput()->UnregisterActionKey(i);
-	//}
-
-	// 모두 클리어후 재등록
 	ZGetInput()->ClearActionKey();
 
-	for(i=0; i<ZACTION_COUNT; i++){
+	for (i = 0; i < ZACTION_COUNT; i++) {
 		char szItemName[256];
 		sprintf(szItemName, "%sActionKey", ZGetConfiguration()->GetKeyboard()->ActionKeys[i].szName);
 		ZActionKey* pWidget = (ZActionKey*)pResource->FindWidget(szItemName);
-		if(pWidget==NULL) continue;
+		if (pWidget == NULL) continue;
 		int nKey = 0;
 		pWidget->GetActionKey(&nKey);
-		//		Mint::GetInstance()->UnregisterActionKey(i);
-		//		Mint::GetInstance()->RegisterActionKey(i, nKey);	// 키 등록
-
-//		ZGetInput()->UnregisterActionKey(i);
-		ZGetInput()->RegisterActionKey(i,nKey);
+		ZGetInput()->RegisterActionKey(i, nKey);
 
 		ZVIRTUALKEY altKey;
 		pWidget->GetActionAltKey(&altKey);
-		if(altKey!=-1)
-			ZGetInput()->RegisterActionKey(i,altKey);
+		if (altKey != -1)
+			ZGetInput()->RegisterActionKey(i, altKey);
 
-		// ZConfiguration으로 옵션 저장
 		ZGetConfiguration()->GetKeyboard()->ActionKeys[i].nVirtualKey = nKey;
 		ZGetConfiguration()->GetKeyboard()->ActionKeys[i].nVirtualKeyAlt = altKey;
 	}
 
-	// 새 키맵후 모든 키상태를 release로 셋팅
 	ZGetInput()->OffActionKeys();
-
-	/*
-	int nCnt[ZACTION_COUNT];
-
-	for(i=0; i<ZACTION_COUNT; i++)
-	{
-		nCnt[i] = ZGetConfiguration()->GetKeyboard()->ActionKeys[i].nVirtualKey;
-	}
-	*/
 
 	{
 		Z_VIDEO_WIDTH = RGetScreenWidth();
-		Z_VIDEO_HEIGHT	= RGetScreenHeight();
-		Z_VIDEO_FULLSCREEN	= RIsFullScreen();
-		Z_VIDEO_BPP	= RGetPixelFormat()==D3DFMT_X8R8G8B8 ? 32:16 ;
+		Z_VIDEO_HEIGHT = RGetScreenHeight();
+		Z_VIDEO_FULLSCREEN = RIsFullScreen();
+		Z_VIDEO_BPP = RGetPixelFormat() == D3DFMT_X8R8G8B8;
 
-		MComboBox*	pWidget = (MComboBox*)pResource->FindWidget("CharTexLevel");
+		MComboBox* pWidget = (MComboBox*)pResource->FindWidget("CharTexLevel");
 
 		int TexLevel = 0;
 		DWORD flag = 0;
 		int EffectLevel = 0;
 		int nTextureFormat = 0;
 
-		if(pWidget)	{
-
+		if (pWidget) {
 			TexLevel = pWidget->GetSelIndex();
 
-			if( ZGetConfiguration()->GetVideo()->bTerrible ){
+			if (ZGetConfiguration()->GetVideo()->bTerrible) {
 				ZGetConfiguration()->GetVideo()->nCharTexLevel = TexLevel;
-				if( TexLevel == 2 )
-					SetObjectTextureLevel(TexLevel+2);
+				if (TexLevel == 2)
+					SetObjectTextureLevel(TexLevel + 2);
 				else
 					SetObjectTextureLevel(TexLevel);
 
 				flag = static_cast<u32>(RTextureType::Object);
-
 			}
-			else if( ZGetConfiguration()->GetVideo()->nCharTexLevel != TexLevel ) {
+			else if (ZGetConfiguration()->GetVideo()->nCharTexLevel != TexLevel) {
 				ZGetConfiguration()->GetVideo()->nCharTexLevel = TexLevel;
 				SetObjectTextureLevel(TexLevel);
 				flag = static_cast<u32>(RTextureType::Object);
@@ -602,20 +539,19 @@ bool ZOptionInterface::SaveInterfaceOption(void)
 
 		pWidget = (MComboBox*)pResource->FindWidget("MapTexLevel");
 
-		if(pWidget)	{
-
+		if (pWidget) {
 			TexLevel = pWidget->GetSelIndex();
 
-			if( ZGetConfiguration()->GetVideo()->bTerrible ){
+			if (ZGetConfiguration()->GetVideo()->bTerrible) {
 				ZGetConfiguration()->GetVideo()->nCharTexLevel = TexLevel;
-				if( TexLevel == 2 )
-					SetObjectTextureLevel(TexLevel+2);
+				if (TexLevel == 2)
+					SetObjectTextureLevel(TexLevel + 2);
 				else
 					SetObjectTextureLevel(TexLevel);
 
 				flag = static_cast<u32>(RTextureType::Object);
 			}
-			if( ZGetConfiguration()->GetVideo()->nMapTexLevel != TexLevel ) {
+			if (ZGetConfiguration()->GetVideo()->nMapTexLevel != TexLevel) {
 				ZGetConfiguration()->GetVideo()->nMapTexLevel = TexLevel;
 				SetMapTextureLevel(TexLevel);
 				flag = static_cast<u32>(RTextureType::Map);
@@ -624,86 +560,81 @@ bool ZOptionInterface::SaveInterfaceOption(void)
 
 		pWidget = (MComboBox*)pResource->FindWidget("EffectLevel");
 
-		if(pWidget)	{
-
+		if (pWidget) {
 			EffectLevel = pWidget->GetSelIndex();
 
-			if( ZGetConfiguration()->GetVideo()->nEffectLevel != EffectLevel ) {
+			if (ZGetConfiguration()->GetVideo()->nEffectLevel != EffectLevel) {
 				ZGetConfiguration()->GetVideo()->nEffectLevel = EffectLevel;
 				SetEffectLevel(EffectLevel);
-				//				flag |= RTextureType_Map;
 			}
 		}
 
 		pWidget = (MComboBox*)pResource->FindWidget("AntiAlias");
 
-		if(pWidget)	{
-
+		if (pWidget) {
 			int AntiAlias = pWidget->GetSelIndex();
 
-			if( ZGetConfiguration()->GetVideo()->nAntiAlias != AntiAlias ) {
+			if (ZGetConfiguration()->GetVideo()->nAntiAlias != AntiAlias) {
 				ZGetConfiguration()->GetVideo()->nAntiAlias = AntiAlias;
 				ChangeAA(AntiAlias);
-				RMODEPARAMS ModeParams={ RGetScreenWidth(),RGetScreenHeight(),RIsFullScreen(),RGetPixelFormat() };
+				RMODEPARAMS ModeParams = { RGetScreenWidth(),RGetScreenHeight(),RIsFullScreen(),RGetPixelFormat() };
 				RResetDevice(&ModeParams);
-	
 			}
 		}
 
 		pWidget = (MComboBox*)pResource->FindWidget("TextureFormat");
 
-		if(pWidget)	{
-
+		if (pWidget) {
 			nTextureFormat = pWidget->GetSelIndex();
 
-			if( ZGetConfiguration()->GetVideo()->nTextureFormat != nTextureFormat ) {
+			if (ZGetConfiguration()->GetVideo()->nTextureFormat != nTextureFormat) {
 				ZGetConfiguration()->GetVideo()->nTextureFormat = nTextureFormat;
 				SetTextureFormat(nTextureFormat);
 				flag = static_cast<u32>(RTextureType::All);
 			}
 		}
 
-		if(flag) {
+		if (flag) {
 			RChangeBaseTextureLevel(static_cast<RTextureType>(flag));
 		}
 	}
-	{ // 동영상 캡쳐 20081017... by kam
-		MComboBox*	pWidget = (MComboBox*)pResource->FindWidget("MovingPictureResolution");
+	{
+		MComboBox* pWidget = (MComboBox*)pResource->FindWidget("MovingPictureResolution");
 		int iResolution = 0;
-		if(pWidget)	{
+		if (pWidget) {
 			iResolution = pWidget->GetSelIndex();
-			ZGetConfiguration()->GetMovingPicture()->iResolution = iResolution;	// configuration에 세팅한다.
-			SetBandiCaptureConfig(iResolution);									// 반디캡처 동영상 해상도에 적용한다
+			ZGetConfiguration()->GetMovingPicture()->iResolution = iResolution;
+			SetBandiCaptureConfig(iResolution);
 		}
 		pWidget = (MComboBox*)pResource->FindWidget("MovingPictureFileSize");
 		int iFileSize = 0;
-		if(pWidget)	{
+		if (pWidget) {
 			iFileSize = pWidget->GetSelIndex();
-			ZGetConfiguration()->GetMovingPicture()->iFileSize = iFileSize;	// configuration에 세팅한다.
-			SetBandiCaptureFileSize(iFileSize);								// 반디캡처 동영상 파일크기 세팅에 적용한다
+			ZGetConfiguration()->GetMovingPicture()->iFileSize = iFileSize;
+			SetBandiCaptureFileSize(iFileSize);
 		}
 	}
-	{	// 언어선택
+	{
 #ifdef _MULTILANGUAGE
-		MComboBox*	pWidget = (MComboBox*)pResource->FindWidget("LanguageSelectComboBox");
-		if(pWidget)	{
-			ZGetConfiguration()->SetSelectedLanguageIndex( pWidget->GetSelIndex());
+		MComboBox* pWidget = (MComboBox*)pResource->FindWidget("LanguageSelectComboBox");
+		if (pWidget) {
+			ZGetConfiguration()->SetSelectedLanguageIndex(pWidget->GetSelIndex());
 		}
-#endif //_MULTILANGUAGE
+#endif
 	}
 	{
 		MButton* pWidget = (MButton*)pResource->FindWidget("Reflection");
-		if(pWidget)
+		if (pWidget)
 		{
 			Z_VIDEO_REFLECTION = pWidget->GetCheck();
 		}
 
 		pWidget = (MButton*)pResource->FindWidget("LightMap");
-		if(pWidget)
+		if (pWidget)
 		{
 			Z_VIDEO_LIGHTMAP = pWidget->GetCheck();
 
-			if(ZGetGame()) {
+			if (ZGetGame()) {
 				ZGetGame()->GetWorld()->GetBsp()->LightMapOnOff(Z_VIDEO_LIGHTMAP);
 			}
 			else {
@@ -712,17 +643,17 @@ bool ZOptionInterface::SaveInterfaceOption(void)
 		}
 
 		pWidget = (MButton*)pResource->FindWidget("DynamicLight");
-		if(pWidget)
+		if (pWidget)
 		{
 			Z_VIDEO_DYNAMICLIGHT = pWidget->GetCheck();
 		}
 
 		pWidget = (MButton*)pResource->FindWidget("Shader");
-		if(pWidget)
+		if (pWidget)
 		{
 			Z_VIDEO_SHADER = pWidget->GetCheck();
 
-			if( Z_VIDEO_SHADER )
+			if (Z_VIDEO_SHADER)
 			{
 				RGetShaderMgr()->SetEnable();
 			}
@@ -730,31 +661,23 @@ bool ZOptionInterface::SaveInterfaceOption(void)
 			{
 				RGetShaderMgr()->SetDisable();
 			}
-			//*/
 		}
 
-		pWidget	= (MButton*)pResource->FindWidget("BGMMute");
-		if( pWidget )
+		pWidget = (MButton*)pResource->FindWidget("BGMMute");
+		if (pWidget)
 		{
-			Z_AUDIO_BGM_MUTE	= !(pWidget->GetCheck());
+			Z_AUDIO_BGM_MUTE = !(pWidget->GetCheck());
 
-			ZGetSoundEngine()->SetMusicMute( Z_AUDIO_BGM_MUTE );
+			ZGetSoundEngine()->SetMusicMute(Z_AUDIO_BGM_MUTE);
 		}
-		pWidget	= (MButton*)pResource->FindWidget("EffectMute");
-		if(pWidget)
+		pWidget = (MButton*)pResource->FindWidget("EffectMute");
+		if (pWidget)
 		{
 			Z_AUDIO_EFFECT_MUTE = !(pWidget->GetCheck());
-			ZGetSoundEngine()->SetEffectMute( Z_AUDIO_EFFECT_MUTE );
-
+			ZGetSoundEngine()->SetEffectMute(Z_AUDIO_EFFECT_MUTE);
 		}
-		//pWidget	= (MButton*)pResource->FindWidget("Effect3D");
-		//if(pWidget)
-		//{
-		//	Z_AUDIO_3D_SOUND = pWidget->GetCheck();
-		//	ZGetSoundEngine()->Set3DSound( Z_AUDIO_3D_SOUND );
-		//}
 		pWidget = (MButton*)pResource->FindWidget("8BitSound");
-		if(pWidget)
+		if (pWidget)
 		{
 			Z_AUDIO_8BITSOUND = pWidget->GetCheck();
 #ifdef _BIRDSOUND
@@ -764,17 +687,17 @@ bool ZOptionInterface::SaveInterfaceOption(void)
 #endif
 		}
 		pWidget = (MButton*)pResource->FindWidget("InverseSound");
-		if(pWidget)
+		if (pWidget)
 		{
 			Z_AUDIO_INVERSE = pWidget->GetCheck();
 #ifdef _BIRDSOUND
 
 #else
-			ZGetSoundEngine()->SetInverseSound( Z_AUDIO_INVERSE );
+			ZGetSoundEngine()->SetInverseSound(Z_AUDIO_INVERSE);
 #endif
 		}
 		pWidget = (MButton*)pResource->FindWidget("HWMixing");
-		if(pWidget)
+		if (pWidget)
 		{
 			Z_AUDIO_HWMIXING = pWidget->GetCheck();
 #ifdef _BIRDSOUND
@@ -784,27 +707,27 @@ bool ZOptionInterface::SaveInterfaceOption(void)
 #endif
 		}
 		pWidget = (MButton*)pResource->FindWidget("HitSound");
-		if(pWidget)
+		if (pWidget)
 		{
 			Z_AUDIO_HITSOUND = pWidget->GetCheck();
 		}
 		pWidget = (MButton*)pResource->FindWidget("NarrationSound");
-		if(pWidget)
+		if (pWidget)
 		{
 			Z_AUDIO_NARRATIONSOUND = pWidget->GetCheck();
 		}
 		pWidget = (MButton*)pResource->FindWidget("InvertMouse");
-		if(pWidget)
+		if (pWidget)
 		{
 			Z_MOUSE_INVERT = pWidget->GetCheck();
 		}
 		pWidget = (MButton*)pResource->FindWidget("InvertJoystick");
-		if(pWidget)
+		if (pWidget)
 		{
 			Z_JOYSTICK_INVERT = pWidget->GetCheck();
 		}
-	}
-	{	// Etc
+		}
+	{
 		MEdit* pEdit = (MEdit*)pResource->FindWidget("NetworkPort1");
 		if (pEdit)
 		{
@@ -820,7 +743,7 @@ bool ZOptionInterface::SaveInterfaceOption(void)
 		}
 
 		MButton* pBoost = (MButton*)pResource->FindWidget("BoostOption");
-		if(pBoost)
+		if (pBoost)
 		{
 			if (Z_ETC_BOOST != pBoost->GetCheck()) {
 				Z_ETC_BOOST = pBoost->GetCheck();
@@ -832,7 +755,7 @@ bool ZOptionInterface::SaveInterfaceOption(void)
 		}
 
 		MButton* pNormalChat = (MButton*)pResource->FindWidget("NormalChatOption");
-		if(pNormalChat)
+		if (pNormalChat)
 		{
 			if (Z_ETC_REJECT_NORMALCHAT != pNormalChat->GetCheck()) {
 				Z_ETC_REJECT_NORMALCHAT = pNormalChat->GetCheck();
@@ -844,7 +767,7 @@ bool ZOptionInterface::SaveInterfaceOption(void)
 		}
 
 		MButton* pTeamChat = (MButton*)pResource->FindWidget("TeamChatOption");
-		if(pTeamChat)
+		if (pTeamChat)
 		{
 			if (Z_ETC_REJECT_TEAMCHAT != pTeamChat->GetCheck()) {
 				Z_ETC_REJECT_TEAMCHAT = pTeamChat->GetCheck();
@@ -856,7 +779,7 @@ bool ZOptionInterface::SaveInterfaceOption(void)
 		}
 
 		MButton* pClanChat = (MButton*)pResource->FindWidget("ClanChatOption");
-		if(pClanChat)
+		if (pClanChat)
 		{
 			if (Z_ETC_REJECT_CLANCHAT != pClanChat->GetCheck()) {
 				Z_ETC_REJECT_CLANCHAT = pClanChat->GetCheck();
@@ -868,7 +791,7 @@ bool ZOptionInterface::SaveInterfaceOption(void)
 		}
 
 		MButton* pWhisper = (MButton*)pResource->FindWidget("WhisperOption");
-		if(pWhisper)
+		if (pWhisper)
 		{
 			if (Z_ETC_REJECT_WHISPER != pWhisper->GetCheck()) {
 				Z_ETC_REJECT_WHISPER = pWhisper->GetCheck();
@@ -881,7 +804,7 @@ bool ZOptionInterface::SaveInterfaceOption(void)
 		}
 
 		MButton* pInvite = (MButton*)pResource->FindWidget("InviteOption");
-		if(pInvite)
+		if (pInvite)
 		{
 			if (Z_ETC_REJECT_INVITE != pInvite->GetCheck()) {
 				Z_ETC_REJECT_INVITE = pInvite->GetCheck();
@@ -908,8 +831,6 @@ bool ZOptionInterface::SaveInterfaceOption(void)
 	}
 
 	{
-		// Macro
-
 		static char stemp_str[ZCONFIG_MACRO_MAX][80] = {
 			"MacroF1",
 			"MacroF2",
@@ -923,90 +844,83 @@ bool ZOptionInterface::SaveInterfaceOption(void)
 
 		ZCONFIG_MACRO* pMacro = ZGetConfiguration()->GetMacro();
 
-		if(pMacro) {
-
+		if (pMacro) {
 			MEdit* pEdit = NULL;
 
-			for(int i=0;i<ZCONFIG_MACRO_MAX;i++) {
-
-				pEdit = (MEdit*) pResource->FindWidget(stemp_str[i]);
+			for (int i = 0; i < ZCONFIG_MACRO_MAX; i++) {
+				pEdit = (MEdit*)pResource->FindWidget(stemp_str[i]);
 
 				if (pEdit) {
-
 					pMacro->SetString(i, (char*)pEdit->GetText());
 				}
 			}
 		}
-
 	}
 
-	// 감마값 저장
 	MSlider* pSlider = (MSlider*)pResource->FindWidget("VideoGamma");
-	if (pSlider != NULL) 
+	if (pSlider != NULL)
 	{
 		Z_VIDEO_GAMMA_VALUE = pSlider->GetValue();
 	}
 
-	ZGetConfiguration()->Save( Z_LOCALE_XML_HEADER);
+	ZGetConfiguration()->Save(Z_LOCALE_XML_HEADER);
 
 	return true;
-}
+		}
 
-
-
-void ZOptionInterface::ShowResizeConfirmDialog( bool Resized )
+void ZOptionInterface::ShowResizeConfirmDialog(bool Resized)
 {
-	if( Resized )
+	if (Resized)
 	{
 		ZIDLResource* pResource = ZApplication::GetGameInterface()->GetIDLResource();
 		MWidget* pWidget = pResource->FindWidget("ViewConfirm");
-		if(pWidget!= 0)
-			pWidget->Show( true, true );
+		if (pWidget != 0)
+			pWidget->Show(true, true);
 	}
 	else
 	{
 		ZIDLResource* pResource = ZApplication::GetGameInterface()->GetIDLResource();
 		MWidget* pWidget = pResource->FindWidget("ResizeConfirm");
-		if(pWidget!= 0)
-			pWidget->Show( true, true );
+		if (pWidget != 0)
+			pWidget->Show(true, true);
 	}
 }
 
-bool ZOptionInterface::SetTimer( bool b, float time /* = 0.f  */ )
+bool ZOptionInterface::SetTimer(bool b, float time)
 {
 	static DWORD DeadTime = 0;
 
-	if( !b )
+	if (!b)
 	{
 		mbTimer = b;
 		return false;
 	}
 
-	if( !mbTimer )
+	if (!mbTimer)
 	{
-		mTimerTime	= timeGetTime();
-		mbTimer		= true;
-		DeadTime		= time*1000;
+		mTimerTime = timeGetTime();
+		mbTimer = true;
+		DeadTime = time * 1000;
 	}
 
-	if(( timeGetTime() - mTimerTime ) > DeadTime )
+	if ((timeGetTime() - mTimerTime) > DeadTime)
 	{
 		DeadTime = 0;
-		mbTimer	= false;
+		mbTimer = false;
 		return true;
 	}
 	else
 	{
 		char szBuf[128];
-		sprintf(szBuf, "%d", min(max( (10 - (int)(( timeGetTime() - mTimerTime ) * 0.001)),0),10));
+		sprintf(szBuf, "%d", min(max((10 - (int)((timeGetTime() - mTimerTime) * 0.001)), 0), 10));
 
-		char szText[ 128];
-		ZTransMsg( szText, MSG_BACKTOTHEPREV, 1, szBuf);
+		char szText[128];
+		ZTransMsg(szText, MSG_BACKTOTHEPREV, 1, szBuf);
 
 		ZIDLResource* pResource = ZApplication::GetGameInterface()->GetIDLResource();
-		MLabel* Countdown = (MLabel*)pResource->FindWidget( "ViewConfirm_CountDown" );
-		if ( Countdown)
-			Countdown->SetText( szText);
+		MLabel* Countdown = (MLabel*)pResource->FindWidget("ViewConfirm_CountDown");
+		if (Countdown)
+			Countdown->SetText(szText);
 	}
 	return false;
 }
@@ -1015,43 +929,40 @@ void ZOptionInterface::ShowNetworkPortConfirmDialog()
 {
 	ZIDLResource* pResource = ZApplication::GetGameInterface()->GetIDLResource();
 	MWidget* pWidget = pResource->FindWidget("NetworkPortConfirm");
-	if(pWidget!= 0) pWidget->Show( true, true );
+	if (pWidget != 0) pWidget->Show(true, true);
 }
 
 bool ZOptionInterface::IsDiffNetworkPort()
 {
 	ZIDLResource* pResource = ZApplication::GetGameInterface()->GetIDLResource();
-	int nCurrPort = ntohs( ZGetGameClient()->GetSafeUDP()->GetLocalPort() );
+	int nCurrPort = ntohs(ZGetGameClient()->GetSafeUDP()->GetLocalPort());
 
 	int nNewPort1, nNewPort2;
 
 	MEdit* pEdit1 = (MEdit*)pResource->FindWidget("NetworkPort1");
-	if ( pEdit1)
-		nNewPort1 = atoi( pEdit1->GetText());
+	if (pEdit1)
+		nNewPort1 = atoi(pEdit1->GetText());
 	else
 		return false;
-
 
 	MEdit* pEdit2 = (MEdit*)pResource->FindWidget("NetworkPort2");
-	if ( pEdit2)
-		nNewPort2 = atoi( pEdit2->GetText());
+	if (pEdit2)
+		nNewPort2 = atoi(pEdit2->GetText());
 	else
 		return false;
 
-
-	if ( nNewPort1 > nNewPort2)
+	if (nNewPort1 > nNewPort2)
 	{
-		char szStr[ 25];
-		itoa( Z_ETC_NETWORKPORT1, szStr, 10);
-		pEdit1->SetText( szStr);
-		itoa( Z_ETC_NETWORKPORT2, szStr, 10);
-		pEdit2->SetText( szStr);
+		char szStr[25];
+		itoa(Z_ETC_NETWORKPORT1, szStr, 10);
+		pEdit1->SetText(szStr);
+		itoa(Z_ETC_NETWORKPORT2, szStr, 10);
+		pEdit2->SetText(szStr);
 
 		return false;
 	}
 
-
-	if ( ( nNewPort1 != Z_ETC_NETWORKPORT1) || ( nNewPort2 != Z_ETC_NETWORKPORT2))
+	if ((nNewPort1 != Z_ETC_NETWORKPORT1) || (nNewPort2 != Z_ETC_NETWORKPORT2))
 		return true;
 
 	return false;
@@ -1064,240 +975,194 @@ void ZOptionInterface::OptimizationVideoOption()
 	MComboBox* pCombo = 0;
 	MLabel* pLabel = 0;
 
-	ZGetConfiguration()->SetForceOptimization( true );
+	ZGetConfiguration()->SetForceOptimization(true);
 
-	if(!RIsHardwareTNL())
-	{	
+	if (!RIsHardwareTNL())
+	{
 		pCombo = (MComboBox*)pResource->FindWidget("CharTexLevel");
-		if(pCombo!=0) pCombo->SetSelIndex(2); // 나쁨
+		if (pCombo != 0) pCombo->SetSelIndex(2);
 		pCombo = (MComboBox*)pResource->FindWidget("MapTexLevel");
-		if(pCombo!=0) pCombo->SetSelIndex(2); // 나쁨
+		if (pCombo != 0) pCombo->SetSelIndex(2);
 		pCombo = (MComboBox*)pResource->FindWidget("EffectLevel");
-		if(pCombo!=0) pCombo->SetSelIndex(2); // 나쁨
+		if (pCombo != 0) pCombo->SetSelIndex(2);
 		pCombo = (MComboBox*)pResource->FindWidget("TextureFormat");
-		if(pCombo!=0) pCombo->SetSelIndex(0); // 16 bit
+		if (pCombo != 0) pCombo->SetSelIndex(0);
 
 		pButton = (MButton*)pResource->FindWidget("Reflection");
-		if(pButton!=0) pButton->SetCheck(false);
+		if (pButton != 0) pButton->SetCheck(false);
 		pButton = (MButton*)pResource->FindWidget("LightMap");
-		if(pButton!=0) pButton->SetCheck(false);		
+		if (pButton != 0) pButton->SetCheck(false);
 		pButton = (MButton*)pResource->FindWidget("DynamicLight");
-		if(pButton!=0) pButton->SetCheck(false);
+		if (pButton != 0) pButton->SetCheck(false);
 
-		pCombo	= (MComboBox*)pResource->FindWidget("ScreenResolution");
-		if( pCombo != 0)
+		pCombo = (MComboBox*)pResource->FindWidget("ScreenResolution");
+		if (pCombo != 0)
 		{
 			D3DDISPLAYMODE ddm;
 			ddm.Width = 640;
 			ddm.Height = 480;
-			ddm.Format = D3DFMT_R5G6B5;
+			ddm.Format = D3DFMT_X8R8G8B8;
 			ddm.RefreshRate = DEFAULT_REFRESHRATE;
-			map<int, D3DDISPLAYMODE>::iterator iter_ = find_if( gDisplayMode.begin(), gDisplayMode.end(), value_equals<int, D3DDISPLAYMODE>(ddm));
-			if( iter_ != gDisplayMode.end() )
+			auto iter_ = find_ddm(ddm);
+			if (iter_ != gDisplayMode.end())
 			{
 				int n = iter_->first;
-				pCombo->SetSelIndex( n );
+				pCombo->SetSelIndex(n);
 			}
 		}
 
 		ZGetConfiguration()->GetVideo()->bTerrible = true;
 		return;
-	}	
+	}
 
 	ZGetConfiguration()->GetVideo()->bTerrible = false;
 
-	int nVMem = RGetApproxVMem() /1024 /1024;
-	if( nVMem < 32 )
-	{		
-		pCombo = (MComboBox*)pResource->FindWidget("CharTexLevel");
-		if(pCombo!=0) pCombo->SetSelIndex(2); // 나쁨
-		pCombo = (MComboBox*)pResource->FindWidget("MapTexLevel");
-		if(pCombo!=0) pCombo->SetSelIndex(2); // 나쁨
-		pCombo = (MComboBox*)pResource->FindWidget("EffectLevel");
-		if(pCombo!=0) pCombo->SetSelIndex(2); // 나쁨
-		pCombo = (MComboBox*)pResource->FindWidget("TextureFormat");
-		if(pCombo!=0) pCombo->SetSelIndex(0); // 16 bit
-
-		pButton = (MButton*)pResource->FindWidget("Reflection");
-		if(pButton!=0) pButton->SetCheck(false);
-		pButton = (MButton*)pResource->FindWidget("DynamicLight");
-		if(pButton!=0) pButton->SetCheck(false);		
-	}
-	else if( nVMem < 64 )
+	int nVMem = RGetApproxVMem() / 1024 / 1024;
+	if (nVMem < 32)
 	{
 		pCombo = (MComboBox*)pResource->FindWidget("CharTexLevel");
-		if(pCombo!=0) pCombo->SetSelIndex(1); // 보통
+		if (pCombo != 0) pCombo->SetSelIndex(2);
 		pCombo = (MComboBox*)pResource->FindWidget("MapTexLevel");
-		if(pCombo!=0) pCombo->SetSelIndex(2); // 나쁨
+		if (pCombo != 0) pCombo->SetSelIndex(2);
 		pCombo = (MComboBox*)pResource->FindWidget("EffectLevel");
-		if(pCombo!=0) pCombo->SetSelIndex(1); // 보통
+		if (pCombo != 0) pCombo->SetSelIndex(2);
 		pCombo = (MComboBox*)pResource->FindWidget("TextureFormat");
-		if(pCombo!=0) pCombo->SetSelIndex(0); // 16 bit
+		if (pCombo != 0) pCombo->SetSelIndex(0);
 
 		pButton = (MButton*)pResource->FindWidget("Reflection");
-		if(pButton!=0) pButton->SetCheck(false);
+		if (pButton != 0) pButton->SetCheck(false);
 		pButton = (MButton*)pResource->FindWidget("DynamicLight");
-		if(pButton!=0) pButton->SetCheck(true);
+		if (pButton != 0) pButton->SetCheck(false);
 	}
-	else // nVMem > 64
+	else if (nVMem < 64)
 	{
 		pCombo = (MComboBox*)pResource->FindWidget("CharTexLevel");
-		if(pCombo!=0) pCombo->SetSelIndex(1); // 보통
+		if (pCombo != 0) pCombo->SetSelIndex(1);
 		pCombo = (MComboBox*)pResource->FindWidget("MapTexLevel");
-		if(pCombo!=0) pCombo->SetSelIndex(1); // 보통
+		if (pCombo != 0) pCombo->SetSelIndex(2);
 		pCombo = (MComboBox*)pResource->FindWidget("EffectLevel");
-		if(pCombo!=0) pCombo->SetSelIndex(0); // 좋음
+		if (pCombo != 0) pCombo->SetSelIndex(1);
 		pCombo = (MComboBox*)pResource->FindWidget("TextureFormat");
-		if(pCombo!=0) pCombo->SetSelIndex(1); // 32 bit
+		if (pCombo != 0) pCombo->SetSelIndex(0);
 
 		pButton = (MButton*)pResource->FindWidget("Reflection");
-		if(pButton!=0) pButton->SetCheck(true);		
+		if (pButton != 0) pButton->SetCheck(false);
 		pButton = (MButton*)pResource->FindWidget("DynamicLight");
-		if(pButton!=0) pButton->SetCheck(true);
-	}
-
-	//pLabel = (MLabel*)pResource->FindWidget("Lightmap Label");
-	//if(pLabel!=0) pLabel->SetTextColor(MCOLOR(64,64,64));
-	pButton = (MButton*)pResource->FindWidget("LightMap");
-	if(pButton!=0) {
-		pButton->SetCheck(true);		
-		//pButton->Enable(false);
-	}
-
-	if(RIsSupportVS())
-	{
-		pButton = (MButton*)pResource->FindWidget("Shader");
-		if(pButton!=0) pButton->SetCheck(true);
+		if (pButton != 0) pButton->SetCheck(true);
 	}
 	else
-	{		
+	{
+		pCombo = (MComboBox*)pResource->FindWidget("CharTexLevel");
+		if (pCombo != 0) pCombo->SetSelIndex(1);
+		pCombo = (MComboBox*)pResource->FindWidget("MapTexLevel");
+		if (pCombo != 0) pCombo->SetSelIndex(1);
+		pCombo = (MComboBox*)pResource->FindWidget("EffectLevel");
+		if (pCombo != 0) pCombo->SetSelIndex(0);
+		pCombo = (MComboBox*)pResource->FindWidget("TextureFormat");
+		if (pCombo != 0) pCombo->SetSelIndex(1);
+
+		pButton = (MButton*)pResource->FindWidget("Reflection");
+		if (pButton != 0) pButton->SetCheck(true);
+		pButton = (MButton*)pResource->FindWidget("DynamicLight");
+		if (pButton != 0) pButton->SetCheck(true);
+	}
+
+	pButton = (MButton*)pResource->FindWidget("LightMap");
+	if (pButton != 0) {
+		pButton->SetCheck(true);
+	}
+
+	if (RIsSupportVS())
+	{
 		pButton = (MButton*)pResource->FindWidget("Shader");
-		if(pButton!=0) pButton->SetCheck(false);
+		if (pButton != 0) pButton->SetCheck(true);
+	}
+	else
+	{
+		pButton = (MButton*)pResource->FindWidget("Shader");
+		if (pButton != 0) pButton->SetCheck(false);
 	}
 }
 
-bool ZOptionInterface::ResizeWidgetRecursive( MWidget* pWidget/*, int w, int h*/)
+bool ZOptionInterface::ResizeWidgetRecursive(MWidget* pWidget)
 {
 	ZIDLResource* pResource = ZApplication::GetGameInterface()->GetIDLResource();
 
-	//MWidget* pWidget = pResource->FindWidget(szName);
-	if(pWidget==NULL) return false;
+	if (pWidget == NULL) return false;
 	int n = pWidget->GetChildCount();
-	for( int i = 0; i < n; ++i)
+	for (int i = 0; i < n; ++i)
 	{
 		MWidget* pChildWidget = pWidget->GetChild(i);
-		ResizeWidgetRecursive( pChildWidget/*, w, h */);
+		ResizeWidgetRecursive(pChildWidget);
 	}
 
-	// idl에서 읽어서 적절한 값을 가지고 있는 위젯이라면 그값으로 리사이즈한다
-	if(pWidget->GetIDLRect().w>0 && pWidget->GetIDLRect().h>0)	
+	if (pWidget->GetIDLRect().w > 0 && pWidget->GetIDLRect().h > 0)
 	{
-		// idl 에서는 800x600 기준으로 기술되어있다
 		const float tempWidth = ((float)RGetScreenWidth()) / 800;
 		const float tempHeight = ((float)RGetScreenHeight()) / 600;
 
-		MRECT r=pWidget->GetIDLRect();
-		r.x*=tempWidth;
-		r.w*=tempWidth;
-		r.y*=tempHeight;
-		r.h*=tempHeight;
+		MRECT r = pWidget->GetIDLRect();
+		r.x *= tempWidth;
+		r.w *= tempWidth;
+		r.y *= tempHeight;
+		r.h *= tempHeight;
 		pWidget->SetBounds(r);
 	}
-	else 
+	else
 	{
 		const float tempWidth = ((float)RGetScreenWidth()) / mOldScreenWidth;
 		const float tempHeight = ((float)RGetScreenHeight()) / mOldScreenHeight;
 		MPOINT p = pWidget->GetPosition();
-		p.Scale( tempWidth, tempHeight );
-		pWidget->SetPosition( p );
-		MRECT r=pWidget->GetRect();
-		pWidget->SetSize( r.w*tempWidth, r.h*tempHeight );
+		p.Scale(tempWidth, tempHeight);
+		pWidget->SetPosition(p);
+		MRECT r = pWidget->GetRect();
+		pWidget->SetSize(r.w * tempWidth, r.h * tempHeight);
 	}
 	return true;
 }
 
 void ZOptionInterface::AdjustMultipliedWidgetsManually()
 {
-	// 기존함수 -> bool ZOptionInterface::ResizeWidget(const char* szName, int w, int h) 에서 가져온 코드다
-	// 하드코딩들이다......
-
 	int w = RGetScreenWidth();
 	int h = RGetScreenHeight();
 
 	ZIDLResource* pResource = ZApplication::GetGameInterface()->GetIDLResource();
 	MWidget* pWidget;
-	
+
 	pWidget = pResource->FindWidget("Login");
 	if (pWidget) {
-		// Resize frame
-		pWidget->SetSize( w, h);
+		pWidget->SetSize(w, h);
 
-		// Resize background image
-		pWidget = pResource->FindWidget( "Login_BackgrdImg");
-		if ( pWidget)
-			pWidget->SetSize( w, h);
+		pWidget = pResource->FindWidget("Login_BackgrdImg");
+		if (pWidget)
+			pWidget->SetSize(w, h);
 
-		// Reposition login frame
-		pWidget = pResource->FindWidget( "LoginFrame");
-		if ( pWidget)
+		pWidget = pResource->FindWidget("LoginFrame");
+		if (pWidget)
 		{
 			MRECT rect;
 			rect = pWidget->GetRect();
 
-			//jintriple3 해상도에 따른 서버 선택 창 위치 중앙에서 약간 아래로...
-			/*	rect.x = (w / 2) - (rect.w / 2) + 5;
-			rect.y = h - rect.h - 10;
-			*/
 			rect.x = (w / 2) - (rect.w / 2) + 5;
 			rect.y = (int)((float)h * 0.555f);
-			if( rect.h + rect.y > h )
+			if (rect.h + rect.y > h)
 				rect.y = h - rect.h - 10;
-			pWidget->SetBounds( rect);
+			pWidget->SetBounds(rect);
 		}
 
-		// REposition connecting message
-		pWidget = pResource->FindWidget( "Login_ConnectingMsg");
-		if ( pWidget)
+		pWidget = pResource->FindWidget("Login_ConnectingMsg");
+		if (pWidget)
 		{
 			MRECT rect;
 			rect = pWidget->GetRect();
 			rect.x = 0;
 			rect.y = (int)(h * 0.66f);
 			rect.w = w;
-			pWidget->SetBounds( rect);
+			pWidget->SetBounds(rect);
 		}
 	}
 
-	/*pWidget = pResource->FindWidget("Shop");
-	if (pWidget) {
-		//_AdjustMultipliedItemListManually("AllEquipmentList", "Shop_ListLabel");
-		//_AdjustMultipliedItemListManually("MyAllEquipmentList", "Shop_ListLabel");
-		//_AdjustMultipliedItemListManually("CashEquipmentList", "Shop_ListLabel");
-
-		ZGetGameInterface()->GetShopEquipInterface()->SelectEquipmentFrameList( "Shop", false);
-	}
-
-	pWidget = pResource->FindWidget("Equipment");
-	if (pWidget) {
-		//_AdjustMultipliedItemListManually("EquipmentList", "Equip_ListLabel1");
-		//_AdjustMultipliedItemListManually("AccountItemList", "Equip_ListLabel2");
-
-		ZGetGameInterface()->GetShopEquipInterface()->SelectEquipmentFrameList( "Equip", true);
-	}*/
-	ZGetGameInterface()->GetShopEquipInterface()->SelectEquipmentFrameList( NULL, true);
-
-/*
-	pWidget = pResource->FindWidget("Replay_FileList");
-	if (pWidget) {
-		enum { LF_FILENAME, LF_VERSION, LF_MAX };
-		MListBox* pReplayListBox = (MListBox*)pWidget;
-		MRECT rc = pReplayListBox->GetClientRect();
-		if (pReplayListBox->GetFieldCount() == LF_MAX) {
-			pReplayListBox->GetField(LF_FILENAME)->nTabSize = rc.0.75f *
-		} else {
-			ASSERT(0);
-		}
-	}*/
+	ZGetGameInterface()->GetShopEquipInterface()->SelectEquipmentFrameList(NULL, true);
 
 	pWidget = pResource->FindWidget("Stage");
 	if (pWidget) {
@@ -1309,12 +1174,12 @@ void ZOptionInterface::AdjustMultipliedWidgetsManually()
 	if (pWidget) {
 		ZRoomListBox* pRoomList;
 
-		pRoomList = (ZRoomListBox*)pResource->FindWidget( "Lobby_StageList" );
-		if( pRoomList != 0 )
+		pRoomList = (ZRoomListBox*)pResource->FindWidget("Lobby_StageList");
+		if (pRoomList != 0)
 		{
 			const float tempWidth = ((float)RGetScreenWidth()) / mOldScreenWidth;
 			const float tempHeight = ((float)RGetScreenHeight()) / mOldScreenHeight;
-			pRoomList->Resize( tempWidth, tempHeight );
+			pRoomList->Resize(tempWidth, tempHeight);
 		}
 	}
 
@@ -1322,24 +1187,16 @@ void ZOptionInterface::AdjustMultipliedWidgetsManually()
 	if (pWidget) {
 		MRECT rect;
 		rect = pWidget->GetRect();
-		rect.x = 50 * ( RGetScreenWidth() / 800.0f);
+		rect.x = 50 * (RGetScreenWidth() / 800.0f);
 		rect.y = (int)((RGetScreenHeight() - rect.h) / 2.0f);
-		pWidget->SetBounds( rect);
+		pWidget->SetBounds(rect);
 	}
 
 	pWidget = pResource->FindWidget("CombatDTInfo");
 	if (pWidget) {
-
 	}
-/*
-	else if(stricmp( szName, "CombatDTInfo")==0)
-		ResizeWidgetRecursive( pWidget, w, h );
-	else if(stricmp( szName, "CombatDT_CharacterInfo")==0)
-		ResizeWidgetRecursive( pWidget, w, h );
-	*/
-
 	pWidget = pResource->FindWidget("BuyItemDetailFrame_Thumbnail");
-	if (pWidget) {	// 이 썸네일 이미지는 와이드 해상도에서도 정사각형으로 보이도록 조정
+	if (pWidget) {
 		MRECT rc = pWidget->GetRect();
 		rc.h = rc.w;
 		pWidget->SetBounds(rc);
@@ -1347,94 +1204,54 @@ void ZOptionInterface::AdjustMultipliedWidgetsManually()
 }
 
 extern MFontR2* g_pDefFont;
-void ZOptionInterface::ResizeDefaultFont( int newScreenHeight )
+void ZOptionInterface::ResizeDefaultFont(int newScreenHeight)
 {
-	// 폰트를 기준 해상도(800*600)에서 몇배할 것인지 계산
-	float fontResizeRatio = newScreenHeight/600.f;
+	float fontResizeRatio = newScreenHeight / 600.f;
 
-	// 디폴트 폰트 크기 변경
 	g_pDefFont->Destroy();
 
-	int newFontHeight = (int)(DEFAULT_FONT_HEIGHT * fontResizeRatio + 0.5f);	//UI작성시 기준해상도가 800*600이므로 600에 대해 계산
+	int newFontHeight = (int)(DEFAULT_FONT_HEIGHT * fontResizeRatio + 0.5f);
 	if (newFontHeight < FONT_MINIMUM_HEIGHT)
-		newFontHeight = FONT_MINIMUM_HEIGHT;	// 640*480에서 너무 뭉개지지 않게
+		newFontHeight = FONT_MINIMUM_HEIGHT;
 
 	if (!g_pDefFont->Create("Default", Z_LOCALE_DEFAULT_FONT, newFontHeight, 1.0f))
 	{
-		mlog("Fail to Recreate default font : MFontR2 / screen resize\n" );
+		mlog("Fail to Recreate default font : MFontR2 / screen resize\n");
 		g_pDefFont->Destroy();
-		SAFE_DELETE( g_pDefFont );
+		SAFE_DELETE(g_pDefFont);
 	}
 
-	// UI에서 로딩된 폰트들 크기 변경
-	MFontManager::Resize( fontResizeRatio, FONT_MINIMUM_HEIGHT ); //원래 크기(800*600기준UI)에 대해서 몇배율로 변화해야하는지를 알려줌
+	MFontManager::Resize(fontResizeRatio, FONT_MINIMUM_HEIGHT);
 }
 
 void ZOptionInterface::Resize(int w, int h)
 {
 	ResizeDefaultFont(h);
-	// 해상도 변경시 위젯들의 크기를 배율해준다
 	if (mOldScreenHeight == 0) mOldScreenHeight = 600;
 	if (mOldScreenWidth == 0) mOldScreenWidth = 800;
 
-	ZGetGameInterface()->MultiplySize(w/800.f, h/600.f, w/float(mOldScreenWidth), h/float(mOldScreenHeight));
+	ZGetGameInterface()->MultiplySize(w / 800.f, h / 600.f, w / float(mOldScreenWidth), h / float(mOldScreenHeight));
 
-	AdjustMultipliedWidgetsManually();	// 배율적용하고나서 직접 매만져줘야 하는 부분들
+	AdjustMultipliedWidgetsManually();
 
 	ZGetGameInterface()->SetSize(w, h);
 
 	if (ZGetCombatInterface()) ZGetCombatInterface()->Resize(w, h);
-
-
-/*	ZIDLResource* pResource = ZApplication::GetGameInterface()->GetIDLResource();
-	MWidget* pWidget = pResource->FindWidget("StageCreateFrame");
-	if (pWidget)
-	{
-		ResizeWidgetRecursive(pWidget);
-
-		int parentWidth=-1, parentHeight=-1;
-		MWidget* pParent = pWidget->GetParent();
-		if (pParent) {
-			parentWidth = pParent->GetRect().w;
-			parentHeight = pParent->GetRect().h;
-		}
-		pWidget->SetBoundsAlignment( pWidget->GetBoundsAlignment(), parentWidth, parentHeight);
-	}
-
-	ZGetGameInterface()->SetSize(w, h);
-	ResizeWidget("Login", w, h);
-	ResizeWidget("Shop", w, h);
-	ResizeWidget("Equipment", w, h);
-	ResizeWidget("Lobby", w, h);
-	ResizeWidget("Stage", w, h);
-	ResizeWidget("Game", w, h);
-	ResizeWidget("Greeter", w, h);
-	//ResizeWidget("Option", w, h);
-	ResizeWidget("CharSelection", w, h);
-	ResizeWidget("CharCreation", w, h);
-	ResizeWidget("GameResult", w, h);
-	ResizeWidget("MonsterBook", w, h);
-	ResizeWidget("CombatTDMInfo", w, h);
-	ResizeWidget("CombatDTInfo", w, h);
-	ResizeWidget("CombatDT_CharacterInfo", w, h);
-
-	if (ZGetCombatInterface()) ZGetCombatInterface()->Resize(w, h);*/
 }
 
 void ZOptionInterface::GetOldScreenResolution()
 {
 	RMODEPARAMS ModeParams;
-	ModeParams.nWidth	= mOldScreenWidth;
-	ModeParams.nHeight	= mOldScreenHeight;
-	ModeParams.bFullScreen	= RIsFullScreen();
-	ModeParams.PixelFormat	= mnOldBpp;
+	ModeParams.nWidth = mOldScreenWidth;
+	ModeParams.nHeight = mOldScreenHeight;
+	ModeParams.bFullScreen = RIsFullScreen();
+	ModeParams.PixelFormat = mnOldBpp;
 
-	//jintriple3 해상도 변경 후 프리 뷰에서 캔슬하면 게임 룸 리스트의 크기가 이상해지는 버그 수정.
 	mOldScreenWidth = RGetScreenWidth();
 	mOldScreenHeight = RGetScreenHeight();
 	mnOldBpp = RGetPixelFormat();
 
-	RResetDevice( &ModeParams );
+	RResetDevice(&ModeParams);
 	Mint::GetInstance()->SetWorkspaceSize(ModeParams.nWidth, ModeParams.nHeight);
 	Mint::GetInstance()->GetMainFrame()->SetSize(ModeParams.nWidth, ModeParams.nHeight);
 	Resize(ModeParams.nWidth, ModeParams.nHeight);
@@ -1446,52 +1263,52 @@ void ZOptionInterface::GetOldScreenResolution()
 	ddm.RefreshRate = DEFAULT_REFRESHRATE;
 
 	ZIDLResource* pResource = ZApplication::GetGameInterface()->GetIDLResource();
-	MComboBox *pWidget = (MComboBox*)pResource->FindWidget( "ScreenResolution" );
+	MComboBox* pWidget = (MComboBox*)pResource->FindWidget("ScreenResolution");
 
-	map<int, D3DDISPLAYMODE>::iterator  iter = find_if( gDisplayMode.begin(), gDisplayMode.end(), value_equals<int, D3DDISPLAYMODE>(ddm));
-	if( iter != gDisplayMode.end() )
-		pWidget->SetSelIndex( iter->first );
+	auto iter = find_ddm(ddm);
+	if (iter != gDisplayMode.end())
+		pWidget->SetSelIndex(iter->first);
 }
 
 bool ZOptionInterface::IsDiffScreenResolution()
 {
 	ZIDLResource* pResource = ZApplication::GetGameInterface()->GetIDLResource();
 
-	MComboBox *pWidget = (MComboBox*)pResource->FindWidget("ScreenResolution");
-	if(pWidget)
+	MComboBox* pWidget = (MComboBox*)pResource->FindWidget("ScreenResolution");
+	if (pWidget)
 	{
 		int nSel = pWidget->GetSelIndex();
-		D3DDISPLAYMODE ddm = (gDisplayMode.find( nSel ))->second;
-		if( ddm.Width == RGetScreenWidth() && ddm.Height == RGetScreenHeight() && ddm.Format == RGetPixelFormat() )
+		D3DDISPLAYMODE ddm = (gDisplayMode.find(nSel))->second;
+		if (ddm.Width == RGetScreenWidth() && ddm.Height == RGetScreenHeight() && ddm.Format == RGetPixelFormat())
 			return false;
 #ifdef _DEBUG
-		mlog( "%d/%d , %d/%d, %d/%d\n", ddm.Width, RGetScreenWidth(), ddm.Height, RGetScreenHeight(), ddm.Format == D3DFMT_X8R8G8B8 ? 32 : 16, RGetPixelFormat() == D3DFMT_X8R8G8B8 ? 32 : 16 );
+		mlog("%d/%d , %d/%d, %d/%d\n", ddm.Width, RGetScreenWidth(), ddm.Height, RGetScreenHeight(), ddm.Format == D3DFMT_X8R8G8B8 ? 32 : 16, RGetPixelFormat() == D3DFMT_X8R8G8B8 ? 32 : 16);
 #endif
-	}
-	return true;
 }
+	return true;
+		}
 
 bool ZOptionInterface::TestScreenResolution()
 {
 	ZIDLResource* pResource = ZApplication::GetGameInterface()->GetIDLResource();
 
-	MComboBox *pWidget = (MComboBox*)pResource->FindWidget("ScreenResolution");
-	if(pWidget)
+	MComboBox* pWidget = (MComboBox*)pResource->FindWidget("ScreenResolution");
+	if (pWidget)
 	{
 		RMODEPARAMS	ModeParams;
 
-		map<int, D3DDISPLAYMODE>::iterator iter = gDisplayMode.find( pWidget->GetSelIndex() );
-		if( iter == gDisplayMode.end() )
+		map<int, D3DDISPLAYMODE>::iterator iter = gDisplayMode.find(pWidget->GetSelIndex());
+		if (iter == gDisplayMode.end())
 		{
-			mlog("선택한 해상도가 존재하지 않아서 해상도 변경에 실패하였습니다..\n" );
+			mlog("선택한 해상도가 존재하지 않아서 해상도 변경에 실패하였습니다..\n");
 			return false;
 		}
 
 		D3DDISPLAYMODE ddm = iter->second;
 
-		mOldScreenWidth	= RGetScreenWidth();
-		mOldScreenHeight	= RGetScreenHeight();
-		mnOldBpp				= RGetPixelFormat();
+		mOldScreenWidth = RGetScreenWidth();
+		mOldScreenHeight = RGetScreenHeight();
+		mnOldBpp = RGetPixelFormat();
 
 		ModeParams.nWidth = ddm.Width;
 		ModeParams.nHeight = ddm.Height;
@@ -1509,14 +1326,14 @@ bool ZOptionInterface::TestScreenResolution()
 
 void ZOptionInterface::Update()
 {
-	if( mbTimer )
+	if (mbTimer)
 	{
-		if( SetTimer(true) )
+		if (SetTimer(true))
 		{
 			GetOldScreenResolution();
 			ZIDLResource* pResource = ZApplication::GetGameInterface()->GetIDLResource();
 			MWidget* pWidget = pResource->FindWidget("ViewConfirm");
-			if(pWidget!= 0) pWidget->Show( false );
+			if (pWidget != 0) pWidget->Show(false);
 		}
 	}
 }
@@ -1524,283 +1341,235 @@ void ZOptionInterface::Update()
 void ZOptionInterface::OnActionKeySet(ZActionKey* pActionKey, ZVIRTUALKEY key)
 {
 	ZIDLResource* pResource = ZApplication::GetGameInterface()->GetIDLResource();
-	for(int i=0; i<ZACTION_COUNT; i++){
+	for (int i = 0; i < ZACTION_COUNT; i++) {
 		char szItemName[256];
 		sprintf(szItemName, "%sActionKey", ZGetConfiguration()->GetKeyboard()->ActionKeys[i].szName);
 		ZActionKey* pWidget = (ZActionKey*)pResource->FindWidget(szItemName);
-		if(pWidget==NULL) continue;
-		if(pWidget==pActionKey) continue;
+		if (pWidget == NULL) continue;
+		if (pWidget == pActionKey) continue;
 
-		if(pWidget->DeleteActionKey(key))
+		if (pWidget->DeleteActionKey(key))
 			pWidget->UpdateText();
 	}
 }
 
-
-
-
-
-
-
-
-///////////////////// 이하 interface listener
 BEGIN_IMPLEMENT_LISTENER(ZGetOptionFrameButtonListener, MBTN_CLK_MSG)
-	// 옵션 프레임 보여주기
-	ZGetOptionInterface()->InitInterfaceOption();
-	ZIDLResource* pResource = ZApplication::GetGameInterface()->GetIDLResource();
-	MWidget* pWidget = pResource->FindWidget("Option");
-	pWidget->Show(true, true);
+ZGetOptionInterface()->InitInterfaceOption();
+ZIDLResource* pResource = ZApplication::GetGameInterface()->GetIDLResource();
+MWidget* pWidget = pResource->FindWidget("Option");
+pWidget->Show(true, true);
 
 #ifdef LOCALE_NHNUSAA
-	pWidget = pResource->FindWidget( "Option_Textarea01");
-	if ( pWidget)		pWidget->Show( false);
-	MButton* pButton = (MButton*)pResource->FindWidget( "BoostOption");
-	if ( pButton)
-	{
-		pButton->SetCheck( false);
-		pButton->Show( false);
-	}
+pWidget = pResource->FindWidget("Option_Textarea01");
+if (pWidget)		pWidget->Show(false);
+MButton* pButton = (MButton*)pResource->FindWidget("BoostOption");
+if (pButton)
+{
+	pButton->SetCheck(false);
+	pButton->Show(false);
+}
 #endif
 
-#ifndef _MULTILANGUAGE	// 다중언어지원 디파인을 껐을땐 언어선택 콤보박스를 숨겨버린다
-	pWidget = (MLabel*)pResource->FindWidget( "LanguageSelectLabel");
-	if ( pWidget) {
-		pWidget->Show( false);
-	}
-	MComboBox* pCBType = (MComboBox*)pResource->FindWidget( "LanguageSelectComboBox");
-	if ( pCBType) {
-		pCBType->Show( false);
-	}
+#ifndef _MULTILANGUAGE
+pWidget = (MLabel*)pResource->FindWidget("LanguageSelectLabel");
+if (pWidget) {
+	pWidget->Show(false);
+}
+MComboBox* pCBType = (MComboBox*)pResource->FindWidget("LanguageSelectComboBox");
+if (pCBType) {
+	pCBType->Show(false);
+}
 #endif
 
 END_IMPLEMENT_LISTENER()
 
-
 BEGIN_IMPLEMENT_LISTENER(ZGetSaveOptionButtonListener, MBTN_CLK_MSG)
-	// Save & Close
-	/*
-	ZApplication::GetGameInterface()->SaveInterfaceOption();
+ZIDLResource* pResource = ZApplication::GetGameInterface()->GetIDLResource();
+
+if (pWidget->m_bEventAcceleratorCall) {
+	MTabCtrl* pTab = (MTabCtrl*)pResource->FindWidget("OptionTabControl");
+
+	if (pTab) {
+		if (pTab->GetSelIndex() == 3)
+			return true;
+	}
+}
+
+if (ZGetOptionInterface()->IsDiffNetworkPort())
+{
+	static bool bRestartAsk = false;
+	if (bRestartAsk == false) {
+		ZGetOptionInterface()->ShowNetworkPortConfirmDialog();
+		bRestartAsk = true;
+		return true;
+	}
+}
+
+if (ZGetOptionInterface()->IsDiffScreenResolution())
+{
+	ZGetOptionInterface()->ShowResizeConfirmDialog(false);
+}
+else
+{
+	bool bLanguageChanged = false;
+	MComboBox* pLanguageComboBox = (MComboBox*)pResource->FindWidget("LanguageSelectComboBox");
+	if (pLanguageComboBox) {
+		if (ZGetConfiguration()->GetSelectedLanguageIndex() != pLanguageComboBox->GetSelIndex())
+			bLanguageChanged = true;
+	}
+
+	ZGetOptionInterface()->SaveInterfaceOption();
 	ZIDLResource* pResource = ZApplication::GetGameInterface()->GetIDLResource();
 	MWidget* pWidget = pResource->FindWidget("Option");
-	if(pWidget!=NULL) pWidget->Show(false);
-	//*/
+	if (pWidget != NULL) pWidget->Show(false);
 
-	ZIDLResource* pResource = ZApplication::GetGameInterface()->GetIDLResource();
-
-	if( pWidget->m_bEventAcceleratorCall ) {
-
-		MTabCtrl* pTab = (MTabCtrl*)pResource->FindWidget("OptionTabControl");
-
-		if(pTab) {//키보드 옵션은 키입력을 막아준다.
-			if(pTab->GetSelIndex()==3)//이름을 찾아 조사
-				return true;
-		}
-	}
-
-	if( ZGetOptionInterface()->IsDiffNetworkPort() )
+	if (bLanguageChanged)
 	{
-		static bool bRestartAsk = false;
-		if (bRestartAsk == false) {
-			ZGetOptionInterface()->ShowNetworkPortConfirmDialog();
-			bRestartAsk = true;
-			return true;
-		}
+		ZApplication::GetGameInterface()->ShowConfirmMessage(
+			ZMsg(MSG_CONFIRM_RESTART_CHANGE_LANGUAGE), ZGetLanguageChangeConfirmListenter());
 	}
+}
 
-	if( ZGetOptionInterface()->IsDiffScreenResolution() )
+if (ZApplication::GetGameInterface()->GetState() == GUNZ_GAME)
+{
+	if (ZGetCombatInterface())
 	{
-		ZGetOptionInterface()->ShowResizeConfirmDialog( false );
+		ZGetCombatInterface()->GetCrossHair()->ChangeFromOption();
 	}
-	else
-	{
-		bool bLanguageChanged = false;
-		MComboBox* pLanguageComboBox = (MComboBox*)pResource->FindWidget("LanguageSelectComboBox");
-		if (pLanguageComboBox) {
-			if (ZGetConfiguration()->GetSelectedLanguageIndex() != pLanguageComboBox->GetSelIndex())
-				bLanguageChanged = true;
-		}
-
-		ZGetOptionInterface()->SaveInterfaceOption();
-		ZIDLResource* pResource = ZApplication::GetGameInterface()->GetIDLResource();
-		MWidget* pWidget = pResource->FindWidget("Option");
-		if(pWidget!=NULL) pWidget->Show(false);
-
-		if(bLanguageChanged)	// 재시작 확인 메세지 박스
-		{
-			ZApplication::GetGameInterface()->ShowConfirmMessage(
-				ZMsg(MSG_CONFIRM_RESTART_CHANGE_LANGUAGE), ZGetLanguageChangeConfirmListenter());
-		}
-	}
-
-	if (ZApplication::GetGameInterface()->GetState() == GUNZ_GAME)
-	{
-		if (ZGetCombatInterface())
-		{
-			ZGetCombatInterface()->GetCrossHair()->ChangeFromOption();
-		}
-	}
+}
 
 END_IMPLEMENT_LISTENER()
 
 BEGIN_IMPLEMENT_LISTENER(ZGetCancelOptionButtonListener, MBTN_CLK_MSG)
-//	ZApplication::GetGameInterface()->SaveInterfaceOption();
-	ZIDLResource* pResource = ZApplication::GetGameInterface()->GetIDLResource();
+ZIDLResource* pResource = ZApplication::GetGameInterface()->GetIDLResource();
 
-	// TODO: 이게 필요한가 ? 테스트 요망
-	if( pWidget->m_bEventAcceleratorCall ) {
+if (pWidget->m_bEventAcceleratorCall) {
+	MTabCtrl* pTab = (MTabCtrl*)pResource->FindWidget("OptionTabControl");
 
-		MTabCtrl* pTab = (MTabCtrl*)pResource->FindWidget("OptionTabControl");
-
-		if(pTab) {//키보드 옵션은 키입력을 막아준다.
-			if(pTab->GetSelIndex()==3)//이름을 찾아 조사
-				return true;
-		}
+	if (pTab) {
+		if (pTab->GetSelIndex() == 3)
+			return true;
 	}
+}
 
-	MWidget* pWidget = pResource->FindWidget("Option");
-	
-	if(pWidget!=NULL) pWidget->Show(false);
+MWidget* pWidget = pResource->FindWidget("Option");
 
-	// 원래 감마값으로 돌리기
-	MSlider* pSlider = (MSlider*)pResource->FindWidget("VideoGamma");
-	if (pSlider != NULL) 
+if (pWidget != NULL) pWidget->Show(false);
+
+MSlider* pSlider = (MSlider*)pResource->FindWidget("VideoGamma");
+if (pSlider != NULL)
+{
+	if (pSlider->GetValue() != Z_VIDEO_GAMMA_VALUE)
 	{
-		if (pSlider->GetValue() != Z_VIDEO_GAMMA_VALUE)
-		{
-			RSetGammaRamp(Z_VIDEO_GAMMA_VALUE);
-		}
+		RSetGammaRamp(Z_VIDEO_GAMMA_VALUE);
 	}
+}
 
-	// Close Only
-//	ZApplication::GetGameInterface()->SetState(GUNZ_PREVIOUS);
 END_IMPLEMENT_LISTENER()
 
-
-///////////////////////////////////////////////////
-/// control
-
-BEGIN_IMPLEMENT_LISTENER( ZGetLoadDefaultKeySettingListener, MBTN_CLK_MSG)
-	ZGetConfiguration()->LoadDefaultKeySetting( );
-	for(int i=0; i<ZACTION_COUNT; i++)
-	{
-		char szItemName[256];
-		sprintf(szItemName, "%sActionKey", ZGetConfiguration()->GetKeyboard()->ActionKeys[i].szName);
-		ZActionKey* pWidget = (ZActionKey*)ZApplication::GetGameInterface()->GetIDLResource()->FindWidget(szItemName);
-		if(pWidget==NULL) continue;
-		//unsigned int nKey = 0;
-		//pWidget->GetActionKey(&nKey);
-		//Mint::GetInstance()->UnregisterActionKey(i);
-		//Mint::GetInstance()->RegisterActionKey(i, nKey);	// 키 등록
-		//m_Keyboard.ActionKeys[i].nScanCode = nKey;	// 옵션 저장
-		pWidget->ClearActionKey();
-		pWidget->SetActionKey(ZGetConfiguration()->GetKeyboard()->ActionKeys[i].nVirtualKey);
-		pWidget->SetActionKey(ZGetConfiguration()->GetKeyboard()->ActionKeys[i].nVirtualKeyAlt);
-	}
+BEGIN_IMPLEMENT_LISTENER(ZGetLoadDefaultKeySettingListener, MBTN_CLK_MSG)
+ZGetConfiguration()->LoadDefaultKeySetting();
+for (int i = 0; i < ZACTION_COUNT; i++)
+{
+	char szItemName[256];
+	sprintf(szItemName, "%sActionKey", ZGetConfiguration()->GetKeyboard()->ActionKeys[i].szName);
+	ZActionKey* pWidget = (ZActionKey*)ZApplication::GetGameInterface()->GetIDLResource()->FindWidget(szItemName);
+	if (pWidget == NULL) continue;
+	pWidget->ClearActionKey();
+	pWidget->SetActionKey(ZGetConfiguration()->GetKeyboard()->ActionKeys[i].nVirtualKey);
+	pWidget->SetActionKey(ZGetConfiguration()->GetKeyboard()->ActionKeys[i].nVirtualKeyAlt);
+}
 END_IMPLEMENT_LISTENER()
-
-
-//////////////////////////////////////////////////
-/// video
 
 BEGIN_IMPLEMENT_LISTENER(ZGetOptionGammaSliderChangeListener, MLIST_VALUE_CHANGED)
-	ZIDLResource* pResource = ZApplication::GetGameInterface()->GetIDLResource();
-	MSlider* pSlider = (MSlider*)pResource->FindWidget("VideoGamma");
-	if (pSlider != NULL) 
-	{
-		unsigned short nGamma = (unsigned short)pSlider->GetValue();
-		if (nGamma < 50) nGamma = 50;
-		RSetGammaRamp(nGamma);
-	}
+ZIDLResource* pResource = ZApplication::GetGameInterface()->GetIDLResource();
+MSlider* pSlider = (MSlider*)pResource->FindWidget("VideoGamma");
+if (pSlider != NULL)
+{
+	unsigned short nGamma = (unsigned short)pSlider->GetValue();
+	if (nGamma < 50) nGamma = 50;
+	RSetGammaRamp(nGamma);
+}
 END_IMPLEMENT_LISTENER()
 
-BEGIN_IMPLEMENT_LISTENER( ZGetRequestResizeListener, MBTN_CLK_MSG )
-	ZIDLResource* pResource = ZApplication::GetGameInterface()->GetIDLResource();
-	MWidget* pWidget = pResource->FindWidget("ResizeConfirm");
-	if(pWidget!= 0) pWidget->Show( false );
-	//해상도 변경후
-	ZGetOptionInterface()->TestScreenResolution();
-	ZGetOptionInterface()->SetTimer( true, 10 );
-	ZGetOptionInterface()->ShowResizeConfirmDialog( true );
+BEGIN_IMPLEMENT_LISTENER(ZGetRequestResizeListener, MBTN_CLK_MSG)
+ZIDLResource* pResource = ZApplication::GetGameInterface()->GetIDLResource();
+MWidget* pWidget = pResource->FindWidget("ResizeConfirm");
+if (pWidget != 0) pWidget->Show(false);
+ZGetOptionInterface()->TestScreenResolution();
+ZGetOptionInterface()->SetTimer(true, 10);
+ZGetOptionInterface()->ShowResizeConfirmDialog(true);
 END_IMPLEMENT_LISTENER()
 
-BEGIN_IMPLEMENT_LISTENER( ZGetViewConfirmCancelListener, MBTN_CLK_MSG )
-	ZIDLResource* pResource = ZApplication::GetGameInterface()->GetIDLResource();
-	MWidget* pWidget = pResource->FindWidget("ViewConfirm");
-	if(pWidget!= 0) pWidget->Show( false );
-	// 해상도 원래대로 변경
- 	ZGetOptionInterface()->SetTimer( false );
-	ZGetOptionInterface()->GetOldScreenResolution();
+BEGIN_IMPLEMENT_LISTENER(ZGetViewConfirmCancelListener, MBTN_CLK_MSG)
+ZIDLResource* pResource = ZApplication::GetGameInterface()->GetIDLResource();
+MWidget* pWidget = pResource->FindWidget("ViewConfirm");
+if (pWidget != 0) pWidget->Show(false);
+ZGetOptionInterface()->SetTimer(false);
+ZGetOptionInterface()->GetOldScreenResolution();
 END_IMPLEMENT_LISTENER()
 
-BEGIN_IMPLEMENT_LISTENER( ZGetViewConfrimAcceptListener, MBTN_CLK_MSG )
+BEGIN_IMPLEMENT_LISTENER(ZGetViewConfrimAcceptListener, MBTN_CLK_MSG)
 
-	ZGetOptionInterface()->SetTimer( false );
+ZGetOptionInterface()->SetTimer(false);
 
-	ZGetOptionInterface()->SaveInterfaceOption();
+ZGetOptionInterface()->SaveInterfaceOption();
 
-	ZIDLResource* pResource = ZApplication::GetGameInterface()->GetIDLResource();
-	MWidget* pWidget = pResource->FindWidget("ViewConfirm");
-	if(pWidget!= 0) pWidget->Show( false );
-		
-	pWidget = pResource->FindWidget("Option");
-	if(pWidget!=NULL) pWidget->Show(false);
+ZIDLResource* pResource = ZApplication::GetGameInterface()->GetIDLResource();
+MWidget* pWidget = pResource->FindWidget("ViewConfirm");
+if (pWidget != 0) pWidget->Show(false);
+
+pWidget = pResource->FindWidget("Option");
+if (pWidget != NULL) pWidget->Show(false);
 END_IMPLEMENT_LISTENER()
 
 BEGIN_IMPLEMENT_LISTENER(ZGetCancelResizeConfirmListener, MBTN_CLK_MSG)
-	ZIDLResource* pResource = ZApplication::GetGameInterface()->GetIDLResource();
-	MWidget* pWidget = pResource->FindWidget("ResizeConfirm");
-	if(pWidget!=NULL) pWidget->Show(false);
+ZIDLResource* pResource = ZApplication::GetGameInterface()->GetIDLResource();
+MWidget* pWidget = pResource->FindWidget("ResizeConfirm");
+if (pWidget != NULL) pWidget->Show(false);
 END_IMPLEMENT_LISTENER()
 
-BEGIN_IMPLEMENT_LISTENER( ZSetOptimizationListener, MBTN_CLK_MSG )
-	ZGetOptionInterface()->OptimizationVideoOption();
+BEGIN_IMPLEMENT_LISTENER(ZSetOptimizationListener, MBTN_CLK_MSG)
+ZGetOptionInterface()->OptimizationVideoOption();
 END_IMPLEMENT_LISTENER()
 
-//////////////////////////////////////////////////
-/// sound
-
-BEGIN_IMPLEMENT_LISTENER( ZGet8BitSoundListener, MBTN_CLK_MSG )
-	MButton* pWidget = (MButton*)ZApplication::GetGameInterface()->GetIDLResource()->FindWidget("8BitSound");
-	if(pWidget)
-	{
-		pWidget->SetCheck(true);
-		pWidget = (MButton*)ZApplication::GetGameInterface()->GetIDLResource()->FindWidget("16BitSound");
-		if(pWidget) pWidget->SetCheck(false);
-	}
+BEGIN_IMPLEMENT_LISTENER(ZGet8BitSoundListener, MBTN_CLK_MSG)
+MButton* pWidget = (MButton*)ZApplication::GetGameInterface()->GetIDLResource()->FindWidget("8BitSound");
+if (pWidget)
+{
+	pWidget->SetCheck(true);
+	pWidget = (MButton*)ZApplication::GetGameInterface()->GetIDLResource()->FindWidget("16BitSound");
+	if (pWidget) pWidget->SetCheck(false);
+}
 END_IMPLEMENT_LISTENER()
-BEGIN_IMPLEMENT_LISTENER( ZGet16BitSoundListener, MBTN_CLK_MSG )
-	MButton* pWidget = (MButton*)ZApplication::GetGameInterface()->GetIDLResource()->FindWidget("16BitSound");
-	if(pWidget)
-	{
-		pWidget->SetCheck(true);
-		pWidget = (MButton*)ZApplication::GetGameInterface()->GetIDLResource()->FindWidget("8BitSound");
-		if(pWidget) pWidget->SetCheck(false);
-	}
+BEGIN_IMPLEMENT_LISTENER(ZGet16BitSoundListener, MBTN_CLK_MSG)
+MButton* pWidget = (MButton*)ZApplication::GetGameInterface()->GetIDLResource()->FindWidget("16BitSound");
+if (pWidget)
+{
+	pWidget->SetCheck(true);
+	pWidget = (MButton*)ZApplication::GetGameInterface()->GetIDLResource()->FindWidget("8BitSound");
+	if (pWidget) pWidget->SetCheck(false);
+}
 END_IMPLEMENT_LISTENER()
 
-
-/////////////////////////////////////////////////
-//// network
-BEGIN_IMPLEMENT_LISTENER( ZGetNetworkPortChangeRestartListener, MBTN_CLK_MSG )
-	ZGetOptionInterface()->SaveInterfaceOption();
-	ZChangeGameState(GUNZ_SHUTDOWN);
-	ZApplication* pApp = ZApplication::GetInstance();
-	pApp->Exit();
+BEGIN_IMPLEMENT_LISTENER(ZGetNetworkPortChangeRestartListener, MBTN_CLK_MSG)
+ZGetOptionInterface()->SaveInterfaceOption();
+ZChangeGameState(GUNZ_SHUTDOWN);
+ZApplication* pApp = ZApplication::GetInstance();
+pApp->Exit();
 END_IMPLEMENT_LISTENER()
 
-BEGIN_IMPLEMENT_LISTENER( ZGetNetworkPortChangeCancelListener, MBTN_CLK_MSG )
-	ZIDLResource* pResource = ZApplication::GetGameInterface()->GetIDLResource();
-	MWidget* pWidget = pResource->FindWidget("NetworkPortConfirm");
-	if(pWidget!= 0) pWidget->Show(false);
+BEGIN_IMPLEMENT_LISTENER(ZGetNetworkPortChangeCancelListener, MBTN_CLK_MSG)
+ZIDLResource* pResource = ZApplication::GetGameInterface()->GetIDLResource();
+MWidget* pWidget = pResource->FindWidget("NetworkPortConfirm");
+if (pWidget != 0) pWidget->Show(false);
 END_IMPLEMENT_LISTENER()
 
-/////////////////////////////////////////////////
-//// mouse
 static void SetMouseSensitivitySlider(int i)
 {
 	ZIDLResource* pResource = ZApplication::GetGameInterface()->GetIDLResource();
 	MSlider* pSlider = (MSlider*)pResource->FindWidget("MouseSensitivitySlider");
-	if (pSlider) 
+	if (pSlider)
 	{
 		pSlider->SetValue(i);
 	}
@@ -1817,35 +1586,33 @@ static void SetMouseSensitivityEdit(int i)
 	}
 }
 
-
-BEGIN_IMPLEMENT_LISTENER( ZGetMouseSensitivitySliderListener, MLIST_VALUE_CHANGED)
-	ZIDLResource* pResource = ZApplication::GetGameInterface()->GetIDLResource();
-	MSlider* pSlider = (MSlider*)pResource->FindWidget("MouseSensitivitySlider");
-	if (pSlider != NULL) 
-	{
-		int i = ZGetConfiguration()->ValidateMouseSensitivityInInt( pSlider->GetValue());
-		SetMouseSensitivityEdit(i);
-	}
+BEGIN_IMPLEMENT_LISTENER(ZGetMouseSensitivitySliderListener, MLIST_VALUE_CHANGED)
+ZIDLResource* pResource = ZApplication::GetGameInterface()->GetIDLResource();
+MSlider* pSlider = (MSlider*)pResource->FindWidget("MouseSensitivitySlider");
+if (pSlider != NULL)
+{
+	int i = ZGetConfiguration()->ValidateMouseSensitivityInInt(pSlider->GetValue());
+	SetMouseSensitivityEdit(i);
+}
 END_IMPLEMENT_LISTENER()
 
-// 이 에디트박스에서 메시지 두개를 처리해야하기 때문에 BEGIN_IMPLEMENT_LISTENER/END_IMPLEMENT_LISTENER 매크로를 안썼음
-MListener* ZGetMouseSensitivityEditListener(void){
+MListener* ZGetMouseSensitivityEditListener(void) {
 	class ListenerClass : public MListener
 	{
 	public:
-		virtual bool OnCommand(MWidget* pWidget, const char* szMessage){
+		virtual bool OnCommand(MWidget* pWidget, const char* szMessage) {
 			ZIDLResource* pResource = ZApplication::GetGameInterface()->GetIDLResource();
-			MEdit* pEdit= (MEdit*)pResource->FindWidget("MouseSensitivityEdit");
+			MEdit* pEdit = (MEdit*)pResource->FindWidget("MouseSensitivityEdit");
 			{
-				int i = atoi( pEdit->GetText());
+				int i = atoi(pEdit->GetText());
 				int v = ZGetConfiguration()->ValidateMouseSensitivityInInt(i);
 
-				if(MWidget::IsMsg(szMessage, MEDIT_CHAR_MSG)==true)
+				if (MWidget::IsMsg(szMessage, MEDIT_CHAR_MSG) == true)
 				{
 					SetMouseSensitivitySlider(v);
 					return true;
 				}
-				else if(MWidget::IsMsg(szMessage, MEDIT_KILL_FOCUS)==true)
+				else if (MWidget::IsMsg(szMessage, MEDIT_KILL_FOCUS) == true)
 				{
 					SetMouseSensitivitySlider(v);
 					SetMouseSensitivityEdit(v);

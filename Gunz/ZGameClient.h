@@ -16,7 +16,6 @@ class MListBox;
 class ZCharacterViewList;
 class UPnP;
 
-
 class ZGameClient : public MMatchClient
 {
 protected:
@@ -33,53 +32,53 @@ protected:
 
 private:
 	unsigned long int		m_nPrevClockRequestAttribute;
-	
+
 	int						m_nBridgePeerCount;
 	unsigned long int		m_tmLastBridgePeer;
 
 	int						m_nCountdown;
 	unsigned long int		m_tmLastCountdown;
 
-	int						m_nRequestID;			///< 클랜 생성등에서 쓰이는 RequestID
-	MUID					m_uidRequestPlayer;		///< 클랜 생성등의 요청자 
-	ZNetAgreementBuilder	m_AgreementBuilder;		///< 동의빌더
+	int						m_nRequestID;
+	MUID					m_uidRequestPlayer;
+	ZNetAgreementBuilder	m_AgreementBuilder;
 	MMatchProposalMode		m_nProposalMode;
 
-	// 투표인터페이스 관련
-	bool					m_bVoteInProgress;		///< 투표가 진행중인가
-	bool					m_bCanVote;				///< 투표권이 있는가
+	bool					m_bVoteInProgress;
+	bool					m_bCanVote;
 
-	// 클랜 앰블럼 관련
 	MEmblemMgr				m_EmblemMgr;
 
-	// 기타옵션 관련
-	bool					m_bPriorityBoost;		///< 성능최대화
-	bool					m_bRejectNormalChat;	///< 일반챗 허용
-	bool					m_bRejectTeamChat;		///< 팀챗 허용
-	bool					m_bRejectClanChat;		///< 클랜챗 허용
-	bool					m_bRejectWhisper;		///< 귓말허용
-	bool					m_bRejectInvite;		///< 초대허용
-	
+	bool					m_bPriorityBoost;
+	bool					m_bRejectNormalChat;
+	bool					m_bRejectTeamChat;
+	bool					m_bRejectClanChat;
+	bool					m_bRejectWhisper;
+	bool					m_bRejectInvite;
+
 public:
-	// 듀얼토너먼트 내 전적정보 (로그인할때만 1회 받음, 언어변경시 여기에 기억된 값으로 ui갱신)
+	bool IsRejoin;
+	int LastVoteID;
+	bool bMatching;
+
 	struct DTCHARINFO {
 		int tournamentPoint, wins, losses, ranking, winners, lastWeekGrade;
 	};
-	const DTCHARINFO* GetMyDuelTournamentCharInfo()		{ return &m_dtCharInfo; }
+	const DTCHARINFO* GetMyDuelTournamentCharInfo() { return &m_dtCharInfo; }
 	const DTCHARINFO* GetMyDuelTournamentCharInfoPrev() { return &m_dtCharInfoPrev; }
 private:
 	DTCHARINFO				m_dtCharInfo, m_dtCharInfoPrev;
 
 protected:
-	void SetChannelRuleName(const char* pszName)	{ strcpy(m_szChannelRule, pszName); }
-	int GetBridgePeerCount()			{ return m_nBridgePeerCount; }
-	void SetBridgePeerCount(int nCount)	{ m_nBridgePeerCount = nCount; }
-	void UpdateBridgePeerTime(unsigned long int nClock)	{ m_tmLastBridgePeer = nClock; }
+	void SetChannelRuleName(const char* pszName) { strcpy(m_szChannelRule, pszName); }
+	int GetBridgePeerCount() { return m_nBridgePeerCount; }
+	void SetBridgePeerCount(int nCount) { m_nBridgePeerCount = nCount; }
+	void UpdateBridgePeerTime(unsigned long int nClock) { m_tmLastBridgePeer = nClock; }
 	void StartBridgePeer();
 
 	void UpdateStageSetting(MSTAGE_SETTING_NODE* pSetting, STAGE_STATE nStageState, const MUID& uidMaster);
-	void SetCountdown(int nCountdown)	{ m_nCountdown = nCountdown; m_tmLastCountdown = 0; }
-	int GetCountdown()					{ return m_nCountdown; }
+	void SetCountdown(int nCountdown) { m_nCountdown = nCountdown; m_tmLastCountdown = 0; }
+	int GetCountdown() { return m_nCountdown; }
 	bool Countdown(int nClock) {
 		if (nClock - m_tmLastCountdown > 1000) {
 			m_nCountdown--;
@@ -92,24 +91,24 @@ protected:
 	static int FindListItem(MListBox* pListBox, const MUID& uid);
 
 protected:
-	ZONCOMMANDCALLBACK*		m_fnOnCommandCallback;
-	
-	bool					m_bIsBigGlobalClock;	// 글로벌 클럭이 로컬보다 더 크면 true
-	unsigned long int		m_nClockDistance;	///< 글로벌 클럭과의 시간차
+	ZONCOMMANDCALLBACK* m_fnOnCommandCallback;
+
+	bool					m_bIsBigGlobalClock;
+	unsigned long int		m_nClockDistance;
 
 	MMatchStageSetting		m_MatchStageSetting;
-	bool					m_bForcedEntry;		///< 난입해서 들어가는지 여부
+	bool					m_bForcedEntry;
 protected:
 	virtual bool OnCommand(MCommand* pCommand);
 	virtual bool OnSockDisconnect(SOCKET sock);
 	virtual bool OnSockConnect(SOCKET sock);
-	virtual void OnSockError(SOCKET sock, SOCKET_ERROR_EVENT ErrorEvent, int &ErrorCode);
+	virtual void OnSockError(SOCKET sock, SOCKET_ERROR_EVENT ErrorEvent, int& ErrorCode);
 	virtual int OnConnected(SOCKET sock, MUID* pTargetUID, MUID* pAllocUID, unsigned int nTimeStamp);
 	virtual void OnRegisterCommand(MCommandManager* pCommandManager);
-	virtual void OnPrepareCommand(MCommand* pCommand);	///< 커맨드를 처리하기 전에
+	virtual void OnPrepareCommand(MCommand* pCommand);
 	virtual int OnResponseMatchLogin(const MUID& uidServer, int nResult, const char* szServerName, const MMatchServerMode nServerMode,
-									 const char* szAccountID, const MMatchUserGradeID nUGradeID, const MMatchPremiumGradeID nPGradeID,
-									 const MUID& uidPlayer, bool bEnabledSurvivalMode, bool bEnabledDuelTournament, unsigned char* szEncryptMsg);	// update sgk 0409
+		const char* szAccountID, const MMatchUserGradeID nUGradeID, const MMatchPremiumGradeID nPGradeID,
+		const MUID& uidPlayer, bool bEnabledSurvivalMode, bool bEnabledDuelTournament, unsigned char* szEncryptMsg);
 	virtual void OnBridgePeerACK(const MUID& uidChar, int nCode);
 	virtual void OnObjectCache(unsigned int nType, void* pBlob, int nCount);
 	virtual void OnAgentError(int nError);
@@ -118,14 +117,11 @@ protected:
 
 protected:
 	void OnMatchNotify(unsigned int nMsgID);
-//	void OnPeerList(const MUID& uidStage, void* pBlob, int nCount);
-//	void OnAddPeer(const MUID& uidChar, const char* szIP, const int nPort =				
-//		MATCHCLIENT_DEFAULT_UDP_PORT, MTD_CharInfo* pCharInfo = NULL, int nTeam = 0);
 	void OnAnnounce(unsigned int nType, char* szMsg);
 	void OnResponseResult(const int nResult);
 
 	void OnChannelResponseJoin(const MUID& uidChannel, MCHANNEL_TYPE nChannelType, const char* szChannelName, bool bEnableInterface);
-	void OnChannelChat(const MUID& uidChannel, char* szName, char* szChat,int nGrade);
+	void OnChannelChat(const MUID& uidChannel, char* szName, char* szChat, int nGrade);
 	void OnChannelList(void* pBlob, int nCount);
 	void OnChannelResponseRule(const MUID& uidchannel, const char* pszRuleName);
 
@@ -135,8 +131,6 @@ protected:
 
 	void OnStageJoin(const MUID& uidChar, const MUID& uidStage, unsigned int nRoomNo, char* szStageName);
 	void OnStageLeave(const MUID& uidChar, const MUID& uidStage);
-//	void OnStageEnterBattle(const MUID& uidChar, const MUID& uidStage, MCmdEnterBattleParam nParam, MTD_PeerListNode* pPeerNode);
-//	void OnStageLeaveBattle(const MUID& uidChar, const MUID& uidStage);
 	void OnStageStart(const MUID& uidChar, const MUID& uidStage, int nCountdown);
 	void OnStageRelayStart();
 	void OnStageLaunch(const MUID& uidStage, const char* pszMapName);
@@ -152,8 +146,8 @@ protected:
 	void OnResponseFriendList(void* pBlob, int nCount);
 	void OnChannelPlayerList(int nTotalPlayerCount, int nPage, void* pBlob, int nCount);
 	void OnChannelAllPlayerList(const MUID& uidChannel, void* pBlob, int nBlobCount);
-	void OnResponseStageSetting(const MUID& uidStage, void* pStageBlob, int nStageCount, void* pCharBlob, 
-		                        int nCharCount, STAGE_STATE nStageState, const MUID& uidMaster);
+	void OnResponseStageSetting(const MUID& uidStage, void* pStageBlob, int nStageCount, void* pCharBlob,
+		int nCharCount, STAGE_STATE nStageState, const MUID& uidMaster);
 	void OnResponseRecommandedChannel(const MUID& uidChannel);
 	void OnResponsePeerRelay(const MUID& uidPeer);
 	void OnResponseGameInfo(const MUID& uidStage, void* pGameInfoBlob, void* pRuleInfoBlob, void* pPlayerInfoBlob);
@@ -169,15 +163,13 @@ protected:
 	void OnChatRoomInvite(char* pszSenderName, char* pszRoomName);
 	void OnChatRoomChat(char* pszChatRoomName, char* pszPlayerName, char* pszChat);
 
-	void OnResponseUpdateStageEquipLook( const MUID& uidPlayer, const int nParts, const int nItemID );
+	void OnResponseUpdateStageEquipLook(const MUID& uidPlayer, const int nParts, const int nItemID);
 
-	// 따라가기 음답.
-	void OnFollowResponse( const int nMsgID );
-	void OnExpiredRentItem(void* pBlob);	///< 기간제 아이템 사용 만료 통지받음
+	void OnFollowResponse(const int nMsgID);
+	void OnExpiredRentItem(void* pBlob);
 
 	void OnBirdTest();
 protected:
-	// 클랜관련
 	void OnResponseCreateClan(const int nResult, const int nRequestID);
 	void OnResponseAgreedCreateClan(const int nResult);
 	void OnClanAskSponsorAgreement(const int nRequestID, const char* szClanName, MUID& uidMasterObject, const char* szMasterName);
@@ -197,24 +189,23 @@ protected:
 	void OnClanStandbyClanList(int nPrevStageCount, int nNextStageCount, void* pBlob);
 	void OnClanMemberConnected(const char* szMember);
 
-	// 동의관련
 	void OnResponseProposal(const int nResult, const MMatchProposalMode nProposalMode, const int nRequestID);
-	void OnAskAgreement(const MUID& uidProposer, 
-		                void* pMemberNamesBlob, 
-						const MMatchProposalMode nProposalMode, 
-						const int nRequestID);
-	void OnReplyAgreement(const MUID& uidProposer, 
-		                  const MUID& uidChar, 
-						  const char* szReplierName, 
-						  const MMatchProposalMode nProposalMode,
-					      const int nRequestID, 
-						  const bool bAgreement);
+	void OnAskAgreement(const MUID& uidProposer,
+		void* pMemberNamesBlob,
+		const MMatchProposalMode nProposalMode,
+		const int nRequestID);
+	void OnReplyAgreement(const MUID& uidProposer,
+		const MUID& uidChar,
+		const char* szReplierName,
+		const MMatchProposalMode nProposalMode,
+		const int nRequestID,
+		const bool bAgreement);
 	void ReplyAgreement(const MUID& uidProposer, const MMatchProposalMode nProposalMode, bool bAgreement);
 protected:
 	void OnGameLevelUp(const MUID& uidChar);
 	void OnGameLevelDown(const MUID& uidChar);
 
-public:				// 젠장 -_-; 리플레이에서 이 이벤트들 처리해야 함;
+public:
 	void OnSpawnWorldItem(void* pBlob);
 	void OnObtainWorldItem(const MUID& uidChar, const int nItemUID);
 	void OnRemoveWorldItem(const int nItemUID);
@@ -222,7 +213,6 @@ public:				// 젠장 -_-; 리플레이에서 이 이벤트들 처리해야 함;
 	void OnNotifyActivatedTrapItemList(void* pBlob);
 
 protected:
-	// Local
 	void OnLocalReport119();
 protected:
 	void OnAdminAnnounce(const char* szMsg, const ZAdminAnnounceType nType);
@@ -231,32 +221,28 @@ public:
 	virtual ~ZGameClient();
 
 	void PriorityBoost(bool bBoost);
-	bool GetPriorityBoost()				{ return m_bPriorityBoost; }
-	bool GetRejectNormalChat()			{ return m_bRejectNormalChat; }
-	void SetRejectNormalChat(bool bVal)	{ m_bRejectNormalChat = bVal; }
-	bool GetRejectTeamChat()			{ return m_bRejectTeamChat; }
-	void SetRejectTeamChat(bool bVal)	{ m_bRejectTeamChat = bVal; }
-	bool GetRejectClanChat()			{ return m_bRejectClanChat; }
-	void SetRejectClanChat(bool bVal)	{ m_bRejectClanChat = bVal; }
-	bool GetRejectWhisper()				{ return m_bRejectWhisper; }
-	void SetRejectWhisper(bool bVal)	{ m_bRejectWhisper = bVal; }
-	bool GetRejectInvite()				{ return m_bRejectInvite; }
-	void SetRejectInvite(bool bVal)		{ m_bRejectInvite = bVal; }
+	bool GetPriorityBoost() { return m_bPriorityBoost; }
+	bool GetRejectNormalChat() { return m_bRejectNormalChat; }
+	void SetRejectNormalChat(bool bVal) { m_bRejectNormalChat = bVal; }
+	bool GetRejectTeamChat() { return m_bRejectTeamChat; }
+	void SetRejectTeamChat(bool bVal) { m_bRejectTeamChat = bVal; }
+	bool GetRejectClanChat() { return m_bRejectClanChat; }
+	void SetRejectClanChat(bool bVal) { m_bRejectClanChat = bVal; }
+	bool GetRejectWhisper() { return m_bRejectWhisper; }
+	void SetRejectWhisper(bool bVal) { m_bRejectWhisper = bVal; }
+	bool GetRejectInvite() { return m_bRejectInvite; }
+	void SetRejectInvite(bool bVal) { m_bRejectInvite = bVal; }
 
-	unsigned long int GetClockCount(void) { return timeGetTime(); }		// 로컬 클럭 반환
-	unsigned long int GetGlobalClockCount(void);		///< 서버와 동기된 클럭을 반환한다.
+	unsigned long int GetClockCount(void) { return timeGetTime(); }
+	unsigned long int GetGlobalClockCount(void);
 
-	virtual void OutputMessage(const char* szMessage, MZMOMType nType=MZMDM_GENERAL);
-	
-	void SetOnCommandCallback(ZONCOMMANDCALLBACK pCallback) { m_fnOnCommandCallback = pCallback;}
+	virtual void OutputMessage(const char* szMessage, MZMOMType nType = MZMDM_GENERAL);
 
-//	void InitializeGame();
-//	void StartGame();
-//	void FinalizeGame();
+	void SetOnCommandCallback(ZONCOMMANDCALLBACK pCallback) { m_fnOnCommandCallback = pCallback; }
 
 	void Tick(void);
-	void Disconnect()							{ MMatchClient::Disconnect(m_Server); }
-	
+	void Disconnect() { MMatchClient::Disconnect(m_Server); }
+
 	MMatchStageSetting* GetMatchStageSetting() { return &m_MatchStageSetting; }
 	bool IsForcedEntry() { return m_bForcedEntry; }
 	bool IsLadderGame() { return m_bLadderGame; }
@@ -272,86 +258,73 @@ public:
 	void StopStageList();
 	void StartChannelList(MCHANNEL_TYPE nChannelType);
 	void StopChannelList();
-	//void SetChannelType(MCHANNEL_TYPE type);
+	const char* GetChannelName() { return m_szChannel; }
+	MCHANNEL_TYPE	GetChannelType() { return m_CurrentChannelType; }
+	bool			GetEnableInterface() { return m_bEnableInterface; }
+	const char* GetChannelRuleName() { return m_szChannelRule; }
+	const char* GetStageName() { return m_szStageName; }
+	int				GetStageNumber() { return m_nRoomNo; }
 
-	const char*		GetChannelName()		{ return m_szChannel; }
-	MCHANNEL_TYPE	GetChannelType()		{ return m_CurrentChannelType; }
-	bool			GetEnableInterface()	{ return m_bEnableInterface; }
-	const char*		GetChannelRuleName()	{ return m_szChannelRule; }
-	const char*		GetStageName()			{ return m_szStageName; }
-	int				GetStageNumber()		{ return m_nRoomNo; }
-	
-	
-	
-	const char* GetChatRoomInvited(){ return m_szChatRoomInvited; }
-	void SetChatRoomInvited(const char* pszRoomName)	{ strcpy(m_szChatRoomInvited, pszRoomName); }
+	const char* GetChatRoomInvited() { return m_szChatRoomInvited; }
+	void SetChatRoomInvited(const char* pszRoomName) { strcpy(m_szChatRoomInvited, pszRoomName); }
 
 	bool AmIStageMaster() { return (m_MatchStageSetting.GetMasterUID() == GetPlayerUID()); }
 
 	const char* GetVoteMessage() { return m_szVoteText; }
 public:
-	// 클랜 관련
 	void AnswerSponsorAgreement(bool bAnswer);
 	void AnswerJoinerAgreement(bool bAnswer);
 	void RequestCreateClan(char* szClanName, char** ppMemberCharNames);
 
-	// 동의 관련
 	void RequestProposal(const MMatchProposalMode nProposalMode, char** ppReplierCharNames, const int nReplierCount);
 	void ReplyAgreement(bool bAgreement);
-public:	// 투표관련
-	bool IsVoteInProgress()				{ return m_bVoteInProgress;	}
-	void SetVoteInProgress(bool bVal)	{ m_bVoteInProgress = bVal; }
-	bool CanVote()						{ return m_bCanVote; }
-	void SetCanVote(bool bVal)			{ m_bCanVote = bVal; }
+public:
+	bool IsVoteInProgress() { return m_bVoteInProgress; }
+	void SetVoteInProgress(bool bVal) { m_bVoteInProgress = bVal; }
+	bool CanVote() { return m_bCanVote; }
+	void SetCanVote(bool bVal) { m_bCanVote = bVal; }
 
 public:
 	void RequestGameSuicide();
-	// game 에서 불러준다
-	//void OnGameRoundState(const MUID& uidStage, int nRoundState, int nRound);
 	void OnStageEnterBattle(const MUID& uidChar, MCmdEnterBattleParam nParam);
 public:
-	// Validate 씨리즈
 	int ValidateRequestDeleteChar();
 public:
-	// Request 씨리즈
 	void RequestChannelJoin(const MUID& uidChannel);
 	void RequestChannelJoin(const MCHANNEL_TYPE nChannelType, char* szChannelName);
-	void RequestOnLobbyCreated();		// 로비에 들어올때 요청하는 메시지들
-	void RequestOnGameDestroyed();		// 게임이 끝났을때 요청하는 메시지들
+	void RequestOnLobbyCreated();
+	void RequestOnGameDestroyed();
 protected:
 	void OnNotifyCallVote(const char* pszDiscuss, const char* pszArg);
 	void OnNotifyVoteResult(const char* pszDiscuss, int nResult);
-	void OnVoteAbort( const int nMsgCode );
+	void OnVoteAbort(const int nMsgCode);
 protected:
 	void OnBroadcastClanRenewVictories(const char* pszWinnerClanName, const char* pszLoserClanName, int nVictories);
 	void OnBroadcastClanInterruptVictories(const char* pszWinnerClanName, const char* pszLoserClanName, int nVictories);
 	void OnBroadcastDuelRenewVictories(const char* pszChampionName, const char* pszChannelName, int nRoomno, int nVictories);
 	void OnBroadcastDuelInterruptVictories(const char* pszChampionName, const char* pszInterrupterName, int nVictories);
 protected:
-	// Emblem 관련
 	void ProcessEmblem(unsigned int nCLID, unsigned int nChecksum);
 	void RequestEmblemURL(unsigned int nCLID);
 	void OnClanResponseEmblemURL(unsigned int nCLID, unsigned int nEmblemChecksum, const char* szEmblemURL);
 	void OnClanEmblemReady(unsigned int nCLID, const char* szURL);
 
 public:
-	MEmblemMgr *GetEmblemManager() { return &m_EmblemMgr; }	
+	MEmblemMgr* GetEmblemManager() { return &m_EmblemMgr; }
 
-	// UPnP
 protected:
-	UPnP *m_pUPnP;
+	UPnP* m_pUPnP;
 
 public:
 	bool CreateUPnP(unsigned short nUDPPort);
 	bool DestroyUPnP();
-	UPnP* GetUDPInfo()		{ return m_pUPnP; }
+	UPnP* GetUDPInfo() { return m_pUPnP; }
 
 	void ChangeQuestStage();
 
-	void OnRecieveGambleItem( unsigned int nRecvItem, unsigned int nCnt, unsigned int nTime);
+	void OnRecieveGambleItem(unsigned int nRecvItem, unsigned int nCnt, unsigned int nTime);
 
-	// 자기자신의 실행파일의 MD5 값을 구해서 그값을 암호화한다.
-    void GetEncryptMD5HashValue(char* szEncryptMD5Value);							// update sgk 0724
+	void GetEncryptMD5HashValue(char* szEncryptMD5Value);
 
 protected:
 	void OnDuelTournamentPrepare(MDUELTOURNAMENTTYPE nType, MUID uidStage, void* pBlobPlayerInfo);
@@ -368,21 +341,14 @@ protected:
 	void OnAdminResponseMutePlayer(int nResult);
 };
 
-
-
-
-
 bool ZPostCommand(MCommand* pCmd);
 
-// 내 플레이어의 uid
 #define ZGetMyUID() (ZGetGameClient() ? ZGetGameClient()->GetPlayerUID() : MUID(0,0))
-
 
 MCommand* ZNewCmd(int nID);
 
 unsigned long int ZGetClockDistance(unsigned long int nGlobalClock, unsigned long int nLocalClock);
 
-// Post Command Macro For Convenience
 #define ZPOSTCMD0(_ID)									{ MCommand* pC=ZNewCmd(_ID); ZPostCommand(pC); }
 #define ZPOSTCMD1(_ID, _P0)								{ MCommand* pC=ZNewCmd(_ID); pC->AP(_P0); ZPostCommand(pC); }
 #define ZPOSTCMD2(_ID, _P0, _P1)						{ MCommand* pC=ZNewCmd(_ID); pC->AP(_P0); pC->AP(_P1); ZPostCommand(pC); }
@@ -395,7 +361,6 @@ unsigned long int ZGetClockDistance(unsigned long int nGlobalClock, unsigned lon
 #define HANDLE_COMMAND(message, fn)    \
 	case (message): return fn(pCommand);
 
-bool GetUserInfoUID(MUID uid,MCOLOR& _color,char* sp_name,MMatchUserGradeID& gid);
-
+bool GetUserInfoUID(MUID uid, MCOLOR& _color, MMatchUserGradeID& gid);
 
 #endif

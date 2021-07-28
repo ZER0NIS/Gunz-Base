@@ -6,7 +6,7 @@
 
 TaskManager::TaskManager()
 {
-	thr = std::thread([this](){ while (true) ThreadLoop(); });
+	thr = std::thread([this]() { while (true) ThreadLoop(); });
 	thr.detach();
 }
 
@@ -54,7 +54,7 @@ bool MeshManager::LoadParts(std::vector<unsigned char>& File)
 	{
 		parts.parse<rapidxml::parse_non_destructive>(reinterpret_cast<char*>(&File[0]), File.size());
 	}
-	catch (rapidxml::parse_error &e)
+	catch (rapidxml::parse_error & e)
 	{
 		MLog("RapidXML threw parse_error (%s) on parts_index.xml at %s\n", e.what(), e.where<char>());
 		return false;
@@ -133,7 +133,7 @@ void MeshManager::Destroy()
 	BaseMeshMap.clear();
 }
 
-MeshManager::GetResult MeshManager::GetCached(const char *szMeshName, const char *szNodeName,
+MeshManager::GetResult MeshManager::GetCached(const char* szMeshName, const char* szNodeName,
 	RMeshNodePtr& NodeOutput, LoadInfoType& LoadInfoOutput)
 {
 	auto Prof = MBeginProfile("MeshManager::Get");
@@ -176,7 +176,7 @@ MeshManager::GetResult MeshManager::GetCached(const char *szMeshName, const char
 
 			alloc_mesh_it->second.References.fetch_add(1, std::memory_order_relaxed);
 			alloc_node_it->second.References++;
-			NodeOutput = RMeshNodePtr{alloc_node_it->second.Node};
+			NodeOutput = RMeshNodePtr{ alloc_node_it->second.Node };
 			return GetResult::Found;
 		}
 	}
@@ -184,13 +184,13 @@ MeshManager::GetResult MeshManager::GetCached(const char *szMeshName, const char
 	auto nodeit = BaseMesh.PartsToEluMap.find(szNodeName);
 
 	if (nodeit == BaseMesh.PartsToEluMap.end())
-	{ 
+	{
 		LOG("Couldn't find node %s in PartsToEluMap element\n", szNodeName);
 
 		return GetResult::NotFound;
 	}
 
-	RMesh *pMesh = nullptr;
+	RMesh* pMesh = nullptr;
 
 	{
 		auto AllocMeshEmplaceRes = BaseMesh.AllocatedMeshes.try_emplace(nodeit->second);
@@ -201,8 +201,8 @@ MeshManager::GetResult MeshManager::GetCached(const char *szMeshName, const char
 			if (MeshAlloc.References == -1)
 			{
 				LOG("Mesh %s for %s being loaded\n", nodeit->second.c_str(), szNodeName);
-				LoadInfoOutput = {nodeit->first.c_str(), nodeit->second.c_str(), &MeshAlloc,
-					&BaseMesh};
+				LoadInfoOutput = { nodeit->first.c_str(), nodeit->second.c_str(), &MeshAlloc,
+					&BaseMesh };
 				return GetResult::MeshBeingLoaded;
 			}
 			pMesh = &MeshAlloc.Mesh;
@@ -215,8 +215,8 @@ MeshManager::GetResult MeshManager::GetCached(const char *szMeshName, const char
 		{
 			LOG("Loading mesh %s for %s\n", nodeit->second.c_str(), szNodeName);
 			MeshAlloc.References.store(-1, std::memory_order_relaxed);
-			LoadInfoOutput = {nodeit->first.c_str(), nodeit->second.c_str(), &MeshAlloc,
-				&BaseMesh};
+			LoadInfoOutput = { nodeit->first.c_str(), nodeit->second.c_str(), &MeshAlloc,
+				&BaseMesh };
 			return GetResult::LoadMesh;
 		}
 	}
@@ -235,7 +235,7 @@ MeshManager::GetResult MeshManager::GetCached(const char *szMeshName, const char
 
 	BaseMesh.AllocatedNodes.emplace(szNodeName, RMeshNodeAllocation{ node, 1 });
 
-	NodeOutput = RMeshNodePtr{node};
+	NodeOutput = RMeshNodePtr{ node };
 	return GetResult::Found;
 }
 
@@ -254,9 +254,9 @@ RMeshNode* MeshManager::Load(const LoadInfoType& LoadInfo)
 	LoadInfo.MeshAlloc->References.store(1, std::memory_order_release);
 	auto Node = LoadInfo.MeshAlloc->Mesh.GetMeshData(LoadInfo.NodeName);
 	{
-		std::lock_guard<std::mutex> lock{mutex};
+		std::lock_guard<std::mutex> lock{ mutex };
 		auto emplace_ret = LoadInfo.BaseMesh->AllocatedNodes.emplace(LoadInfo.NodeName,
-			RMeshNodeAllocation{Node, 0});
+			RMeshNodeAllocation{ Node, 0 });
 		emplace_ret.first->second.References++;
 	}
 	LOG("Load -- Placed node %s -> %p from mesh %s, %p\n", LoadInfo.NodeName, Node,
@@ -296,10 +296,10 @@ void MeshManager::AwaitMeshLoad(const LoadInfoType& LoadInfo, void* Obj,
 		}
 		auto Node = LoadInfo.MeshAlloc->Mesh.GetMeshData(LoadInfo.NodeName);
 		{
-			std::lock_guard<std::mutex> lock{mutex};
+			std::lock_guard<std::mutex> lock{ mutex };
 			LoadInfo.MeshAlloc->References.fetch_add(1, std::memory_order_relaxed);
 			auto emplace_ret = LoadInfo.BaseMesh->AllocatedNodes.try_emplace(LoadInfo.NodeName,
-				RMeshNodeAllocation{Node, 0});
+				RMeshNodeAllocation{ Node, 0 });
 			emplace_ret.first->second.References++;
 		}
 		LOG("AwaitMeshLoad -- Placed node %s -> %p from mesh %s, %p\n", LoadInfo.NodeName, Node,
@@ -318,12 +318,12 @@ void MeshManager::InvokeCallback(void* Obj, RMeshNode* Node, const char* NodeNam
 		// We want to make sure the object hasn't been destroyed
 		// between the GetAsync call and the invokation.
 		if (RemoveObject(Obj, false))
-			Callback(RMeshNodePtr{Node}, NodeName);
+			Callback(RMeshNodePtr{ Node }, NodeName);
 	};
 	TaskManager::GetInstance().Invoke(std::move(Invokation));
 }
 
-void MeshManager::Release(RMeshNode *pNode)
+void MeshManager::Release(RMeshNode* pNode)
 {
 	auto Prof = MBeginProfile("MeshManager::Release");
 
@@ -421,7 +421,7 @@ void MeshManager::DecrementRefCount(AllocatedNodesType& AllocatedNodes,
 	}
 }
 
-bool MeshManager::RemoveObject(void *Obj, bool All)
+bool MeshManager::RemoveObject(void* Obj, bool All)
 {
 	std::lock_guard<std::mutex> lock(ObjQueueMutex);
 

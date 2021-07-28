@@ -5,19 +5,17 @@
 
 #include "mempool.h"
 
-// 사용안하는것들은 지운다..
-
-class ZEffectLightTracer : public ZEffectBillboard , public CMemPoolSm<ZEffectLightTracer>
+class ZEffectLightTracer : public ZEffectBillboard, public CMemPoolSm<ZEffectLightTracer>
 {
 protected:
 	unsigned long int m_nStartTime;
 
-	D3DXVECTOR3	m_LightTracerDir;
-	D3DXVECTOR3	m_Start, m_End;
+	rvector	m_LightTracerDir;
+	rvector	m_Start, m_End;
 	float		m_fLength;
 
 public:
-	ZEffectLightTracer(ZEffectBillboardSource* pEffectBillboardSource, D3DXVECTOR3& Start, D3DXVECTOR3& End);
+	ZEffectLightTracer(ZEffectBillboardSource* pEffectBillboardSource, rvector& Start, rvector& End);
 	virtual ~ZEffectLightTracer(void);
 
 	virtual bool Draw(unsigned long int nTime);

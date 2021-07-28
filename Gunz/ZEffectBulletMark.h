@@ -7,7 +7,7 @@ class ZEffectBulletMark : public ZEffectBillboard{
 protected:
 	unsigned long int m_nStartTime;
 public:
-	ZEffectBulletMark(ZEffectBillboardSource* pEffectBillboardSource, D3DXVECTOR3& Pos, D3DXVECTOR3& Normal);
+	ZEffectBulletMark(ZEffectBillboardSource* pEffectBillboardSource, rvector& Pos, rvector& Normal);
 	virtual ~ZEffectBulletMark(void);
 
 	virtual bool Draw(unsigned long int nTime);

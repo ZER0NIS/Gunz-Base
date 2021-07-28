@@ -4,7 +4,6 @@
 
 class ZOptionInterface
 {
-
 	int		mOldScreenWidth;
 	int		mOldScreenHeight;
 
@@ -12,7 +11,6 @@ class ZOptionInterface
 
 	bool	mbTimer;
 	DWORD	mTimerTime;
-
 
 public:
 	ZOptionInterface(void);
@@ -25,32 +23,24 @@ public:
 
 	void OptimizationVideoOption();
 
-	// 리사이즈 관련
-	void Resize(int w, int h);		/// 리사이즈를 통해 해상도에 적응하는 인터페이스를 구현한다.
-	bool ResizeWidgetRecursive( MWidget* pWidget/*, int w, int h*/);
+	void Resize(int w, int h);
+	bool ResizeWidgetRecursive(MWidget* pWidget);
 	bool ResizeWidget(const char* szName, int w, int h);
 	void AdjustMultipliedWidgetsManually();
-	void ResizeDefaultFont( int newScreenHeight );
+	void ResizeDefaultFont(int newScreenHeight);
 
-	void ShowResizeConfirmDialog( bool Resized );
+	void ShowResizeConfirmDialog(bool Resized);
 	bool IsDiffScreenResolution();
 	bool TestScreenResolution();
 	void GetOldScreenResolution();
-	bool SetTimer( bool b = false,  float time = 0.0f );
+	bool SetTimer(bool b = false, float time = 0.0f);
 
-	// 네트워크 포트변경
 	void ShowNetworkPortConfirmDialog();
 	bool IsDiffNetworkPort();
 
-	// 액션키 중복 확인
 	void OnActionKeySet(ZActionKey* pActionKey, int key);
 };
 
-
-
-///////////////////// 이하 interface listener
-
-// 옵션
 DECLARE_LISTENER(ZGetOptionGammaSliderChangeListener)
 DECLARE_LISTENER(ZGetLoadDefaultKeySettingListener)
 DECLARE_LISTENER(ZSetOptimizationListener)
@@ -67,4 +57,3 @@ DECLARE_LISTENER(ZGet8BitSoundListener)
 DECLARE_LISTENER(ZGet16BitSoundListener)
 DECLARE_LISTENER(ZGetMouseSensitivitySliderListener)
 DECLARE_LISTENER(ZGetMouseSensitivityEditListener)
-

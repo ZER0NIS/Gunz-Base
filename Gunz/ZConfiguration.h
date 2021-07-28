@@ -19,18 +19,15 @@ struct ZHOTKEY {
 	string command;
 };
 
-
 struct ZSERVERNODE
 {
-	char	szName[ 32];
-	char	szAddress[ 32];
+	char	szName[32];
+	char	szAddress[32];
 	int		nPort;
 	int		nType;
 };
 
-
-typedef map<int,ZHOTKEY*> ZHOTKEYS;
-
+typedef map<int, ZHOTKEY*> ZHOTKEYS;
 
 struct ZCONFIG_VIDEO
 {
@@ -51,7 +48,7 @@ struct ZCONFIG_VIDEO
 	bool bTerrible;
 };
 
-struct ZCONFIG_AUDIO{
+struct ZCONFIG_AUDIO {
 	bool	bBGMEnabled;
 	bool bBGMMute;
 	float	fBGMVolume;
@@ -65,28 +62,28 @@ struct ZCONFIG_AUDIO{
 	bool bNarrationSound;
 };
 
-struct ZCONFIG_MOUSE{
+struct ZCONFIG_MOUSE {
 	float	fSensitivity;
 	bool	bInvert;
 };
 
-struct ZCONFIG_JOYSTICK{
+struct ZCONFIG_JOYSTICK {
 	float	fSensitivity;
 	bool	bInvert;
 };
 
-struct ZACTIONKEYDESCRIPTION{
+struct ZACTIONKEYDESCRIPTION {
 	char	szName[256];
 	int		nVirtualKey;
-	int		nVirtualKeyAlt;	// 액션당 키 2개씩 할당할수있다
+	int		nVirtualKeyAlt;
 };
 
-struct ZCONFIG_MOVINGPICTURE{
-	int		iResolution;		// 동영상 캡쳐 해상도
-	int		iFileSize;			// 동영상 파일크기(용량제한)
+struct ZCONFIG_MOVINGPICTURE {
+	int		iResolution;
+	int		iFileSize;
 };
 
-struct ZCONFIG_KEYBOARD{
+struct ZCONFIG_KEYBOARD {
 	ZACTIONKEYDESCRIPTION	ActionKeys[ZACTION_COUNT];
 };
 
@@ -94,27 +91,27 @@ struct ZCONFIG_KEYBOARD{
 
 struct ZCONFIG_MACRO
 {
-	char szMacro[ ZCONFIG_MACRO_MAX ][256];
+	char szMacro[ZCONFIG_MACRO_MAX][256];
 
-	void SetString(int i,char* str) {
-		if(i<0 || i>ZCONFIG_MACRO_MAX-1)
+	void SetString(int i, char* str) {
+		if (i<0 || i>ZCONFIG_MACRO_MAX - 1)
 			return;
-		if(str==NULL)
+		if (str == NULL)
 			return;
 
-		int nLen = min( 256, (int)strlen( str));
+		int nLen = min(256, (int)strlen(str));
 		strncpy(szMacro[i], str, nLen);
 		szMacro[i][nLen] = 0;
 	}
 
 	char* GetString(int i) {
-		if(i<0 || i>ZCONFIG_MACRO_MAX-1)
+		if (i<0 || i>ZCONFIG_MACRO_MAX - 1)
 			return NULL;
 		return szMacro[i];
 	}
 };
 
-struct ZCONFIG_ETC{
+struct ZCONFIG_ETC {
 	int			nNetworkPort1;
 	int			nNetworkPort2;
 	bool		bBoost;
@@ -124,19 +121,17 @@ struct ZCONFIG_ETC{
 	bool		bRejectWhisper;
 	bool		bRejectInvite;
 	int			nCrossHair;
-	bool		bInGameNoChat;			// 게임중 대화 차단 여부: 게임중 채팅입력, 일반말, 귓말, 팀채팅 차단됨.
-										// 오직 클랜채팅, 채팅 명령어만 허용함.
-	char		szLanguage[32];			// 현재 선택된 언어
+	bool		bInGameNoChat;
+	char		szLanguage[32];
 	int			nFrameLimit_perSecond;
 };
 
-/// 로케일과 관련된 설정값
 struct ZCONFIG_SELECTABLE_LANGUAGE {
-	string		strLanguage;			// 내부적으로 언어를 구별하기 위한 문자열 "USA" "KOR" "GRM" 등
-	string		strLanguageName;		// 유저에게 보여주기 위한 언어명
+	string		strLanguage;
+	string		strLanguageName;
 };
 struct ZCONFIG_LOCALE {
-	char		szDefaultFont[ 32];
+	char		szDefaultFont[32];
 	char		szXmlHeader[256];
 	char		szHomepageUrl[256];
 	char		szHomepageTitle[128];
@@ -150,7 +145,6 @@ struct ZCONFIG_LOCALE {
 	int			nMaxPlayers;
 
 	vector<ZCONFIG_SELECTABLE_LANGUAGE> vecSelectableLanguage;
-
 };
 
 class ZLocatorList;
@@ -177,15 +171,15 @@ private:
 	bool				m_bOptimization;
 
 	int					m_nServerCount;
-	bool				m_bViewGameChat;		// 게임중 채팅을 볼지 안볼지 여부
+	bool				m_bViewGameChat;
 
-	ZLocatorList*		m_pLocatorList;
-	ZLocatorList*		m_pTLocatorList;
+	ZLocatorList* m_pLocatorList;
+	ZLocatorList* m_pTLocatorList;
 
-	ZGameTypeList*		m_pGameTypeList;
+	ZGameTypeList* m_pGameTypeList;
 
 	bool				m_bIsComplete;
-	bool				m_bReservedSave;		// 단축키로 실시간 변경한 값을 파일로 아직 저장안한 경우
+	bool				m_bReservedSave;
 
 protected:
 	void ParseLocaleSelectableLanguages(MXmlElement& selectableLangsElem);
@@ -206,57 +200,51 @@ public:
 	bool LoadGameTypeCfg(const char* szFileName);
 	bool LoadSystem(const char* szFileName);
 	bool LoadConfig(const char* szFileName);
-	bool Save( const char* szHeader)	{ return SaveToFile(FILENAME_CONFIG, szHeader); }
-	bool SaveToFile(const char*szFileName, const char* szHeader);
+	bool Save(const char* szHeader) { return SaveToFile(FILENAME_CONFIG, szHeader); }
+	bool SaveToFile(const char* szFileName, const char* szHeader);
 	bool LoadHotKey(const char* szFileName);
 
-	ZLocatorList* GetLocatorList()	{ return m_pLocatorList; }
-	ZLocatorList* GetTLocatorList()	{ return m_pTLocatorList; }
+	ZLocatorList* GetLocatorList() { return m_pLocatorList; }
+	ZLocatorList* GetTLocatorList() { return m_pTLocatorList; }
 
-	ZGameTypeList* GetGameTypeList()	{ return m_pGameTypeList; }
+	ZGameTypeList* GetGameTypeList() { return m_pGameTypeList; }
 
-	char*	GetBAReportAddr()		{ return m_szBAReportAddr; }
-	char*	GetBAReportDir()		{ return m_szBAReportDir; }
+	char* GetBAReportAddr() { return m_szBAReportAddr; }
+	char* GetBAReportDir() { return m_szBAReportDir; }
 
-//	char*	GetXmlHeader()			{ return m_Locale.szXmlHeader; }
+	char* GetInterfaceSkinName() { return m_szInterfaceSkinName; }
+	char* GetServerIP() { return m_szServerIP; }
+	int		GetServerPort() { return m_nServerPort; }
+	int		GetServerCount() { return m_nServerCount; }
+	ZSERVERNODE	GetServerNode(int nNum);
+	bool GetViewGameChat() { return m_bViewGameChat; }
+	void SetViewGameChat(bool b) { m_bViewGameChat = b; }
 
-	char*	GetInterfaceSkinName()	{ return m_szInterfaceSkinName; }
-	char*	GetServerIP()			{ return m_szServerIP; }
-	int		GetServerPort()			{ return m_nServerPort; }
-	int		GetServerCount()		{ return m_nServerCount; }
-	ZSERVERNODE	GetServerNode( int nNum);
-//	char*	GetDefaultFont()		{ return m_Locale.szDefaultFont; }
-//	bool	GetIMESupport()			{ return m_Locale.bIMESupport; }
+	void SetForceOptimization(bool b) { m_bOptimization = b; }
+	bool GetForceOptimization() const { return m_bOptimization; }
 
-	bool GetViewGameChat()			{ return m_bViewGameChat; }
-	void SetViewGameChat(bool b)	{ m_bViewGameChat = b; }
-
-	void SetForceOptimization(bool b) {	m_bOptimization = b;}
-	bool GetForceOptimization() const {	return m_bOptimization;}
-
-	ZHOTKEY *GetHotkey(int nID);
+	ZHOTKEY* GetHotkey(int nID);
 
 	ZHOTKEYS m_HotKeys;
 
-	map<int,ZSERVERNODE>	m_ServerList;
+	map<int, ZSERVERNODE>	m_ServerList;
 
-	ZCONFIG_VIDEO* GetVideo()		{ return &m_Video; }
-	ZCONFIG_AUDIO* GetAudio()		{ return &m_Audio; }
-	ZCONFIG_MOUSE* GetMouse()		{ return &m_Mouse; }
+	ZCONFIG_VIDEO* GetVideo() { return &m_Video; }
+	ZCONFIG_AUDIO* GetAudio() { return &m_Audio; }
+	ZCONFIG_MOUSE* GetMouse() { return &m_Mouse; }
 	ZCONFIG_KEYBOARD* GetKeyboard() { return &m_Keyboard; }
-	ZCONFIG_JOYSTICK* GetJoystick()	{ return &m_Joystick; }
-	ZCONFIG_ETC* GetEtc()			{ return &m_Etc; }
-	ZCONFIG_MACRO* GetMacro()		{ return &m_Macro; }
-	ZCONFIG_LOCALE* GetLocale()		{ return &m_Locale; }
-	ZCONFIG_MOVINGPICTURE* GetMovingPicture() { return &m_MovingPicture;}
+	ZCONFIG_JOYSTICK* GetJoystick() { return &m_Joystick; }
+	ZCONFIG_ETC* GetEtc() { return &m_Etc; }
+	ZCONFIG_MACRO* GetMacro() { return &m_Macro; }
+	ZCONFIG_LOCALE* GetLocale() { return &m_Locale; }
+	ZCONFIG_MOVINGPICTURE* GetMovingPicture() { return &m_MovingPicture; }
 
-	const bool IsComplete()			{ return m_bIsComplete; }
-	void ReserveSave()				{ m_bReservedSave = true; }
+	const bool IsComplete() { return m_bIsComplete; }
+	void ReserveSave() { m_bReservedSave = true; }
 
 	const bool LateStringConvert();
 
 public:
-	// 마우스 감도설정값 최소 0.0125f 최대 1.0000f
 #define MOUSE_SENSITIVITY_MIN 125
 #define MOUSE_SENSITIVITY_MAX 10000
 
@@ -265,46 +253,32 @@ public:
 
 	int GetMouseSensitivityInInt();
 	float GetMouseSensitivityInFloat();
-	
+
 	float SetMouseSensitivityInFloat(float f);
 	int SetMouseSensitivityInInt(int i);
 
 public:
-	// 현재 디폴트 언어가 선택되어 있는가
-	bool IsUsingDefaultLanguage()	{ return m_Locale.strDefaultLanguage == m_Etc.szLanguage; }
-	// 현재 선택된 언어ID문자열을 반환
+	bool IsUsingDefaultLanguage() { return m_Locale.strDefaultLanguage == m_Etc.szLanguage; }
 	const char* GetSelectedLanguage() { return m_Etc.szLanguage; }
-	// 현재 선택된 언어의 인덱스를 반환
 	unsigned int GetSelectedLanguageIndex();
-	// 언어 선택을 바꿈
 	void SetSelectedLanguageIndex(unsigned int i);
 private:
 	void ValidateSelectedLanguage();
 };
 
+ZConfiguration* ZGetConfiguration();
 
-ZConfiguration*	ZGetConfiguration();
-
-
-
-//////////////////////////////////////////////////////////////
-// NHNUSA에서는 런처가 커맨드라인으로 선택언어를 넘겨준다. 즉 NHN 버전은 유저의 선택 언어를 config.xml에 저장하지 않는다.
-// 대신 기동시 커맨드라인을 파싱해 여기에 선택언어를 저장해두고 실행중 언어변경은 여기 저장해 놓은 값에 의존한다. (보통은 config.xml에 의존)
 class ZLanguageSetting_forNHNUSA
 {
 	static unsigned int m_idLang;
 
 public:
-	static void SetLanguageIndexFromCmdLineStr(const char* cmdline);// 커맨드라인에서 언어선택을 알아낸다
+	static void SetLanguageIndexFromCmdLineStr(const char* cmdline);
 
 	static void SetLanguageSetting(unsigned int idLang) { m_idLang = idLang; }
 	static unsigned int GetLanguageSetting() { return m_idLang; }
 };
 ZLanguageSetting_forNHNUSA* ZGetLanguageSetting_forNHNUSA();
-//////////////////////////////////////////////////////////////
-
-
-
 
 #define ZTOK_SERVER		"SERVER"
 #define ZTOK_IP				"IP"
@@ -355,8 +329,8 @@ ZLanguageSetting_forNHNUSA* ZGetLanguageSetting_forNHNUSA();
 #define ZTOK_VIDEO_MAPTEXLEVEL			"MAPTEXTURELEVEL"
 #define ZTOK_VIDEO_EFFECTLEVEL			"EFFECTLEVEL"
 #define ZTOK_VIDEO_TEXTUREFORMAT		"TEXTUREFORMAT"
-#define ZTOK_MOVINGPICTURE_RESOLUTION	"MOVINGPICTURERESOLUTION"	// 동영상 캡쳐 해상도
-#define ZTOK_MOVINGPICTURE_FILESIZE		"MOVINGPICTUREFILSIZE"		// 동영상 캡쳐 파일크기(용량제한)
+#define ZTOK_MOVINGPICTURE_RESOLUTION	"MOVINGPICTURERESOLUTION"
+#define ZTOK_MOVINGPICTURE_FILESIZE		"MOVINGPICTUREFILSIZE"
 
 #define ZTOK_AUDIO_BGM_ENABLED			"BGM_ENABLED"
 #define ZTOK_AUDIO_BGM_VOLUME			"BGM_VOLUME"
@@ -409,7 +383,6 @@ ZLanguageSetting_forNHNUSA* ZGetLanguageSetting_forNHNUSA();
 #define ZTOK_LOCALE_MAXPLAYERS		"MAXPLAYERS"
 #define ZTOK_LOCALE_SELECTABLE_LANGUAGES "SELECTABLE_LANGUAGES"
 
-// Variables
 #define Z_MOUSE_SENSITIVITY			(ZGetConfiguration()->GetMouse()->fSensitivity)
 #define Z_MOUSE_INVERT			(ZGetConfiguration()->GetMouse()->bInvert)
 
@@ -448,7 +421,6 @@ ZLanguageSetting_forNHNUSA* ZGetLanguageSetting_forNHNUSA();
 #define Z_ETC_REJECT_INVITE		(ZGetConfiguration()->GetEtc()->bRejectInvite)
 #define Z_ETC_CROSSHAIR			(ZGetConfiguration()->GetEtc()->nCrossHair)
 #define Z_ETC_FRAMELIMIT_PERSECOND	(ZGetConfiguration()->GetEtc()->nFrameLimit_perSecond)
-
 
 #define Z_LOCALE_DEFAULT_FONT	(ZGetConfiguration()->GetLocale()->szDefaultFont)
 #define Z_LOCALE_XML_HEADER		(ZGetConfiguration()->GetLocale()->szXmlHeader)

@@ -1,29 +1,13 @@
 #ifndef _ZGLOBAL_H
 #define _ZGLOBAL_H
 
-//#include "RMesh.h"
 #include "ZApplication.h"
 
-// 전역적으로 사용하는 것은 이곳에다 넣도록 하자
-#ifdef LOCALE_BRAZIL
-#define APPLICATION_NAME		"The Duel"
-#else
-#define APPLICATION_NAME		"Gunz"
-#endif
-
-// 저장되는 폴더
-#ifdef LOCALE_BRAZIL
-#define GUNZ_FOLDER			"/The Duel"
-#elif LOCALE_JAPAN
-#define GUNZ_FOLDER			"/GUNZWEI"
-#else
+#define APPLICATION_NAME	"Gunz"
 #define GUNZ_FOLDER			"/Gunz"
-#endif
-
 #define SCREENSHOT_FOLDER	"/Screenshots"
 #define REPLAY_FOLDER		"/Replay"
 #define EMBLEM_FOLDER		"/Emblem"
-
 
 class MZFileSystem;
 class MMessenger;
@@ -50,22 +34,16 @@ class ZInput;
 extern ZDirectInput	g_DInput;
 extern ZInput* g_pInput;
 
-bool					ZIsLaunchDevelop(void);
+RMeshMgr* ZGetNpcMeshMgr(void);
+RMeshMgr* ZGetMeshMgr(void);
+RMeshMgr* ZGetWeaponMeshMgr(void);
+RAniEventMgr* ZGetAniEventMgr(void);
 
-RMeshMgr*				ZGetNpcMeshMgr(void);
-RMeshMgr*				ZGetMeshMgr(void);
-RMeshMgr*				ZGetWeaponMeshMgr(void);
-RAniEventMgr*			ZGetAniEventMgr(void);
+ZSoundEngine* ZGetSoundEngine(void);
 
-ZSoundEngine*			ZGetSoundEngine(void);
+ZEffectManager* ZGetEffectManager(void);
+ZScreenEffectManager* ZGetScreenEffectManager(void);
 
-ZEffectManager*			ZGetEffectManager(void);
-ZScreenEffectManager*	ZGetScreenEffectManager(void);
-
-int						ZGetSVNRevision(void);
-
-
-// dll-injection으로 호출하는 핵 때문에 매크로 인라이닝
 #define ZGetApplication()		ZApplication::GetInstance()
 #define ZGetGameClient()		(ZApplication::GetGameInterface() ? ZApplication::GetGameInterface()->GetGameClient() : NULL)
 #define ZGetGame()				(ZApplication::GetGameInterface() ? ZApplication::GetGameInterface()->GetGame() : NULL)
@@ -88,16 +66,12 @@ int						ZGetSVNRevision(void);
 #define ZGetWorldManager()		ZApplication::GetInstance()->GetWorldManager()
 #define ZGetWorld()				(ZGetWorldManager()->GetCurrent())
 
-inline ZEmblemInterface*	ZGetEmblemInterface() { return ZApplication::GetInstance()->GetEmblemInterface(); }
-inline ZOptionInterface*	ZGetOptionInterface(void) { return ZApplication::GetInstance()->GetOptionInterface(); }
-
+inline ZEmblemInterface* ZGetEmblemInterface() { return ZApplication::GetInstance()->GetEmblemInterface(); }
+inline ZOptionInterface* ZGetOptionInterface(void) { return ZApplication::GetInstance()->GetOptionInterface(); }
 
 #define ZIsActionKeyPressed(_ActionID)	(ZGetInput()->IsActionKeyPressed(_ActionID))
 
-//jintriple3 메크로..
 #define PROTECT_DEBUG_REGISTER(b) if(GetTickCount() >0)if(GetTickCount() >0)if(GetTickCount() >0)if(b)
-//jintriple3 디버그 레지스터 해킹 방어 위한 비교 숫자.
 #define FOR_DEBUG_REGISTER 1000
-
 
 #endif

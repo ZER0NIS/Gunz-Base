@@ -2,11 +2,9 @@
 #include <winsock2.h>
 #include "MCommandBuilder.h"
 #include "MMatchUtil.h"
-//#include "MPacketHShieldCrypter.h"
 
-
-MCommandBuilder::MCommandBuilder(MUID uidSender, MUID uidReceiver, MCommandManager*	pCmdMgr) 
-{	
+MCommandBuilder::MCommandBuilder(MUID uidSender, MUID uidReceiver, MCommandManager* pCmdMgr)
+{
 	m_pPacketCrypter = NULL;
 	m_uidSender = uidSender;
 	m_uidReceiver = uidReceiver;
@@ -19,18 +17,18 @@ MCommandBuilder::MCommandBuilder(MUID uidSender, MUID uidReceiver, MCommandManag
 	m_dwLastCommandMakeTime = 0;
 }
 
-MCommandBuilder::~MCommandBuilder() 
+MCommandBuilder::~MCommandBuilder()
 {
 	Clear();
 }
 
-bool MCommandBuilder::CheckBufferEmpty() 
+bool MCommandBuilder::CheckBufferEmpty()
 {
 	if (m_nBufferNext == 0) return true;
 	else return false;
 }
 
-bool MCommandBuilder::EstimateBufferToCmd() 
+bool MCommandBuilder::EstimateBufferToCmd()
 {
 	if (m_nBufferNext < sizeof(MPacketHeader))
 		return false;
@@ -40,22 +38,21 @@ bool MCommandBuilder::EstimateBufferToCmd()
 	return true;
 }
 
-void MCommandBuilder::AddBuffer(char* pBuffer, int nLen) 
+void MCommandBuilder::AddBuffer(char* pBuffer, int nLen)
 {
 	if (nLen <= 0) return;
 	if ((m_nBufferNext + nLen) >= COMMAND_BUFFER_LEN) {
-		//_ASSERT(FALSE);
 		return;
 	}
-	CopyMemory(m_Buffer+m_nBufferNext, pBuffer, nLen);
+	CopyMemory(m_Buffer + m_nBufferNext, pBuffer, nLen);
 	m_nBufferNext += nLen;
 }
 
-bool MCommandBuilder::MoveBufferToFront(int nStart, int nLen) 
+bool MCommandBuilder::MoveBufferToFront(int nStart, int nLen)
 {
-	if (nStart+nLen > m_nBufferNext) 
+	if (nStart + nLen > m_nBufferNext)
 		return false;
-	CopyMemory(m_Buffer, m_Buffer+nStart, nLen);
+	CopyMemory(m_Buffer, m_Buffer + nStart, nLen);
 	m_nBufferNext = nLen;
 	return true;
 }
@@ -69,30 +66,30 @@ int MCommandBuilder::CalcCommandCount(char* pBuffer, int nBufferLen)
 {
 	unsigned int nOffset = 0;
 	int nLen = nBufferLen;
-	MPacketHeader* pPacket = (MPacketHeader*)(pBuffer+nOffset);
+	MPacketHeader* pPacket = (MPacketHeader*)(pBuffer + nOffset);
 	int nCmdCount = 0;
 	int nPacketSize = 0;
 
 	while (nLen >= sizeof(MPacketHeader))
 	{
-		pPacket = (MPacketHeader*)(pBuffer+nOffset);
+		pPacket = (MPacketHeader*)(pBuffer + nOffset);
 
 		nPacketSize = _CalcPacketSize(pPacket);
 		if ((nPacketSize > nLen) || (nPacketSize <= 0)) break;
 
 		nOffset += nPacketSize;
-		nLen -= nPacketSize;			
-		nCmdCount++;		
+		nLen -= nPacketSize;
+		nCmdCount++;
 	}
 
 	return nCmdCount;
 }
 
-int MCommandBuilder::MakeCommand(char* pBuffer, int nBufferLen) 
+int MCommandBuilder::MakeCommand(char* pBuffer, int nBufferLen)
 {
 	unsigned int nOffset = 0;
 	int nLen = nBufferLen;
-	MPacketHeader* pPacket = (MPacketHeader*)(pBuffer+nOffset);
+	MPacketHeader* pPacket = (MPacketHeader*)(pBuffer + nOffset);
 	int nCmdCount = 0;
 	int nPacketSize = 0;
 
@@ -106,17 +103,17 @@ int MCommandBuilder::MakeCommand(char* pBuffer, int nBufferLen)
 			unsigned short nCheckSum = MBuildCheckSum(pPacket, nPacketSize);
 			if (pPacket->nCheckSum != nCheckSum) {
 				return -1;
-			} else if (nPacketSize > MAX_PACKET_SIZE)
+			}
+			else if (nPacketSize > MAX_PACKET_SIZE)
 			{
 				return -1;
 			}
-			else 
+			else
 			{
 				MCommand* pCmd = new MCommand();
 				int nCmdSize = nPacketSize - sizeof(MPacketHeader);
 				if (pCmd->SetData(((MCommandMsg*)pPacket)->Buffer, m_pCommandManager, (unsigned short)nCmdSize))
 				{
-					// 시리얼 체크
 					if (m_bCheckCommandSN)
 					{
 						if (!m_CommandSNChecker.CheckValidate(pCmd->m_nSerialNumber))
@@ -124,6 +121,17 @@ int MCommandBuilder::MakeCommand(char* pBuffer, int nBufferLen)
 							delete pCmd; pCmd = NULL;
 							return -1;
 						}
+					}
+
+					// Custom: Add packet type
+					pCmd->m_nCommandType = MSGID_RAWCOMMAND;
+
+					// refuse packet if the command data is supposed to be decrypted but we received a encrypted packet of it
+					if (!pCmd->m_pCommandDesc->IsFlag(MCCT_NON_ENCRYPTED))
+					{
+						mlog("Mismatched cmd flag (rc)\n");
+						delete pCmd; pCmd = NULL;
+						return -1;
 					}
 
 					pCmd->m_Sender = m_uidSender;
@@ -137,19 +145,18 @@ int MCommandBuilder::MakeCommand(char* pBuffer, int nBufferLen)
 				}
 			}
 		}
-		else if (pPacket->nMsg == MSGID_COMMAND) 
+		else if (pPacket->nMsg == MSGID_COMMAND)
 		{
 			unsigned short nCheckSum = MBuildCheckSum(pPacket, nPacketSize);
 			if (pPacket->nCheckSum != nCheckSum) {
 				return -1;
-			} 
+			}
 			else if (nPacketSize > MAX_PACKET_SIZE)
 			{
 				return -1;
 			}
-			else 
+			else
 			{
-				// 암호화 디코딩
 				MCommand* pCmd = new MCommand();
 
 				int nCmdSize = nPacketSize - sizeof(MPacketHeader);
@@ -164,7 +171,6 @@ int MCommandBuilder::MakeCommand(char* pBuffer, int nBufferLen)
 
 				if (pCmd->SetData((char*)((MCommandMsg*)pPacket)->Buffer, m_pCommandManager, (unsigned short)nCmdSize))
 				{
-					// 시리얼 체크
 					if (m_bCheckCommandSN)
 					{
 						if (!m_CommandSNChecker.CheckValidate(pCmd->m_nSerialNumber))
@@ -172,6 +178,17 @@ int MCommandBuilder::MakeCommand(char* pBuffer, int nBufferLen)
 							delete pCmd; pCmd = NULL;
 							return -1;
 						}
+					}
+
+					// Custom: Add packet type
+					pCmd->m_nCommandType = MSGID_COMMAND;
+
+					// refuse packet if the command data is supposed to be decrypted but we received a encrypted packet of it
+					if (pCmd->m_pCommandDesc->IsFlag(MCCT_NON_ENCRYPTED))
+					{
+						mlog("Mismatched cmd flag (c)\n");
+						delete pCmd; pCmd = NULL;
+						return -1;
 					}
 
 					pCmd->m_Sender = m_uidSender;
@@ -184,9 +201,8 @@ int MCommandBuilder::MakeCommand(char* pBuffer, int nBufferLen)
 					return -1;
 				}
 			}
-		} 
+		}
 		else if (pPacket->nMsg == MSGID_REPLYCONNECT) {
-			// 아직 UID 설정하기 전일수 있음
 			if (nPacketSize == sizeof(MReplyConnectMsg))
 			{
 				MPacketHeader* pNewPacket = (MPacketHeader*)malloc(nPacketSize);
@@ -203,13 +219,11 @@ int MCommandBuilder::MakeCommand(char* pBuffer, int nBufferLen)
 		}
 
 		nOffset += nPacketSize;
-		nLen -= nPacketSize;			
+		nLen -= nPacketSize;
 		nCmdCount++;
 
-//			if (nLen < sizeof(MPacketHeader)) break;
-		pPacket = (MPacketHeader*)(pBuffer+nOffset);
+		pPacket = (MPacketHeader*)(pBuffer + nOffset);
 	}
-
 
 	return nLen;
 }
@@ -237,80 +251,78 @@ void MCommandBuilder::Clear()
 	}
 }
 
-bool MCommandBuilder::Read(char* pBuffer, int nBufferLen, bool bFloodCheck, bool *bFloodResult) 
+bool MCommandBuilder::Read(char* pBuffer, int nBufferLen, bool bFloodCheck, bool* bFloodResult)
 {
 	MPacketHeader* pPacket = (MPacketHeader*)pBuffer;
 
-	if (CheckBufferEmpty() == true)  {
-		if ( (nBufferLen < sizeof(MPacketHeader)) || (nBufferLen < _CalcPacketSize(pPacket)) ) {	
-			AddBuffer(pBuffer, nBufferLen);	// 내부 Buffer에 저장
-		} else {	
-			// Flood Check
+	if (CheckBufferEmpty() == true) {
+		if ((nBufferLen < sizeof(MPacketHeader)) || (nBufferLen < _CalcPacketSize(pPacket))) {
+			AddBuffer(pBuffer, nBufferLen);
+		}
+		else {
 			int nCommandCount = CalcCommandCount(pBuffer, nBufferLen);
-			if( CheckFlooding(nCommandCount) == true && bFloodCheck )
+			if (CheckFlooding(nCommandCount) == true && bFloodCheck)
 			{
-				if( bFloodResult != NULL )
+				if (bFloodResult != NULL)
 					(*bFloodResult) = true;
 
 				return false;
 			}
-			
-			// Build Command
-			int nSpareData = MakeCommand(pBuffer, nBufferLen);			// Arg로 넘어온 외부버퍼에서 바로 Cmd생성
+
+			int nSpareData = MakeCommand(pBuffer, nBufferLen);
 			if (nSpareData > 0) {
-				AddBuffer(pBuffer+(nBufferLen-nSpareData), nSpareData);	// 남은부분 내부 Buffer에 저장(내부버퍼처음사용)
+				AddBuffer(pBuffer + (nBufferLen - nSpareData), nSpareData);
 			}
 			else if (nSpareData < 0) return false;
 		}
-	} else {
+	}
+	else {
 		AddBuffer(pBuffer, nBufferLen);
 		if (EstimateBufferToCmd() == true) {
-			// Flood Check
 			int nCommandCount = CalcCommandCount(pBuffer, nBufferLen);
-			if( CheckFlooding(nCommandCount) == true && bFloodCheck )
+			if (CheckFlooding(nCommandCount) == true && bFloodCheck)
 			{
-				if( bFloodResult != NULL )
+				if (bFloodResult != NULL)
 					(*bFloodResult) = true;
 
 				return false;
 			}
 
-			// Build Command
-			int nSpareData = MakeCommand(m_Buffer, m_nBufferNext);	// m_nBufferNext == nBufferSize
+			int nSpareData = MakeCommand(m_Buffer, m_nBufferNext);
 			if (nSpareData >= 0)
-				MoveBufferToFront(m_nBufferNext-nSpareData, nSpareData);	// Cmd만들고 남은부분 버퍼 앞쪽으로이동
-			else return false;						
+				MoveBufferToFront(m_nBufferNext - nSpareData, nSpareData);
+			else return false;
 		}
 	}
 
 	return true;
 }
 
-MCommand* MCommandBuilder::GetCommand() 
+MCommand* MCommandBuilder::GetCommand()
 {
 	MCommandList::iterator itorCmd = m_CommandList.begin();
 	if (itorCmd != m_CommandList.end()) {
 		MCommand* pCmd = (*itorCmd);
 		m_CommandList.pop_front();
 		return (pCmd);
-	} else {
+	}
+	else {
 		return NULL;
 	}
 }
 
-
-MPacketHeader* MCommandBuilder::GetNetCommand() 
+MPacketHeader* MCommandBuilder::GetNetCommand()
 {
 	list<MPacketHeader*>::iterator itorCmd = m_NetCmdList.begin();
 	if (itorCmd != m_NetCmdList.end()) {
 		MPacketHeader* pTestCmd = (*itorCmd);
 		m_NetCmdList.pop_front();
 		return (pTestCmd);
-	} else {
+	}
+	else {
 		return NULL;
 	}
 }
-
 
 void MCommandBuilder::SetUID(MUID uidReceiver, MUID uidSender)
 {
@@ -328,11 +340,11 @@ bool MCommandBuilder::CheckFlooding(int nCommandCount)
 {
 	DWORD dwCurTime = GetTickCount();
 
-	if( dwCurTime - m_dwLastCommandMakeTime < 1000 )
+	if (dwCurTime - m_dwLastCommandMakeTime < 1000)
 	{
 		m_CommandCountPerSec += nCommandCount;
 
-		if( m_CommandCountPerSec > MAX_COMMAND_COUNT_FLOODING )
+		if (m_CommandCountPerSec > MAX_COMMAND_COUNT_FLOODING)
 			return true;
 	}
 	else
@@ -340,7 +352,7 @@ bool MCommandBuilder::CheckFlooding(int nCommandCount)
 		m_CommandCountPerSec = nCommandCount;
 		m_dwLastCommandMakeTime = dwCurTime;
 
-		if( m_CommandCountPerSec > MAX_COMMAND_COUNT_FLOODING )
+		if (m_CommandCountPerSec > MAX_COMMAND_COUNT_FLOODING)
 			return true;
 	}
 

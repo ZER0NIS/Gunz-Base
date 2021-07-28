@@ -7,7 +7,7 @@
 
 #define MINT_R2_CLASS_TYPE	0x1130
 
-class MDrawContextR2 : public MDrawContext{
+class MDrawContextR2 : public MDrawContext {
 protected:
 	LPDIRECT3DDEVICE9	m_pd3dDevice;
 public:
@@ -21,6 +21,7 @@ public:
 	virtual void Line(int sx, int sy, int ex, int ey) override;
 	virtual void Rectangle(int x, int y, int cx, int cy) override;
 	virtual void FillRectangle(int x, int y, int cx, int cy) override;
+	virtual void FillRectangleW(int x, int y, int cx, int cy);
 
 	// Bitmap Drawing
 	virtual void DrawEx(int tx1, int ty1, int tx2, int ty2, int tx3, int ty3, int tx4, int ty4) override;
@@ -33,19 +34,11 @@ public:
 
 	virtual void SetClipRect(MRECT& r) override;
 
-	// Functions to draw relative to 4:3 aspect ratio
-	virtual void DrawRelative(float x, float y, float w, float h) override;
-	virtual void DrawRelative(float x, float y, int w, int h) override;
-	virtual int TextRelative(float x, float y, const char* szText) override;
-	virtual void DrawRelative(float x, float y, float w, float h, int sx, int sy, int sw, int sh) override;
-	virtual void FillRectangleRelative(float x, float y, float cx, float cy) override;
-
 private:
-	virtual void Draw(MBitmap *pBitmap, int x, int y, int w, int h, int sx, int sy, int sw, int sh, bool bMirrorX=false, bool bMirrorY=false ) override;
+	virtual void Draw(MBitmap* pBitmap, int x, int y, int w, int h, int sx, int sy, int sw, int sh, bool bMirrorX = false, bool bMirrorY = false) override;
 };
 
-
-class MBitmapR2 : public MBitmap{
+class MBitmapR2 : public MBitmap {
 public:
 	LPDIRECT3DDEVICE9		m_pd3dDevice;
 	RealSpace2::RBaseTexture* m_pTexture;
@@ -72,16 +65,16 @@ public:
 
 	void CheckDrawMode(float* fuv);
 
-	virtual void Draw(float x, float y, float w, float h, float sx, float sy, float sw, float sh, 
-		      DWORD dwColor, MDrawEffect effect=MDE_NORMAL, bool bMirrorX=false, bool bMirrorY=false);
-	virtual void DrawEx(float tx1, float ty1, float tx2, float ty2, 
-		        float tx3, float ty3, float tx4, float ty4, DWORD dwColor, MDrawEffect effect=MDE_NORMAL);
+	virtual void Draw(float x, float y, float w, float h, float sx, float sy, float sw, float sh,
+		DWORD dwColor, MDrawEffect effect = MDE_NORMAL, bool bMirrorX = false, bool bMirrorY = false);
+	virtual void DrawEx(float tx1, float ty1, float tx2, float ty2,
+		float tx3, float ty3, float tx4, float ty4, DWORD dwColor, MDrawEffect effect = MDE_NORMAL);
 
 	void OnLostDevice();
 	void OnResetDevice();
 };
 
-class MFontR2 : public MFont{
+class MFontR2 : public MFont {
 public:
 	bool		m_bAntiAlias;
 	float		m_fScale;

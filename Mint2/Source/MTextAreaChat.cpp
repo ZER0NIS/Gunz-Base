@@ -1,15 +1,15 @@
 #include "stdafx.h"
-#include "MTextArea.h"
+#include "MTextAreaChat.h"
 #include "MColorTable.h"
 #include "MScrollBar.h"
 #include "MEdit.h"
 #include "Mint.h"
 
-#define MTEXTAREA_DEFAULT_WIDTH				100
+#define DEFAULT_WIDTH				100
 
-IMPLEMENT_LOOK(MTextArea, MTextAreaLook)
+IMPLEMENT_LOOK(MTextAreaChat, MTextAreaChatLook)
 
-bool MTextArea::GetCaretPosition(MPOINT* pOut, int nSize, const char* szText, int nPos, bool bFirst)
+bool MTextAreaChat::GetCaretPosition(MPOINT* pOut, int nSize, const char* szText, int nPos, bool bFirst)
 {
 	MFont* pFont = GetFont();
 
@@ -39,7 +39,7 @@ bool MTextArea::GetCaretPosition(MPOINT* pOut, int nSize, const char* szText, in
 	return bResult;
 }
 
-int MTextArea::GetCharPosition(const char* szText, int nX, int nLine)
+int MTextAreaChat::GetCharPosition(const char* szText, int nX, int nLine)
 {
 	MFont* pFont = GetFont();
 
@@ -50,7 +50,7 @@ int MTextArea::GetCharPosition(const char* szText, int nX, int nLine)
 	return nCur + x;
 }
 
-bool MTextArea::IsDoubleCaretPos()
+bool MTextAreaChat::IsDoubleCaretPos()
 {
 	const char* szText = m_CurrentLine->text.c_str();
 	int nPos = m_CaretPos.x;
@@ -75,7 +75,7 @@ bool MTextArea::IsDoubleCaretPos()
 	return false;
 }
 
-void MTextArea::ScrollDown()
+void MTextAreaChat::ScrollDown()
 {
 	const char* szText = GetTextLine(m_nStartLine);
 	int nLine = MMGetLineCount(GetFont(), szText, GetClientWidth(), m_bWordWrap, m_bColorSupport, m_nIndentation);
@@ -91,7 +91,7 @@ void MTextArea::ScrollDown()
 	}
 }
 
-void MTextArea::ScrollUp()
+void MTextAreaChat::ScrollUp()
 {
 	if (m_nStartLineSkipLine > 0) {
 		m_nStartLineSkipLine--;
@@ -108,18 +108,18 @@ void MTextArea::ScrollUp()
 	}
 }
 
-void MTextArea::MoveFirst()
+void MTextAreaChat::MoveFirst()
 {
 }
 
-void MTextArea::MoveLast()
+void MTextAreaChat::MoveLast()
 {
 }
 
-int MTextArea::GetTotalLineCount(int& nStartLine, int& nCurrentLine)
+int MTextAreaChat::GetTotalLineCount(int& nStartLine, int& nCurrentLine)
 {
 	int nTotalLine = 0;
-	MLINELISTITERATOR itr = m_Lines.begin();
+	MLINELISTITERATORCHAT itr = m_Lines.begin();
 	for (int i = 0; i < GetLineCount(); i++)
 	{
 		MRECT rectScrollBar;
@@ -152,7 +152,7 @@ int MTextArea::GetTotalLineCount(int& nStartLine, int& nCurrentLine)
 	return nTotalLine;
 }
 
-void MTextArea::UpdateScrollBar(bool bAdjustStart)
+void MTextAreaChat::UpdateScrollBar(bool bAdjustStart)
 {
 	MFont* pFont = GetFont();
 	MRECT r = GetClientRect();
@@ -198,7 +198,7 @@ void MTextArea::UpdateScrollBar(bool bAdjustStart)
 	m_pScrollBar->Show(bShow, false);
 }
 
-void MTextArea::OnScrollBarChanged(int nPos)
+void MTextAreaChat::OnScrollBarChanged(int nPos)
 {
 	MFont* pFont = GetFont();
 	MRECT r = GetClientRect();
@@ -207,7 +207,7 @@ void MTextArea::OnScrollBarChanged(int nPos)
 	int nCurrentLine = 0;
 
 	int nTotalLine = 0;
-	MLINELISTITERATOR itr = m_Lines.begin();
+	MLINELISTITERATORCHAT itr = m_Lines.begin();
 	for (int i = 0; i < GetLineCount(); i++)
 	{
 		const char* szText = itr->text.c_str();
@@ -226,7 +226,7 @@ void MTextArea::OnScrollBarChanged(int nPos)
 	}
 }
 
-bool MTextArea::OnCommand(MWidget* pWindow, const char* szMessage)
+bool MTextAreaChat::OnCommand(MWidget* pWindow, const char* szMessage)
 {
 	if (pWindow == m_pScrollBar && strcmp(szMessage, MLIST_VALUE_CHANGED) == 0) {
 		OnScrollBarChanged(m_pScrollBar->GetValue());
@@ -235,7 +235,7 @@ bool MTextArea::OnCommand(MWidget* pWindow, const char* szMessage)
 	return false;
 }
 
-bool MTextArea::MoveLeft(bool bBackspace)
+bool MTextAreaChat::MoveLeft(bool bBackspace)
 {
 	if (IsDoubleCaretPos() && m_bCaretFirst == false && !bBackspace)
 	{
@@ -264,7 +264,7 @@ bool MTextArea::MoveLeft(bool bBackspace)
 	return true;
 }
 
-void MTextArea::MoveRight()
+void MTextAreaChat::MoveRight()
 {
 	if (IsDoubleCaretPos() && m_bCaretFirst)
 	{
@@ -287,7 +287,7 @@ void MTextArea::MoveRight()
 			}
 }
 
-void MTextArea::MoveUp()
+void MTextAreaChat::MoveUp()
 {
 	if (GetCaretPos().x == m_CurrentLine->text.size())
 		m_bCaretFirst = true;
@@ -329,7 +329,7 @@ void MTextArea::MoveUp()
 	}
 }
 
-void MTextArea::MoveDown()
+void MTextAreaChat::MoveDown()
 {
 	if (GetCaretPos().x == 0)
 		m_bCaretFirst = false;
@@ -374,7 +374,7 @@ void MTextArea::MoveDown()
 	}
 }
 
-void MTextArea::OnHome()
+void MTextAreaChat::OnHome()
 {
 	const char* szCurrent = m_CurrentLine->text.c_str();
 
@@ -387,7 +387,7 @@ void MTextArea::OnHome()
 	m_bCaretFirst = false;
 }
 
-void MTextArea::OnEnd()
+void MTextAreaChat::OnEnd()
 {
 	const char* szCurrent = m_CurrentLine->text.c_str();
 
@@ -401,7 +401,7 @@ void MTextArea::OnEnd()
 	m_bCaretFirst = true;
 }
 
-void MTextArea::DeleteCurrent()
+void MTextAreaChat::DeleteCurrent()
 {
 	if (m_CaretPos.x + 1 < (int)m_CurrentLine->text.size() && IsHangul(*(m_CurrentLine->text.begin() + m_CaretPos.x)))
 	{
@@ -417,7 +417,7 @@ void MTextArea::DeleteCurrent()
 		else
 			if (m_CaretPos.y + 1 < (int)m_Lines.size())
 			{
-				MLINELISTITERATOR willbedel = m_CurrentLine;
+				MLINELISTITERATORCHAT willbedel = m_CurrentLine;
 				willbedel++;
 				m_CurrentLine->text += willbedel->text;
 				m_Lines.erase(willbedel);
@@ -425,7 +425,7 @@ void MTextArea::DeleteCurrent()
 			}
 }
 
-bool MTextArea::OnLButtonDown(MPOINT pos)
+bool MTextAreaChat::OnLButtonDown(MPOINT pos)
 {
 	MRECT r = GetClientRect();
 
@@ -456,7 +456,7 @@ bool MTextArea::OnLButtonDown(MPOINT pos)
 	return false;
 }
 
-bool MTextArea::OnEvent(MEvent* pEvent, MListener* pListener)
+bool MTextAreaChat::OnEvent(MEvent* pEvent, MListener* pListener)
 {
 	if (MWidget::m_pFocusedWidget != this) return false;
 	MRECT r = GetClientRect();
@@ -524,17 +524,17 @@ bool MTextArea::OnEvent(MEvent* pEvent, MListener* pListener)
 	return false;
 }
 
-void MTextArea::OnSetFocus(void)
+void MTextAreaChat::OnSetFocus(void)
 {
 	Mint::GetInstance()->EnableIME(true);
 }
 
-void MTextArea::OnReleaseFocus(void)
+void MTextAreaChat::OnReleaseFocus(void)
 {
 	Mint::GetInstance()->EnableIME(false);
 }
 
-bool MTextArea::InputFilterKey(int nKey, bool bCtrl)
+bool MTextAreaChat::InputFilterKey(int nKey, bool bCtrl)
 {
 	if (nKey != VK_UP && nKey != VK_DOWN)
 		m_bVerticalMoving = false;
@@ -552,7 +552,7 @@ bool MTextArea::InputFilterKey(int nKey, bool bCtrl)
 
 	case VK_RETURN:
 		if (GetLength() < GetMaxLen()) {
-			MLineItem newline(m_CurrentLine->color, string(m_CurrentLine->text.begin() + m_CaretPos.x, m_CurrentLine->text.end()));
+			MLineItemChat newline(m_CurrentLine->color, string(m_CurrentLine->text.begin() + m_CaretPos.x, m_CurrentLine->text.end()));
 			m_CurrentLine->text.erase(m_CaretPos.x, m_CurrentLine->text.size());
 			m_CurrentLine++;
 			m_CurrentLine = m_Lines.insert(m_CurrentLine, newline);
@@ -568,14 +568,14 @@ bool MTextArea::InputFilterKey(int nKey, bool bCtrl)
 	return false;
 }
 
-bool MTextArea::InputFilterChar(int nKey)
+bool MTextAreaChat::InputFilterChar(int nKey)
 {
 	if (nKey == VK_BACK) {
 		return true;
 	}
 	else if (nKey == VK_ESCAPE) {
 		MListener* pListener = GetListener();
-		if (pListener != NULL) pListener->OnCommand(this, MTEXTAREA_ESC_VALUE);
+		if (pListener != NULL) pListener->OnCommand(this, MTextAreaChat_ESC_VALUE);
 		return true;
 	}
 	else if (nKey == 22) {
@@ -593,7 +593,7 @@ bool MTextArea::InputFilterChar(int nKey)
 	return false;
 }
 
-void MTextArea::SetMaxLen(int nMaxLen)
+void MTextAreaChat::SetMaxLen(int nMaxLen)
 {
 	m_Lines.erase(m_Lines.begin(), m_Lines.end());
 
@@ -604,11 +604,11 @@ void MTextArea::SetMaxLen(int nMaxLen)
 
 	m_CaretPos = MPOINT(0, 0);
 
-	m_Lines.push_back(MLineItem(MTEXTAREA_DEFAULT_TEXT_COLOR, string()));
+	m_Lines.push_back(MLineItemChat(DEFAULT_TEXT_COLOR, string()));
 	m_CurrentLine = m_Lines.begin();
 }
 
-MTextArea::MTextArea(int nMaxLen, const char* szName, MWidget* pParent, MListener* pListener)
+MTextAreaChat::MTextAreaChat(int nMaxLen, const char* szName, MWidget* pParent, MListener* pListener)
 	: MWidget(szName, pParent, pListener), m_TextOffset(0, 0)
 {
 	LOOK_IN_CONSTRUCTOR()
@@ -622,7 +622,7 @@ MTextArea::MTextArea(int nMaxLen, const char* szName, MWidget* pParent, MListene
 
 	MFont* pFont = GetFont();
 	m_nCustomLineHeight = -1;
-	int w = MTEXTAREA_DEFAULT_WIDTH;
+	int w = DEFAULT_WIDTH;
 	int h = GetLineHeight() + 2;
 	SetTextOffset(MPOINT(1, 1));
 
@@ -639,34 +639,34 @@ MTextArea::MTextArea(int nMaxLen, const char* szName, MWidget* pParent, MListene
 	SetMaxLen(nMaxLen);
 }
 
-void MTextArea::SetTextOffset(MPOINT p)
+void MTextAreaChat::SetTextOffset(MPOINT p)
 {
 	m_TextOffset = p;
 }
 
-void MTextArea::SetTextColor(MCOLOR color)
+void MTextAreaChat::SetTextColor(MCOLOR color)
 {
 	m_TextColor = color;
 }
 
-MCOLOR MTextArea::GetTextColor(void)
+MCOLOR MTextAreaChat::GetTextColor(void)
 {
 	return m_TextColor;
 }
 
-MTextArea::~MTextArea()
+MTextAreaChat::~MTextAreaChat()
 {
 	delete m_pScrollBar;
 }
 
-bool MTextArea::GetText(char* pBuffer, int nBufferSize)
+bool MTextAreaChat::GetText(char* pBuffer, int nBufferSize)
 {
 	if (GetLength() > nBufferSize) return false;
 
 	int nSize = 0;
 	char* temp = pBuffer;
 	temp[0] = 0;
-	MLINELISTITERATOR i;
+	MLINELISTITERATORCHAT i;
 	for (i = m_Lines.begin(); i != m_Lines.end(); i++)
 	{
 		strcpy(temp, i->text.c_str()); temp += i->text.size();
@@ -679,23 +679,23 @@ bool MTextArea::GetText(char* pBuffer, int nBufferSize)
 	return true;
 }
 
-const char* MTextArea::GetTextLine(int nLine)
+const char* MTextAreaChat::GetTextLine(int nLine)
 {
 	if (nLine >= (int)m_Lines.size()) return NULL;
-	MLINELISTITERATOR i = m_Lines.begin();
+	MLINELISTITERATORCHAT i = m_Lines.begin();
 	for (int j = 0; j < nLine; j++, i++);
 	return i->text.c_str();
 }
 
-MLINELISTITERATOR MTextArea::GetIterator(int nLine)
+MLINELISTITERATORCHAT MTextAreaChat::GetIterator(int nLine)
 {
 	if (nLine >= (int)m_Lines.size()) return m_Lines.end();
-	MLINELISTITERATOR i = m_Lines.begin();
+	auto i = m_Lines.begin();
 	for (int j = 0; j < nLine; j++, i++);
 	return i;
 }
 
-void MTextArea::SetText(const char* szText)
+void MTextAreaChat::SetText(const char* szText)
 {
 	m_nCurrentSize = 0;
 
@@ -707,7 +707,7 @@ void MTextArea::SetText(const char* szText)
 	{
 		nNext = text.find(10, nStart);
 		if (nNext == -1) nNext = nLength;
-		m_Lines.push_back(MLineItem(m_TextColor, text.substr(nStart, nNext - nStart)));
+		m_Lines.push_back(MLineItemChat(m_TextColor, text.substr(nStart, nNext - nStart)));
 		m_nCurrentSize += nNext - nStart;
 		nStart = nNext + 1;
 	}
@@ -717,18 +717,18 @@ void MTextArea::SetText(const char* szText)
 	m_CaretPos = MPOINT(0, 0);
 
 	if (!m_Lines.size())
-		m_Lines.push_back(MLineItem(m_TextColor, string()));
+		m_Lines.push_back(MLineItemChat(m_TextColor, string()));
 	m_CurrentLine = m_Lines.begin();
 
 	UpdateScrollBar();
 }
 
-void MTextArea::Clear()
+void MTextAreaChat::Clear()
 {
 	SetText("");
 }
 
-void MTextArea::OnSize(int w, int h)
+void MTextAreaChat::OnSize(int w, int h)
 {
 	MRECT cr = GetClientRect();
 	if (m_pScrollBar->IsVisible() == true)
@@ -740,7 +740,7 @@ void MTextArea::OnSize(int w, int h)
 		UpdateScrollBar();
 }
 
-void MTextAreaLook::OnFrameDraw(MTextArea* pTextArea, MDrawContext* pDC)
+void MTextAreaChatLook::OnFrameDraw(MTextAreaChat* pTextArea, MDrawContext* pDC)
 {
 	if (m_bgColor.a != 0)
 	{
@@ -750,19 +750,19 @@ void MTextAreaLook::OnFrameDraw(MTextArea* pTextArea, MDrawContext* pDC)
 	}
 }
 
-const char* MTextArea::GetCompositionString(void)
+const char* MTextAreaChat::GetCompositionString(void)
 {
 	return m_szIMECompositionString;
 }
 
-int MTextArea::GetClientWidth()
+int MTextAreaChat::GetClientWidth()
 {
 	return GetClientRect().w;
 }
 
 #pragma optimize( "", off )
 
-void MTextAreaLook::OnTextDraw_WordWrap(MTextArea* pTextArea, MDrawContext* pDC)
+void MTextAreaChatLook::OnTextDraw_WordWrap(MTextAreaChat* pTextArea, MDrawContext* pDC)
 {
 	bool bColorSupport = true;
 
@@ -796,7 +796,7 @@ void MTextAreaLook::OnTextDraw_WordWrap(MTextArea* pTextArea, MDrawContext* pDC)
 	int nStartLineSkipLine = pTextArea->m_nStartLineSkipLine;
 	int nIndentation = pTextArea->m_nIndentation;
 
-	MLINELISTITERATOR itor = pTextArea->GetIterator(pTextArea->GetStartLine());
+	MLINELISTITERATORCHAT itor = pTextArea->GetIterator(pTextArea->GetStartLine());
 
 	for (; itor != pTextArea->m_Lines.end(); itor++)
 	{
@@ -835,7 +835,7 @@ void MTextAreaLook::OnTextDraw_WordWrap(MTextArea* pTextArea, MDrawContext* pDC)
 		if (nTextLen > 0) {
 			MPOINT* pPositions = NULL;
 			if (bCurrentLine == true) pPositions = new MPOINT[nTextLen];
-			nLine = pDC->TextMultiLine(textrt, szText, 0, true, nIndentation, nSkipLine, pPositions);
+			nLine = pDC->TextMultiLineChat(textrt, szText, 0, true, nIndentation, nSkipLine, pPositions);
 
 			if (pTextArea->IsFocus() && bCurrentLine == true) {
 				Mint* pMint = Mint::GetInstance();
@@ -885,7 +885,7 @@ void MTextAreaLook::OnTextDraw_WordWrap(MTextArea* pTextArea, MDrawContext* pDC)
 
 #pragma optimize( "", on )
 
-void MTextAreaLook::OnTextDraw(MTextArea* pTextArea, MDrawContext* pDC)
+void MTextAreaChatLook::OnTextDraw(MTextAreaChat* pTextArea, MDrawContext* pDC)
 {
 	MFont* pFont = pDC->GetFont();
 
@@ -929,18 +929,18 @@ void MTextAreaLook::OnTextDraw(MTextArea* pTextArea, MDrawContext* pDC)
 	}
 }
 
-void MTextAreaLook::OnDraw(MTextArea* pTextArea, MDrawContext* pDC)
+void MTextAreaChatLook::OnDraw(MTextAreaChat* pTextArea, MDrawContext* pDC)
 {
 	OnFrameDraw(pTextArea, pDC);
 	OnTextDraw_WordWrap(pTextArea, pDC);
 }
 
-MRECT MTextAreaLook::GetClientRect(MTextArea* pTextArea, MRECT& r)
+MRECT MTextAreaChatLook::GetClientRect(MTextAreaChat* pTextArea, MRECT& r)
 {
 	return MRECT(r.x, r.y, r.w, r.h);
 }
 
-void MTextArea::AddText(const char* szText, MCOLOR color)
+void MTextAreaChat::AddText(const char* szText, MCOLOR color)
 {
 	m_CurrentLine = m_Lines.end();
 	m_CurrentLine--;
@@ -955,7 +955,7 @@ void MTextArea::AddText(const char* szText, MCOLOR color)
 		m_CurrentLine->color = color;
 		m_CurrentLine->text.append(string(szCurrent, nCharCount));
 
-		m_Lines.push_back(MLineItem(color, string()));
+		m_Lines.push_back(MLineItemChat(color, string()));
 		m_CurrentLine = m_Lines.end();
 		m_CurrentLine--;
 
@@ -971,7 +971,7 @@ void MTextArea::AddText(const char* szText, MCOLOR color)
 	UpdateScrollBar(true);
 }
 
-void MTextArea::AddText(const char* szText)
+void MTextAreaChat::AddText(const char* szText)
 {
 	m_CurrentLine = m_Lines.end();
 	m_CurrentLine--;
@@ -979,7 +979,7 @@ void MTextArea::AddText(const char* szText)
 	AddText(szText, m_CurrentLine->color);
 }
 
-void MTextArea::DeleteFirstLine()
+void MTextAreaChat::DeleteFirstLine()
 {
 	if (GetLineCount() < 2) return;
 
@@ -996,19 +996,19 @@ void MTextArea::DeleteFirstLine()
 	UpdateScrollBar();
 }
 
-int MTextArea::GetLineHeight(void)
+int MTextAreaChat::GetLineHeight(void)
 {
 	if (m_nCustomLineHeight != -1)
 		return m_nCustomLineHeight;
 	return GetFont()->GetHeight();
 }
 
-void MTextArea::SetCustomLineHeight(int nHeight)
+void MTextAreaChat::SetCustomLineHeight(int nHeight)
 {
 	m_nCustomLineHeight = nHeight;
 }
 
-void MTextArea::MultiplySize(float byIDLWidth, float byIDLHeight, float byCurrWidth, float byCurrHeight)
+void MTextAreaChat::MultiplySize(float byIDLWidth, float byIDLHeight, float byCurrWidth, float byCurrHeight)
 {
 	MWidget::MultiplySize(byIDLWidth, byIDLHeight, byCurrWidth, byCurrHeight);
 
@@ -1016,7 +1016,7 @@ void MTextArea::MultiplySize(float byIDLWidth, float byIDLHeight, float byCurrWi
 		m_nCustomLineHeight = int(m_nCustomLineHeight * byCurrHeight + 0.5f);
 }
 
-void MTextArea::AdjustHeightByContent()
+void MTextAreaChat::AdjustHeightByContent()
 {
 	int nStartLine(0), nCurrline(0), nTotalLine(0);
 	nTotalLine = GetTotalLineCount(nStartLine, nCurrline);
@@ -1025,7 +1025,7 @@ void MTextArea::AdjustHeightByContent()
 	SetSize(rcTextArea.w, newHeight);
 }
 
-int MTextArea::GetTextPosition(const char* text)
+int MTextAreaChat::GetTextPosition(const char* text)
 {
 	return 0;
 }

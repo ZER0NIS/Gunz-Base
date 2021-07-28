@@ -8,7 +8,7 @@
 
 static int g_bullet_mark_cnt = 0;
 
-ZEffectBulletMark::ZEffectBulletMark(ZEffectBillboardSource* pEffectBillboardSource, D3DXVECTOR3& Pos, D3DXVECTOR3& Normal)
+ZEffectBulletMark::ZEffectBulletMark(ZEffectBillboardSource* pEffectBillboardSource, rvector& Pos, rvector& Normal)
 : ZEffectBillboard(pEffectBillboardSource)
 {
 	m_nStartTime = timeGetTime();

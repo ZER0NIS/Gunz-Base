@@ -29,9 +29,9 @@
 #include "MBmButton.h"
 #include "MBmLabel.h"
 #include "MHotKey.h"
-//#include "MActionKey.h"
 #include "MMsgBox.h"
 #include "MTextArea.h"
+#include "MTextAreaChat.h"
 #include "MBTextAreaLook.h"
 #include "MBSliderLook.h"
 #include "MTabCtrl.h"
@@ -106,16 +106,16 @@ MAlignmentMode MIDLResource::GetAlignmentMode(MXmlElement& element)
 
 	char szValue[256] = "";
 
-	if(element.GetChildContents(szValue, "HALIGN")==true){
-		if(_stricmp(szValue, "LEFT")==0) am |= MAM_LEFT;
-		else if(_stricmp(szValue, "CENTER")==0) am |= MAM_HCENTER;
-		else if(_stricmp(szValue, "RIGHT")==0) am |= MAM_RIGHT;
+	if (element.GetChildContents(szValue, "HALIGN") == true) {
+		if (_stricmp(szValue, "LEFT") == 0) am |= MAM_LEFT;
+		else if (_stricmp(szValue, "CENTER") == 0) am |= MAM_HCENTER;
+		else if (_stricmp(szValue, "RIGHT") == 0) am |= MAM_RIGHT;
 	}
 
-	if(element.GetChildContents(szValue, "VALIGN")==true){
-		if(_stricmp(szValue, "TOP")==0) am |= MAM_TOP;
-		else if(_stricmp(szValue, "CENTER")==0) am |= MAM_VCENTER;
-		else if(_stricmp(szValue, "BOTTOM")==0) am |= MAM_BOTTOM;
+	if (element.GetChildContents(szValue, "VALIGN") == true) {
+		if (_stricmp(szValue, "TOP") == 0) am |= MAM_TOP;
+		else if (_stricmp(szValue, "CENTER") == 0) am |= MAM_VCENTER;
+		else if (_stricmp(szValue, "BOTTOM") == 0) am |= MAM_BOTTOM;
 	}
 
 	return am;
@@ -208,7 +208,7 @@ MBmButton* MIDLResource::GetBmButton(MXmlElement& element)
 		if (szTagName[0] == '#') continue;
 
 		if (GetCommonWidgetProperty(pBmButton, childElement, szTagName)) continue;
-		
+
 		if (!strcmp(szTagName, "BUTTONLOOK"))
 		{
 			char szItem[256];
@@ -248,15 +248,15 @@ MBmButton* MIDLResource::GetBmButton(MXmlElement& element)
 				}
 			}
 		}
-		else if(!strcmp(szTagName, "CONFIRMMESSAGE"))
+		else if (!strcmp(szTagName, "CONFIRMMESSAGE"))
 		{
-			char szContents[256] = {0, };
-			char szItem[256] = {0,};
+			char szContents[256] = { 0, };
+			char szItem[256] = { 0, };
 			childElement.GetContents(szContents);
 			TransText(szContents, szItem);
 			pBmButton->SetConfirmMessageBox(szItem);
 		}
-		else if(!strcmp(szTagName, "CONFIRMLOOK")){
+		else if (!strcmp(szTagName, "CONFIRMLOOK")) {
 			if (pBmButton->m_pMsgBox != NULL)
 			{
 				char szItem[256];
@@ -272,39 +272,40 @@ MBmButton* MIDLResource::GetBmButton(MXmlElement& element)
 				}
 			}
 		}
-		else if( !strcmp(szTagName,"STRETCH"))
+		else if (!strcmp(szTagName, "STRETCH"))
 		{
 			pBmButton->SetStretch(true);
 		}
-		else if( !strcmp(szTagName,"BMTEXTCOLOR"))
+		else if (!strcmp(szTagName, "BMTEXTCOLOR"))
 		{
 			pBmButton->m_bTextColor = true;
-			float r,g,b,a;
-			childElement.GetAttribute( &r, "r", 0);
-			childElement.GetAttribute( &g, "g", 0);
-			childElement.GetAttribute( &b, "b", 0);
-			childElement.GetAttribute( &a, "a", 255);
-			pBmButton->m_BmTextColor = MCOLOR( (unsigned char)r, (unsigned char)g, (unsigned char)b, (unsigned char)a);
+			float r, g, b, a;
+			childElement.GetAttribute(&r, "r", 0);
+			childElement.GetAttribute(&g, "g", 0);
+			childElement.GetAttribute(&b, "b", 0);
+			childElement.GetAttribute(&a, "a", 255);
+			pBmButton->m_BmTextColor = MCOLOR((unsigned char)r, (unsigned char)g, (unsigned char)b, (unsigned char)a);
 		}
-		else if(!strcmp(szTagName, "PUSHBUTTON")){
+		else if (!strcmp(szTagName, "PUSHBUTTON")) {
 			pBmButton->SetType(MBT_PUSH);
 		}
-		else if(!strcmp(szTagName, "SETCHECK")){
+		else if (!strcmp(szTagName, "SETCHECK")) {
 			pBmButton->SetCheck(true);
 		}
-		else if(!strcmp(szTagName, "GROUP")){
+		else if (!strcmp(szTagName, "GROUP")) {
 			char szItem[256];
 			memset(szItem, 0, sizeof(szItem));
 			childElement.GetContents(szItem);
 
 			map<string, MButtonGroup*>::iterator itor = m_ButtonGroupMap.find(szItem);
 
-			MButtonGroup *pButtonGroup;
-			if(itor != m_ButtonGroupMap.end()) {
+			MButtonGroup* pButtonGroup;
+			if (itor != m_ButtonGroupMap.end()) {
 				pButtonGroup = itor->second;
-			} else {
+			}
+			else {
 				pButtonGroup = new MButtonGroup;
-				m_ButtonGroupMap.insert(map<string, MButtonGroup*>::value_type(szItem,pButtonGroup));
+				m_ButtonGroupMap.insert(map<string, MButtonGroup*>::value_type(szItem, pButtonGroup));
 			}
 
 			pBmButton->SetButtonGroup(pButtonGroup);
@@ -339,24 +340,25 @@ MBitmap* MIDLResource::GetBitmap(MXmlElement& element)
 		{
 			bBoundsFound = true;
 			rt = GetRect(childElement);
-		}else
-		if (!strcmp(szTagName, "SOURCE"))
-		{
-			bSourceFound = true;
-			childElement.GetContents(szFileName);
 		}
+		else
+			if (!strcmp(szTagName, "SOURCE"))
+			{
+				bSourceFound = true;
+				childElement.GetContents(szFileName);
+			}
 	}
 
-	if(bSourceFound && bBoundsFound)
+	if (bSourceFound && bBoundsFound)
 	{
-		if(szFileName[0]==0 || _stricmp(szFileName,"NULL")==0) return NULL;
-		MBitmap *pBitmap = MBitmapManager::Get(szFileName);
-		if(pBitmap==NULL) {
-			mlog("warning : bitmap %s not found.\n",szFileName);
+		if (szFileName[0] == 0 || _stricmp(szFileName, "NULL") == 0) return NULL;
+		MBitmap* pBitmap = MBitmapManager::Get(szFileName);
+		if (pBitmap == NULL) {
+			mlog("warning : bitmap %s not found.\n", szFileName);
 			return NULL;
 		}
 
-		MPartialBitmap *pNewBitmap = new MPartialBitmap(pBitmap,rt);
+		MPartialBitmap* pNewBitmap = new MPartialBitmap(pBitmap, rt);
 
 		MBitmapManager::Add(pNewBitmap);
 
@@ -364,11 +366,11 @@ MBitmap* MIDLResource::GetBitmap(MXmlElement& element)
 	}
 
 	element.GetContents(szFileName);
-	if(szFileName[0]==0 || _stricmp(szFileName,"NULL")==0) return NULL;
+	if (szFileName[0] == 0 || _stricmp(szFileName, "NULL") == 0) return NULL;
 
-	MBitmap *pBitmap = MBitmapManager::Get(szFileName);
-	if(pBitmap==NULL) {
-		mlog("warning : bitmap %s not found.\n",szFileName);
+	MBitmap* pBitmap = MBitmapManager::Get(szFileName);
+	if (pBitmap == NULL) {
+		mlog("warning : bitmap %s not found.\n", szFileName);
 	}
 
 	return pBitmap;
@@ -399,30 +401,30 @@ MBitmap* MIDLResource::GetBitmapAlias(MXmlElement& element)
 		{
 			bBoundsFound = true;
 			rt = GetRect(childElement);
-		}else
-		if (!strcmp(szTagName, "SOURCE"))
-		{
-			bSourceFound = true;
-			childElement.GetContents(szSourceFileName);
 		}
+		else
+			if (!strcmp(szTagName, "SOURCE"))
+			{
+				bSourceFound = true;
+				childElement.GetContents(szSourceFileName);
+			}
 	}
 
 	char szAliasName[256];
 	element.GetAttribute(szAliasName, "name");
 
-	if(bSourceFound && bBoundsFound) {	// 부분 bitmap 이다
-
-		if(szSourceFileName[0]==0 || _stricmp(szSourceFileName,"NULL")==0) return NULL;
-		MBitmap *pBitmap = MBitmapManager::Get(szSourceFileName);
-		if(pBitmap==NULL) {
-			mlog("warning : bitmap %s not found.\n",szSourceFileName);
+	if (bSourceFound && bBoundsFound) {
+		if (szSourceFileName[0] == 0 || _stricmp(szSourceFileName, "NULL") == 0) return NULL;
+		MBitmap* pBitmap = MBitmapManager::Get(szSourceFileName);
+		if (pBitmap == NULL) {
+			mlog("warning : bitmap %s not found.\n", szSourceFileName);
 			return NULL;
 		}
 
-		MPartialBitmap *pNewBitmap = new MPartialBitmap(pBitmap,rt);
-		strcpy(pNewBitmap->m_szName,szAliasName);
+		MPartialBitmap* pNewBitmap = new MPartialBitmap(pBitmap, rt);
+		strcpy(pNewBitmap->m_szName, szAliasName);
 
-		MBitmapManager::Add(pNewBitmap);	// 나중에 지워주어야 한다
+		MBitmapManager::Add(pNewBitmap);
 
 		return pNewBitmap;
 	}
@@ -478,22 +480,22 @@ MBGroupLook* MIDLResource::GetGroupLook(MXmlElement& element)
 
 		if (!strcmp(szTagName, "FONT"))
 		{
-			childElement.GetContents(szFontName);			
-		} 
+			childElement.GetContents(szFontName);
+		}
 		if (!strcmp(szTagName, "TEXTPOSITION"))
 		{
 			pGroupLook->m_TitlePosition = GetPoint(childElement);
-		} 
+		}
 		if (!strcmp(szTagName, "STRETCH"))
 		{
 			bool bStretch = true;
 			childElement.GetContents(&bStretch);
 			pGroupLook->m_bStretch = bStretch;
-		} 
+		}
 		else if (!strcmp(szTagName, "TEXTCOLOR"))
 		{
 			pGroupLook->m_FontColor = GetColor(childElement);
-		} 
+		}
 		else if (!strcmp(szTagName, "BITMAPS"))
 		{
 			GetBitmaps(pGroupLook->m_pFrameBitmaps, childElement, FRAME_BITMAP_COUNT);
@@ -505,13 +507,11 @@ MBGroupLook* MIDLResource::GetGroupLook(MXmlElement& element)
 	}
 	pGroupLook->m_pFont = MFontManager::Get(szFontName);
 
-	// Default Look
-	if(bDefaultLook==true) MGroup::ChangeLook(pGroupLook);
+	if (bDefaultLook == true) MGroup::ChangeLook(pGroupLook);
 
-	// FrameLook 등록
 	char szItem[256];
 	element.GetAttribute(szItem, IDL_ATTR_ITEM, "");
-	if(!m_GroupLookMap.insert(map<string, MBGroupLook*>::value_type(string(szItem), pGroupLook)).second)
+	if (!m_GroupLookMap.insert(map<string, MBGroupLook*>::value_type(string(szItem), pGroupLook)).second)
 		OutputDebugString("insert widget failed.\n");
 
 	return pGroupLook;
@@ -538,23 +538,23 @@ MBFrameLook* MIDLResource::GetFrameLook(MXmlElement& element)
 
 		if (!strcmp(szTagName, "FONT"))
 		{
-			childElement.GetContents(szFontName);			
-		} 
+			childElement.GetContents(szFontName);
+		}
 		if (!strcmp(szTagName, "TEXTPOSITION"))
 		{
 			pFrameLook->m_TitlePosition = GetPoint(childElement);
-		} 
+		}
 		if (!strcmp(szTagName, "STRETCH"))
 		{
 			bool bStretch = true;
 			childElement.GetContents(&bStretch);
 			pFrameLook->m_bStretch = bStretch;
-		} 
+		}
 		else if (!strcmp(szTagName, "TEXTCOLOR"))
 		{
 			pFrameLook->m_FontColor = GetColor(childElement);
-		} 
-		else if( !strcmp(szTagName,"BGCOLOR"))
+		}
+		else if (!strcmp(szTagName, "BGCOLOR"))
 		{
 			pFrameLook->m_BGColor = GetColor(childElement);
 		}
@@ -574,39 +574,36 @@ MBFrameLook* MIDLResource::GetFrameLook(MXmlElement& element)
 		{
 			childElement.GetContents(&bDefaultLook);
 		}
-		else if(!strcmp(szTagName,"CUSTOMLOOK"))
+		else if (!strcmp(szTagName, "CUSTOMLOOK"))
 		{
 			int iTempBuf;
-			childElement.GetContents( &iTempBuf );
-			pFrameLook->SetCustomLook( iTempBuf );
+			childElement.GetContents(&iTempBuf);
+			pFrameLook->SetCustomLook(iTempBuf);
 		}
 		else if (!strcmp(szTagName, "DEFAULTTITLE"))
 		{
 			char szText[256];
 			childElement.GetContents(szText);
-			strcpy(pFrameLook->m_szDefaultTitle,szText);
+			strcpy(pFrameLook->m_szDefaultTitle, szText);
 		}
 		else if (!strcmp(szTagName, "SCALABLE"))
 		{
 			pFrameLook->SetScaleEnable(true);
-		} 
+		}
 	}
 	pFrameLook->m_pFont = MFontManager::Get(szFontName);
 
-	// Default Look
-	if(bDefaultLook==true) MFrame::ChangeLook(pFrameLook);
+	if (bDefaultLook == true) MFrame::ChangeLook(pFrameLook);
 
-	// FrameLook 등록
 	char szItem[256];
 	element.GetAttribute(szItem, IDL_ATTR_ITEM, "");
-	if(!m_FrameLookMap.insert(map<string, MBFrameLook*>::value_type(string(szItem), pFrameLook)).second)
+	if (!m_FrameLookMap.insert(map<string, MBFrameLook*>::value_type(string(szItem), pFrameLook)).second)
 		OutputDebugString("insert widget failed.\n");
 
 	return pFrameLook;
 }
 
-
-MBTextAreaLook*	MIDLResource::GetTextAreaLook(MXmlElement& element)
+MBTextAreaLook* MIDLResource::GetTextAreaLook(MXmlElement& element)
 {
 	MXmlElement childElement;
 	char szTagName[256], szFontName[256];
@@ -626,8 +623,8 @@ MBTextAreaLook*	MIDLResource::GetTextAreaLook(MXmlElement& element)
 		if (szTagName[0] == '#') continue;
 		if (!strcmp(szTagName, "FONT"))
 		{
-			childElement.GetContents(szFontName);			
-		} 
+			childElement.GetContents(szFontName);
+		}
 		else if (!strcmp(szTagName, "BITMAPS"))
 		{
 			GetBitmaps(pTextAreaLook->m_pFrameBitmaps, childElement, 9);
@@ -643,15 +640,12 @@ MBTextAreaLook*	MIDLResource::GetTextAreaLook(MXmlElement& element)
 	}
 	pTextAreaLook->m_pFont = MFontManager::Get(szFontName);
 
-	// Default Look
-	if(bDefaultLook==true) MTextArea::ChangeLook(pTextAreaLook);
+	if (bDefaultLook == true) MTextArea::ChangeLook(pTextAreaLook);
 
-	// TextAreaLook 등록
 	char szItem[256];
 	element.GetAttribute(szItem, IDL_ATTR_ITEM, "");
-	if(!m_TextAreaLookMap.insert(map<string, MBTextAreaLook*>::value_type(string(szItem), pTextAreaLook)).second)
+	if (!m_TextAreaLookMap.insert(map<string, MBTextAreaLook*>::value_type(string(szItem), pTextAreaLook)).second)
 		OutputDebugString("insert widget failed.\n");
-
 
 	return pTextAreaLook;
 }
@@ -677,12 +671,12 @@ MBLabelLook* MIDLResource::GetLabelLook(MXmlElement& element)
 
 		if (!strcmp(szTagName, "FONT"))
 		{
-			childElement.GetContents(szFontName);			
-		} 
+			childElement.GetContents(szFontName);
+		}
 		else if (!strcmp(szTagName, "TEXTCOLOR"))
 		{
 			pLabelLook->m_FontColor = GetColor(childElement);
-		} 
+		}
 		else if (!strcmp(szTagName, "DEFAULT"))
 		{
 			childElement.GetContents(&bDefaultLook);
@@ -690,18 +684,15 @@ MBLabelLook* MIDLResource::GetLabelLook(MXmlElement& element)
 	}
 	pLabelLook->m_pFont = MFontManager::Get(szFontName);
 
-	// Default Look
-	if(bDefaultLook==true) MLabel::ChangeLook(pLabelLook);
+	if (bDefaultLook == true) MLabel::ChangeLook(pLabelLook);
 
-	// LabelLook 등록
 	char szItem[256];
 	element.GetAttribute(szItem, IDL_ATTR_ITEM, "");
-	if(!m_LabelLookMap.insert(map<string, MBLabelLook*>::value_type(string(szItem), pLabelLook)).second)
+	if (!m_LabelLookMap.insert(map<string, MBLabelLook*>::value_type(string(szItem), pLabelLook)).second)
 		OutputDebugString("insert widget failed.\n");
 
 	return pLabelLook;
 }
-
 
 MBButtonLook* MIDLResource::GetButtonLook(MXmlElement& element)
 {
@@ -712,7 +703,7 @@ MBButtonLook* MIDLResource::GetButtonLook(MXmlElement& element)
 	bool bDefaultLook = false;
 
 	MBButtonLook* pButtonLook = new MBButtonLook();
-	
+
 	int iCount = element.GetChildNodeCount();
 
 	for (int i = 0; i < iCount; i++)
@@ -726,15 +717,15 @@ MBButtonLook* MIDLResource::GetButtonLook(MXmlElement& element)
 		if (!strcmp(szBuf, "FONT"))
 		{
 			childElement.GetContents(szFontName);
-		} 
+		}
 		else if (!strcmp(szBuf, "TEXTCOLOR"))
 		{
 			pButtonLook->m_FontColor = GetColor(childElement);
-		} 
+		}
 		else if (!strcmp(szBuf, "TEXTDOWNCOLOR"))
 		{
 			pButtonLook->m_FontDownColor = GetColor(childElement);
-		} 
+		}
 		else if (!strcmp(szBuf, "TEXTDOWNOFFSET"))
 		{
 			pButtonLook->m_FontDownOffset = GetPoint(childElement);
@@ -742,11 +733,11 @@ MBButtonLook* MIDLResource::GetButtonLook(MXmlElement& element)
 		else if (!strcmp(szBuf, "TEXTHIGHLIGHTCOLOR"))
 		{
 			pButtonLook->m_FontHighlightColor = GetColor(childElement);
-		} 
+		}
 		else if (!strcmp(szBuf, "TEXTDISABLECOLOR"))
 		{
 			pButtonLook->m_FontDisableColor = GetColor(childElement);
-		} 
+		}
 		else if (!strcmp(szBuf, "UP"))
 		{
 			GetBitmaps(pButtonLook->m_pUpBitmaps, childElement, 9);
@@ -772,35 +763,32 @@ MBButtonLook* MIDLResource::GetButtonLook(MXmlElement& element)
 			bool bStretch = true;
 			childElement.GetContents(&bStretch);
 			pButtonLook->m_bStretch = bStretch;
-		} 
-		else if(!strcmp(szBuf, "CUSTOMLOOK"))
+		}
+		else if (!strcmp(szBuf, "CUSTOMLOOK"))
 		{
 			pButtonLook->SetCustomLook(true);
 		}
-		else if(!strcmp(szBuf, "WIRELOOK"))
+		else if (!strcmp(szBuf, "WIRELOOK"))
 		{
 			pButtonLook->SetWireLook(true);
 		}
 		else if (!strcmp(szBuf, "SCALABLE"))
 		{
 			pButtonLook->SetScaleEnable(true);
-		} 
+		}
 	}
 
 	pButtonLook->m_pFont = MFontManager::Get(szFontName);
 
-	// Default Look
-	if(bDefaultLook==true) MButton::ChangeLook(pButtonLook);
+	if (bDefaultLook == true) MButton::ChangeLook(pButtonLook);
 
-	// ButtonLook 등록
 	char szItem[256];
 	element.GetAttribute(szItem, IDL_ATTR_ITEM, "");
-	if(!m_ButtonLookMap.insert(map<string, MBButtonLook*>::value_type(string(szItem), pButtonLook)).second)
+	if (!m_ButtonLookMap.insert(map<string, MBButtonLook*>::value_type(string(szItem), pButtonLook)).second)
 		OutputDebugString("insert widget failed.\n");
 
 	return pButtonLook;
 }
-
 
 MBEditLook* MIDLResource::GetEditLook(MXmlElement& element)
 {
@@ -824,7 +812,7 @@ MBEditLook* MIDLResource::GetEditLook(MXmlElement& element)
 			char szFontName[256];
 			childElement.GetContents(szFontName);
 			pEditLook->m_pFont = MFontManager::Get(szFontName);
-		} 
+		}
 		else if (!strcmp(szTagName, "BITMAPS"))
 		{
 			GetBitmaps(pEditLook->m_pFrameBitmaps, childElement, 9);
@@ -833,23 +821,20 @@ MBEditLook* MIDLResource::GetEditLook(MXmlElement& element)
 		{
 			childElement.GetContents(&bDefaultLook);
 		}
-		else if(!strcmp(szTagName,"CUSTOMLOOK"))
+		else if (!strcmp(szTagName, "CUSTOMLOOK"))
 		{
 			pEditLook->SetCustomLook(true);
 		}
 	}
 
-	// Default Look
-	if(bDefaultLook==true){
+	if (bDefaultLook == true) {
 		MEdit::ChangeLook(pEditLook);
 		MHotKey::ChangeLook(pEditLook);
-//		MActionKey::ChangeLook(pEditLook);
 	}
 
-	// EditLook 등록
 	char szItem[256];
 	element.GetAttribute(szItem, IDL_ATTR_ITEM, "");
-	if(!m_EditLookMap.insert(map<string, MBEditLook*>::value_type(string(szItem), pEditLook)).second)
+	if (!m_EditLookMap.insert(map<string, MBEditLook*>::value_type(string(szItem), pEditLook)).second)
 		OutputDebugString("insert widget failed.\n");
 
 	return pEditLook;
@@ -879,38 +864,38 @@ MBListBoxLook* MIDLResource::GetListBoxLook(MXmlElement& element, int nType)
 			char szFontName[256];
 			childElement.GetContents(szFontName);
 			pListBoxLook->m_pFont = MFontManager::Get(szFontName);
-		} 
-		else if (!strcmp(szTagName, "BITMAPS")) 
+		}
+		else if (!strcmp(szTagName, "BITMAPS"))
 		{
 			GetBitmaps(pListBoxLook->m_pFrameBitmaps, childElement, 9);
 		}
 		else if (!strcmp(szTagName, "SELECTEDPLANECOLOR"))
 		{
 			pListBoxLook->m_SelectedPlaneColor = GetColor(childElement);
-		} 
+		}
 		else if (!strcmp(szTagName, "SELECTEDTEXTCOLOR"))
 		{
 			pListBoxLook->m_SelectedTextColor = GetColor(childElement);
-		} 
+		}
 		else if (!strcmp(szTagName, "UNFOCUSEDSELECTEDPLANECOLOR"))
 		{
 			pListBoxLook->m_UnfocusedSelectedPlaneColor = GetColor(childElement);
-		} 
-		else	if( !strcmp(szTagName, "ITEMTEXTMULTILINE"))
-		{
-			pListBoxLook->m_bItemTextMultiLine	= true;
 		}
-		else if( !strcmp(szTagName, "ITEMTEXTHCENTER"))
+		else	if (!strcmp(szTagName, "ITEMTEXTMULTILINE"))
+		{
+			pListBoxLook->m_bItemTextMultiLine = true;
+		}
+		else if (!strcmp(szTagName, "ITEMTEXTHCENTER"))
 		{
 			pListBoxLook->m_ItemTextAlignmentMode |= MAM_HCENTER;
 		}
- 		else if( !strcmp(szTagName, "ITEMTEXTVCENTER"))
+		else if (!strcmp(szTagName, "ITEMTEXTVCENTER"))
 		{
 			pListBoxLook->m_ItemTextAlignmentMode |= MAM_VCENTER;
 		}
-		else if( !strcmp(szTagName, "ITEMBITMAP"))
+		else if (!strcmp(szTagName, "ITEMBITMAP"))
 		{
-			pListBoxLook->m_pItemSlotBitmap	= GetBitmap( childElement );
+			pListBoxLook->m_pItemSlotBitmap = GetBitmap(childElement);
 		}
 		else if (!strcmp(szTagName, "DEFAULT"))
 		{
@@ -918,16 +903,14 @@ MBListBoxLook* MIDLResource::GetListBoxLook(MXmlElement& element, int nType)
 		}
 	}
 
-	// Default Look
-	if(bDefaultLook==true){
-		if(nType==0)	MListBox::ChangeLook(pListBoxLook);
+	if (bDefaultLook == true) {
+		if (nType == 0)	MListBox::ChangeLook(pListBoxLook);
 		else			MComboListBox::ChangeLook(pListBoxLook);
 	}
 
-	// ListBoxLook 등록
 	char szItem[256];
 	element.GetAttribute(szItem, IDL_ATTR_ITEM, "");
-	if(!m_ListBoxLookMap.insert(map<string, MBListBoxLook*>::value_type(string(szItem), pListBoxLook)).second)
+	if (!m_ListBoxLookMap.insert(map<string, MBListBoxLook*>::value_type(string(szItem), pListBoxLook)).second)
 		OutputDebugString("insert widget failed.\n");
 
 	return pListBoxLook;
@@ -961,13 +944,11 @@ MBArrowLook* MIDLResource::GetArrowLook(MXmlElement& element)
 		}
 	}
 
-	// Default Look
-	if(bDefaultLook==true) MArrow::ChangeLook(pArrowLook);
+	if (bDefaultLook == true) MArrow::ChangeLook(pArrowLook);
 
-	// ArrowLook 등록
 	char szItem[256];
 	element.GetAttribute(szItem, IDL_ATTR_ITEM, "");
-	if(!m_ArrowLookMap.insert(map<string, MBArrowLook*>::value_type(string(szItem), pArrowLook)).second)
+	if (!m_ArrowLookMap.insert(map<string, MBArrowLook*>::value_type(string(szItem), pArrowLook)).second)
 		OutputDebugString("insert widget failed.\n");
 
 	return pArrowLook;
@@ -1024,13 +1005,11 @@ MBThumbLook* MIDLResource::GetThumbLook(MXmlElement& element)
 		}
 	}
 
-	// Default Look
-	if(bDefaultLook==true) MThumb::ChangeLook(pThumbLook);
+	if (bDefaultLook == true) MThumb::ChangeLook(pThumbLook);
 
-	// ThumbLook 등록
 	char szItem[256];
 	element.GetAttribute(szItem, IDL_ATTR_ITEM, "");
-	if(!m_ThumbLookMap.insert(map<string, MBThumbLook*>::value_type(string(szItem), pThumbLook)).second)
+	if (!m_ThumbLookMap.insert(map<string, MBThumbLook*>::value_type(string(szItem), pThumbLook)).second)
 		OutputDebugString("insert widget failed.\n");
 
 	return pThumbLook;
@@ -1069,13 +1048,11 @@ MBScrollBarLook* MIDLResource::GetScrollBarLook(MXmlElement& element)
 		}
 	}
 
-	// Default Look
-	if(bDefaultLook==true) MScrollBar::ChangeLook(pScrollBarLook);
+	if (bDefaultLook == true) MScrollBar::ChangeLook(pScrollBarLook);
 
-	// ScrollBarLook 등록
 	char szItem[256];
 	element.GetAttribute(szItem, IDL_ATTR_ITEM, "");
-	if(!m_ScrollBarLookMap.insert(map<string, MBScrollBarLook*>::value_type(string(szItem), pScrollBarLook)).second)
+	if (!m_ScrollBarLookMap.insert(map<string, MBScrollBarLook*>::value_type(string(szItem), pScrollBarLook)).second)
 		OutputDebugString("insert widget failed.\n");
 
 	return pScrollBarLook;
@@ -1104,7 +1081,7 @@ MBSliderThumbLook* MIDLResource::GetSliderThumbLook(MXmlElement& element)
 
 		if (szTagName[0] == '#') continue;
 
-		if(!strcmp(szTagName, "BITMAP") )
+		if (!strcmp(szTagName, "BITMAP"))
 		{
 			pSliderThumbLook->m_pBitmap = GetBitmap(childElement);
 		}
@@ -1112,16 +1089,13 @@ MBSliderThumbLook* MIDLResource::GetSliderThumbLook(MXmlElement& element)
 		{
 			childElement.GetContents(&bDefaultLook);
 		}
-		// else if BITMAP...
 	}
 
-	// Default Look
-	if(bDefaultLook==true) MSliderThumb::ChangeLook((MSliderThumbLook*)pSliderThumbLook);
+	if (bDefaultLook == true) MSliderThumb::ChangeLook((MSliderThumbLook*)pSliderThumbLook);
 
-	// ThumbLook 등록
 	char szItem[256];
 	element.GetAttribute(szItem, IDL_ATTR_ITEM, "");
-	if(!m_ThumbLookMap.insert(map<string, MBThumbLook*>::value_type(string(szItem), (MBThumbLook*)pSliderThumbLook)).second)
+	if (!m_ThumbLookMap.insert(map<string, MBThumbLook*>::value_type(string(szItem), (MBThumbLook*)pSliderThumbLook)).second)
 		OutputDebugString("insert widget failed.\n");
 
 	return pSliderThumbLook;
@@ -1156,13 +1130,11 @@ MBTabCtrlLook* MIDLResource::GetTabCtrlLook(MXmlElement& element)
 		}
 	}
 
-	// Default Look
-	if(bDefaultLook==true) MTabCtrl::ChangeLook(pTabCtrlLook);
+	if (bDefaultLook == true) MTabCtrl::ChangeLook(pTabCtrlLook);
 
-	// MTabCtrlLook 등록
 	char szItem[256];
 	element.GetAttribute(szItem, IDL_ATTR_ITEM, "");
-	if(!m_TabCtrlLookMap.insert(map<string, MBTabCtrlLook*>::value_type(string(szItem), pTabCtrlLook)).second)
+	if (!m_TabCtrlLookMap.insert(map<string, MBTabCtrlLook*>::value_type(string(szItem), pTabCtrlLook)).second)
 		OutputDebugString("insert widget failed.\n");
 
 	return pTabCtrlLook;
@@ -1189,7 +1161,7 @@ void MIDLResource::InsertWidget(MXmlElement& element, MWidget* pWidget)
 {
 	char szItem[256];
 	element.GetAttribute(szItem, "item", "unnamed widget");
-	strcpy(pWidget->m_szIDLName,szItem);
+	strcpy(pWidget->m_szIDLName, szItem);
 	m_WidgetMap.insert(MWidgetMMap::value_type(string(szItem), pWidget));
 }
 
@@ -1199,87 +1171,76 @@ bool MIDLResource::GetCommonWidgetProperty(MWidget* pWidget, MXmlElement& elemen
 
 	bool bRet = false;
 	if (!strcmp(szTagName, "BOUNDS"))
-		{
-			int w = MGetWorkspaceWidth();
-			int h = MGetWorkspaceHeight();
-			if(pWidget->GetParent()!=NULL){
-				MRECT r = pWidget->GetParent()->GetRect();
-				w = r.w;
-				h = r.h;
-			}
-			MRECT rect = GetRect(element);
-			// 만약 크기가 음수라면 현재 화면에서 최대 크기
-			if(rect.w<0) rect.w = w-abs(rect.x);
-			if(rect.h<0) rect.h = h-abs(rect.y);
-
-			// 만약 위치가 CENTER_NUMBER이면 정 중앙에서 시작
-			// 만약 위치가 음수라면 좌측또는 하단으로 얼라인
-			/*
-			#define CENTER_NUMBER	-10000
-			if(rect.x<=CENTER_NUMBER) rect.x = MGetWorkspaceWidth()/2 + (rect.x-CENTER_NUMBER);
-			else if(rect.x<0) rect.x = w-rect.w+rect.x + 1;
-			if(rect.y<=CENTER_NUMBER) rect.y = MGetWorkspaceHeight()/2 + (rect.y-CENTER_NUMBER);
-			else if(rect.y<0) rect.y = h-rect.h+rect.y + 1;
-			*/
-
-			pWidget->SetBounds(rect);
-			pWidget->m_IDLRect = rect;
-			bRet = true;
+	{
+		int w = MGetWorkspaceWidth();
+		int h = MGetWorkspaceHeight();
+		if (pWidget->GetParent() != NULL) {
+			MRECT r = pWidget->GetParent()->GetRect();
+			w = r.w;
+			h = r.h;
 		}
+		MRECT rect = GetRect(element);
+		if (rect.w < 0) rect.w = w - abs(rect.x);
+		if (rect.h < 0) rect.h = h - abs(rect.y);
+
+		pWidget->SetBounds(rect);
+		pWidget->m_IDLRect = rect;
+		bRet = true;
+	}
 	else if (!strcmp(szTagName, "TEXT"))
-		{
-			char szText[16384], szTar[16384];
-			element.GetContents(szText);
-			TransText(szText, szTar);
-			pWidget->SetText(szTar);
-			bRet = true;
-		}
+	{
+		char szText[16384], szTar[16384];
+		element.GetContents(szText);
+		TransText(szText, szTar);
+		pWidget->SetText(szTar);
+		bRet = true;
+	}
 	else if (!strcmp(szTagName, "ANCHORS"))
-		{	
-			pWidget->m_Anchors = GetAnchors(element);
-			bRet = true;
-		}
+	{
+		pWidget->m_Anchors = GetAnchors(element);
+		bRet = true;
+	}
 	else if (!strcmp(szTagName, "CLIP"))
-		{
-			bool bClip = false;
-			element.GetContents(&bClip);
-			pWidget->SetClipByParent( bClip );
-		}
+	{
+		bool bClip = false;
+		element.GetContents(&bClip);
+		pWidget->SetClipByParent(bClip);
+	}
 	else if (!strcmp(szTagName, "TOOLTIP"))
-		{
-			char szContents[1024];
-			char szToolTip[1024];
-			element.GetContents(szContents);
-			TransText(szContents, szToolTip);
-			pWidget->AttachToolTip(szToolTip);
-		}
+	{
+		char szContents[1024];
+		char szToolTip[1024];
+		element.GetContents(szContents);
+		TransText(szContents, szToolTip);
+		pWidget->AttachToolTip(szToolTip);
+	}
 	else if (!strcmp(szTagName, "ALIGN"))
-		{
-			pWidget->SetBoundsAlignment(GetAlignmentMode(element), -1, -1);
-		}
+	{
+		pWidget->SetBoundsAlignment(GetAlignmentMode(element), -1, -1);
+	}
 	else if (!strcmp(szTagName, "VISIBLE"))
-		{
-			bool bValue = true;
-			element.GetContents(&bValue);
-			pWidget->Show(bValue);
-		}
+	{
+		bool bValue = true;
+		element.GetContents(&bValue);
+		pWidget->Show(bValue);
+	}
 	else if (!strcmp(szTagName, "ENABLE"))
-		{
-			bool bValue = true;
-			element.GetContents(&bValue);
-			pWidget->Enable(bValue);
-		}
-	else if (!strcmp(szTagName, "FOCUSABLE")) 
-		{
-			bool bValue = true;
-			element.GetContents(&bValue);
-			pWidget->SetFocusEnable(bValue);
-		}
+	{
+		bool bValue = true;
+		element.GetContents(&bValue);
+		pWidget->Enable(bValue);
+	}
+	else if (!strcmp(szTagName, "FOCUSABLE"))
+	{
+		bool bValue = true;
+		element.GetContents(&bValue);
+		pWidget->SetFocusEnable(bValue);
+	}
 
 	return bRet;
 }
 
-MFrame*	MIDLResource::GetFrame(MXmlElement& element)
+MFrame* MIDLResource::GetFrame(MXmlElement& element)
 {
 	MXmlElement childElement;
 	char szBuf[4096];
@@ -1287,7 +1248,6 @@ MFrame*	MIDLResource::GetFrame(MXmlElement& element)
 	MBFrameLook* pFrameLook = NULL;
 
 	pListener = pParentWidget = GetParentWidget(element);
-//	MFrame* pFrame = new MFrame("", pParentWidget, pListener);
 	MFrame* pFrame = CreateFrame("", pParentWidget, pListener);
 	InsertWidget(element, pFrame);
 
@@ -1312,31 +1272,18 @@ MFrame*	MIDLResource::GetFrame(MXmlElement& element)
 			{
 				pFrameLook = (MBFrameLook*)(*itor).second;
 				pFrame->ChangeCustomLook(pFrameLook);
-			}else {
-				mlog("warning : FrameLook %s not found.\n",szItem);
+			}
+			else {
+				mlog("warning : FrameLook %s not found.\n", szItem);
 			}
 		}
 		else if (!strcmp(szBuf, "CLOSE_BUTTON"))
 		{
 			GetFrameBtn(pFrame->GetCloseButton(), pFrameLook, childElement);
-			/*
-			GetFrameButton(pFrame->GetCloseButton(), childElement);
-			pFrame->GetCloseButton()->SetUpBitmap(pFrameLook->m_pCloseButtonBitmaps[0]);
-			pFrame->GetCloseButton()->SetDownBitmap(pFrameLook->m_pCloseButtonBitmaps[1]);
-			pFrame->GetCloseButton()->SetDisableBitmap(pFrameLook->m_pCloseButtonBitmaps[2]);
-			*/
-//			pFrame->GetCloseButton()->Show(true);
 		}
 		else if (!strcmp(szBuf, "MINIMIZE_BUTTON"))
 		{
 			GetFrameBtn(pFrame->GetMinimizeButton(), pFrameLook, childElement);
-			/*
-			GetFrameButton(pFrame->GetMinimizeButton(), childElement);
-			pFrame->GetMinimizeButton()->SetUpBitmap(pFrameLook->m_pMinimizeButtonBitmaps[0]);
-			pFrame->GetMinimizeButton()->SetDownBitmap(pFrameLook->m_pMinimizeButtonBitmaps[1]);
-			pFrame->GetMinimizeButton()->SetDisableBitmap(pFrameLook->m_pMinimizeButtonBitmaps[2]);
-			*/
-//			pFrame->GetMinimizeButton()->Show(true);
 		}
 		else if (!strcmp(szBuf, "TITLEBAR"))
 		{
@@ -1369,7 +1316,6 @@ MFrame*	MIDLResource::GetFrame(MXmlElement& element)
 			pFrame->SetMovable(bValue);
 		}
 	}
-
 
 	return pFrame;
 }
@@ -1412,16 +1358,15 @@ MLabel* MIDLResource::GetLabel(MXmlElement& element)
 				pLabel->ChangeCustomLook((MBLabelLook*)(*itor).second);
 			}
 		}
-		else if(!strcmp(szBuf, "FONT"))
+		else if (!strcmp(szBuf, "FONT"))
 		{
 			childElement.GetContents(szFontName);
-			pLabel->SetFont( MFontManager::Get(szFontName) );
+			pLabel->SetFont(MFontManager::Get(szFontName));
 		}
-		else if(!strcmp(szBuf, "TEXTALIGN" ))
+		else if (!strcmp(szBuf, "TEXTALIGN"))
 		{
-			pLabel->SetAlignment( GetAlignmentMode(childElement));
+			pLabel->SetAlignment(GetAlignmentMode(childElement));
 		}
-
 	}
 	return pLabel;
 }
@@ -1451,32 +1396,31 @@ MButton* MIDLResource::GetButton(MXmlElement& element)
 			char szItem[256];
 			memset(szItem, 0, sizeof(szItem));
 			childElement.GetContents(szItem);
-			
+
 			map<string, MBButtonLook*>::iterator itor = m_ButtonLookMap.find(szItem);
 			if (itor != m_ButtonLookMap.end())
 			{
 				pButton->ChangeCustomLook((MBButtonLook*)(*itor).second);
 			}
 		}
-		else if(!strcmp(szBuf, "DEFAULTKEY")){
-			char szItem[256] = {0,};
+		else if (!strcmp(szBuf, "DEFAULTKEY")) {
+			char szItem[256] = { 0, };
 			childElement.GetContents(szItem);
-			if(_stricmp(szItem, "ENTER")==0){
+			if (_stricmp(szItem, "ENTER") == 0) {
 				pButton->m_nKeyAssigned = MBKA_ENTER;
 			}
-			else if(_stricmp(szItem, "ESC")==0){
+			else if (_stricmp(szItem, "ESC") == 0) {
 				pButton->m_nKeyAssigned = MBKA_ESC;
 			}
 		}
-		else if(!strcmp(szBuf, "CONFIRMMESSAGE")){
-
-			char szContents[256] = {0, };
-			char szItem[256] = {0,};
+		else if (!strcmp(szBuf, "CONFIRMMESSAGE")) {
+			char szContents[256] = { 0, };
+			char szItem[256] = { 0, };
 			childElement.GetContents(szContents);
 			TransText(szContents, szItem);
 			pButton->SetConfirmMessageBox(szItem);
 		}
-		else if(!strcmp(szBuf, "CONFIRMLOOK")){
+		else if (!strcmp(szBuf, "CONFIRMLOOK")) {
 			if (pButton->m_pMsgBox != NULL)
 			{
 				char szItem[256];
@@ -1492,28 +1436,29 @@ MButton* MIDLResource::GetButton(MXmlElement& element)
 				}
 			}
 		}
-		else if(!strcmp(szBuf, "PUSHBUTTON")){
+		else if (!strcmp(szBuf, "PUSHBUTTON")) {
 			pButton->SetType(MBT_PUSH);
 		}
-		else if(!strcmp(szBuf, "PUSHBUTTON2")){
+		else if (!strcmp(szBuf, "PUSHBUTTON2")) {
 			pButton->SetType(MBT_PUSH2);
 		}
-		else if(!strcmp(szBuf, "SETCHECK")){
+		else if (!strcmp(szBuf, "SETCHECK")) {
 			pButton->SetCheck(true);
 		}
-		else if(!strcmp(szBuf, "GROUP")){
+		else if (!strcmp(szBuf, "GROUP")) {
 			char szItem[256];
 			memset(szItem, 0, sizeof(szItem));
 			childElement.GetContents(szItem);
 
 			map<string, MButtonGroup*>::iterator itor = m_ButtonGroupMap.find(szItem);
-			
-			MButtonGroup *pButtonGroup;
-			if(itor != m_ButtonGroupMap.end()) {
+
+			MButtonGroup* pButtonGroup;
+			if (itor != m_ButtonGroupMap.end()) {
 				pButtonGroup = itor->second;
-			} else {
-                pButtonGroup = new MButtonGroup;
-				m_ButtonGroupMap.insert(map<string, MButtonGroup*>::value_type(szItem,pButtonGroup));
+			}
+			else {
+				pButtonGroup = new MButtonGroup;
+				m_ButtonGroupMap.insert(map<string, MButtonGroup*>::value_type(szItem, pButtonGroup));
 			}
 
 			pButton->SetButtonGroup(pButtonGroup);
@@ -1542,7 +1487,6 @@ MEdit* MIDLResource::GetEdit(MXmlElement& element)
 		childElement.GetTagName(szBuf);
 
 		if (GetCommonWidgetProperty(pEdit, childElement, szBuf)) continue;
-
 
 		if (!strcmp(szBuf, "EDITLOOK"))
 		{
@@ -1593,7 +1537,7 @@ MListBox* MIDLResource::GetListBox(MXmlElement& element)
 	MListBoxLook* pListBoxLook = NULL;
 
 	pListener = pParentWidget = GetParentWidget(element);
-	MListBox* pListBox = (MListBox*)Mint::GetInstance()->NewWidget(MINT_LISTBOX, "", pParentWidget, pListener);	// RAONHAJE TODO : NewWidget에 Name 넘겨주도록 바꾸자.
+	MListBox* pListBox = (MListBox*)Mint::GetInstance()->NewWidget(MINT_LISTBOX, "", pParentWidget, pListener);
 	InsertWidget(element, pListBox);
 
 	int iCount = element.GetChildNodeCount();
@@ -1625,30 +1569,30 @@ MListBox* MIDLResource::GetListBox(MXmlElement& element)
 			childElement.GetContents(&bValue);
 			pListBox->SetSelected(bValue);
 		}
-		else if( !strcmp(szBuf, "ITEMHEIGHT" ))
+		else if (!strcmp(szBuf, "ITEMHEIGHT"))
 		{
 			int iValue = -1;
 			childElement.GetContents(&iValue);
-			pListBox->SetItemHeight( iValue );
+			pListBox->SetItemHeight(iValue);
 		}
-		else if(!strcmp(szBuf, "FONT" ))
+		else if (!strcmp(szBuf, "FONT"))
 		{
-			childElement.GetContents( szItem );
-			pListBox->SetFont( MFontManager::Get(szItem) );
+			childElement.GetContents(szItem);
+			pListBox->SetFont(MFontManager::Get(szItem));
 		}
-		else if(!strcmp(szBuf, "TEXTCOLOR" ))
+		else if (!strcmp(szBuf, "TEXTCOLOR"))
 		{
-			pListBox->m_FontColor = GetColor( childElement );
+			pListBox->m_FontColor = GetColor(childElement);
 		}
-		else if(!strcmp(szBuf, "TEXTALIGN" ))
+		else if (!strcmp(szBuf, "TEXTALIGN"))
 		{
 			pListBox->m_FontAlign = GetAlignmentMode(childElement);
 		}
-		else if(!strcmp(szBuf, "NULLFRAME"))
+		else if (!strcmp(szBuf, "NULLFRAME"))
 		{
 			pListBox->m_bNullFrame = true;
 		}
-		else if(!strcmp(szBuf, "MULTISELECT"))
+		else if (!strcmp(szBuf, "MULTISELECT"))
 		{
 			pListBox->m_bMultiSelect = true;
 		}
@@ -1685,24 +1629,24 @@ MPicture* MIDLResource::GetPicture(MXmlElement& element)
 		else if (!strcmp(szBuf, "STRETCH"))
 		{
 			char ctemp[16];
-			childElement.GetContents( ctemp );
-			if( ctemp[0] == 'x' )
+			childElement.GetContents(ctemp);
+			if (ctemp[0] == 'x')
 				pPicture->SetStretch(1);
-			else if( ctemp[0] == 'y' )
+			else if (ctemp[0] == 'y')
 				pPicture->SetStretch(2);
 			else
 				pPicture->SetStretch(3);
 		}
-		else if( !strcmp(szBuf, "DRAWMODE" ))
+		else if (!strcmp(szBuf, "DRAWMODE"))
 		{
 			int mode;
 			childElement.GetContents(&mode);
 			DWORD cmode = pPicture->GetDrawMode();
-			if( mode == 0 ) pPicture->SetDrawMode( cmode | MBM_Normal );
-			else if( mode == 1 ) pPicture->SetDrawMode( cmode | MBM_FlipLR );
-			else if( mode == 2 ) pPicture->SetDrawMode( cmode | MBM_FlipUD );
-			else if( mode == 3 ) pPicture->SetDrawMode( cmode | MBM_RotL90 );
-			else if( mode == 4 ) pPicture->SetDrawMode( cmode | MBM_RotR90 );
+			if (mode == 0) pPicture->SetDrawMode(cmode | MBM_Normal);
+			else if (mode == 1) pPicture->SetDrawMode(cmode | MBM_FlipLR);
+			else if (mode == 2) pPicture->SetDrawMode(cmode | MBM_FlipUD);
+			else if (mode == 3) pPicture->SetDrawMode(cmode | MBM_RotL90);
+			else if (mode == 4) pPicture->SetDrawMode(cmode | MBM_RotR90);
 		}
 	}
 
@@ -1773,7 +1717,8 @@ MScrollBar* MIDLResource::GetScrollBar(MXmlElement& element)
 			map<string, MBArrowLook*>::iterator itor = m_ArrowLookMap.find(szItem);
 			if (itor != m_ArrowLookMap.end())
 				pScrollBar->ChangeCustomArrowLook((MBArrowLook*)(*itor).second);
-		}else if (!strcmp(szBuf, "THUMBLOOK"))
+		}
+		else if (!strcmp(szBuf, "THUMBLOOK"))
 		{
 			char szItem[256];
 			memset(szItem, 0, sizeof(szItem));
@@ -1783,8 +1728,6 @@ MScrollBar* MIDLResource::GetScrollBar(MXmlElement& element)
 			if (itor != m_ThumbLookMap.end())
 				pScrollBar->ChangeCustomThumbLook((*itor).second);
 		}
-
-
 	}
 	pScrollBar->SetMinMax(nMin, nMax);
 
@@ -1838,7 +1781,7 @@ MSlider* MIDLResource::GetSlider(MXmlElement& element)
 				pSlider->ChangeCustomLook((MBScrollBarLook*)(*itor).second);
 			}
 		}
-		else if(!strcmp(szBuf, "ARROWLOOK"))
+		else if (!strcmp(szBuf, "ARROWLOOK"))
 		{
 			char szItem[256];
 			memset(szItem, 0, sizeof(szItem));
@@ -1851,7 +1794,7 @@ MSlider* MIDLResource::GetSlider(MXmlElement& element)
 				pSlider->m_pDown->ChangeCustomLook((MBArrowLook*)(*itor).second);
 			}
 		}
-		else if(!strcmp(szBuf, "THUMBLOOK"))
+		else if (!strcmp(szBuf, "THUMBLOOK"))
 		{
 			char szItem[256];
 			memset(szItem, 0, sizeof(szItem));
@@ -1860,7 +1803,7 @@ MSlider* MIDLResource::GetSlider(MXmlElement& element)
 			map<string, MBThumbLook*>::iterator itor = m_ThumbLookMap.find(szItem);
 			if (itor != m_ThumbLookMap.end())
 			{
-				pSlider->m_pThumb->ChangeCustomLook((MBThumbLook*)(*itor).second);				
+				pSlider->m_pThumb->ChangeCustomLook((MBThumbLook*)(*itor).second);
 			}
 		}
 	}
@@ -1868,7 +1811,6 @@ MSlider* MIDLResource::GetSlider(MXmlElement& element)
 	pSlider->SetMinMax(nMin, nMax);
 
 	return pSlider;
-
 }
 
 MGroup* MIDLResource::GetGroup(MXmlElement& element)
@@ -1965,53 +1907,53 @@ MComboBox* MIDLResource::GetComboBox(MXmlElement& element)
 			childElement.GetAttribute(&bSelected, "selected", false);
 			if (bSelected)
 			{
-				pComboBox->SetSelIndex(pComboBox->GetCount()-1);
+				pComboBox->SetSelIndex(pComboBox->GetCount() - 1);
 			}
 		}
-		else if(!strcmp(szBuf, "DROPSIZE"))
+		else if (!strcmp(szBuf, "DROPSIZE"))
 		{
 			int nDropSize = 100;
 			childElement.GetContents(&nDropSize);
 			pComboBox->SetDropSize(nDropSize);
 		}
-		else if(!strcmp(szBuf, "COMBOTYPE"))
+		else if (!strcmp(szBuf, "COMBOTYPE"))
 		{
 			int nType = 0;
 			childElement.GetContents(&nType);
 			pComboBox->SetComboType(nType);
 		}
-		else if(!strcmp(szBuf, "COMBOFIRSTSIZE"))
+		else if (!strcmp(szBuf, "COMBOFIRSTSIZE"))
 		{
 			int nComboSize = 0;
 			childElement.GetContents(&nComboSize);
 			pComboBox->SetNextComboBoxTypeSize(nComboSize);
 		}
-		else if(!strcmp(szBuf, "TEXTALIGN" ))
+		else if (!strcmp(szBuf, "TEXTALIGN"))
 		{
-			MAlignmentMode mode = GetAlignmentMode( childElement );
- 			pComboBox->m_pListBox->m_FontAlign = mode;
+			MAlignmentMode mode = GetAlignmentMode(childElement);
+			pComboBox->m_pListBox->m_FontAlign = mode;
 			pComboBox->SetAlignment(mode);
 		}
-		else if(!strcmp(szBuf, "FONT" ))
+		else if (!strcmp(szBuf, "FONT"))
 		{
-			childElement.GetContents( szBuf );
+			childElement.GetContents(szBuf);
 			MFont* pFont = MFontManager::Get(szBuf);
-			pComboBox->m_pListBox->	SetFont( pFont );
-			pComboBox->SetFont( pFont );
+			pComboBox->m_pListBox->SetFont(pFont);
+			pComboBox->SetFont(pFont);
 		}
-		else if(!strcmp(szBuf, "TEXTCOLOR" ))
+		else if (!strcmp(szBuf, "TEXTCOLOR"))
 		{
-			MCOLOR color = GetColor( childElement );
+			MCOLOR color = GetColor(childElement);
 			pComboBox->m_pListBox->m_FontColor = color;
-            pComboBox->SetTextColor( color );
+			pComboBox->SetTextColor(color);
 		}
-		else if( !strcmp(szBuf, "ITEMHEIGHT" ))
+		else if (!strcmp(szBuf, "ITEMHEIGHT"))
 		{
 			int iValue = -1;
 			childElement.GetContents(&iValue);
-			pComboBox->m_pListBox->SetItemHeight( iValue );
+			pComboBox->m_pListBox->SetItemHeight(iValue);
 		}
-		else if(!strcmp(szBuf,"DROPUNDER"))
+		else if (!strcmp(szBuf, "DROPUNDER"))
 		{
 			bool bValue;
 			childElement.GetContents(&bValue);
@@ -2029,7 +1971,7 @@ MMenuItem* MIDLResource::GetMenuItem(MPopupMenu* pPopupMenu, MXmlElement& elemen
 	char szTagName[1024];
 	MMenuItem* pMenuItem = (MMenuItem*)Mint::GetInstance()->NewWidget(MINT_MENUITEM, "", NULL, NULL);
 	pPopupMenu->AddMenuItem(pMenuItem);
-	
+
 	int iCount = element.GetChildNodeCount();
 
 	for (int i = 0; i < iCount; i++)
@@ -2050,7 +1992,7 @@ MMenuItem* MIDLResource::GetMenuItem(MPopupMenu* pPopupMenu, MXmlElement& elemen
 		}
 	}
 
-	return pMenuItem;	
+	return pMenuItem;
 }
 
 MPopupMenu* MIDLResource::GetSubMenu(MMenuItem* pParentMenuItem, MXmlElement& element)
@@ -2129,7 +2071,7 @@ MAniBitmap* MIDLResource::GetAniBitmap(MXmlElement& element)
 		if (!strcmp(szBuf, "BITMAP"))
 		{
 			MBitmap* pBitmap = GetBitmap(childElement);
-			if(pBitmap)
+			if (pBitmap)
 				pAniBitmap->Add(pBitmap);
 		}
 		else if (!strcmp(szBuf, "DELAY"))
@@ -2142,7 +2084,7 @@ MAniBitmap* MIDLResource::GetAniBitmap(MXmlElement& element)
 
 	char szItem[256];
 	element.GetAttribute(szItem, IDL_ATTR_ITEM, "");
-	if(!m_AniBitmapMap.insert(map<string, MAniBitmap*>::value_type(string(szItem), pAniBitmap)).second)
+	if (!m_AniBitmapMap.insert(map<string, MAniBitmap*>::value_type(string(szItem), pAniBitmap)).second)
 		OutputDebugString("insert widget failed.\n");
 
 	return pAniBitmap;
@@ -2160,7 +2102,6 @@ MAnimation* MIDLResource::GetAnimation(MXmlElement& element)
 
 	MAnimation* pAnimation = (MAnimation*)Mint::GetInstance()->NewWidget(MINT_ANIMATION, "", pParentWidget, NULL);
 	InsertWidget(element, pAnimation);
-
 
 	int iCount = element.GetChildNodeCount();
 
@@ -2201,7 +2142,7 @@ MAnimation* MIDLResource::GetAnimation(MXmlElement& element)
 		else if (!strcmp(szBuf, "RUN"))
 		{
 			bool bValue = true;
-			childElement.GetContents( &bValue);
+			childElement.GetContents(&bValue);
 			pAnimation->m_bRunAnimation = bValue;
 		}
 	}
@@ -2213,7 +2154,6 @@ MAnimation* MIDLResource::GetAnimation(MXmlElement& element)
 		pAnimation->SetAniBitmap(pAniBitmap);
 	}
 
-	
 	return pAnimation;
 }
 
@@ -2254,9 +2194,9 @@ MCursor* MIDLResource::GetCursor(MXmlElement& element)
 		}
 	}
 
-	if (pCursor != NULL) 
+	if (pCursor != NULL)
 	{
-		if (pParentWidget!=NULL) pParentWidget->SetCursor(pCursor);
+		if (pParentWidget != NULL) pParentWidget->SetCursor(pCursor);
 		else (MWidget*)m_pParent->SetCursor(pCursor);
 
 		MCursorSystem::Add(pCursor);
@@ -2301,7 +2241,7 @@ MBmLabel* MIDLResource::GetBmLabel(MXmlElement& element)
 }
 
 MFont* MIDLResource::CreateFont(char* szAliasName, char* szFontName, int nHeight,
-								bool bBold, bool bItalic, int nOutlineStyle, bool bAntialiasing, DWORD nColorArg1, DWORD nColorArg2)
+	bool bBold, bool bItalic, int nOutlineStyle, bool bAntialiasing, DWORD nColorArg1, DWORD nColorArg2)
 {
 	return NULL;
 }
@@ -2318,7 +2258,7 @@ MFont* MIDLResource::GetFont(MXmlElement& element)
 	int nOutlineStyle = 0;
 	DWORD nColorArg1 = 0;
 	DWORD nColorArg2 = 0;
-	int a,r,g,b; a=r=g=b=0;
+	int a, r, g, b; a = r = g = b = 0;
 	bool bAntialiasing = false;
 
 	element.GetAttribute(szItem, IDL_ATTR_ITEM, "");
@@ -2336,10 +2276,6 @@ MFont* MIDLResource::GetFont(MXmlElement& element)
 		if (!strcmp(szBuf, "FONTSET"))
 		{
 			childElement.GetContents(szName);
-//			char szAniBitmap[256];
-//			MAniBitmap* pAniBitmap = NULL;
-//			childElement.GetContents(szAniBitmap);
-//			if (pCursor == NULL) pCursor = new MAniBitmapCursor(szItem, pAniBitmap);
 		}
 		else if (!strcmp(szBuf, "FONTHEIGHT"))
 		{
@@ -2368,7 +2304,7 @@ MFont* MIDLResource::GetFont(MXmlElement& element)
 			childElement.GetChildContents(&r, "R");
 			childElement.GetChildContents(&g, "G");
 			childElement.GetChildContents(&b, "B");
-			nColorArg1 = MINT_ARGB(a,r,g,b);
+			nColorArg1 = MINT_ARGB(a, r, g, b);
 		}
 		else if (!strcmp(szBuf, "COLORARG2"))
 		{
@@ -2377,12 +2313,12 @@ MFont* MIDLResource::GetFont(MXmlElement& element)
 			childElement.GetChildContents(&r, "R");
 			childElement.GetChildContents(&g, "G");
 			childElement.GetChildContents(&b, "B");
-			nColorArg2 = MINT_ARGB(a,r,g,b);
+			nColorArg2 = MINT_ARGB(a, r, g, b);
 		}
 	}
 
 	pFont = CreateFont(szItem, szName, nHeight, bBold, bItalic, nOutlineStyle, bAntialiasing, nColorArg1, nColorArg2);
-	if (pFont != NULL) 
+	if (pFont != NULL)
 	{
 		MFontManager::Add(pFont);
 	}
@@ -2409,7 +2345,6 @@ MHotKey* MIDLResource::GetHotKey(MXmlElement& element)
 
 		if (GetCommonWidgetProperty(pHotKey, childElement, szBuf)) continue;
 
-
 		if (!strcmp(szBuf, "EDITLOOK"))
 		{
 			char szItem[256];
@@ -2422,52 +2357,10 @@ MHotKey* MIDLResource::GetHotKey(MXmlElement& element)
 				pHotKey->ChangeCustomLook((MBEditLook*)(*itor).second);
 			}
 		}
-
 	}
 
 	return pHotKey;
 }
-
-/*
-MActionKey* MIDLResource::GetActionKey(MXmlElement& element)
-{
-	MXmlElement childElement;
-	char szBuf[4096];
-	MWidget* pParentWidget;	MListener* pListener;
-
-	pListener = pParentWidget = GetParentWidget(element);
-	MActionKey* pActionKey = (MActionKey*)Mint::GetInstance()->NewWidget(MINT_ACTIONKEY, "", pParentWidget, pListener);
-	InsertWidget(element, pActionKey);
-
-	int iCount = element.GetChildNodeCount();
-
-	for (int i = 0; i < iCount; i++)
-	{
-		memset(szBuf, 0, sizeof(szBuf));
-		childElement = element.GetChildNode(i);
-		childElement.GetTagName(szBuf);
-
-		if (GetCommonWidgetProperty(pActionKey, childElement, szBuf)) continue;
-
-
-		if (!strcmp(szBuf, "EDITLOOK"))
-		{
-			char szItem[256];
-			memset(szItem, 0, sizeof(szItem));
-			childElement.GetContents(szItem);
-
-			map<string, MBEditLook*>::iterator itor = m_EditLookMap.find(szItem);
-			if (itor != m_EditLookMap.end())
-			{
-				pActionKey->ChangeCustomLook((MBEditLook*)(*itor).second);
-			}
-		}
-
-	}
-
-	return pActionKey;
-}
-*/
 
 MTextArea* MIDLResource::GetTextArea(MXmlElement& element)
 {
@@ -2494,7 +2387,7 @@ MTextArea* MIDLResource::GetTextArea(MXmlElement& element)
 			bool bEditable = true;
 			childElement.GetContents(&bEditable);
 			pTextArea->SetEditable(bEditable);
-		} 
+		}
 		else if (!strcmp(szBuf, "RESIZABLE"))
 		{
 			bool bValue = true;
@@ -2504,11 +2397,11 @@ MTextArea* MIDLResource::GetTextArea(MXmlElement& element)
 		else if (!strcmp(szBuf, "TEXTOFFSET"))
 		{
 			pTextArea->SetTextOffset(GetPoint(childElement));
-		} 
+		}
 		else if (!strcmp(szBuf, "TEXTCOLOR"))
 		{
 			pTextArea->SetTextColor(GetColor(childElement));
-		} 
+		}
 		else if (!strcmp(szBuf, "TEXTAREALOOK"))
 		{
 			char szItem[256];
@@ -2552,7 +2445,7 @@ MTabCtrl* MIDLResource::GetTabCtrl(MXmlElement& element)
 	MWidget* pParentWidget;	MListener* pListener;
 
 	pListener = pParentWidget = GetParentWidget(element);
-	MTabCtrl* pTabCtrl= (MTabCtrl*)Mint::GetInstance()->NewWidget(MINT_TABCTRL, "", pParentWidget, pListener);
+	MTabCtrl* pTabCtrl = (MTabCtrl*)Mint::GetInstance()->NewWidget(MINT_TABCTRL, "", pParentWidget, pListener);
 	InsertWidget(element, pTabCtrl);
 
 	int iCount = element.GetChildNodeCount();
@@ -2567,19 +2460,19 @@ MTabCtrl* MIDLResource::GetTabCtrl(MXmlElement& element)
 
 		if (!strcmp(szBuf, "TAB"))
 		{
-			MWidget *pButton = NULL;
-			MWidget *pFrame = NULL;
+			MWidget* pButton = NULL;
+			MWidget* pFrame = NULL;
 
 			char szWidgetName[256];
 			childElement.GetAttribute(szWidgetName, "button");
 			pButton = FindWidget(szWidgetName);
-			if(pButton != NULL && 
-				(strcmp(pButton->GetClassName(),MINT_BUTTON)==0 ||
-				strcmp(pButton->GetClassName(),MINT_BMBUTTON)==0))
+			if (pButton != NULL &&
+				(strcmp(pButton->GetClassName(), MINT_BUTTON) == 0 ||
+					strcmp(pButton->GetClassName(), MINT_BMBUTTON) == 0))
 			{
 				childElement.GetAttribute(szWidgetName, "widget");
 				pFrame = FindWidget(szWidgetName);
-				pTabCtrl->Add((MButton*)pButton,pFrame);
+				pTabCtrl->Add((MButton*)pButton, pFrame);
 			}
 		}
 		else if (!strcmp(szBuf, "TABCONTROLLOOK"))
@@ -2602,7 +2495,6 @@ MPanel* MIDLResource::GetPanel(MXmlElement& element)
 {
 	MXmlElement childElement;
 	char szBuf[4096];
-//	char szFontName[4096];
 	MWidget* pParentWidget;	MListener* pListener;
 
 	pListener = pParentWidget = GetParentWidget(element);
@@ -2626,12 +2518,12 @@ MPanel* MIDLResource::GetPanel(MXmlElement& element)
 			if (!_stricmp(szBorderStyle, "none")) pPanel->SetBorderStyle(MBS_NONE);
 			else if (!_stricmp(szBorderStyle, "single")) pPanel->SetBorderStyle(MBS_SINGLE);
 		}
-		else if(!_stricmp(szBuf, "BORDERCOLOR"))
+		else if (!_stricmp(szBuf, "BORDERCOLOR"))
 		{
 			MCOLOR color = GetColor(childElement);
 			pPanel->SetBorderColor(color);
 		}
-		else if(!_stricmp(szBuf, "BACKGROUND"))
+		else if (!_stricmp(szBuf, "BACKGROUND"))
 		{
 			MCOLOR color = GetColor(childElement);
 			pPanel->SetBackgroundColor(color);
@@ -2693,13 +2585,13 @@ void MIDLResource::Parse(MXmlElement& element)
 	{
 		GetTextAreaLook(element);
 	}
-	else if( !_stricmp(szTagName, "SLIDERTHUMBLOOKTEMPLATE" ))
+	else if (!_stricmp(szTagName, "SLIDERTHUMBLOOKTEMPLATE"))
 	{
-		GetSliderThumbLook( element );
+		GetSliderThumbLook(element);
 	}
-	else if( !_stricmp(szTagName, "TABCTRLLOOKTEMPLATE" ))
+	else if (!_stricmp(szTagName, "TABCTRLLOOKTEMPLATE"))
 	{
-		GetTabCtrlLook( element );
+		GetTabCtrlLook(element);
 	}
 	else if (!_stricmp(szTagName, "FONTTEMPLATE"))
 	{
@@ -2773,10 +2665,6 @@ void MIDLResource::Parse(MXmlElement& element)
 	{
 		GetHotKey(element);
 	}
-/*	else if (!_stricmp(szTagName, "ACTIONKEY"))
-	{
-		GetActionKey(element);
-	}	*/
 	else if (!_stricmp(szTagName, "TEXTAREA"))
 	{
 		GetTextArea(element);
@@ -2797,9 +2685,13 @@ void MIDLResource::Parse(MXmlElement& element)
 	{
 		GetRebounds(element);
 	}
+	else if (!_stricmp(szTagName, "TEXTAREACHAT"))
+	{
+		GetTextAreaChat(element);
+	}
 }
 
-bool MIDLResource::LoadFromFile(const char* szFileName, MWidget* pParent,MZFileSystem *pfs)
+bool MIDLResource::LoadFromFile(const char* szFileName, MWidget* pParent, MZFileSystem* pfs)
 {
 	m_pParent = pParent;
 	if (m_pParent == NULL) m_pParent = Mint::GetInstance()->GetMainFrame();
@@ -2870,7 +2762,7 @@ bool MIDLResource::SaveToFile(const char* szFileName)
 	}
 
 	rootElement.AppendText("\n");
-	if (!xmlDocument.SaveToFile(szFileName)) 
+	if (!xmlDocument.SaveToFile(szFileName))
 	{
 		xmlDocument.Destroy();
 		return false;
@@ -2883,7 +2775,6 @@ void MIDLResource::ClearLooks()
 {
 #define CLEAR(x) while(!x.empty()) { delete (*x.begin()).second; x.erase(x.begin()); }
 
-	// 룩을 클리어하기 전에 위젯들이 디폴트 룩을 사용하도록 바꾼다 (언어변환으로 리소스 리로딩할때 문제 생김)
 	MButton::ChangeLook(NULL);
 	MListBox::ChangeLook(NULL);
 	MEdit::ChangeLook(NULL);
@@ -2901,7 +2792,7 @@ void MIDLResource::ClearLooks()
 	MScrollBar::ChangeLook(NULL);
 	MTabCtrl::ChangeLook(NULL);
 	MTextArea::ChangeLook(NULL);
-
+	MTextAreaChat::ChangeLook(NULL);
 
 	CLEAR(m_LabelLookMap);
 	CLEAR(m_ButtonLookMap);
@@ -2912,9 +2803,7 @@ void MIDLResource::ClearLooks()
 	CLEAR(m_ScrollBarLookMap);
 	CLEAR(m_ArrowLookMap);
 	CLEAR(m_ThumbLookMap);
-//	CLEAR(m_SliderLookMap);
 	CLEAR(m_AniBitmapMap);
-//	CLEAR(m_WidgetMap)
 	CLEAR(m_TabCtrlLookMap);
 
 	CLEAR(m_TextAreaLookMap);
@@ -3024,7 +2913,7 @@ void MIDLResource::FindWidgets(MWidgetList& widgetList, string szItem)
 	}
 }
 
-MFrame*	MIDLResource::CreateFrame(const char* szName, MWidget* pParent, MListener* pListener)
+MFrame* MIDLResource::CreateFrame(const char* szName, MWidget* pParent, MListener* pListener)
 {
 	MFrame* pFrame = (MFrame*)Mint::GetInstance()->NewWidget(MINT_FRAME, szName, pParent, pListener);
 	return pFrame;
@@ -3041,9 +2930,9 @@ MBFrameLook* MIDLResource::FindFrameLook(string szItem)
 	return NULL;
 }
 
-void MIDLResource::InsertWidget(const char* pItemName, MWidget* pWidget )
+void MIDLResource::InsertWidget(const char* pItemName, MWidget* pWidget)
 {
-	m_WidgetMap.insert(MWidgetMMap::value_type(string(pItemName), pWidget) );
+	m_WidgetMap.insert(MWidgetMMap::value_type(string(pItemName), pWidget));
 }
 
 void MIDLResource::TransText(char* szSrc, char* szOut)
@@ -3053,7 +2942,7 @@ void MIDLResource::TransText(char* szSrc, char* szOut)
 
 void MIDLResource::GetRebounds(MXmlElement& element)
 {
-	char szItem[256] = {0, };
+	char szItem[256] = { 0, };
 
 	MXmlElement childElement;
 
@@ -3063,20 +2952,73 @@ void MIDLResource::GetRebounds(MXmlElement& element)
 	MWidgetList widget_list;
 	FindWidgets(widget_list, string(szItem));
 
-
-/*
-#ifdef _DEBUG
-	if (widget_list.size() != 1)
-	{
-		_ASSERT(0);		// 위젯이 하나가 아니다.
-	}
-#endif
-*/
-
 	for (MWidgetList::iterator itor = widget_list.begin(); itor != widget_list.end(); ++itor)
 	{
 		MWidget* pWidget = (*itor);
-		pWidget->SetBounds( rt);
+		pWidget->SetBounds(rt);
 		pWidget->m_IDLRect = rt;
 	}
+}
+
+MTextAreaChat* MIDLResource::GetTextAreaChat(MXmlElement& element)
+{
+	MXmlElement childElement;
+	char szBuf[4096];
+	MWidget* pParentWidget;	MListener* pListener;
+
+	pListener = pParentWidget = GetParentWidget(element);
+	MTextAreaChat* pTextArea = (MTextAreaChat*)Mint::GetInstance()->NewWidget(MINT_TEXTAREA_CHAT, "", pParentWidget, pListener);
+	InsertWidget(element, pTextArea);
+
+	int iCount = element.GetChildNodeCount();
+
+	for (int i = 0; i < iCount; i++)
+	{
+		memset(szBuf, 0, sizeof(szBuf));
+		childElement = element.GetChildNode(i);
+		childElement.GetTagName(szBuf);
+
+		if (GetCommonWidgetProperty(pTextArea, childElement, szBuf)) continue;
+
+		if (!strcmp(szBuf, "EDITABLE"))
+		{
+			bool bEditable = true;
+			childElement.GetContents(&bEditable);
+			pTextArea->SetEditable(bEditable);
+		}
+		else if (!strcmp(szBuf, "RESIZABLE"))
+		{
+			bool bValue = true;
+			childElement.GetContents(&bValue);
+			pTextArea->SetResizable(bValue);
+		}
+		else if (!strcmp(szBuf, "TEXTOFFSET"))
+		{
+			pTextArea->SetTextOffset(GetPoint(childElement));
+		}
+		else if (!strcmp(szBuf, "TEXTCOLOR"))
+		{
+			pTextArea->SetTextColor(GetColor(childElement));
+		}
+		else if (!strcmp(szBuf, "MAXLENGTH"))
+		{
+			int nMaxLength;
+			childElement.GetContents(&nMaxLength);
+			pTextArea->SetMaxLen(nMaxLength);
+		}
+		else if (!strcmp(szBuf, "INDENTATION"))
+		{
+			int nIndentation;
+			childElement.GetContents(&nIndentation);
+			pTextArea->SetIndentation(nIndentation);
+		}
+		else if (!strcmp(szBuf, "SCROLLBAR"))
+		{
+			bool bValue = true;
+			childElement.GetContents(&bValue);
+			pTextArea->SetScrollBarEnable(bValue);
+		}
+	}
+
+	return pTextArea;
 }

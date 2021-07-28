@@ -1,8 +1,3 @@
-#ifndef MTEXTAREA_H
-#define MTEXTAREA_H
-
-#pragma warning(disable:4786)
-
 #include <list>
 #include <string>
 #include "MWidget.h"
@@ -11,44 +6,44 @@
 
 using namespace std;
 
-class MTextArea;
+class MTextAreaChat;
 class MScrollBar;
 
-#define MTEXTAREA_DEFAULT_TEXT_COLOR		MCOLOR(224,224,224)
+#define DEFAULT_TEXT_COLOR		MCOLOR(224,224,224)
 
-class MTextAreaLook {
+class MTextAreaChatLook {
 protected:
 	MCOLOR m_bgColor;
 public:
-	MTextAreaLook() : m_bgColor(0, 0, 0, 0) {}
-	virtual void OnDraw(MTextArea* pTextArea, MDrawContext* pDC);
-	virtual MRECT GetClientRect(MTextArea* pTextArea, MRECT& r);
+	MTextAreaChatLook() : m_bgColor(0, 0, 0, 0) {}
+	virtual void OnDraw(MTextAreaChat* pTextArea, MDrawContext* pDC);
+	virtual MRECT GetClientRect(MTextAreaChat* pTextArea, MRECT& r);
 	virtual void SetBgColor(MCOLOR& c) { m_bgColor = c; }
 
 private:
-	virtual void OnFrameDraw(MTextArea* pTextArea, MDrawContext* pDC);
-	virtual void OnTextDraw(MTextArea* pTextArea, MDrawContext* pDC);
-	virtual void OnTextDraw_WordWrap(MTextArea* pTextArea, MDrawContext* pDC);
+	virtual void OnFrameDraw(MTextAreaChat* pTextArea, MDrawContext* pDC);
+	virtual void OnTextDraw(MTextAreaChat* pTextArea, MDrawContext* pDC);
+	virtual void OnTextDraw_WordWrap(MTextAreaChat* pTextArea, MDrawContext* pDC);
 };
 
-struct MLineItem {
-	MLineItem(MCOLOR _color, string& _text) {
+struct MLineItemChat {
+	MLineItemChat(MCOLOR _color, string& _text) {
 		color = _color;
 		text = _text;
 	}
-	MLineItem(string& _text) {
-		color = MTEXTAREA_DEFAULT_TEXT_COLOR;
+	MLineItemChat(string& _text) {
+		color = DEFAULT_TEXT_COLOR;
 		text = _text;
 	}
 	MCOLOR color;
 	string text;
 };
 
-typedef list<MLineItem> MLINELIST;
-typedef list<MLineItem>::iterator MLINELISTITERATOR;
+typedef std::list<MLineItemChat> MLINELISTCHAT;
+typedef std::list<MLineItemChat>::iterator MLINELISTITERATORCHAT;
 
-class MTextArea : public MWidget {
-	friend MTextAreaLook;
+class MTextAreaChat : public MWidget {
+	friend MTextAreaChatLook;
 protected:
 	bool		m_bScrollBarEnable;
 	int			m_nIndentation;
@@ -72,12 +67,12 @@ protected:
 	MPOINT		m_CaretPos;
 	bool		m_bCaretFirst;
 
-	MLINELIST			m_Lines;
-	MLINELISTITERATOR	m_CurrentLine;
+	MLINELISTCHAT			m_Lines;
+	MLINELISTITERATORCHAT	m_CurrentLine;
 
 	MScrollBar* m_pScrollBar;
 
-	DECLARE_LOOK(MTextAreaLook)
+	DECLARE_LOOK(MTextAreaChatLook)
 	DECLARE_LOOK_CLIENT()
 
 protected:
@@ -113,14 +108,14 @@ protected:
 
 	void UpdateScrollBar(bool bAdjustStart = false);
 
-	MLINELISTITERATOR GetIterator(int nLine);
+	MLINELISTITERATORCHAT GetIterator(int nLine);
 
 public:
-	MTextArea(int nMaxLen = 120, const char* szName = NULL, MWidget* pParent = NULL, MListener* pListener = NULL);
-	virtual ~MTextArea();
+	MTextAreaChat(int nMaxLen = 120, const char* szName = NULL, MWidget* pParent = NULL, MListener* pListener = NULL);
+	virtual ~MTextAreaChat();
 
-#define MINT_TEXTAREA	"TextArea"
-	virtual const char* GetClassName(void) { return MINT_TEXTAREA; }
+#define MINT_TEXTAREA_CHAT	"TextAreaChat"
+	virtual const char* GetClassName(void) { return MINT_TEXTAREA_CHAT; }
 
 	MPOINT GetCaretPos() { return m_CaretPos; }
 	int	GetStartLine() { return m_nStartLine; }
@@ -159,7 +154,6 @@ public:
 	void Clear();
 
 	void SetText(const char* szText);
-
 	void AddText(const char* szText, MCOLOR color);
 	void AddText(const char* szText);
 
@@ -172,11 +166,8 @@ public:
 
 	void AdjustHeightByContent();
 
-	//Custom: GetTextPosition for emojis
 	int GetTextPosition(const char* text);
 };
 
-#define MTEXTAREA_ENTER_VALUE		"entered"
-#define MTEXTAREA_ESC_VALUE			"esc"
-
-#endif
+#define MTextAreaChat_ENTER_VALUE		"entered"
+#define MTextAreaChat_ESC_VALUE			"esc"

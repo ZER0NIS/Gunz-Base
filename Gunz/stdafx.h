@@ -11,7 +11,7 @@
 #include <mswsock.h>
 #include <crtdbg.h>
 
-#define WIN32_LEAN_AND_MEAN		
+#define WIN32_LEAN_AND_MEAN
 #include <windows.h>
 
 #include <mmsystem.h>
@@ -28,9 +28,9 @@
 #include <stdio.h>
 
 #define _QUEST
-#define _QUEST_ITEM	
-#define _MONSTER_BIBLE 
-#define _MULTILANGUAGE	
+#define _QUEST_ITEM
+#define _MONSTER_BIBLE
+#define _MULTILANGUAGE
 #define _DUELTOURNAMENT
 
 // stl
@@ -121,9 +121,5 @@
 
 #include "SafeString.h"
 #include "RGGlobal.h"
-
-#include <cassert>
-#define ASSERT assert
-
 
 #define pi PI_FLOAT

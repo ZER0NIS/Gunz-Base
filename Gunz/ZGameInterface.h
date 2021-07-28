@@ -27,13 +27,13 @@ class ZShopEquipInterface;
 
 enum ZChangeWeaponType;
 
-class MUserDataListItem : public MDefaultListItem{
+class MUserDataListItem : public MDefaultListItem {
 	int m_nUserData;
 public:
 	MUserDataListItem(const char* szText, int nUserData)
-		: MDefaultListItem(szText){
-			m_nUserData=nUserData;
-		}
+		: MDefaultListItem(szText) {
+		m_nUserData = nUserData;
+	}
 
 	int GetUserData() { return m_nUserData; }
 };
@@ -48,66 +48,64 @@ public:
 	bool				m_bLoginTimeout;
 	DWORD				m_dwLoginTimeout;
 
-	MTextAreaLook		m_textAreaLookItemDesc;	
-	
+	MTextAreaLook		m_textAreaLookItemDesc;
+
+	list<MCommand*>	m_listDelayedGameCmd;
+
 protected:
-	ZScreenEffectManager *m_pScreenEffectManager;
-	ZEffectManager*		m_pEffectManager;
+	ZScreenEffectManager* m_pScreenEffectManager;
+	ZEffectManager* m_pEffectManager;
 
 	GunzState			m_nPreviousState;
 
-	ZCombatInterface*	m_pCombatInterface;
+	ZCombatInterface* m_pCombatInterface;
 	ZShopEquipInterface* m_pShopEquipInterface;
-	ZGameInput*			m_pGameInput;
-	ZLoading*			m_pLoadingInterface;
-	ZPlayerMenu*		m_pPlayerMenu;
+	ZGameInput* m_pGameInput;
+	ZLoading* m_pLoadingInterface;
+	ZPlayerMenu* m_pPlayerMenu;
 
-	static ZGameClient*	m_spGameClient;
-	ZGame*				m_pGame;
+	static ZGameClient* m_spGameClient;
+	ZGame* m_pGame;
 	ZCamera				m_Camera;
 	ZChat				m_Chat;
 	ZQuest				m_Quest;
-	ZSurvival			m_Survival;		
-	ZGameTypeManager	m_GameTypeManager;	
-	ZMiniMap			*m_pMiniMap;
+	ZSurvival			m_Survival;
+	ZGameTypeManager	m_GameTypeManager;
+	ZMiniMap* m_pMiniMap;
 	ZTips				m_Tips;
 
-	ZBandiCapturer*		m_Capture;					
-	
-	ZCombatMenu			m_CombatMenu;		
+	ZBandiCapturer* m_Capture;
 
-	ZMyCharacter*		m_pMyCharacter;
+	ZCombatMenu			m_CombatMenu;
+
+	ZMyCharacter* m_pMyCharacter;
 
 	ZMonsterBookInterface* m_pMonsterBookInterface;
 
-
-	
 	bool				m_bShowInterface;
 
-	bool				m_bCursor;					///< 커서를 사용할 수 있는 상태
+	bool				m_bCursor;
 	LPDIRECT3DSURFACE9	m_pCursorSurface;
 
 	DWORD				m_dwFrameMoveClock;
 
 	ZIDLResource		m_IDLResource;
 
-	GunzState			m_nState;			///< 현재 상태
-	bool				m_bLogin;			///< Login 되었는가?
+	GunzState			m_nState;
+	bool				m_bLogin;
 
 	bool				m_bLoading;
 	bool				m_bWaitingArrangedGame;
 
-	MBitmap				*m_pMapThumbnail;///< 맵 썸네일
+	MBitmap* m_pMapThumbnail;
 
-	ZMsgBox*				m_pMsgBox;
-	ZMsgBox*				m_pConfirmMsgBox;
-	ZInterfaceBackground*	m_pBackground;
-	ZCharacterSelectView*	m_pCharacterSelectView;
+	ZMsgBox* m_pMsgBox;
+	ZMsgBox* m_pConfirmMsgBox;
+	ZInterfaceBackground* m_pBackground;
+	ZCharacterSelectView* m_pCharacterSelectView;
 
-	bool				m_bOnEndOfReplay;		// 리플레이 보구나면 플레이어의 Level Percent가 바뀌기 때문에 리플레이 시작 전에
-	int					m_nLevelPercentCache;	// m_bOnEndOfReplay를 true로 셋한 다음 m_nLevelPercentCache에 현재 LevelPercent
-												// 값을 저장해 놓구서 끝나면 다시 복원한다. 좀 안좋은 구조... 방법이 없음. -_-;
-
+	bool				m_bOnEndOfReplay;
+	int					m_nLevelPercentCache;
 	unsigned long int	m_nDrawCount;
 
 	bool			m_bReservedWeapon;
@@ -117,41 +115,38 @@ protected:
 	bool			m_bLeaveStageReserved;
 	DWORD			m_dwLeaveBattleTime;
 
-
 	int				m_nLoginState;
 	DWORD			m_dwLoginTimer;
 	DWORD			m_dwRefreshTime;
 	int				m_nLocServ;
 
-	MBitmapR2*		m_pRoomListFrame;							// 게임방 리스트 프레임 이미지
-	MBitmapR2*		m_pDuelTournamentLobbyFrame;				// 듀얼토너먼트 채널일때의 프레임 이미지
-	MBitmapR2*		m_pBottomFrame;								// 하단 정보창 프레임 이미지
-	MBitmapR2*		m_pClanInfoBg;								// 클랜 정보 배경 이미지
-	MBitmapR2*		m_pDuelTournamentInfoBg;					// 듀얼토너먼트 전적 정보 배경 이미지
-	MBitmapR2*		m_pDuelTournamentRankingLabel;				// 듀얼토너먼트 랭킹 리스트 상단 레이블 이미지
-	MBitmapR2*		m_pLoginBG;									// 로그인 배경 이미지
-	MBitmapR2*		m_pLoginPanel;								// 로그인 패널 이미지
+	MBitmapR2* m_pRoomListFrame;
+	MBitmapR2* m_pDuelTournamentLobbyFrame;
+	MBitmapR2* m_pBottomFrame;
+	MBitmapR2* m_pClanInfoBg;
+	MBitmapR2* m_pDuelTournamentInfoBg;
+	MBitmapR2* m_pDuelTournamentRankingLabel;
+	MBitmapR2* m_pLoginBG;
+	MBitmapR2* m_pLoginPanel;
 
-	ZBitmapManager<int> m_ItemThumbnailMgr;							// 상점/장비창/듀얼토너먼트 게임중에 보여질 아이템 썸네일 매니저
-	//↑적절한 시기마다 모두 언로드해서 메모리를 낭비하지 않도록 해야 합니다. (상점 나갈때, 장비창 나갈때, 듀얼토너먼트 게임 나갈때)
+	ZBitmapManager<int> m_ItemThumbnailMgr;
+	ZLocatorList* m_pLocatorList;
+	ZLocatorList* m_pTLocatorList;
 
-	ZLocatorList*	m_pLocatorList;
-	ZLocatorList*	m_pTLocatorList;
+	DWORD			m_dwTimeCount;
+	DWORD			m_dwHourCount;
 
-	DWORD			m_dwTimeCount;								// 게임 경과시간 카운트. 청소년 자율규제 적용안 쓰불...
-	DWORD			m_dwHourCount;								// 게임 경과시간(hour) 카운트. 청소년 자율규제 적용안 쓰불...
-
-	DWORD			m_dwVoiceTime;								// 현재 출력중인 보이스 사운드 시간
-	char			m_szCurrVoice[ 256];						// 현재 출력하는 보이스 파일 이름
-	char			m_szNextVoice[ 256];						// 다음에 출력할 보이스 파일 이름
-	DWORD			m_dwNextVoiceTime;							// 다음에 출력할 보이스 사운드 시간
+	DWORD			m_dwVoiceTime;
+	char			m_szCurrVoice[256];
+	char			m_szNextVoice[256];
+	DWORD			m_dwNextVoiceTime;
 
 	int				m_nRetryCount;
 
 	bool			m_bReservedQuit;
 	DWORD			m_dwReservedQuitTimer;
 
-	bool			m_bReserveResetApp;							// for changing language
+	bool			m_bReserveResetApp;
 
 	static bool		m_bSkipGlobalEvent;
 
@@ -160,11 +155,8 @@ protected:
 	DWORD			m_dErrMaxPalyerDelayTime;
 	DWORD			m_bErrMaxPalyer;
 
-	bool			m_bGameFinishLeaveBattle;		// 배틀에서 나갈때 스테이지 종료 여부
+	bool			m_bGameFinishLeaveBattle;
 
-	list<MCommand*>	m_listDelayedGameCmd;
-
-// _DUELTOURNAMENT
 	vector<DTPlayerInfo> m_vecDTPlayerInfo;
 	MDUELTOURNAMENTTYPE m_eDuelTournamentType;
 
@@ -176,13 +168,13 @@ protected:
 	static bool		OnCommand(MCommand* pCommand);
 
 	bool ResizeWidget(const char* szName, int w, int h);
-	bool ResizeWidgetRecursive( MWidget* pWidget, int w, int h);
+	bool ResizeWidgetRecursive(MWidget* pWidget, int w, int h);
 	void SetListenerWidget(const char* szName, MListener* pListener);
 
 	void UpdateCursorEnable();
 	void UpdateDuelTournamentWaitMsgDots();
 
-	bool InitInterface(const char* szSkinName,ZLoadingProgress *pLoadingProgress = NULL);
+	bool InitInterface(const char* szSkinName, ZLoadingProgress* pLoadingProgress = NULL);
 	bool InitInterfaceListener();
 	void FinalInterface();
 
@@ -198,7 +190,6 @@ protected:
 
 	void OnDirectLoginCreate(void);
 	void OnDirectLoginDestroy(void);
-
 
 	void OnGameOnLoginCreate(void);
 	void OnGameOnLoginDestroy(void);
@@ -229,14 +220,14 @@ protected:
 
 	void HideAllWidgets();
 
-	void OnResponseShopItemList( const vector< MTD_ShopItemInfo*> &vShopItemList  , const vector<MTD_GambleItemNode*>& vGItemList );
+	void OnResponseShopItemList(const vector< MTD_ShopItemInfo*>& vShopItemList, const vector<MTD_GambleItemNode*>& vGItemList);
 	void OnResponseCharacterItemList(MUID* puidEquipItem
 		, MTD_ItemNode* pItemNodes
 		, int nItemCount
 		, MTD_GambleItemNode* pGItemNodes
-		, int nGItemCount );
+		, int nGItemCount);
 
-	void OnSendGambleItemList( void* pGItemArray, const DWORD dwCount );
+	void OnSendGambleItemList(void* pGItemArray, const DWORD dwCount);
 
 	void OnDrawStateGame(MDrawContext* pDC);
 	void OnDrawStateLogin(MDrawContext* pDC);
@@ -244,65 +235,48 @@ protected:
 	void OnDrawStateCharSelection(MDrawContext* pDC);
 
 #ifdef _QUEST_ITEM
-	void OnResponseCharacterItemList_QuestItem( MTD_QuestItemNode* pQuestItemNode, int nQuestItemCount );
-	void OnResponseBuyQuestItem( const int nResult, const int nBP );
-	void OnResponseSellQuestItem( const int nResult, const int nBP );
+	void OnResponseCharacterItemList_QuestItem(MTD_QuestItemNode* pQuestItemNode, int nQuestItemCount);
+	void OnResponseBuyQuestItem(const int nResult, const int nBP);
+	void OnResponseSellQuestItem(const int nResult, const int nBP);
 #endif
 
-	void OnResponseServerStatusInfoList( const int nListCount, void* pBlob );
-	void OnResponseBlockCountryCodeIP( const char* pszBlockCountryCode, const char* pszRoutingURL );
+	void OnResponseServerStatusInfoList(const int nListCount, void* pBlob);
+	void OnResponseBlockCountryCodeIP(const char* pszBlockCountryCode, const char* pszRoutingURL);
 
-	// locator관련.
 	void RequestServerStatusListInfo();
 
-/*
-	GUNZ_NA = 0,
-	GUNZ_GAME = 1,
-	GUNZ_LOGIN = 2,
-	GUNZ_NETMARBLELOGIN = 3,
-	GUNZ_LOBBY = 4,
-	GUNZ_STAGE = 5,
-	GUNZ_GREETER = 6,
-	GUNZ_CHARSELECTION = 7,
-	GUNZ_CHARCREATION = 8,
-	GUNZ_PREVIOUS = 10,
-	GUNZ_SHUTDOWN = 11,
-	GUNZ_BIRDTEST
-*/
 public:
-	ZGameInterface(const char* szName=NULL, MWidget* pParent=NULL, MListener* pListener=NULL);
+	ZGameInterface(const char* szName = NULL, MWidget* pParent = NULL, MListener* pListener = NULL);
 	~ZGameInterface();
 
-	static bool m_sbRemainClientConnectionForResetApp;	// 언어를 바꾸어서 리소스를 다시 로딩해야 할때 이걸 true로 해줘야 함
+	static bool m_sbRemainClientConnectionForResetApp;
 
-	bool OnCreate(ZLoadingProgress *pLoadingProgress);
+	bool OnCreate(ZLoadingProgress* pLoadingProgress);
 	void OnDestroy();
 
 	void OnInvalidate();
 	void OnRestore();
 
 	bool Update(float fElapsed);
-	void OnDraw(MDrawContext *pDC);
+	void OnDraw(MDrawContext* pDC);
 
 	void SetCursorEnable(bool bEnable);
 	void OnResetCursor();
 	bool IsCursorEnable() { return m_bCursor; }
 
 	bool SetState(GunzState nState);
-	GunzState GetState(void){ return m_nState; }
-	
-	void UpdateBlueRedTeam(void);		// 동환이가 추가
+	GunzState GetState(void) { return m_nState; }
 
-	void ChangeToCharSelection(void);	///< 캐릭터 선택으로 이동
+	void UpdateBlueRedTeam(void);
+
+	void ChangeToCharSelection(void);
 
 	bool ChangeInterfaceSkin(const char* szNewSkinName);
 
-	/// 해당하는 이름을 아이템으로 가진 위젯의 Visible상태를 바꾼다.
-	bool ShowWidget(const char* szName, bool bVisible, bool bModal=false);
+	bool ShowWidget(const char* szName, bool bVisible, bool bModal = false);
 	void SetTextWidget(const char* szName, const char* szText);
 	void EnableWidget(const char* szName, bool bEnable);
 
-	// 나중에 지울것..우선 당장 테스트를 위해
 	void TestChangeParts(int mode);
 	void TestChangePartsAll();
 	void TestChangeWeapon(RVisualMesh* pVMesh = NULL);
@@ -310,27 +284,27 @@ public:
 
 	void ChangeParts(int mode);
 	void ChangeWeapon(ZChangeWeaponType nType);
-	
+
 	void Reload();
 
-	void RespawnMyCharacter();	// 혼자테스트할때 클릭하면 되살아난다.
+	void RespawnMyCharacter();
 
-	void ReserveLeaveStage();	// 스테이지에서 나갈때 일정시간 흐른뒤 나간다
-	void ReserveLeaveBattle();	// 대기방으로 나갈떄 일정시간 흐른뒤 나간다
+	void ReserveLeaveStage();
+	void ReserveLeaveBattle();
 	void FinishGame(void);
 	bool IsLeaveBattleReserved() { return m_bLeaveBattleReserved; }
 
-	void ReserveResetApp(bool b)	{ m_bReserveResetApp = b; }
-	bool IsReservedResetApp()		{ return m_bReserveResetApp; }
+	void ReserveResetApp(bool b) { m_bReserveResetApp = b; }
+	bool IsReservedResetApp() { return m_bReserveResetApp; }
 
 	void SaveScreenShot();
 
-	void ShowMessage(const char* szText, MListener* pCustomListenter=NULL, int nMessageID=0);
-	void ShowConfirmMessage(const char* szText, MListener* pCustomListenter=NULL);
+	void ShowMessage(const char* szText, MListener* pCustomListenter = NULL, int nMessageID = 0);
+	void ShowConfirmMessage(const char* szText, MListener* pCustomListenter = NULL);
 	void ShowMessage(int nMessageID);
 	void ShowErrorMessage(int nErrorID);
 	void ShowErrorMessage(const char* szErrorMsg, int nErrorID);
-	
+
 	void ShowInterface(bool bShowInterface);
 	bool IsShowInterface() { return m_bShowInterface; }
 
@@ -339,19 +313,14 @@ public:
 
 	void OnCharSelect(void);
 
-
-	// GunzState에 따른 Create/Destroy 핸들러
 	bool OnGameCreate(void);
 	void OnGameDestroy(void);
 	void OnGameUpdate(float fElapsed);
 
-
-	// 로비 UI 설정
-//	void SetupPlayerListButton(int index=-1);
-//	void SetupPlayerListTab();
-	void OnArrangedTeamGameUI(bool bFinding);
+	void OnArrangedTeamGameUI(bool bFinding, bool isvote = false);
 	void OnDuelTournamentGameUI(bool bWaiting);
-
+	void OnPlayerWarsShowerOpen(bool bShowMe);
+	void OnPlayerWarsShower(bool bShowMe);
 	void InitLobbyUIByChannelType();
 
 	void InitLadderUI(bool bLadderEnable);
@@ -359,9 +328,6 @@ public:
 	void InitDuelTournamentLobbyUI(bool bEnableDuelTournamentUI);
 	void InitChannelFrame(MCHANNEL_TYPE nChannelType);
 
-//	bool InitLocatorList( MZFileSystem* pFileSystem, const char* pszLocatorList );
-
-	// 스테이지 UI 설정
 	void SetMapThumbnail(const char* szMapName);
 	void ClearMapThumbnail();
 	void SerializeStageInterface();
@@ -370,21 +336,15 @@ public:
 	void EnableStageInterface(bool bEnable);
 	void ShowPrivateStageJoinFrame(const char* szStageName);
 
-	void SetRoomNoLight( int d );
+	void SetRoomNoLight(int d);
 
+	void ShowEquipmentDialog(bool bShow = true);
+	void ShowShopDialog(bool bShow = true);
 
-	// 상점및 장비
-	void ShowEquipmentDialog(bool bShow=true);
-	void ShowShopDialog(bool bShow=true);
+	void ChangeSelectedChar(int nNum);
 
-	// 캐릭터 선택
-	void ChangeSelectedChar( int nNum);
-
-
-	// 리플레이
-	void ShowReplayDialog( bool bShow);
-	void ViewReplay( void);
-
+	void ShowReplayDialog(bool bShow);
+	void ViewReplay(void);
 
 	void ShowMenu(bool bEnable);
 	void Show112Dialog(bool bShow);
@@ -399,35 +359,28 @@ public:
 
 public:
 
-
-	// 클랜생성이나 래더팀게임초대를 받을수 있는 상태인가 ?
 	bool IsReadyToPropose();
 
-	// 리플레이
 	void OnReplay();
 
-	// XTrap
-	void OnRequestXTrapSeedKey(unsigned char *pComBuf);			// add sgk 0402
+	void OnRequestXTrapSeedKey(unsigned char* pComBuf);
 
-	void OnDisconnectMsg( const DWORD dwMsgID );
-	void ShowDisconnectMsg( DWORD errStrID, DWORD delayTime );
+	void OnDisconnectMsg(const DWORD dwMsgID);
+	void ShowDisconnectMsg(DWORD errStrID, DWORD delayTime);
 
-	void OnAnnounceDeleteClan( const string& strAnnounce );
+	void OnAnnounceDeleteClan(const string& strAnnounce);
 
-	// 퀘스트 아이템 아이콘 비트맵 얻기(쓰는덴 많은데 마땅히 둘데가 없어서... -_-;)
-	MBitmap* GetQuestItemIcon( int nItemID, bool bSmallIcon);
+	MBitmap* GetQuestItemIcon(int nItemID, bool bSmallIcon);
 
-	// ZActionKey 입력중 GlobalEvent 무력화
 	static bool CheckSkipGlobalEvent() { return m_bSkipGlobalEvent; }
 	void SetSkipGlobalEvent(bool bSkip) { m_bSkipGlobalEvent = bSkip; }
 
-	// 보이스 사운드 출력
 	void OnVoiceSound();
-	void PlayVoiceSound( char* pszSoundName, DWORD time=0);
+	void PlayVoiceSound(char* pszSoundName, DWORD time = 0);
 
 	void SetAgentPing(DWORD nIP, DWORD nTimeStamp);
 
-	void OnRequestGameguardAuth( const DWORD dwIndex, const DWORD dwValue1, const DWORD dwValue2, const DWORD dwValue3 );
+	void OnRequestGameguardAuth(const DWORD dwIndex, const DWORD dwValue1, const DWORD dwValue2, const DWORD dwValue3);
 
 	void SetErrMaxPlayerDelayTime(DWORD dDelayTime) { m_dErrMaxPalyerDelayTime = dDelayTime; }
 	DWORD GetErrMaxPlayerDelayTime() { return m_dErrMaxPalyerDelayTime; }
@@ -436,47 +389,43 @@ public:
 
 	virtual void MultiplySize(float byIDLWidth, float byIDLHeight, float byCurrWidth, float byCurrHeight);
 
-// _DUELTOURNAMENT
 	void SetDuelTournamentCharacterList(MDUELTOURNAMENTTYPE nType, const vector<DTPlayerInfo>& vecDTPlayerInfo);
-	const vector<DTPlayerInfo>& GetVectorDTPlayerInfo()	{ return m_vecDTPlayerInfo; }
-	void SetDuelTournamantType(MDUELTOURNAMENTTYPE eType)		{ m_eDuelTournamentType = eType; }
-	MDUELTOURNAMENTTYPE GetDuelTournamentType()		{ return m_eDuelTournamentType; }
+	const vector<DTPlayerInfo>& GetVectorDTPlayerInfo() { return m_vecDTPlayerInfo; }
+	void SetDuelTournamantType(MDUELTOURNAMENTTYPE eType) { m_eDuelTournamentType = eType; }
+	MDUELTOURNAMENTTYPE GetDuelTournamentType() { return m_eDuelTournamentType; }
 
 	void UpdateDuelTournamantMyCharInfoUI();
 	void UpdateDuelTournamantMyCharInfoPreviousUI();
 
-// 릴레이맵
-	bool GetIsGameFinishLeaveBattle()			{ return m_bGameFinishLeaveBattle; }
+	bool GetIsGameFinishLeaveBattle() { return m_bGameFinishLeaveBattle; }
 
-	// 바깥에서 얻을만한 인터페이스들 (__forceinline 는 dll-injection 핵 방해를 위한 것)
-	__forceinline ZGameClient* GetGameClient(void)			{ return m_spGameClient; }
-	__forceinline ZGame* GetGame(void)						{ return m_pGame; }
+	__forceinline ZGameClient* GetGameClient(void) { return m_spGameClient; }
+	__forceinline ZGame* GetGame(void) { return m_pGame; }
 	__forceinline ZCombatInterface* GetCombatInterface(void) { return m_pCombatInterface; }
 	__forceinline ZShopEquipInterface* GetShopEquipInterface(void) { return m_pShopEquipInterface; }
-	__forceinline ZCamera* GetCamera()						{ return &m_Camera; }
-	__forceinline ZCharacter*	GetMyCharacter()			{ return (ZCharacter*)m_pMyCharacter; }
-	__forceinline ZBaseQuest* GetQuest();					// 퀘스트/서바이벌 중 현재 모드에 맞는 걸 반환
-	__forceinline ZQuest* GetQuestExactly()					{ return &m_Quest; }		// 퀘스트 객체를 반환
-	__forceinline ZSurvival* GetSurvivalExactly()			{ return &m_Survival; }		// 서바이벌 객체를 반환
-	__forceinline ZChat* GetChat()							{ return &m_Chat; }
-	__forceinline ZGameTypeManager* GetGameTypeManager()		{ return &m_GameTypeManager; }
-
+	__forceinline ZCamera* GetCamera() { return &m_Camera; }
+	__forceinline ZCharacter* GetMyCharacter() { return (ZCharacter*)m_pMyCharacter; }
+	__forceinline ZBaseQuest* GetQuest();
+	__forceinline ZQuest* GetQuestExactly() { return &m_Quest; }
+	__forceinline ZSurvival* GetSurvivalExactly() { return &m_Survival; }
+	__forceinline ZChat* GetChat() { return &m_Chat; }
+	__forceinline ZGameTypeManager* GetGameTypeManager() { return &m_GameTypeManager; }
 
 	ZScreenEffectManager* GetScreenEffectManager() { return m_pScreenEffectManager; }
-	ZEffectManager* GetEffectManager()			{ return m_pEffectManager; }
-	void SetGameClient(ZGameClient* pGameClient){ m_spGameClient = pGameClient; }
-	
-	ZCharacterSelectView* GetCharacterSelectView() { return m_pCharacterSelectView; }
-	ZIDLResource* GetIDLResource(void)			{ return &m_IDLResource; }
-	ZPlayerMenu* GetPlayerMenu()				{ return m_pPlayerMenu; }
-	ZMiniMap*	GetMiniMap()					{ return m_pMiniMap; }
-	
-	ZTips* GetTips()							{ return &m_Tips; }
-	ZBandiCapturer*	GetBandiCapturer()			{ return m_Capture; }
-	ZCombatMenu*	 GetCombatMenu()			{ return &m_CombatMenu; }
-	ZMonsterBookInterface* GetMonsterBookInterface()	{ return m_pMonsterBookInterface; }
+	ZEffectManager* GetEffectManager() { return m_pEffectManager; }
+	void SetGameClient(ZGameClient* pGameClient) { m_spGameClient = pGameClient; }
 
-	ZBitmapManager<int>* GetItemThumbnailMgr()		{ return &m_ItemThumbnailMgr; }
+	ZCharacterSelectView* GetCharacterSelectView() { return m_pCharacterSelectView; }
+	ZIDLResource* GetIDLResource(void) { return &m_IDLResource; }
+	ZPlayerMenu* GetPlayerMenu() { return m_pPlayerMenu; }
+	ZMiniMap* GetMiniMap() { return m_pMiniMap; }
+
+	ZTips* GetTips() { return &m_Tips; }
+	ZBandiCapturer* GetBandiCapturer() { return m_Capture; }
+	ZCombatMenu* GetCombatMenu() { return &m_CombatMenu; }
+	ZMonsterBookInterface* GetMonsterBookInterface() { return m_pMonsterBookInterface; }
+
+	ZBitmapManager<int>* GetItemThumbnailMgr() { return &m_ItemThumbnailMgr; }
 };
 
 __forceinline ZBaseQuest* ZGameInterface::GetQuest()
@@ -485,16 +434,14 @@ __forceinline ZBaseQuest* ZGameInterface::GetQuest()
 	{
 		MMATCH_GAMETYPE gameType = ZGetGame()->GetMatch()->GetMatchType();
 
-		if (m_GameTypeManager.IsQuestOnly( gameType ))
+		if (m_GameTypeManager.IsQuestOnly(gameType))
 			return static_cast<ZBaseQuest*>(&m_Quest);
-		else if (m_GameTypeManager.IsSurvivalOnly( gameType ))
+		else if (m_GameTypeManager.IsSurvivalOnly(gameType))
 			return static_cast<ZBaseQuest*>(&m_Survival);
 	}
-	
-	//ASSERT(0);
+
 	return static_cast<ZBaseQuest*>(&m_Quest);
 }
-
 
 #define BEGIN_WIDGETLIST(_ITEM, _IDLRESPTR, _CLASS, _INSTANCE)								\
 {																							\
@@ -508,22 +455,17 @@ __forceinline ZBaseQuest* ZGameInterface::GetQuest()
 
 #define END_WIDGETLIST()		}}}
 
-
 #define DEFAULT_INTERFACE_SKIN "Default"
 
-
 #define WM_CHANGE_GAMESTATE		(WM_USER + 25)
-void ZChangeGameState(GunzState state);		/// 쓰레드에 안전하기 위해서는 만듦
-
-
-//void ZLoadBitmap(const char* szDir, const char* szFilter, bool bAddDirToAliasName = false);
+void ZChangeGameState(GunzState state);
 
 inline void GetDuelTournamentGradeIconFileName(char* out_sz, int grade)
 {
 	sprintf(out_sz, "dt_grade%d.png", grade);
 }
 
-char* GetItemSlotName( const char* szName, int nItem);
-bool SetWidgetToolTipText(char* szWidget,const char* szToolTipText, MAlignmentMode mam=MAM_LEFT|MAM_TOP);
+char* GetItemSlotName(const char* szName, int nItem);
+bool SetWidgetToolTipText(char* szWidget, const char* szToolTipText, MAlignmentMode mam = MAM_LEFT | MAM_TOP);
 
 #endif
