@@ -1,0 +1,526 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<XML ID="CombatInterface">
+	<Schema xmlns="MaietData" xmlns:dt="MaietDataTypes" />
+	
+	<LABEL item="CenterMessage">
+		<LABELLOOK>CenterMessageLabelLook</LABELLOOK>
+		<VISIBLE>false</VISIBLE>
+		<ALIGN>
+			<HALIGN>center</HALIGN>
+			<VALIGN>center</VALIGN>
+		</ALIGN>
+		<BOUNDS>
+			<X>0</X>
+			<Y>0</Y>
+			<W>600</W>
+			<H>50</H>
+		</BOUNDS>
+		<TEXT>No Message</TEXT>
+	</LABEL>
+
+	<LABEL item="Time">
+		<LABELLOOK>CenterMessageLabelLook</LABELLOOK>
+		<VISIBLE>false</VISIBLE>
+		<ALIGN>
+			<HALIGN>left</HALIGN>
+			<VALIGN>top</VALIGN>
+		</ALIGN>
+		<BOUNDS>
+			<X>0</X>
+			<Y>0</Y>
+			<W>600</W>
+			<H>50</H>
+		</BOUNDS>
+		<TEXT>No Message</TEXT>
+	</LABEL>
+
+<!-- ¸Þ´º -->
+
+	<FRAME item="CombatMenuFrame">
+		<FRAMELOOK>DefaultFrameLook</FRAMELOOK>
+		<BOUNDS>
+			<X>0</X>
+			<Y>0</Y>
+			<W>260</W>
+			<H>247</H>
+		</BOUNDS>
+		<ALIGN>
+			<HALIGN>center</HALIGN>
+			<VALIGN>center</VALIGN>
+		</ALIGN>
+		<RESIZABLE>false</RESIZABLE>
+		<MOVABLE>true</MOVABLE>
+		<VISIBLE>false</VISIBLE>
+		<FOCUSABLE>false</FOCUSABLE>
+		<TEXT>STR:UI_CI_03</TEXT> <!-- °ÔÀÓ ¸Þ´º -->
+	</FRAME>
+
+	<BUTTON item="OptionFrame" parent="CombatMenuFrame">
+		<BUTTONLOOK>DefaultButtonLook</BUTTONLOOK>
+		<ANCHORS>
+			<LEFT>true</LEFT>
+			<TOP>true</TOP>
+			<RIGHT>true</RIGHT>
+			<BOTTOM>true</BOTTOM>
+		</ANCHORS>
+		<BOUNDS>
+			<X>19</X>
+			<Y>46</Y>
+			<W>222</W>
+			<H>32</H>
+		</BOUNDS>
+		<TEXT>STR:UI_CI_04</TEXT> <!-- ¿É¼Ç(&amp;O) -->
+	</BUTTON>
+	<BUTTON item="CombatMenuClose" parent="CombatMenuFrame">
+		<BUTTONLOOK>DefaultButtonLook</BUTTONLOOK>
+		<ANCHORS>
+			<LEFT>true</LEFT>
+			<TOP>true</TOP>
+			<RIGHT>true</RIGHT>
+			<BOTTOM>true</BOTTOM>
+		</ANCHORS>
+		<BOUNDS>
+			<X>19</X>
+			<Y>83</Y>
+			<W>222</W>
+			<H>32</H>
+		</BOUNDS>
+		<TEXT>STR:UI_CI_05</TEXT> <!-- °ÔÀÓÀ¸·Î µ¹¾Æ°¡±â(&amp;X) -->
+		<DEFAULTKEY>ESC</DEFAULTKEY>
+	</BUTTON>
+	<BUTTON item="BattleExit" parent="CombatMenuFrame">
+		<BUTTONLOOK>DefaultButtonLook</BUTTONLOOK>
+		<ANCHORS>
+			<LEFT>true</LEFT>
+			<TOP>true</TOP>
+			<RIGHT>true</RIGHT>
+			<BOTTOM>true</BOTTOM>
+		</ANCHORS>
+		<BOUNDS>
+			<X>19</X>
+			<Y>120</Y>
+			<W>222</W>
+			<H>32</H>
+		</BOUNDS>
+		<TEXT>STR:UI_CI_06</TEXT> <!-- ´ë±â¹æÀ¸·Î ³ª°¡±â(&amp;R) -->
+		<CONFIRMLOOK>DefaultFrameLook</CONFIRMLOOK>
+	</BUTTON>
+	<BUTTON item="StageExit" parent="CombatMenuFrame">
+		<BUTTONLOOK>DefaultButtonLook</BUTTONLOOK>
+		<ANCHORS>
+			<LEFT>true</LEFT>
+			<TOP>true</TOP>
+			<RIGHT>true</RIGHT>
+			<BOTTOM>true</BOTTOM>
+		</ANCHORS>
+		<BOUNDS>
+			<X>19</X>
+			<Y>157</Y>
+			<W>222</W>
+			<H>32</H>
+		</BOUNDS>
+		<TEXT>STR:UI_CI_07</TEXT> <!-- °ÔÀÓ¿¡¼­ ³ª°¡±â(&amp;L) -->
+		<CONFIRMMESSAGE>STR:UI_CI_08</CONFIRMMESSAGE> <!-- °ÔÀÓ¿¡¼­ ³ª°¡½Ã°Ú½À´Ï±î? -->
+		<CONFIRMLOOK>DefaultFrameLook</CONFIRMLOOK>
+	</BUTTON>
+	<BUTTON item="Exit" parent="CombatMenuFrame">
+		<BUTTONLOOK>DefaultButtonLook</BUTTONLOOK>
+		<ANCHORS>
+			<LEFT>true</LEFT>
+			<TOP>true</TOP>
+			<RIGHT>true</RIGHT>
+			<BOTTOM>true</BOTTOM>
+		</ANCHORS>
+		<BOUNDS>
+			<X>19</X>
+			<Y>194</Y>
+			<W>222</W>
+			<H>32</H>
+		</BOUNDS>
+		<TEXT>STR:UI_CI_09</TEXT> <!-- ÇÁ·Î±×·¥ Á¾·á(&amp;Q) -->
+		<CONFIRMMESSAGE>STR:UI_CI_10</CONFIRMMESSAGE> <!-- GUNZ¸¦ Á¾·áÇÏ½Ã°Ú½À´Ï±î? -->
+		<CONFIRMLOOK>DefaultFrameLook</CONFIRMLOOK>
+	</BUTTON>
+
+	<!-- ÄÞº¸ µîÀÇ ¸Þ¼¼Áö -->
+
+	<LABEL item="CombatEffectMsgLabel">
+		<LABELLOOK>HPAPLabelLook</LABELLOOK>
+		<ANCHORS>
+			<LEFT>true</LEFT>
+			<TOP>true</TOP>
+			<RIGHT>false</RIGHT>
+			<BOTTOM>false</BOTTOM>
+		</ANCHORS>
+		<BOUNDS>
+			<X>30</X>
+			<Y>75</Y>
+			<W>260</W>
+			<H>30</H>
+		</BOUNDS>
+		<TEXT></TEXT>
+		<VISIBLE>false</VISIBLE>
+	</LABEL>
+	
+	<!-- ZBMNUMLABEL : Å¬·£ÀüÀÏ¶§´Â Å¬·£Á¤º¸ Ç¥½Ã -->
+	<FRAME item="CombatTDMInfo">
+		<FRAMELOOK>NullFrameLook</FRAMELOOK>
+		<BOUNDS>
+			<X>0</X>
+			<Y>0</Y>
+			<W>800</W>
+			<H>600</H>
+		</BOUNDS>
+		<TITLEBAR>false</TITLEBAR>
+		<RESIZABLE>false</RESIZABLE>
+		<FOCUSABLE>false</FOCUSABLE>
+		<VISIBLE>false</VISIBLE>
+	</FRAME>
+	
+	<PICTURE item ="TDM_ScoreboardBG" parent="CombatTDMInfo">
+		<BOUNDS>
+			<X>276</X>
+			<Y>0</Y>
+			<W>248</W>
+			<H>49</H>
+		</BOUNDS>
+		<STRETCH/>
+		<BITMAP>team_scorebg.tga</BITMAP>
+	</PICTURE>
+
+	<PICTURE item="TDM_RedWin" parent="CombatTDMInfo">
+		<BOUNDS>
+			<X>291</X>
+			<Y>11</Y>
+			<W>72</W>
+			<H>21</H>
+		</BOUNDS>
+		<STRETCH/>
+		<BITMAP>team_score_red.tga</BITMAP>
+	</PICTURE>
+
+	<PICTURE item="TDM_BlueWin" parent="CombatTDMInfo">
+		<BOUNDS>
+			<X>437</X>
+			<Y>11</Y>
+			<W>72</W>
+			<H>21</H>
+		</BOUNDS>
+		<STRETCH/>
+		<BITMAP>team_score_blue.tga</BITMAP>
+	</PICTURE>
+
+	<ZBMNUMLABEL item="TDM_Score_Red" parent="CombatTDMInfo">
+		<BOUNDS>
+			<X>291</X>
+			<Y>5</Y>
+			<W>72</W>
+			<H>32</H>
+		</BOUNDS>
+		<BITMAP>grp_num.tga</BITMAP>
+		<FONTSIZE>
+			<W>32</W>
+			<H>32</H>
+		</FONTSIZE>
+	</ZBMNUMLABEL>
+	
+	<ZBMNUMLABEL item="TDM_Score_Blue" parent="CombatTDMInfo">
+		<BOUNDS>
+			<X>437</X>
+			<Y>5</Y>
+			<W>72</W>
+			<H>32</H>
+		</BOUNDS>
+		<BITMAP>grp_num.tga</BITMAP>
+		<FONTSIZE>
+			<W>32</W>
+			<H>32</H>
+		</FONTSIZE>
+	</ZBMNUMLABEL>
+
+	<ZBMNUMLABEL item="TDM_Score_Max" parent="CombatTDMInfo">
+		<BOUNDS>
+			<X>360</X>
+			<Y>12</Y>
+			<W>80</W>
+			<H>32</H>
+		</BOUNDS>
+		<BITMAP>grp_num.tga</BITMAP>
+		<FONTSIZE>
+			<W>32</W>
+			<H>32</H>
+		</FONTSIZE>
+	</ZBMNUMLABEL>
+	
+	<PICTURE item ="TDM_Scoreboard" parent="CombatTDMInfo">
+		<BOUNDS>
+			<X>276</X>
+			<Y>0</Y>
+			<W>248</W>
+			<H>49</H>
+		</BOUNDS>
+		<STRETCH/>
+		<BITMAP>team_score.tga</BITMAP>
+	</PICTURE>
+
+<!-- Nice ¾Ö´Ï¸ÞÀÌ¼Ç -->
+<!--
+	<ANIMATIONTEMPLATE item="CombatNiceAnimTemplate">
+		<DELAY>100</DELAY>
+		<BITMAP>nice01.png</BITMAP>
+		<BITMAP>nice02.png</BITMAP>
+	</ANIMATIONTEMPLATE>
+	<ANIMATION item="CombatNice">
+		<PLAYMODE>repetition</PLAYMODE>
+		<ANIMTEMPLATE>CombatNiceAnimTemplate</ANIMTEMPLATE>
+		<BOUNDS>
+			<X>30</X>
+			<Y>75</Y>
+			<W>128</W>
+			<H>64</H>
+		</BOUNDS>
+		<VISIBLE>false</VISIBLE>
+	</ANIMATION>
+-->
+<!-- ¿ÉÁ®¹ö Á¤º¸ -->
+<!--
+	<LABEL item="ObserverInfoLabel">
+		<LABELLOOK>HPAPLabelLook</LABELLOOK>
+		<ALIGN>
+			<HALIGN>center</HALIGN>
+		</ALIGN>
+		<BOUNDS>
+			<X>0</X>
+			<Y>50</Y>
+			<W>600</W>
+			<H>50</H>
+		</BOUNDS>
+		<TEXT></TEXT>
+		<VISIBLE>false</VISIBLE>
+	</LABEL>
+-->
+
+	<!-- Ã§¸°Áö Äù½ºÆ® Á¤º¸ -->
+	<FRAME item="CombatChallQuestInfo">
+		<FRAMELOOK>NullFrameLook</FRAMELOOK>
+		<BOUNDS>
+			<X>0</X>
+			<Y>0</Y>
+			<W>800</W>
+			<H>600</H>
+		</BOUNDS>
+		<TITLEBAR>false</TITLEBAR>
+		<RESIZABLE>false</RESIZABLE>
+		<FOCUSABLE>false</FOCUSABLE>
+		<VISIBLE>false</VISIBLE>
+	</FRAME>
+<!-->
+	<ZBMNUMLABEL item="CQ_ElapsedTime" parent="CombatChallQuestInfo">
+		<BOUNDS>
+			<X>300</X>
+			<Y>10</Y>
+			<W>200</W>
+			<H>36</H>
+		</BOUNDS>
+		<BITMAP>grp_num.tga</BITMAP>
+		<FONTSIZE>
+			<W>32</W>
+			<H>32</H>
+		</FONTSIZE>
+	</ZBMNUMLABEL>
+<!-->
+	
+	<!-- Label : ¶ó¿îµå ÁøÇàµµ -->
+<!-->
+	<LABEL item="CQ_RoundProgress" parent="CombatChallQuestInfo">
+		<FONT>FONTa12_O2Wht</FONT>
+		<BOUNDS>
+			<X>300</X>
+			<Y>46</Y>
+			<W>200</W>
+			<H>36</H>
+		</BOUNDS>
+		<TEXT></TEXT>
+	
+	</LABEL>
+<!-->
+	
+	<ZBMNUMLABEL item="CQ_ElapsedTime" parent="CombatChallQuestInfo">
+		<BOUNDS>
+			<X>340</X>
+			<Y>60</Y>
+			<W>116</W>
+			<H>32</H>
+		</BOUNDS>
+		<BITMAP>Challenge_TimeNum.tga</BITMAP>
+		<FONTSIZE>
+			<W>64</W>
+			<H>64</H>
+		</FONTSIZE>
+	</ZBMNUMLABEL>
+	
+	<ZBMNUMLABEL item="CQ_RoundProgress" parent="CombatChallQuestInfo">
+		<BOUNDS>
+			<X>440</X>
+			<Y>20</Y>
+			<W>64</W>
+			<H>32</H>
+		</BOUNDS>
+		<BITMAP>Challenge_RoundNum.tga</BITMAP>
+		<FONTSIZE>
+			<W>21</W>
+			<H>32</H>
+		</FONTSIZE>
+	</ZBMNUMLABEL>
+
+	<PICTURE item ="CQ_Round" parent="CombatChallQuestInfo">
+		<BOUNDS>
+			<X>298</X>
+			<Y>20</Y>
+			<W>127</W>
+			<H>32</H>
+		</BOUNDS>
+		<STRETCH/>
+		<BITMAP>Challenge_Round.tga</BITMAP>
+	</PICTURE>	
+	
+	<PICTURE item ="CQ_FadeBG" parent="CombatChallQuestInfo">
+		<BOUNDS>
+			<X>0</X>
+			<Y>0</Y>
+			<W>800</W>
+			<H>600</H>
+		</BOUNDS>
+		<STRETCH/>
+		<BITMAP>fade.tga</BITMAP>
+	</PICTURE>	
+	
+	<LABEL item="CQ_ObserverDescription" parent="CombatChallQuestInfo">
+		<FONT>FONTa12_O2Wht</FONT>
+		<BOUNDS>
+			<X>300</X>
+			<Y>540</Y>
+			<W>300</W>
+			<H>36</H>
+		</BOUNDS>
+		<TEXT>STR:UI_COMBAT_CQI_01</TEXT>
+	</LABEL>
+	
+	<FRAME item="CombatChatFrame">
+		<FRAMELOOK>ChatFrameLook</FRAMELOOK>
+		<BOUNDS>
+			<X>10</X>
+			<Y>350</Y>
+			<W>500</W>
+			<H>240</H>
+		</BOUNDS>
+		<ANCHORS>
+			<LEFT>TRUE</LEFT>
+			<TOP>FALSE</TOP>
+			<RIGHT>FALSE</RIGHT>
+			<BOTTOM>TRUE</BOTTOM>
+		</ANCHORS>
+	</FRAME>
+	<!--
+	<LISTBOX item="CombatChatOutput" parent="CombatChatFrame">
+		<LISTBOXLOOK>NullListBoxLook</LISTBOXLOOK>
+		<ANCHORS>
+			<LEFT>true</LEFT>
+			<TOP>true</TOP>
+			<RIGHT>true</RIGHT>
+			<BOTTOM>true</BOTTOM>
+		</ANCHORS>
+		<BOUNDS>
+			<X>7</X>
+			<Y>22</Y>
+			<W>440</W>
+			<H>118</H>
+		</BOUNDS>
+		<SELECTED>false</SELECTED>
+		<FOCUSABLE>false</FOCUSABLE>
+		<ITEMTEXTMULTILINE/>
+		<NULLFRAME/>
+	</LISTBOX>
+	-->
+	
+	
+	<TEXTAREACHAT item = "CombatChatOutput" parent = "CombatChatFrame">
+		<FONT>FONTa9</FONT>
+		<ANCHORS>
+			<LEFT>true</LEFT>
+			<TOP>true</TOP>
+			<RIGHT>true</RIGHT>
+			<BOTTOM>true</BOTTOM>
+		</ANCHORS>
+		<BOUNDS>
+			<X>7</X>
+			<Y>112</Y>
+			<W>480</W>
+			<H>118</H>
+		</BOUNDS>
+		<MOVABLE>false</MOVABLE>
+		<EDITABLE>false</EDITABLE>
+		<MAXLENGTH>4096</MAXLENGTH>
+		<INDENTATION>50</INDENTATION>
+		<SCROLLBAR>false</SCROLLBAR>
+	</TEXTAREACHAT>
+
+	<TEXTAREA item = "CombatChatOutputAdmin" parent = "CombatChatFrame">
+		<FONT>FONTa10b</FONT>
+		<ANCHORS>
+			<LEFT>true</LEFT>
+			<TOP>true</TOP>
+			<RIGHT>true</RIGHT>
+			<BOTTOM>true</BOTTOM>
+		</ANCHORS>
+		<BOUNDS>
+			<X>7</X>
+			<Y>0</Y>
+			<W>480</W>
+			<H>118</H>
+		</BOUNDS>
+		<MOVABLE>false</MOVABLE>
+		<EDITABLE>false</EDITABLE>
+		<MAXLENGTH>4096</MAXLENGTH>
+		<INDENTATION>50</INDENTATION>
+		<SCROLLBAR>false</SCROLLBAR>
+	</TEXTAREA>
+	
+	<LABEL item="CombatChatModeToAll" parent="CombatChatFrame">
+		<LABELLOOK>HPAPLabelLook</LABELLOOK>
+		<BOUNDS>
+			<X>5</X>
+			<Y>208</Y>
+			<W>60</W>
+			<H>30</H>
+		</BOUNDS>
+		<TEXT>STR:UI_CI_01</TEXT> <!-- Ù°ÖŽß¡Ñ”: -->
+	</LABEL>
+	<LABEL item="CombatChatModeToTeam" parent="CombatChatFrame">
+		<LABELLOOK>HPAPLabelLook</LABELLOOK>
+		<BOUNDS>
+			<X>5</X>
+			<Y>208</Y>
+			<W>60</W>
+			<H>30</H>
+		</BOUNDS>
+		<TEXT>STR:UI_CI_02</TEXT> <!-- Ç€à ¸ß¡Ñ”: -->
+	</LABEL>
+	<EDIT item="CombatChatInput" parent="CombatChatFrame">
+		<EDITLOOK>NullEditLook</EDITLOOK>
+		<ANCHORS>
+			<LEFT>true</LEFT>
+			<TOP>false</TOP>
+			<RIGHT>true</RIGHT>
+			<BOTTOM>true</BOTTOM>
+		</ANCHORS>
+		<BOUNDS>
+			<X>67</X>
+			<Y>215</Y>
+			<W>336</W>
+			<H>18</H>
+		</BOUNDS>
+	</EDIT>
+	
+	<INCLUDE>CombatInterface_DuelTournament.xml</INCLUDE>
+</XML>
