@@ -1,0 +1,10 @@
+﻿<?xml version="1.0" encoding="UTF-8" ?>
+<XML id="channel">
+	<DEFAULTCHANNELNAME name="STR:CHANNEL_DEFAULT_NAME"/>
+	<DEFAULTRULENAME name="elite"/>
+	<CHANNEL name="Advanced's World" maxplayers="500" rule="elite" />
+	<CHANNEL name="Advanced's Newbies [Lvl 1-50]" maxplayers="250" rule="elite" levelmin='1' levelmax='50' />
+	<CHANNEL name="Advanced's Pros [Lvl 51-99]" maxplayers="250" rule="elite" levelmin='51' levelmax='99' />
+	<CHANNEL name="Advanced's Events" maxplayers="250" rule="set1" IsEvent="true"/>
+	<CHANNEL name="Advanced's Duel Tournament" maxplayers="250" rule="dueltournament" IsDuelTournament="true"/>
+</XML>
