@@ -563,9 +563,6 @@ void ZApplication::OnDestroy()
 
 	RGetParticleSystem()->Destroy();
 
-	// Custom: Destroy FS
-	m_FileSystem.Destroy();
-
 	mlog("destroy game application done.\n");
 }
 
