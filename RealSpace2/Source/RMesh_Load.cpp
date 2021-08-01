@@ -749,8 +749,6 @@ bool RMesh::ReadNewElu(MZFile* mzf, const char* fname) {
 			MZF_READ_XOR(&count_opa_name, 2);
 			MZF_READ_XOR(node->m_opa_name, count_opa_name);
 
-			// Custom : Fix NewElu material
-
 			char twoside = 0;
 			MZF_READ_XOR(&twoside, sizeof(char));
 			node->m_bTwoSided = (twoside < 0) ? false : true;

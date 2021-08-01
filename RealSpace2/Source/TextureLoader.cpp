@@ -95,7 +95,8 @@ static D3DPtr<IDirect3DTexture9> LoadSTB(const void* data, size_t size,
 	float sample_ratio, TextureInfo& info)
 {
 	struct free_deleter {
-		void operator()(void* p) const { free(p); } };
+		void operator()(void* p) const { free(p); }
+	};
 	using c_ptr = std::unique_ptr<u8[], free_deleter>;
 
 	D3DPtr<IDirect3DTexture9> ret;
@@ -218,7 +219,7 @@ static bool is_tga(const void* data, size_t size)
 		(header.imagetype >= 1 && header.imagetype <= 3) ||
 		(header.imagetype >= 9 && header.imagetype <= 11)) &&
 		(header.bitsperpixel == 8 || header.bitsperpixel == 24 ||
-		header.bitsperpixel == 32);
+			header.bitsperpixel == 32);
 }
 
 enum class FileType
@@ -285,27 +286,27 @@ static FileType GetFileType(const void* data, size_t size, const char* ext)
 
 namespace RealSpace2
 {
-D3DPtr<IDirect3DTexture9> LoadTexture(const void * data, size_t size,
-	float sample_ratio,
-	TextureInfo& info, const char * ext)
-{
-	auto ft = GetFileType(data, size, ext);
-	if (ft == FileType::Unknown)
-		return nullptr;
-
-	switch (ft)
+	D3DPtr<IDirect3DTexture9> LoadTexture(const void* data, size_t size,
+		float sample_ratio,
+		TextureInfo& info, const char* ext)
 	{
-	case FileType::BMP:
-	case FileType::JPG:
-	case FileType::PNG:
-	case FileType::TGA:
-		return LoadSTB(data, size, sample_ratio, info);
-		break;
-	case FileType::DDS:
-		return LoadDDS(data, size, sample_ratio, info);
-		break;
-	};
+		auto ft = GetFileType(data, size, ext);
+		if (ft == FileType::Unknown)
+			return nullptr;
 
-	return nullptr;
-}
+		switch (ft)
+		{
+		case FileType::BMP:
+		case FileType::JPG:
+		case FileType::PNG:
+		case FileType::TGA:
+			return LoadSTB(data, size, sample_ratio, info);
+			break;
+		case FileType::DDS:
+			return LoadDDS(data, size, sample_ratio, info);
+			break;
+		};
+
+		return nullptr;
+	}
 }

@@ -1,11 +1,10 @@
-#ifndef _RAnimationDef_h
-#define _RAnimationDef_h
+#pragma once
 
 #include "RMeshUtil.h"
 #include <vector>
 #include <string>
 
-enum AnimationType{
+enum AnimationType {
 	RAniType_TransForm = 0,
 	RAniType_Vertex,
 	RAniType_Bone,
@@ -20,11 +19,7 @@ enum AnimationLoopType {
 	RAniLoopType_OnceLowerBody,
 };
 
-////////////////////////////////////////////////
-// 캐릭터에 속한 에니메이션 리스트들을 관리
-
 enum AnimationFileType {
-
 	RAniFileType_None = 0,
 
 	RAniFileType_Idle,
@@ -89,6 +84,3 @@ enum AnimationFileType {
 
 	RAniFileType_End
 };
-
-
-#endif//_RAnimationDef_h
