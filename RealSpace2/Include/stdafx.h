@@ -5,6 +5,7 @@
 #define POINTER_64 __ptr64
 
 #include <winsock2.h>
+#include <WinUser.h>
 #include <crtdbg.h>
 #include <mbstring.h>
 #include <tchar.h>

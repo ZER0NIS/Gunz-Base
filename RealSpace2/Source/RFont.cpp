@@ -79,7 +79,6 @@ bool RFontTexture::Create()
 }
 
 void RFontTexture::Destroy() {
-
 	if (m_hDC) {
 		SelectObject(m_hDC, m_hPrevBitmap);
 		if (m_hbmBitmap)
@@ -107,7 +106,6 @@ void BlitRect(BYTE* pDest, int x1, int y1, int x2, int y2, int w, int h, u32* pB
 		pDestTemp = (u32*)(pDest + (y * Pitch));
 		bx = 0;
 		for (int x = x1; x < x2; x++) {
-
 			u32 dwPixel = pBitmapBits[(w * by) + (bx)];
 			if (dwPixel & 0x00ffffff)
 				dwPixel |= 0xff000000;
@@ -119,7 +117,6 @@ void BlitRect(BYTE* pDest, int x1, int y1, int x2, int y2, int w, int h, u32* pB
 		by++;
 	}
 }
-
 
 bool RFontTexture::UploadTexture(RCHARINFO* pCharInfo, u32* pBitmapBits, int w, int h)
 {
@@ -224,7 +221,7 @@ bool RFontTexture::MakeFontBitmap(HFONT hFont, RCHARINFO* pInfo, const wchar_t* 
 		if ((chChar >= '0') && (chChar <= '9'))
 			nWidth++;
 	}
-#else	
+#else
 
 	SetTextColor(m_hDC, RGB(255, 255, 255));
 	SetBkColor(m_hDC, 0x00000000);
@@ -238,7 +235,6 @@ bool RFontTexture::MakeFontBitmap(HFONT hFont, RCHARINFO* pInfo, const wchar_t* 
 	SelectObject(m_hDC, hPrevFont);
 
 	return bRet;
-
 }
 
 int RFontTexture::GetCharWidth(HFONT hFont, const char* szChar)
@@ -435,7 +431,6 @@ bool RFont::EndFont()
 		g_nFontCount = 0;
 	}
 
-
 	RGetDevice()->SetSamplerState(0, D3DSAMP_MINFILTER, D3DTEXF_LINEAR);
 	RGetDevice()->SetSamplerState(0, D3DSAMP_MAGFILTER, D3DTEXF_LINEAR);
 
@@ -557,7 +552,6 @@ void RFont::DrawTextImpl(float x, float y, const BasicStringView<CharT>& Text,
 				x += min(int(pInfo->nWidth * fScale + 1), RFONT_CELL_SIZE);
 			else
 				x += (pInfo->nWidth * fScale);
-
 		}
 
 		p = pp;

@@ -490,7 +490,7 @@ int FindStringPos(char* str, char* word)
 				return i;
 			}
 		}
-}
+	}
 	return -1;
 }
 
@@ -543,19 +543,6 @@ long FAR PASCAL WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
 	switch (message)
 	{
-#ifdef LOCALE_JAPAN
-	case WM_COPYDATA:
-	{
-		ZBaseAuthInfo* pAuth = ZGetLocale()->GetAuthInfo();
-		if (((ZGameOnJPAuthInfo*)pAuth)->NewLogin(wParam, lParam))
-		{
-			MessageBox(g_hWnd, "Same id accessing from a different PC", NULL, MB_OK);
-			zexit(-1);
-		}
-	}
-	break;
-#endif
-
 	case WM_SYSCHAR:
 		if (wParam == VK_RETURN)
 		{
@@ -610,7 +597,7 @@ long FAR PASCAL WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 	}
 
 	return DefWindowProc(hWnd, message, wParam, lParam);
-	}
+}
 
 enum RBASE_FONT {
 	RBASE_FONT_GULIM = 0,
@@ -775,7 +762,7 @@ int PASCAL WinMain(HINSTANCE this_inst, HINSTANCE prev_inst, LPSTR cmdline, int 
 	{
 		MLog("main.cpp - Late string convert fale.\n");
 		return false;
-	}
+}
 
 	if (!InitializeNotify(ZApplication::GetFileSystem())) {
 		MLog("Check notify.xml\n");

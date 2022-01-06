@@ -1,9 +1,4 @@
-#ifndef _RMeshUtil_h
-#define _RMeshUtil_h
-
-//#if _MSC_VER > 1000
-//#pragma once
-//#endif // _MSC_VER > 1000
+#pragma once
 
 #pragma warning (disable : 4244)
 #pragma warning (disable : 4305)
@@ -16,10 +11,6 @@
 
 #include "RTypes.h"
 
-#define DEL(p)  { if(p) { delete (p);   (p)=NULL; } }
-#define DEL2(p) { if(p) { delete[] (p);   (p)=NULL; } }
-#define REL(p)	{ if(p != NULL) { (p)->Release(); (p)=NULL; }  }
-
 #define		MAX_NAME_LEN		40
 #define		MAX_PATH_NAME_LEN	256
 #define		MAX_ANI_KEY			100
@@ -29,11 +20,7 @@
 #ifndef USING_VERTEX_SHADER
 #define USING_VERTEX_SHADER
 #endif
-//*/
 using namespace std;
-
-/////////////////////////////////////////////////////
-// max plugins 관련 버전 관리..
 
 #define EXPORTER_MESH_VER1	0x00000011
 #define EXPORTER_MESH_VER2	0x00005001
@@ -47,7 +34,7 @@ using namespace std;
 #define EXPORTER_ANI_VER1	0x00000012
 #define EXPORTER_ANI_VER2	0x00001001
 #define EXPORTER_ANI_VER3	0x00001002
-#define EXPORTER_ANI_VER4	0x00001003	// 에니메이션의 회전값을 미리계산해서 넘김 : 로딩속도 개선
+#define EXPORTER_ANI_VER4	0x00001003
 
 #define EXPORTER_SIG		0x0107f060
 
@@ -66,100 +53,26 @@ typedef struct {
 	int		ani_type;
 } ex_ani_t;
 
-//#define _BLEND_ANIMATION 나중에 하자~
-
-// 모션 선택에 따른 기준..
-
-
 enum RWeaponMotionType {
-	eq_weapon_etc = 0,	// weapon single,double
+	eq_weapon_etc = 0,
 
 	eq_wd_katana,
-	eq_ws_pistol,		// 한손 무기는 권총뿐...
+	eq_ws_pistol,
 	eq_wd_pistol,
 	eq_wd_shotgun,
 	eq_wd_rifle,
 	eq_wd_grenade,
 	eq_ws_dagger,
 	eq_wd_item,
-	eq_wd_rlauncher,// eq_wd_rocket_launcher
-	eq_ws_smg,		// 10
-	eq_wd_smg,		// 11
-	eq_wd_sword,	// 12
-	eq_wd_blade,	// 13
-	eq_wd_dagger,	// 14
+	eq_wd_rlauncher,
+	eq_ws_smg,
+	eq_wd_smg,
+	eq_wd_sword,
+	eq_wd_blade,
+	eq_wd_dagger,
 
 	eq_weapon_end,
 };
-
-// 고유한 
-
-/*
-
-enum RWeaponType {
-
-	z_weapon_etc = 0,	// weapon single,double
-
-	z_wd_katana,		
-	z_ws_pistol,
-	z_wd_pistol,
-	z_wd_shotgun,
-	z_wd_machinegun,	// 5
-	z_wd_rifle,
-	z_wd_grenade,
-	z_wd_flashbang,
-	z_wd_smoke,
-	z_ws_dagger,
-	z_wd_medikit,
-	z_wd_repairkit,		// 12
-	z_wd_rlauncher,	
-	z_ws_smg,		
-	z_wd_smg,		
-	z_wd_sword,
-	z_wd_blade,			// 17
-	z_wd_dagger,
-
-	z_wd_snifer,
-
-	z_weapon_end,
-};
-
-*/
-
-/*
-
-Bip01
-Bip01 Head
-Bip01 HeadNub
-Bip01 L Calf
-Bip01 L Clavicle
-Bip01 L Finger0
-Bip01 L Finger0Nub
-Bip01 L Foot
-Bip01 L ForeArm
-Bip01 L Hand
-Bip01 L Thigh
-Bip01 L Toe0
-Bip01 L Toe0Nub
-Bip01 L UpperArm
-Bip01 Neck
-Bip01 Pelvis
-Bip01 R Calf
-Bip01 R Clavicle
-Bip01 R Finger0
-Bip01 R Finger0Nub
-Bip01 R Foot
-Bip01 R ForeArm
-Bip01 R Hand
-Bip01 R Thigh
-Bip01 R Toe0
-Bip01 R Toe0Nub
-Bip01 R UpperArm
-Bip01 Spine
-Bip01 Spine1
-Bip01 Spine2
-
-*/
 
 typedef enum _RMeshPartsPosInfoType {
 	eq_parts_pos_info_etc = 0,
@@ -197,17 +110,12 @@ typedef enum _RMeshPartsPosInfoType {
 	eq_parts_pos_info_RToe0Nub,
 	eq_parts_pos_info_RUpperArm,
 
-	// 위치 추가 더미들
-
-//	eq_parts_pos_info_Lesser_Healing,
-//	eq_parts_pos_info_Healing,
 	eq_parts_pos_info_Effect,
 
 	eq_parts_pos_info_end
 } RMeshPartsPosInfoType;
 
 typedef enum _RMeshPartsType {
-
 	eq_parts_etc = 0,
 	eq_parts_head,
 	eq_parts_face,
@@ -217,31 +125,24 @@ typedef enum _RMeshPartsType {
 	eq_parts_feet,
 	eq_parts_sunglass,
 
-	// left weapon
-
-	eq_parts_left_pistol,//왼손더미는 권총과 SMG 뿐
+	eq_parts_left_pistol,
 	eq_parts_left_smg,
 	eq_parts_left_blade,
 	eq_parts_left_dagger,
 
-	// right weapon
-
 	eq_parts_right_katana,
 	eq_parts_right_pistol,
 	eq_parts_right_smg,
-	eq_parts_right_shotgun,		
+	eq_parts_right_shotgun,
 	eq_parts_right_rifle,
 	eq_parts_right_grenade,
-	eq_parts_right_item,	
+	eq_parts_right_item,
 	eq_parts_right_dagger,
 	eq_parts_right_rlauncher,
 	eq_parts_right_sword,
 	eq_parts_right_blade,
 
-	// etc..코드로 붙여줄것들..
-
 	eq_parts_end,
-
 } RMeshPartsType;
 
 enum CutParts {
@@ -302,34 +203,31 @@ enum RShaderConst {
 };
 
 enum RShaderBlendInput {
-    VPOSITION,
+	VPOSITION,
 	WEIGHT2,
 	MATRIX_INDEX,
 	NORMAL,
 	TEXTURE_UV
 };
 
-///////////////////////////////////////////////////
-// 임시 draw util 
-
-struct	RTLVertex { 
-	D3DXVECTOR4 p;   
-	DWORD color;     
-	FLOAT tu, tv; 
+struct	RTLVertex {
+	D3DXVECTOR4 p;
+	DWORD color;
+	FLOAT tu, tv;
 };
 
-struct	RLVertex { 
-	D3DXVECTOR3 p;   
-	DWORD color;     
-	FLOAT tu, tv; 
+struct	RLVertex {
+	D3DXVECTOR3 p;
+	DWORD color;
+	FLOAT tu, tv;
 };
 
-#ifndef _MAX_EXPORT // max 와 겹침..
+#ifndef _MAX_EXPORT
 
-struct	RVertex { 
-	D3DXVECTOR3 p;   
-	D3DXVECTOR3 n;   
-	FLOAT tu, tv; 
+struct	RVertex {
+	D3DXVECTOR3 p;
+	D3DXVECTOR3 n;
+	FLOAT tu, tv;
 };
 
 #endif
@@ -338,11 +236,9 @@ struct RBlendVertex
 {
 	D3DXVECTOR3 p;
 	float weight1, weight2;
-//	BYTE matrixIndices;
-//	BYTE matIndex[4];
 	float matIndex[3];
 	D3DXVECTOR3 normal;
-	float tu, tv;	
+	float tu, tv;
 };
 
 #define RTLVertexType		(D3DFVF_XYZRHW|D3DFVF_DIFFUSE|D3DFVF_TEX1)
@@ -360,8 +256,6 @@ public:
 	int	frame;
 };
 
-// 예전포멧용구조..
-
 #define RRotKey RQuatKey
 
 class RVisKey {
@@ -370,7 +264,7 @@ public:
 	int frame;
 };
 
-class RTMKey : public D3DXMATRIX{
+class RTMKey : public D3DXMATRIX {
 public:
 	int frame;
 };
@@ -379,24 +273,6 @@ class RVertexAniKey : public D3DXVECTOR3 {
 public:
 	int frame;
 };
-
-/*
-struct RRotKey {
-D3DXVECTOR3 v;
-float a;
-int	frame;
-};
-
-struct RPosKey {
-D3DXVECTOR3 v;
-int	frame;
-};
-
-struct RQuatKey {
-D3DXQUATERNION q;
-int	frame;
-};
-*/
 
 struct RFaceInfoOld {
 	int				m_point_index[3];
@@ -417,10 +293,8 @@ struct RFaceNormalInfo {
 };
 
 struct RPhysiqueInfo {
-
-	RPhysiqueInfo()	{
-
-		for(int i=0;i<MAX_PHYSIQUE_KEY;i++)
+	RPhysiqueInfo() {
+		for (int i = 0; i < MAX_PHYSIQUE_KEY; i++)
 			m_parent_name[i][0] = 0;
 
 		m_num = 0;
@@ -434,8 +308,6 @@ struct RPhysiqueInfo {
 	D3DXVECTOR3 m_offset[MAX_PHYSIQUE_KEY];
 };
 
-// 버퍼생성에 실패하는 경우 soft 로 돌린다..내부적으로 알아서 돌아가도록...
-
 #define USE_VERTEX_SW 1
 #define USE_VERTEX_HW 1<<1
 
@@ -447,25 +319,24 @@ public:
 	void Lock();
 	void Unlock();
 
-	void Update(int size,WORD* pData);
-	bool Create(int size,WORD* pData,DWORD flag=USE_VERTEX_HW|USE_VERTEX_SW,DWORD Usage=D3DUSAGE_WRITEONLY,D3DPOOL Pool=D3DPOOL_MANAGED);
-
+	void Update(int size, WORD* pData);
+	bool Create(int size, WORD* pData, DWORD flag = USE_VERTEX_HW | USE_VERTEX_SW, DWORD Usage = D3DUSAGE_WRITEONLY, D3DPOOL Pool = D3DPOOL_MANAGED);
 
 	int GetFaceCnt();
 
 	void SetIndices();
 
 public:
-	
-	bool	m_bUseSWVertex;	// 버텍스 버퍼가 사용 불가능한 저사양 컴인가? 혹은 버텍스 에니메이션..
+
+	bool	m_bUseSWVertex;
 	bool	m_bUseHWVertex;
 
 	DWORD	m_dwUsage;
 	D3DPOOL	m_dwPool;
 	DWORD	m_dwLockFlag;
 
-	WORD*	m_pIndex;
-	WORD*	m_i;
+	WORD* m_pIndex;
+	WORD* m_i;
 
 	int m_size;
 	LPDIRECT3DINDEXBUFFER9 m_ib;
@@ -479,19 +350,19 @@ public:
 	void Init();
 	void Clear();
 
-	bool Create(char* pVertex,DWORD fvf,int VertexSize,int VertexCnt,DWORD flag,DWORD Usage=D3DUSAGE_WRITEONLY,D3DPOOL Pool=D3DPOOL_MANAGED);
+	bool Create(char* pVertex, DWORD fvf, int VertexSize, int VertexCnt, DWORD flag, DWORD Usage = D3DUSAGE_WRITEONLY, D3DPOOL Pool = D3DPOOL_MANAGED);
 
-	bool Update(char* pVertex,DWORD fvf,int VertexSize,int VertexCnt);
-	bool UpdateData(char* pVertex);		
+	bool Update(char* pVertex, DWORD fvf, int VertexSize, int VertexCnt);
+	bool UpdateData(char* pVertex);
 	bool UpdateDataSW(char* pVertex);
 	bool UpdateDataHW(char* pVertex);
 
 	bool UpdateData(D3DXVECTOR3* pVec);
 
-#ifndef _MAX_EXPORT // max 와 겹침..
+#ifndef _MAX_EXPORT
 
-	void UpdateDataLVert(RLVertex* pVert,D3DXVECTOR3* pVec,int nCnt);
-	void UpdateDataVert(RVertex* pVert,D3DXVECTOR3* pVec,int nCnt);
+	void UpdateDataLVert(RLVertex* pVert, D3DXVECTOR3* pVec, int nCnt);
+	void UpdateDataVert(RVertex* pVert, D3DXVECTOR3* pVec, int nCnt);
 
 #endif
 
@@ -502,7 +373,7 @@ public:
 
 	void Render();
 	void RenderFVF();
-	void Render(RIndexBuffer* ib );
+	void Render(RIndexBuffer* ib);
 	void RenderSoft();
 	void RenderIndexSoft(RIndexBuffer* ib);
 	void SetVertexBuffer();
@@ -515,10 +386,10 @@ public:
 public:
 
 	bool	m_is_init;
-	bool	m_bUseSWVertex;	// 버텍스 버퍼가 사용 불가능한 저사양 컴인가? 혹은 버텍스 에니메이션..
+	bool	m_bUseSWVertex;
 	bool	m_bUseHWVertex;
-	char*	m_pVert;
-	char*	m_v;
+	char* m_pVert;
+	char* m_v;
 
 	DWORD	m_dwFVF;
 	DWORD	m_dwUsage;
@@ -536,22 +407,18 @@ public:
 	LPDIRECT3DVERTEXBUFFER9	m_vb;
 };
 
-///////////////////////////////////////////////////////////////////////////////
-// util
-
-inline D3DXQUATERNION* WINAPI D3DXQuaternionUnitAxisToUnitAxis2( D3DXQUATERNION *pOut, const D3DXVECTOR3 *pvFrom, const D3DXVECTOR3 *pvTo)
+inline D3DXQUATERNION* WINAPI D3DXQuaternionUnitAxisToUnitAxis2(D3DXQUATERNION* pOut, const D3DXVECTOR3* pvFrom, const D3DXVECTOR3* pvTo)
 {
 	D3DXVECTOR3 vAxis;
-	D3DXVec3Cross(&vAxis, pvFrom, pvTo);    
+	D3DXVec3Cross(&vAxis, pvFrom, pvTo);
 	pOut->x = vAxis.x;
 	pOut->y = vAxis.y;
 	pOut->z = vAxis.z;
-	pOut->w = D3DXVec3Dot( pvFrom, pvTo );
+	pOut->w = D3DXVec3Dot(pvFrom, pvTo);
 	return pOut;
 }
 
-
-inline D3DXQUATERNION* WINAPI D3DXQuaternionAxisToAxis( D3DXQUATERNION *pOut, const D3DXVECTOR3 *pvFrom, const D3DXVECTOR3 *pvTo)
+inline D3DXQUATERNION* WINAPI D3DXQuaternionAxisToAxis(D3DXQUATERNION* pOut, const D3DXVECTOR3* pvFrom, const D3DXVECTOR3* pvTo)
 {
 	D3DXVECTOR3 vA, vB;
 	D3DXVec3Normalize(&vA, pvFrom);
@@ -563,91 +430,86 @@ inline D3DXQUATERNION* WINAPI D3DXQuaternionAxisToAxis( D3DXQUATERNION *pOut, co
 
 class CD3DArcBall
 {
-	INT            m_iWidth;				
-	INT            m_iHeight;				
-	FLOAT          m_fRadius;				
-	FLOAT          m_fRadiusTranslation;	
+	INT            m_iWidth;
+	INT            m_iHeight;
+	FLOAT          m_fRadius;
+	FLOAT          m_fRadiusTranslation;
 
-	D3DXQUATERNION m_qDown;					
-	D3DXQUATERNION m_qNow;					
-	D3DXMATRIX     m_matRotation;			
-	D3DXMATRIX     m_matRotationDelta;		
-	D3DXMATRIX     m_matTranslation;		
-	D3DXMATRIX     m_matTranslationDelta;	
-	BOOL           m_bDrag;					
-	BOOL           m_bRightHanded;			
+	D3DXQUATERNION m_qDown;
+	D3DXQUATERNION m_qNow;
+	D3DXMATRIX     m_matRotation;
+	D3DXMATRIX     m_matRotationDelta;
+	D3DXMATRIX     m_matTranslation;
+	D3DXMATRIX     m_matTranslationDelta;
+	BOOL           m_bDrag;
+	BOOL           m_bRightHanded;
 
-	D3DXVECTOR3 ScreenToVector( int sx, int sy );
+	D3DXVECTOR3 ScreenToVector(int sx, int sy);
 
 public:
 
-	LRESULT     HandleMouseMessages( HWND, UINT, WPARAM, LPARAM );
+	LRESULT     HandleMouseMessages(HWND, UINT, WPARAM, LPARAM);
 
-	D3DXMATRIX* GetRotationMatrix()         { return &m_matRotation; }
-	D3DXMATRIX* GetRotationDeltaMatrix()    { return &m_matRotationDelta; }
-	D3DXMATRIX* GetTranslationMatrix()      { return &m_matTranslation; }
+	D3DXMATRIX* GetRotationMatrix() { return &m_matRotation; }
+	D3DXMATRIX* GetRotationDeltaMatrix() { return &m_matRotationDelta; }
+	D3DXMATRIX* GetTranslationMatrix() { return &m_matTranslation; }
 	D3DXMATRIX* GetTranslationDeltaMatrix() { return &m_matTranslationDelta; }
-	BOOL        IsBeingDragged()            { return m_bDrag; }
+	BOOL        IsBeingDragged() { return m_bDrag; }
 
-	VOID        SetRadius( FLOAT fRadius );
-	VOID        SetWindow( INT w, INT h, FLOAT r=0.9 );
-	VOID        SetRightHanded( BOOL bRightHanded ) { m_bRightHanded = bRightHanded; }
+	VOID        SetRadius(FLOAT fRadius);
+	VOID        SetWindow(INT w, INT h, FLOAT r = 0.9);
+	VOID        SetRightHanded(BOOL bRightHanded) { m_bRightHanded = bRightHanded; }
 
 	CD3DArcBall();
 };
 
-//////////////////////////////////////////////////////////////
-// help func
+void	RRot2Quat(RQuatKey& q, RRotKey& v);
+void	RQuat2Mat(D3DXMATRIX& mat, RQuatKey& q);
+int		RMatInv(D3DXMATRIX& q, D3DXMATRIX& a);
+void	ConvertMat(rmatrix& mat1, rmatrix& mat2);
 
-void	RRot2Quat( RQuatKey& q,RRotKey& v );
-void	RQuat2Mat( D3DXMATRIX& mat, RQuatKey&q );
-int		RMatInv( D3DXMATRIX& q, D3DXMATRIX& a );
-void	ConvertMat(rmatrix& mat1,rmatrix& mat2);
-
-
-inline D3DXVECTOR3 operator*( D3DXVECTOR3 &in_vec,D3DXMATRIX &mat) {
-
+inline D3DXVECTOR3 operator*(D3DXVECTOR3& in_vec, D3DXMATRIX& mat) {
 	D3DXVECTOR3 out;
 
-	FLOAT x = in_vec.x*mat._11 + in_vec.y*mat._21 + in_vec.z* mat._31 + mat._41;
-	FLOAT y = in_vec.x*mat._12 + in_vec.y*mat._22 + in_vec.z* mat._32 + mat._42;
-	FLOAT z = in_vec.x*mat._13 + in_vec.y*mat._23 + in_vec.z* mat._33 + mat._43;
-	FLOAT w = in_vec.x*mat._14 + in_vec.y*mat._24 + in_vec.z* mat._34 + mat._44;
+	FLOAT x = in_vec.x * mat._11 + in_vec.y * mat._21 + in_vec.z * mat._31 + mat._41;
+	FLOAT y = in_vec.x * mat._12 + in_vec.y * mat._22 + in_vec.z * mat._32 + mat._42;
+	FLOAT z = in_vec.x * mat._13 + in_vec.y * mat._23 + in_vec.z * mat._33 + mat._43;
+	FLOAT w = in_vec.x * mat._14 + in_vec.y * mat._24 + in_vec.z * mat._34 + mat._44;
 
-	out.x = x/w;
-	out.y = y/w;
-	out.z = z/w;
+	out.x = x / w;
+	out.y = y / w;
+	out.z = z / w;
 
 	return out;
 }
 
-inline D3DXMATRIX operator*( D3DXMATRIX &in1,D3DXMATRIX &in2) {
+inline D3DXMATRIX operator*(D3DXMATRIX& in1, D3DXMATRIX& in2) {
 	D3DXMATRIX out;
-	D3DXMatrixMultiply(&out,&in1,&in2);
+	D3DXMatrixMultiply(&out, &in1, &in2);
 	return out;
 }
 
-inline D3DXMATRIX operator~( D3DXMATRIX &in) {
+inline D3DXMATRIX operator~(D3DXMATRIX& in) {
 	D3DXMATRIX out;
-	D3DXMatrixInverse(&out,0,&in);
+	D3DXMatrixInverse(&out, 0, &in);
 	return out;
 }
 
 inline rmatrix RGetRotX(float a) {
 	rmatrix mat;
-	D3DXMatrixRotationX(&mat,D3DX_PI/180.f*a);
+	D3DXMatrixRotationX(&mat, D3DX_PI / 180.f * a);
 	return mat;
 }
 
 inline rmatrix RGetRotY(float a) {
 	rmatrix mat;
-	D3DXMatrixRotationY(&mat,D3DX_PI/180.f*a);
+	D3DXMatrixRotationY(&mat, D3DX_PI / 180.f * a);
 	return mat;
 }
 
 inline rmatrix RGetRotZ(float a) {
 	rmatrix mat;
-	D3DXMatrixRotationZ(&mat,D3DX_PI/180.f*a);
+	D3DXMatrixRotationZ(&mat, D3DX_PI / 180.f * a);
 	return mat;
 }
 
@@ -658,16 +520,16 @@ inline rmatrix GetIdentityMatrix() {
 }
 
 inline rvector GetTransPos(rmatrix& m) {
-	return rvector(m._41,m._42,m._43);
+	return rvector(m._41, m._42, m._43);
 }
 
-void draw_line(LPDIRECT3DDEVICE9 dev,D3DXVECTOR3* vec,int size,DWORD color);
-void draw_box(rmatrix* wmat , rvector& max,rvector& min,DWORD color);
-void draw_query_fill_box(rmatrix* wmat , rvector& max,rvector& min,DWORD color);
+void draw_line(LPDIRECT3DDEVICE9 dev, D3DXVECTOR3* vec, int size, DWORD color);
+void draw_box(rmatrix* wmat, rvector& max, rvector& min, DWORD color);
+void draw_query_fill_box(rmatrix* wmat, rvector& max, rvector& min, DWORD color);
 
-void _GetModelTry(RLVertex* pVert,int size,DWORD color,int* face_num);
-void _draw_try(LPDIRECT3DDEVICE9 dev,rmatrix& mat,float size,DWORD color);
-void _draw_matrix(LPDIRECT3DDEVICE9 dev,rmatrix& mat,float size);
+void _GetModelTry(RLVertex* pVert, int size, DWORD color, int* face_num);
+void _draw_try(LPDIRECT3DDEVICE9 dev, rmatrix& mat, float size, DWORD color);
+void _draw_matrix(LPDIRECT3DDEVICE9 dev, rmatrix& mat, float size);
 
 class RDebugStr
 {
@@ -677,17 +539,17 @@ public:
 
 	void Clear();
 
-	void Add(char* str,bool line=true);
-	void Add(bool b,bool line=true);
-	void Add(char c,bool line=true);
-	void Add(short s,bool line=true);
-	void Add(WORD  w,bool line=true);
-	void Add(int i,bool line=true);
-	void Add(DWORD d,bool line=true);
-	void Add(float f,bool line=true);
-	void Add(rvector& v,bool line=true);
-	void AddLine(int cnt=1);
-	void AddTab(int cnt=1);
+	void Add(char* str, bool line = true);
+	void Add(bool b, bool line = true);
+	void Add(char c, bool line = true);
+	void Add(short s, bool line = true);
+	void Add(WORD  w, bool line = true);
+	void Add(int i, bool line = true);
+	void Add(DWORD d, bool line = true);
+	void Add(float f, bool line = true);
+	void Add(rvector& v, bool line = true);
+	void AddLine(int cnt = 1);
+	void AddTab(int cnt = 1);
 
 	void PrintLog();
 
@@ -698,7 +560,7 @@ public:
 	string m_str;
 };
 
-void GetPath(const char* str,char* path);
+void GetPath(const char* str, char* path);
 
 class RBaseObject
 {
@@ -707,7 +569,6 @@ public:
 		m_NameID = -1;
 	}
 	virtual ~RBaseObject() {
-
 	}
 
 public:
@@ -724,23 +585,20 @@ public:
 	string	m_Name;
 };
 
-/////////////////////////////////////////////////////////////////////////
-
 #pragma warning(disable : 4996)
 
 template<class T>
-class RHashList : public list<T>
+class RHashList : public std::list<T>
 {
 protected:
-	unordered_map<string,T>	m_HashMap;
-	unordered_map<int,T>		m_HashMapID;
+	unordered_map<std::string, T>	m_HashMap;
+	unordered_map<int, T>		m_HashMapID;
 public:
 	void PushBack(T pNode) {
 		push_back(pNode);
-		m_HashMap.insert(unordered_map<string,T>::value_type(string(pNode->GetName()),pNode));
-		if(pNode->m_NameID != -1)
-			m_HashMapID.insert(unordered_map<int,T>::value_type( pNode->m_NameID, pNode) );
-
+		m_HashMap.insert(unordered_map<string, T>::value_type(string(pNode->GetName()), pNode));
+		if (pNode->m_NameID != -1)
+			m_HashMapID.insert(unordered_map<int, T>::value_type(pNode->m_NameID, pNode));
 	}
 
 	void Clear() {
@@ -750,18 +608,16 @@ public:
 	}
 
 	iterator Erase(iterator where) {
-
 		iterator itor = erase(where);
 
 		if (itor != end()) {
-
-			unordered_map<string,T>::iterator hash_map_itor = m_HashMap.find( string( (*itor)->GetName() ) );
+			unordered_map<string, T>::iterator hash_map_itor = m_HashMap.find(string((*itor)->GetName()));
 
 			if (hash_map_itor != m_HashMap.end()) {
 				m_HashMap.erase(hash_map_itor);
 			}
 
-			unordered_map<int,T>::iterator hash_map_itor_id = m_HashMapID.find( (*itor)->m_NameID );
+			unordered_map<int, T>::iterator hash_map_itor_id = m_HashMapID.find((*itor)->m_NameID);
 
 			if (hash_map_itor_id != m_HashMapID.end()) {
 				m_HashMapID.erase(hash_map_itor_id);
@@ -770,9 +626,8 @@ public:
 		return itor;
 	}
 
-	T Find(char *name) {
-
-		unordered_map<string,T>::iterator itor = m_HashMap.find( string(name) );
+	T Find(char* name) {
+		unordered_map<string, T>::iterator itor = m_HashMap.find(string(name));
 
 		if (itor != m_HashMap.end()) {
 			return (*itor).second;
@@ -781,13 +636,10 @@ public:
 	}
 
 	T Find(int id) {
-		unordered_map<int,T>::iterator itor = m_HashMapID.find(id);
+		unordered_map<int, T>::iterator itor = m_HashMapID.find(id);
 		if (itor != m_HashMapID.end()) {
 			return (*itor).second;
 		}
 		return NULL;
 	}
-
 };
-
-#endif//_RMeshUtil_h
