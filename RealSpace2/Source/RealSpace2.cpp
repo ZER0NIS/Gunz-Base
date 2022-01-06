@@ -364,8 +364,7 @@ bool RInitDisplay(HWND hWnd, const RMODEPARAMS* params)
 	g_d3dpp.AutoDepthStencilFormat = D3DFMT_D16;
 
 	g_d3dpp.Flags = NULL;
-	g_d3dpp.PresentationInterval =
-		params->bFullScreen ? D3DPRESENT_INTERVAL_IMMEDIATE : D3DPRESENT_INTERVAL_DEFAULT;
+	g_d3dpp.PresentationInterval = D3DPRESENT_INTERVAL_IMMEDIATE;
 
 	DWORD BehaviorFlags = D3DCREATE_FPU_PRESERVE |
 		(QueryFeature(RQF_HARDWARETNL) ? D3DCREATE_HARDWARE_VERTEXPROCESSING : D3DCREATE_SOFTWARE_VERTEXPROCESSING);
@@ -454,7 +453,7 @@ void RAdjustWindow(const RMODEPARAMS* pModeParams)
 		SetWindowLong(g_hWnd, GWL_STYLE, WS_POPUP | WS_SYSMENU);
 	}
 	else
-		SetWindowLong(g_hWnd, GWL_STYLE, WS_POPUP | WS_CAPTION | WS_SYSMENU);
+		SetWindowLong(g_hWnd, GWL_STYLE, WS_VISIBLE | WS_OVERLAPPED | WS_BORDER | WS_CAPTION | WS_SYSMENU | WS_MAXIMIZEBOX | WS_MINIMIZEBOX);
 
 	RECT rt;
 	GetClientRect(g_hWnd, &rt);
@@ -599,6 +598,7 @@ void RFlip()
 				Sleep((int)fFrameLimit - (currentTime - g_dwLastTime));
 				currentTime = timeGetTime();
 			}
+
 			g_dwLastTime = currentTime;
 		}
 

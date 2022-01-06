@@ -5,8 +5,7 @@ static int g_nRErrorCode = ROK;
 
 void RSetError(int nErrCode)
 {
-	g_nRErrorCode = nErrCode;	
-
+	g_nRErrorCode = nErrCode;
 }
 
 int RGetLastError(void)
