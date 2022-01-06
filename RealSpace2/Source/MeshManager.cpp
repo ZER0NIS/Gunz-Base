@@ -292,8 +292,9 @@ void MeshManager::AwaitMeshLoad(const LoadInfoType& LoadInfo, void* Obj,
 	{
 		while (LoadInfo.MeshAlloc->References.load(std::memory_order_acquire) == -1)
 		{
-			std::this_thread::sleep_for(std::chrono::milliseconds(1));
+			std::this_thread::sleep_for(std::chrono::milliseconds(3)); // 1 //test: 3
 		}
+
 		auto Node = LoadInfo.MeshAlloc->Mesh.GetMeshData(LoadInfo.NodeName);
 		{
 			std::lock_guard<std::mutex> lock{ mutex };

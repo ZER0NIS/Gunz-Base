@@ -230,8 +230,13 @@ int RMain(const char* AppName, HINSTANCE this_inst, HINSTANCE prev_inst, LPSTR c
 	wc.lpszClassName = "RealSpace2";
 	if (!RegisterClass(&wc)) return FALSE;
 
-	DWORD dwStyle = pModeParams->bFullScreen ? WS_POPUP | WS_SYSMENU : WS_POPUP | WS_CAPTION | WS_SYSMENU;
-	g_hWnd = CreateWindow("RealSpace2", AppName, dwStyle, CW_USEDEFAULT, CW_USEDEFAULT,
+	DWORD dwStyle;
+	if (pModeParams->bFullScreen) // Fullscreen
+		dwStyle = WS_VISIBLE | WS_POPUP;
+	else//windowed
+		dwStyle = WS_VISIBLE | WS_OVERLAPPED | WS_BORDER | WS_CAPTION | WS_SYSMENU | WS_MAXIMIZEBOX | WS_MINIMIZEBOX;
+
+	g_hWnd = CreateWindowA("RealSpace2", AppName, dwStyle, CW_USEDEFAULT, CW_USEDEFAULT,
 		pModeParams->nWidth, pModeParams->nHeight, NULL, NULL, this_inst, NULL);
 
 	RAdjustWindow(pModeParams);
@@ -288,9 +293,9 @@ int RRun()
 
 		if (!g_bActive)
 			Sleep(10);
-		}while (WM_QUIT != msg.message);
-		return (INT)msg.wParam;
-	}
+	} while (WM_QUIT != msg.message);
+	return (INT)msg.wParam;
+}
 
 int RInitD3D(RMODEPARAMS* pModeParams)
 {

@@ -1,4 +1,5 @@
 #pragma once
+
 #include "GlobalTypes.h"
 using BYTE = unsigned char;
 using WORD = unsigned short;

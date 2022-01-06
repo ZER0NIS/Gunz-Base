@@ -468,8 +468,8 @@ void RMeshMgr::UnLoad(char* name)
 	RMesh* pMesh = Get(name);
 
 	if (pMesh) {
-	std:string filename = pMesh->GetFileName();
-	std:string modelname = pMesh->GetName();
+		std::string filename = pMesh->GetFileName();
+		std::string modelname = pMesh->GetName();
 
 		SAFE_DELETE(pMesh);
 
