@@ -121,6 +121,7 @@ bool ZQuest::Load()
 		mlog("Read Animation Event Failed");
 		return false;
 	}
+
 	m_bLoaded = true;
 	return true;
 }
@@ -128,11 +129,6 @@ bool ZQuest::Load()
 void ZQuest::Reload()
 {
 	m_bLoaded = false;
-
-#ifdef _DEBUG
-	ZApplication::GetSkillManager()->Destroy();
-	ZApplication::GetSkillManager()->Create();
-#endif
 
 	m_NPCCatalogue.Clear();
 	m_MapCatalogue.Clear();
