@@ -2,10 +2,8 @@
 #include "ZObject.h"
 #include "ZMyCharacter.h"
 #include "ZNetCharacter.h"
-#include "RCollisionDetection.h"
 #include "ZGame.h"
 #include "CheckReturnCallStack.h"
-#include "ZAniEventHandler.h"
 
 MImplementRTTI(ZObject, ZModuleContainer);
 
@@ -28,6 +26,7 @@ ZObject::~ZObject()
 void ZObject::OnDraw()
 {
 }
+
 void ZObject::OnUpdate(float fDelta)
 {
 }
@@ -163,11 +162,6 @@ bool ZObject::ColTest(const rvector& p1, const rvector& p2, float radius, float 
 void ZObject::SetVisualMesh(RVisualMesh* pVMesh)
 {
 	m_pVMesh = pVMesh;
-
-	for (int i = 0; i < ani_mode_end; i++)
-	{
-		m_pVMesh->GetFrameInfo((RAniMode)i)->SetAnimEventHandler(ZAniEventHandler::ZAniEventHandlerCB);
-	}
 }
 
 void ZObject::AddHealEffect()

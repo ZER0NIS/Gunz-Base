@@ -452,9 +452,11 @@ void ResetAppResource()
 		MLog("In changing language... InitLocale error !!!\n");
 
 	ZGetConfiguration()->Load_StringResDependent();
+
 	OnCreate(0);
-	RParticleSystem::Restore();
+	RGetParticleSystem()->Restore();
 	OnRestore(0);
+
 	ZGetGameInterface()->m_sbRemainClientConnectionForResetApp = false;
 
 	ZPostRequestCharacterItemListForce(ZGetGameClient()->GetPlayerUID());
@@ -550,7 +552,7 @@ long FAR PASCAL WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 			RFrame_ToggleFullScreen();
 #endif
 			return 0;
-		}
+	}
 		break;
 
 	case WM_CREATE:
@@ -578,7 +580,7 @@ long FAR PASCAL WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 	{
 		bool b = false;
 	}
-	}
+}
 
 	if (Mint::GetInstance()->ProcessEvent(hWnd, message, wParam, lParam) == true)
 	{
@@ -762,7 +764,7 @@ int PASCAL WinMain(HINSTANCE this_inst, HINSTANCE prev_inst, LPSTR cmdline, int 
 	{
 		MLog("main.cpp - Late string convert fale.\n");
 		return false;
-}
+	}
 
 	if (!InitializeNotify(ZApplication::GetFileSystem())) {
 		MLog("Check notify.xml\n");

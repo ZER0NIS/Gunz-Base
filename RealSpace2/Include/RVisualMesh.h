@@ -12,8 +12,6 @@ _NAMESPACE_REALSPACE2_BEGIN
 class RVisualMesh;
 class ROcclusionList;
 
-typedef void(ANIEVE_HANDLER)(RAniEventInfo* pAniEventInfo);
-
 class AniFrameInfo {
 public:
 	AniFrameInfo();
@@ -22,17 +20,10 @@ public:
 
 	void Frame(RAniMode amode, RVisualMesh* pVMesh);
 
-	ANIEVE_HANDLER* m_pEventFunc;
-
-	RAniIDEventSet* m_pAniIdEventSet;
-
-	RAniNameEventSet* m_pAniNameEventSet;
-	void SetAnimEventHandler(ANIEVE_HANDLER pEventFunc) { m_pEventFunc = pEventFunc; }
-
-	void SetAniIdEventSet(RAniIDEventSet* pEventSet) { m_pAniIdEventSet = pEventSet; }
-
-	vector<bool>			m_vecCheckAniEvent;
-	vector<bool>::iterator	m_iterCheckAniEvent;
+	static void (*m_pEventFunc)(const struct RAniEventInfo&, rvector);
+	const struct RAniIDEventSet* m_pAniIdEventSet{};
+	const struct RAniNameEventSet* m_pAniNameEventSet{};
+	std::vector<bool> AniEventFired;
 
 	bool			m_isOncePlayDone;
 	bool			m_isPlayDone;
@@ -74,19 +65,13 @@ public:
 		m_dwReturnMaxTime = 0;
 	}
 
-	~RFrameTime() {
-	}
+	~RFrameTime() = default;
 
 public:
 	void Start(float fMax, DWORD MaxTime, DWORD ReturnMaxTime);
 	void Stop();
-
 	void Update();
-
-	float GetValue() {
-		return m_fCurValue;
-	}
-
+	float GetValue() { return m_fCurValue; }
 public:
 
 	int   m_nType;
@@ -101,88 +86,26 @@ public:
 
 #define VISUAL_LIGHT_MAX 3
 
+enum class LightActivationType
+{
+	Off,
+	On,
+	ShaderOnly,
+};
+
 class RVisualLightMgr
 {
 public:
 	RVisualLightMgr();
 
-	int GetLightCount();
-
 	void SetLight(int index, D3DLIGHT9* light, bool ShaderOnly);
-
 	void UpdateLight();
-
 	void Clone(RVisualMesh* pVMesh);
 
-public:
-	D3DLIGHT9 m_Light[VISUAL_LIGHT_MAX];
-	int		  m_LightEnable[VISUAL_LIGHT_MAX];
-};
+	int GetLightCount();
 
-class RQuery
-{
-public:
-	RQuery() {
-		m_nSpendingTime = NULL;
-		m_DataCnt = NULL;
-		m_Query = NULL;
-	}
-
-	virtual ~RQuery() {
-		Destroy();
-	}
-
-	HRESULT Create(LPDIRECT3DDEVICE9 dev) {
-		return dev->CreateQuery(D3DQUERYTYPE_OCCLUSION, &m_Query);
-	}
-
-	void Destroy() {
-		if (m_Query) {
-			m_Query->Release();
-			m_Query = NULL;
-		}
-	}
-
-	HRESULT Begin() {
-		return m_Query->Issue(D3DISSUE_BEGIN);
-	}
-
-	HRESULT End() {
-		return m_Query->Issue(D3DISSUE_END);
-	}
-
-	DWORD GetRenderCount() {
-		if (m_Query == NULL) return 0;
-
-		int nCnt = 0;
-		m_DataCnt = 0;
-
-		while (m_Query->GetData((void*)&m_DataCnt, sizeof(DWORD), D3DGETDATA_FLUSH) == S_FALSE) {
-			m_nSpendingTime++;
-			nCnt++;
-			if (nCnt > 5000) {
-				m_DataCnt = 1000;
-				break;
-			}
-		}
-		return m_DataCnt;
-	}
-
-	bool isNeedRender() {
-		if (m_Query == NULL) return true;
-
-		DWORD Cnt = GetRenderCount();
-
-		if (Cnt > 10)
-			return true;
-		return false;
-	}
-
-public:
-
-	int					m_nSpendingTime;
-	DWORD				m_DataCnt;
-	LPDIRECT3DQUERY9	m_Query;
+	D3DLIGHT9 m_Light[VISUAL_LIGHT_MAX]{};
+	LightActivationType m_LightEnable[VISUAL_LIGHT_MAX];
 };
 
 class RVisualMesh {
@@ -366,23 +289,21 @@ public:
 
 	bool ChangeChestCloth(float fAccel, int Numiter);
 
-	void UpdateForce(D3DXVECTOR3& force);
+	void UpdateForce(rvector& force);
 	void SetClothState(int state);
 	void UpdateCloth();
 	void RenderCloth();
 
 	bool isChestClothMesh() { return m_pCloth ? true : false; }
 
-	void SetClothForce(D3DXVECTOR3& f);
+	void SetClothForce(rvector& f);
 
 	void SetClothValue(bool bGame, float fDist);
 
 private:
-
-	float			m_fClothDist;
-	bool			m_bClothGame;
+	float		m_fClothDist;
+	bool		m_bClothGame;
 	RCharCloth* m_pCloth;
-
 public:
 
 	void SetLight(int index, D3DLIGHT9* light, bool ShaderOnly) { m_LightMgr.SetLight(index, light, ShaderOnly); }
@@ -408,7 +329,7 @@ public:
 	rmatrix			m_RotMat;
 
 	rmatrix				m_ToonUVMat;
-	LPDIRECT3DTEXTURE9	m_ToonTexture;
+	D3DPtr<IDirect3DTexture9> m_ToonTexture;
 	bool				m_bToonLighting;
 	bool				m_bToonTextureRender;
 	DWORD				m_bToonColor;
@@ -418,7 +339,9 @@ public:
 	rvector			m_vUp;
 	rmatrix			m_WorldMat;
 	rmatrix			m_ScaleMat;
+
 	std::array<RMeshNodePtr, eq_parts_end> m_pTMesh;
+
 	RMesh* m_pMesh;
 	RMesh* m_pLowPolyMesh;
 
@@ -437,21 +360,22 @@ public:
 
 	AniFrameInfo* m_FrameInfo;
 
-	D3DXVECTOR3		m_vBMax;
-	D3DXVECTOR3		m_vBMin;
+	rvector		m_vBMax;
+	rvector		m_vBMin;
 
 	RVisualMesh* m_WeaponVisualMesh[eq_weapon_end];
-	RPartsInfo		m_WeaponPartInfo[eq_parts_end];
-	D3DXMATRIX		m_WeaponMatrixTemp;
-	D3DXMATRIX		m_WeaponDummyMatrix[weapon_dummy_end];
-	D3DXMATRIX		m_WeaponDummyMatrix2[weapon_dummy_end];
+	RPartsInfo	 m_WeaponPartInfo[eq_parts_end];
 
-	RWeaponMotionType	m_SelectWeaponMotionType;
+	rmatrix		m_WeaponMatrixTemp;
+	rmatrix		m_WeaponDummyMatrix[weapon_dummy_end];
+	rmatrix		m_WeaponDummyMatrix2[weapon_dummy_end];
+
+	RWeaponMotionType  m_SelectWeaponMotionType;
 	RWeaponMotionType* m_pSelectWeaponMotionType_AntiHack;
 
 	rmatrix* m_pBipMatrix;
 
-	rmatrix			m_UpperRotMat;
+	rmatrix	 m_UpperRotMat;
 
 	RAnimationNode** m_pAniNodeTable;
 	int					m_nAniNodeTableCnt;
@@ -476,16 +400,6 @@ public:
 
 	bool			m_bCalcBoxWithScale;
 	bool			m_bSkipRenderFaceParts;
-};
-
-class RCharacterVisualMesh : public RVisualMesh {
-public:
-	RCharacterVisualMesh() {
-	}
-	~RCharacterVisualMesh() {
-	}
-
-public:
 };
 
 _NAMESPACE_REALSPACE2_END

@@ -69,7 +69,7 @@ bool RIndexBuffer::Create(int size, WORD* pData, DWORD flag, DWORD Usage, D3DPOO
 	if (flag & USE_VERTEX_SW) m_bUseSWVertex = true;
 
 	if (m_bUseHWVertex) {
-		if (FAILED(RGetDevice()->CreateIndexBuffer(sizeof(WORD) * size, Usage, D3DFMT_INDEX16, Pool, &m_ib, 0))) {
+		if (FAILED(RGetDevice()->CreateIndexBuffer(sizeof(WORD) * size, Usage, D3DFMT_INDEX16, Pool, MakeWriteProxy(m_ib), NULL))) {
 			mlog("RIndexBuffer::Create Error : use soft index buffer\n");
 		}
 	}
@@ -85,7 +85,7 @@ bool RIndexBuffer::Create(int size, WORD* pData, DWORD flag, DWORD Usage, D3DPOO
 
 void RIndexBuffer::SetIndices()
 {
-	RGetDevice()->SetIndices(m_ib);
+	RGetDevice()->SetIndices(m_ib.get());
 }
 
 RVertexBuffer::RVertexBuffer()
@@ -147,8 +147,10 @@ bool RVertexBuffer::Create(char* pVertex, DWORD fvf, int VertexSize, int VertexC
 	if (flag & USE_VERTEX_SW) m_bUseSWVertex = true;
 	if (flag & USE_VERTEX_HW) m_bUseHWVertex = true;
 
-	if (m_bUseHWVertex) {
-		if (FAILED(RGetDevice()->CreateVertexBuffer(m_nBufferSize, Usage, fvf, Pool, &m_vb, 0))) {
+	if (m_bUseHWVertex)
+	{
+		if (FAILED(RGetDevice()->CreateVertexBuffer(m_nBufferSize, Usage, fvf, Pool, MakeWriteProxy(m_vb), 0)))
+		{
 		}
 	}
 
@@ -276,7 +278,7 @@ void RVertexBuffer::Unlock() {
 
 void RVertexBuffer::SetStreamSource()
 {
-	RGetDevice()->SetStreamSource(0, m_vb, 0, m_nVertexSize);
+	RGetDevice()->SetStreamSource(0, m_vb.get(), 0, m_nVertexSize);
 }
 
 void RVertexBuffer::Render() {
@@ -286,7 +288,7 @@ void RVertexBuffer::Render() {
 
 	if (dev == NULL) return;
 
-	dev->SetStreamSource(0, m_vb, 0, m_nVertexSize);
+	dev->SetStreamSource(0, m_vb.get(), 0, m_nVertexSize);
 	dev->DrawPrimitive(m_PrimitiveType, 0, m_nVertexCnt / 3);
 }
 
@@ -375,8 +377,8 @@ void RVertexBuffer::Render(RIndexBuffer* ib)
 
 	if (dev == NULL) return;
 
-	dev->SetStreamSource(0, m_vb, 0, m_nVertexSize);
-	dev->SetIndices(ib->m_ib);
+	dev->SetStreamSource(0, m_vb.get(), 0, m_nVertexSize);
+	dev->SetIndices(ib->m_ib.get());
 	dev->DrawIndexedPrimitive(m_PrimitiveType, 0, 0, m_nVertexCnt, 0, ib->GetFaceCnt());
 }
 
@@ -384,13 +386,13 @@ void RVertexBuffer::SetVertexBuffer()
 {
 	LPDIRECT3DDEVICE9 dev = RGetDevice();
 	dev->SetFVF(m_dwFVF);
-	dev->SetStreamSource(0, m_vb, 0, m_nVertexSize);
+	dev->SetStreamSource(0, m_vb.get(), 0, m_nVertexSize);
 }
 
 void RVertexBuffer::SetVSVertexBuffer()
 {
 	LPDIRECT3DDEVICE9 dev = RGetDevice();
-	dev->SetStreamSource(0, m_vb, 0, m_nVertexSize);
+	dev->SetStreamSource(0, m_vb.get(), 0, m_nVertexSize);
 }
 
 void RVertexBuffer::RenderIndexBuffer(RIndexBuffer* ib)
@@ -400,7 +402,7 @@ void RVertexBuffer::RenderIndexBuffer(RIndexBuffer* ib)
 
 	LPDIRECT3DDEVICE9 dev = RGetDevice();
 
-	dev->SetIndices(ib->m_ib);
+	dev->SetIndices(ib->m_ib.get());
 	dev->DrawIndexedPrimitive(m_PrimitiveType, 0, 0, m_nVertexCnt, 0, ib->GetFaceCnt());
 }
 
@@ -920,24 +922,24 @@ void RDebugStr::PrintLog() {
 	mlog(m_str.c_str());
 }
 
-char* RBaseObject::GetName()
+const char* RBaseObject::GetName() const
 {
-	return (char*)m_Name.c_str();
+	return m_Name.c_str();
 }
 
-void RBaseObject::SetName(char* name)
+void RBaseObject::SetName(const char* name)
 {
 	m_Name = name;
 }
 
-bool RBaseObject::CheckName(string& name)
+bool RBaseObject::CheckName(const string& name)
 {
 	if (m_Name == name)
 		return true;
 	return false;
 }
 
-bool RBaseObject::CheckName(char* name)
+bool RBaseObject::CheckName(const char* name)
 {
 	return CheckName(string(name));
 }

@@ -9,15 +9,12 @@
 #define FILENAME_NPCSET_DESC			"XML/Quest/npcset.xml"
 #define FILENAME_DROPTABLE				"XML/Quest/droptable.xml"
 
-
 MMatchQuest::MMatchQuest() : MBaseQuest()
 {
-
 }
 
 MMatchQuest::~MMatchQuest()
 {
-
 }
 
 bool MMatchQuest::OnCreate()
@@ -27,6 +24,7 @@ bool MMatchQuest::OnCreate()
 		mlog("Droptable Read Failed");
 		return false;
 	}
+
 	if (!m_NPCCatalogue.ReadXml(FILENAME_NPC_DESC))
 	{
 		mlog("Read NPC Catalogue Failed");
@@ -37,46 +35,38 @@ bool MMatchQuest::OnCreate()
 
 	if (!m_NPCSetCatalogue.ReadXml(FILENAME_NPCSET_DESC))
 	{
-		mlog("Read NPCSet Catalogue Failed");
+		mlog("Read NPCSet Catalogue Failed.");
 		return false;
 	}
 
 	if (!m_ScenarioCatalogue.ReadXml(FILENAME_SCENARIO))
 	{
-		mlog("Read Scenario Catalogue Failed");
+		mlog("Read Scenario Catalogue Failed.");
 		return false;
 	}
-	
+
 	if (!m_MapCatalogue.ReadXml(FILENAME_QUESTMAP))
 	{
-		mlog("Read Questmap Catalogue Failed");
+		mlog("Read Questmap Catalogue Failed.");
 		return false;
 	}
 
 	if (!m_SurvivalScenarioCatalogue.ReadXml(FILENAME_SURVIVALSCENARIO))
 	{
-		mlog("Read Survival-Scenario Catalogue Failed");
+		mlog("Read Survival-Scenario Catalogue Failed.");
 		return false;
 	}
 
 	if (!m_SurvivalMapCatalogue.ReadXml(FILENAME_SURVIVALMAP))
 	{
-		mlog("Read Questmap Catalogue Failed");
+		mlog("Read Questmap Catalogue Failed.");
 		return false;
 	}
 
-#ifdef _DEBUG
-	m_MapCatalogue.DebugReport();
-	m_SurvivalMapCatalogue.DebugReport();
-#endif
-
-	// 최근 서바이벌 랭킹 리스트 요청
 	MMatchServer::GetInstance()->OnRequestSurvivalModeGroupRanking();
 	return true;
 }
 
 void MMatchQuest::OnDestroy()
 {
-
 }
-

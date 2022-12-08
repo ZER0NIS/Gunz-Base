@@ -1,24 +1,12 @@
-#include "stdafx.h"
-#include "RMesh.h"
+ï»¿#include "stdafx.h"
 #include "RAnimationMgr.h"
-
 #include "RealSpace2.h"
-
 #include "MDebug.h"
 
-//#include "MZFileSystem.h"
-
 _USING_NAMESPACE_REALSPACE2
-
 _NAMESPACE_REALSPACE2_BEGIN
 
-/////////////////////////////////////////////////////////////////////
-
-RAnimationFileMgr::RAnimationFileMgr()
-{
-
-}
-
+RAnimationFileMgr::RAnimationFileMgr() = default;
 RAnimationFileMgr::~RAnimationFileMgr()
 {
 	Destroy();
@@ -28,9 +16,7 @@ void RAnimationFileMgr::Destroy()
 {
 	RAnimationFileHashList_Iter  node;
 
-//	mlog("¿¡´Ï¸ÞÀÌ¼Ç ÆÄÀÏ Á¦°Å size %d \n",m_list.size() );
-
-	for(node = m_list.begin(); node != m_list.end(); ) {
+	for (node = m_list.begin(); node != m_list.end(); ) {
 		delete (*node);
 		node = m_list.erase(node);
 	}
@@ -44,41 +30,33 @@ RAnimationFileMgr* RAnimationFileMgr::GetInstance()
 	return &m_AniMgr;
 }
 
-RAnimationFile* RAnimationFileMgr::Add(char* filename)
+RAnimationFile* RAnimationFileMgr::Add(const char* filename)
 {
 	RAnimationFile* pFile = Get(filename);
 
-	if( pFile ) {
+	if (pFile) {
 		pFile->AddRef();
-//		mlog("¿¡´Ï¸ÞÀÌ¼Ç ÆÄÀÏ Áßº¹»ç¿ë %s ref_cnt %d \n",filename,pFile->m_nRefCount);
 		return pFile;
 	}
 
-//	mlog("¿¡´Ï¸ÞÀÌ¼Ç ÆÄÀÏ »ý¼º %s %d \n",filename,m_list.size());
-
 	pFile = new RAnimationFile;
 
-	pFile->LoadAni( filename );
+	pFile->LoadAni(filename);
 
 	pFile->SetName(filename);
 
-	m_list.PushBack( pFile );
+	m_list.PushBack(pFile);
 
 	return pFile;
 }
 
-RAnimationFile* RAnimationFileMgr::Get(char* filename)
+RAnimationFile* RAnimationFileMgr::Get(const char* filename)
 {
 	return m_list.Find(filename);
 }
 
-/////////////////////////////////////////////////////////////////////
-
 RAnimationMgr::RAnimationMgr() {
 	m_id_last = 0;
-//	m_node_table.reserve(MAX_ANIMATION_NODE);//±âº»
-//	for(int i=0;i<MAX_ANIMATION_NODE;i++)
-//		m_node_table[i] = NULL;
 	m_list_map = NULL;
 	m_list_map_size = 0;
 }
@@ -87,18 +65,15 @@ RAnimationMgr::~RAnimationMgr() {
 	DelAll();
 }
 
-
-RAnimation* RAnimationMgr::AddAnimationFile(char* name,char* filename,int sID,bool notload,int MotionTypeID) {
-
+RAnimation* RAnimationMgr::AddAnimationFile(const char* name, const char* filename, int sID, bool notload, int MotionTypeID) {
 	RAnimation* node = new RAnimation;
 
-	if(notload) {//³ªÁß¿¡ load
+	if (notload) {
 		node->SetLoadDone(false);
 	}
 	else {
-
 		if (!node->LoadAni(filename)) {
-			mlog("elu %s file loading failure !!!\n",filename);
+			mlog("elu %s file loading failure !!!\n", filename);
 			delete node;
 			return NULL;
 		}
@@ -111,17 +86,16 @@ RAnimation* RAnimationMgr::AddAnimationFile(char* name,char* filename,int sID,bo
 	node->SetWeaponMotionType(MotionTypeID);
 
 	m_node_table.push_back(node);
-//	m_node_table[m_id_last] = node;
 	m_id_last++;
 
-	if(m_id_last > MAX_ANIMATION_NODE)
-		mlog("¿¡´Ï¸ÞÀÌ¼Ç ³ëµå ¿¹¾à »çÀÌÁî¸¦ ´Ã¸®´Â°ÍÀÌ ÁÁ°ÚÀ½..\n",filename);
+	if (m_id_last > MAX_ANIMATION_NODE)
+		mlog("ì—ë‹ˆë©”ì´ì…˜ ë…¸ë“œ ì˜ˆì•½ ì‚¬ì´ì¦ˆë¥¼ ëŠ˜ë¦¬ëŠ”ê²ƒì´ ì¢‹ê² ìŒ..\n", filename);
 
 	m_list.PushBack(node);
 
-	if(m_list_map) {
-		if(MotionTypeID != -1) {
-			if(m_list_map_size > MotionTypeID) {
+	if (m_list_map) {
+		if (MotionTypeID != -1) {
+			if (m_list_map_size > MotionTypeID) {
 				m_list_map[MotionTypeID].PushBack(node);
 			}
 		}
@@ -131,32 +105,27 @@ RAnimation* RAnimationMgr::AddAnimationFile(char* name,char* filename,int sID,bo
 }
 
 void RAnimationMgr::DelAll() {
-
 	RAnimationHashList_Iter node;
 
-	if(m_list_map_size) {
-
-		for(int i=0;i<m_list_map_size;i++) {
+	if (m_list_map_size) {
+		for (int i = 0; i < m_list_map_size; i++) {
 			m_list_map[i].Clear();
 		}
 
-		delete [] m_list_map;
-		m_list_map	= NULL;
+		delete[] m_list_map;
+		m_list_map = NULL;
 		m_list_map_size = 0;
 	}
 
-//	if(m_list.size())
-//		mlog("ranimationmgr::del_all size = %d \n ",m_list.size() );
-
-	for(node = m_list.begin(); node != m_list.end(); ) {
+	for (node = m_list.begin(); node != m_list.end(); ) {
 		delete (*node);
 		node = m_list.erase(node);
 	}
 
 	m_list.Clear();
 
-	if(!m_node_table.empty())
-		m_node_table.clear();//¹öÆÛ´Â ³²¾Æ ÀÖ´Ù..
+	if (!m_node_table.empty())
+		m_node_table.clear();
 
 	m_id_last = 0;
 }
@@ -166,12 +135,12 @@ void RAnimationMgr::ReloadAll()
 	RAnimationHashList_Iter node;
 	RAnimation* pANode = NULL;
 
-	for(node = m_list.begin(); node != m_list.end(); ++node) {
+	for (node = m_list.begin(); node != m_list.end(); ++node) {
 		pANode = *node;
-		if(pANode) {
-			if(pANode->IsLoadDone()==false) {
+		if (pANode) {
+			if (pANode->IsLoadDone() == false) {
 				if (!pANode->LoadAni(pANode->m_filename)) {
-					mlog("elu %s file loading failure !!!\n",pANode->m_filename);
+					mlog("elu %s file loading failure !!!\n", pANode->m_filename);
 				}
 				pANode->SetLoadDone(true);
 			}
@@ -181,22 +150,21 @@ void RAnimationMgr::ReloadAll()
 
 void RAnimationMgr::MakeListMap(int size)
 {
-	if(m_list_map)//Å¬¸®¾îÇÏ±âÀü¿¡´Â ¸ø¸¸µë..
+	if (m_list_map)
 		return;
 
-	if( size > 100 ) {
-		mlog("RAnimationMgr::MakeListMap %d ´Â ³Ê¹«°úÇÑ°Å ¾Æ´Ñ°¡?\n",size);
+	if (size > 100) {
+		mlog("RAnimationMgr::MakeListMap %d ëŠ” ë„ˆë¬´ê³¼í•œê±° ì•„ë‹Œê°€?\n", size);
 	}
 
 	m_list_map = new RAnimationHashList[size];
 	m_list_map_size = size;
 }
 
-RAnimation* RAnimationMgr::GetAnimationListMap(char* name,int wtype) {
+RAnimation* RAnimationMgr::GetAnimationListMap(const char* name, int wtype) {
+	if (m_list_map_size == 0) return NULL;
 
-	if(m_list_map_size==0) return NULL;
-
-	if(m_list_map_size-1 < wtype) {
+	if (m_list_map_size - 1 < wtype) {
 		return NULL;
 	}
 
@@ -205,23 +173,23 @@ RAnimation* RAnimationMgr::GetAnimationListMap(char* name,int wtype) {
 	return pAni;
 }
 
-RAnimation* RAnimationMgr::GetAnimation(char* name,int wtype) 
+RAnimation* RAnimationMgr::GetAnimation(const char* name, int wtype)
 {
-	if(!name) 
+	if (!name)
 		return NULL;
 
-	if(name[0]==0) 
+	if (name[0] == 0)
 		return NULL;
 
-	if(m_list.empty())
+	if (m_list.empty())
 		return NULL;
 
 	RAnimation* pAni = NULL;
 
-	if(wtype != -1)
-		pAni = GetAnimationListMap(name,wtype);
+	if (wtype != -1)
+		pAni = GetAnimationListMap(name, wtype);
 
-	if(pAni) {
+	if (pAni) {
 		return pAni;
 	}
 
@@ -229,16 +197,15 @@ RAnimation* RAnimationMgr::GetAnimation(char* name,int wtype)
 	return pAni;
 }
 
-RAnimation* RAnimationMgr::GetAnimation(int sID,int wtype) {
-
+RAnimation* RAnimationMgr::GetAnimation(int sID, int wtype) {
 	RAnimationHashList_Iter node;
 
-	if( m_list.empty() ) 
+	if (m_list.empty())
 		return NULL;
 
-	for(node = m_list.begin(); node != m_list.end(); ++node) {
-		if( (*node)->CheckWeaponMotionType(wtype) )
-			if( (*node)->m_sID == sID )
+	for (node = m_list.begin(); node != m_list.end(); ++node) {
+		if ((*node)->CheckWeaponMotionType(wtype))
+			if ((*node)->m_sID == sID)
 				return *node;
 	}
 	return NULL;

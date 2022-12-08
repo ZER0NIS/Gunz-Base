@@ -311,7 +311,7 @@ struct RPhysiqueInfo {
 #define USE_VERTEX_SW 1
 #define USE_VERTEX_HW 1<<1
 
-class RIndexBuffer {
+class RIndexBuffer final {
 public:
 	RIndexBuffer();
 	virtual ~RIndexBuffer();
@@ -339,10 +339,11 @@ public:
 	WORD* m_i;
 
 	int m_size;
-	LPDIRECT3DINDEXBUFFER9 m_ib;
+
+	D3DPtr<IDirect3DIndexBuffer9> m_ib;
 };
 
-class RVertexBuffer {
+class RVertexBuffer final {
 public:
 	RVertexBuffer();
 	virtual ~RVertexBuffer();
@@ -385,9 +386,9 @@ public:
 
 public:
 
-	bool	m_is_init;
-	bool	m_bUseSWVertex;
-	bool	m_bUseHWVertex;
+	bool  m_is_init;
+	bool  m_bUseSWVertex;
+	bool  m_bUseHWVertex;
 	char* m_pVert;
 	char* m_v;
 
@@ -404,7 +405,7 @@ public:
 
 	D3DPRIMITIVETYPE m_PrimitiveType;
 
-	LPDIRECT3DVERTEXBUFFER9	m_vb;
+	D3DPtr<IDirect3DVertexBuffer9> 	m_vb;
 };
 
 inline D3DXQUATERNION* WINAPI D3DXQuaternionUnitAxisToUnitAxis2(D3DXQUATERNION* pOut, const D3DXVECTOR3* pvFrom, const D3DXVECTOR3* pvTo)
@@ -572,62 +573,59 @@ public:
 	}
 
 public:
+	const char* GetName() const;
+	void  SetName(const char* name);
 
-	char* GetName();
-	void  SetName(char* name);
-
-	bool  CheckName(char* name);
-	bool  CheckName(string& name);
-
+	bool  CheckName(const char* name);
+	bool  CheckName(const std::string& name);
 public:
-
 	int		m_NameID;
-	string	m_Name;
+	std::string	m_Name;
 };
 
 #pragma warning(disable : 4996)
 
-template<class T>
+template <class T>
 class RHashList : public std::list<T>
 {
 protected:
-	unordered_map<std::string, T>	m_HashMap;
-	unordered_map<int, T>		m_HashMapID;
+	std::unordered_map<std::string, T>	m_HashMap;
+	std::unordered_map<int, T>			m_HashMapID;
 public:
 	void PushBack(T pNode) {
-		push_back(pNode);
-		m_HashMap.insert(unordered_map<string, T>::value_type(string(pNode->GetName()), pNode));
+		this->push_back(pNode);
+		m_HashMap.insert({ std::string(pNode->GetName()), pNode });
 		if (pNode->m_NameID != -1)
-			m_HashMapID.insert(unordered_map<int, T>::value_type(pNode->m_NameID, pNode));
+			m_HashMapID.insert({ pNode->m_NameID, pNode });
 	}
 
 	void Clear() {
 		m_HashMap.clear();
 		m_HashMapID.clear();
-		clear();
+		this->clear();
 	}
 
-	iterator Erase(iterator where) {
-		iterator itor = erase(where);
+	auto Erase(typename RHashList<T>::iterator where) {
+		auto itor = this->erase(where);
 
-		if (itor != end()) {
-			unordered_map<string, T>::iterator hash_map_itor = m_HashMap.find(string((*itor)->GetName()));
+		if (itor != this->end()) {
+			auto it = m_HashMap.find(std::string((*itor)->GetName()));
 
-			if (hash_map_itor != m_HashMap.end()) {
-				m_HashMap.erase(hash_map_itor);
+			if (it != m_HashMap.end()) {
+				m_HashMap.erase(it);
 			}
 
-			unordered_map<int, T>::iterator hash_map_itor_id = m_HashMapID.find((*itor)->m_NameID);
+			auto it_id = m_HashMapID.find((*itor)->m_NameID);
 
-			if (hash_map_itor_id != m_HashMapID.end()) {
-				m_HashMapID.erase(hash_map_itor_id);
+			if (it_id != m_HashMapID.end()) {
+				m_HashMapID.erase(it_id);
 			}
 		}
 		return itor;
 	}
 
-	T Find(char* name) {
-		unordered_map<string, T>::iterator itor = m_HashMap.find(string(name));
+	T Find(const char* name) {
+		auto itor = m_HashMap.find(name);
 
 		if (itor != m_HashMap.end()) {
 			return (*itor).second;
@@ -636,10 +634,10 @@ public:
 	}
 
 	T Find(int id) {
-		unordered_map<int, T>::iterator itor = m_HashMapID.find(id);
+		auto itor = m_HashMapID.find(id);
 		if (itor != m_HashMapID.end()) {
-			return (*itor).second;
+			return itor->second;
 		}
-		return NULL;
+		return nullptr;
 	}
 };

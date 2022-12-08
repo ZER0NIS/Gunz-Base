@@ -420,7 +420,7 @@ void RMeshMgr::RenderFast(int id, D3DXMATRIX* unit_mat)
 	if (m_list.empty()) return;
 
 	if (id == -1) return;
-	_ASSERT(m_node_table[id]);
+
 	m_node_table[id]->Render(unit_mat);
 }
 

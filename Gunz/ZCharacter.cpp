@@ -1470,7 +1470,7 @@ void ZCharacter::OnChangeWeapon(char* WeaponModelName)
 	}
 }
 
-char* GetPartsNextName(RMeshPartsType ptype, RVisualMesh* pVMesh, bool bReverse)
+static const char* GetPartsNextName(RMeshPartsType ptype, RVisualMesh* pVMesh, bool bReverse)
 {
 	static bool bFirst = true;
 	static vector<RMeshNode*> g_table[6 * 2];
@@ -1543,7 +1543,7 @@ void ZCharacter::OnChangeParts(RMeshPartsType partstype, int PartsID)
 #ifndef _PUBLISH
 	if (m_bInitialized == false) return;
 	if (m_pVMesh) {
-		if (partstype > eq_parts_etc&& partstype < eq_parts_left_pistol) {
+		if (partstype > eq_parts_etc && partstype < eq_parts_left_pistol) {
 			if (PartsID == 0) {
 				m_pVMesh->SetBaseParts(partstype);
 			}
@@ -3215,7 +3215,7 @@ void ZCharacter::OnDamagedAPlayer(ZObject* pAttacker, vector<MTD_ShotInfo*> vSho
 			if (pAttacker == ZGetGame()->m_pMyCharacter && this != pAttacker && !ZGetGame()->m_pMyCharacter->IsDie())
 			{
 				void* pBlobArray = MMakeBlobArray(sizeof(MTD_ShotInfo), vShots.size());
-				for (int i = 0; i < vShots.size(); ++i)
+				for (size_t i = 0; i < vShots.size(); ++i)
 				{
 					MTD_ShotInfo* pShot = vShots[i];
 					void* pElement = MGetBlobArrayElement(pBlobArray, i);
@@ -3232,7 +3232,7 @@ void ZCharacter::OnScream()
 {
 	if (GetProperty()->nSex == MMS_MALE)
 		ZGetSoundEngine()->PlaySound("ooh_male", GetPosition(), IsObserverTarget());
-	else
+	else if (GetProperty()->nSex == MMS_FEMALE)
 		ZGetSoundEngine()->PlaySound("ooh_female", GetPosition(), IsObserverTarget());
 }
 

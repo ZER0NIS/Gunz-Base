@@ -880,7 +880,9 @@ void ZGameInterface::SetTextWidget(const char* szName, const char* szText)
 bool ZGameInterface::OnGameCreate(void)
 {
 	HideAllWidgets();
+
 	GetItemThumbnailMgr()->UnloadTextureTemporarily();
+
 	m_Camera.Init();
 	ClearMapThumbnail();
 
@@ -996,7 +998,7 @@ bool ZGameInterface::OnGameCreate(void)
 
 void ZGameInterface::OnGameDestroy(void)
 {
-	mlog("OnGameDestroy Started\n");
+	mlog("ZGameInterface::OnGameDestroy - Started\n");
 
 	MPicture* pPicture;
 	pPicture = (MPicture*)ZApplication::GetGameInterface()->GetIDLResource()->FindWidget("ClanResult_ClanBitmap1");
@@ -1041,7 +1043,7 @@ void ZGameInterface::OnGameDestroy(void)
 	SAFE_DELETE(m_Capture);
 #endif
 
-	mlog("OnGameDestroy Finished\n");
+	mlog("ZGameInterface::OnGameDestroy - Finished\n");
 }
 
 void ZGameInterface::OnGreeterCreate(void)
@@ -2895,7 +2897,7 @@ bool ZGameInterface::OnGlobalEvent(MEvent* pEvent)
 	}
 #endif
 	return false;
-}
+	}
 
 bool ZGameInterface::OnDebugEvent(MEvent* pEvent, MListener* pListener)
 {
@@ -3153,7 +3155,7 @@ bool ZGameInterface::Update(float fElapsed)
 			if (GetState() == GUNZ_BIRDTEST) OnBirdTestUpdate();
 #endif
 		}
-	}
+		}
 
 	if (GetState() == GUNZ_LOBBY && m_bWaitingArrangedGame) {
 		MLabel* pLabel = (MLabel*)m_IDLResource.FindWidget("LobbyWaitingArrangedGameLabel");
@@ -3185,7 +3187,7 @@ bool ZGameInterface::Update(float fElapsed)
 	__EP(13);
 
 	return true;
-}
+	}
 
 void ZGameInterface::OnResetCursor()
 {
@@ -4875,7 +4877,7 @@ void ZGameInterface::OnResponseServerStatusInfoList(const int nListCount, void* 
 			if (pss->m_nServerID > 200)
 			{
 				nCol = 1;
-		}
+			}
 
 			sockaddr_in Addr;
 			Addr.sin_addr.S_un.S_addr = pss->m_dwAgentIP;
@@ -4894,8 +4896,8 @@ void ZGameInterface::OnResponseServerStatusInfoList(const int nListCount, void* 
 			mlog("ServerList - ID:%d, Name:%s, IP:%s, Port:%d, Type:%d, (%d/%d)\n",
 				pss->m_nServerID, szServName, strAddrBuf, pss->m_nPort, pss->m_nType, pss->m_nCurPlayer, pss->m_nMaxPlayer, "");
 #endif
-	}
-}
+		}
+		}
 
 #ifdef LOCALE_NHNUSAA
 	char szAuthString[NHN_AUTH_LENGTH] = { 0, };
@@ -4969,7 +4971,7 @@ void ZGameInterface::OnRequestXTrapSeedKey(unsigned char* pComBuf)
 #else
 		"An abnormal behavior is detected. Terminating game.\n"
 #endif
-};
+		};
 		if (ZGetGameClient())
 		{
 			ZGetGameClient()->Disconnect();

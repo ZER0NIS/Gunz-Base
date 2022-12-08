@@ -5,30 +5,27 @@ class MXmlElement;
 
 #include <string>
 #include "RTypes.h"
-
-using namespace std;
-
 #include "RNameSpace.h"
+
 _NAMESPACE_REALSPACE2_BEGIN
 
 struct RLIGHT
 {
-	string	Name;
+	std::string	Name;
 	rvector Color;
 	rvector Position;
 	float	fIntensity;
-	float	fAttnStart,fAttnEnd;
+	float	fAttnStart, fAttnEnd;
 	DWORD	dwFlags;
 };
 
-class RLightList : public list<RLIGHT*> {
+class RLightList : public std::list<RLIGHT*> {
 public:
 	virtual ~RLightList();
-	bool Open(MXmlElement *pElement);
-	bool Save(MXmlElement *pElement);
+	bool Open(MXmlElement* pElement);
+	bool Save(MXmlElement* pElement);
 };
 
 _NAMESPACE_REALSPACE2_END
-
 
 #endif

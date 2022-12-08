@@ -1,6 +1,6 @@
-#ifndef _RAnimationNode_h
-#define _RAnimationNode_h
+#pragma once
 
+#include "GlobalTypes.h"
 #include "RAnimationDef.h"
 
 _NAMESPACE_REALSPACE2_BEGIN
@@ -16,35 +16,32 @@ public:
 	float GetVisValue(int frame);
 
 	D3DXQUATERNION	GetRotValue(int frame);
-	D3DXVECTOR3		GetPosValue(int frame);
+	rvector			GetPosValue(int frame);
 	rmatrix			GetTMValue(int frame);
-	int 			GetVecValue(int frame,D3DXVECTOR3* pVecTable);
+	int 			GetVecValue(int frame, rvector* pVecTable);
 
-	void ConnectToNameID();//자기이름으로 연결
+	void ConnectToNameID();
 
 public:
 
-	D3DXMATRIX		m_mat_base;
+	rmatrix		    m_mat_base;
 	int				m_node_id;
-	RMesh*			m_pConnectMesh;
+	RMesh* m_pConnectMesh;
 
 	int				m_pos_cnt;
 	int				m_rot_cnt;
 	int				m_mat_cnt;
 	int				m_vis_cnt;
 
-	RPosKey*		m_pos;
-	RQuatKey*		m_quat;
-	RTMKey*			m_mat;
-	RVisKey*		m_vis;
+	RPosKey* m_pos;
+	RQuatKey* m_quat;
+	RTMKey* m_mat;
+	RVisKey* m_vis;
 
 	int				m_vertex_cnt;
 	int				m_vertex_vcnt;
-	DWORD*			m_vertex_frame;
-	D3DXVECTOR3**	m_vertex;
+	DWORD* m_vertex_frame;
+	rvector** m_vertex;
 };
 
-
 _NAMESPACE_REALSPACE2_END
-
-#endif//_RAnimationNode_h

@@ -245,7 +245,7 @@ bool e_sort_str(RMeshNode* _a, RMeshNode* _b)
 	return false;
 }
 
-int CheckEf(char* str)
+static int CheckEf(const char* str)
 {
 	if (!str) return 0;
 
@@ -263,7 +263,7 @@ int CheckEf(char* str)
 	return 0;
 }
 
-int CheckEfAlign(char* str, int& ef, int& align)
+static int CheckEfAlign(const char* str, int& ef, int& align)
 {
 	if (!str || str[0] == 0)	return -1;
 
@@ -323,7 +323,7 @@ void RMesh::CheckNameToType(RMeshNode* pMeshNode)
 	pMeshNode->m_isDummy = false;
 	pMeshNode->m_isWeaponMesh = false;
 
-	char* pName = pMeshNode->GetName();
+	auto* pName = pMeshNode->GetName();
 
 #define NCMPNAME(name,n)	(strnicmp(pName,name,n)==0)
 #define CMPNAME(name)		(stricmp(pName,name)==0)

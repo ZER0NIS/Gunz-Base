@@ -1,117 +1,60 @@
 #include "stdafx.h"
 #include "RAniEventInfo.h"
+#include "MXml.h"
 
-RAniNameEventSet* _RAniIDEventSet::GetAniNameEventSet(char* AnimationName)
+const RAniNameEventSet* RAniIDEventSet::GetAniNameEventSet(const char* AnimationName) const
 {
-	for(m_AniIDEventSetIter = m_AniIDEventSet.begin(); m_AniIDEventSetIter != m_AniIDEventSet.end(); m_AniIDEventSetIter++)
-	{
-		if( strcmp( (*(m_AniIDEventSetIter))->GetAnimationName(), AnimationName) == 0)
-		{
-			return (*(m_AniIDEventSetIter));
-		}
-	}
-	return NULL;
+	for (auto& e : AniIDEventSet)
+		if (iequals(AnimationName, e.AnimationName))
+			return &e;
+	return nullptr;
 }
 
-
-RAniIDEventSet*	RAniEventMgr::GetAniIDEventSet(int id)
+const RAniIDEventSet* RAniEventMgr::GetAniIDEventSet(int ID) const
 {
-	for(m_AniEventMgrIter = m_AniEventMgr.begin(); m_AniEventMgrIter != m_AniEventMgr.end() ; m_AniEventMgrIter++)
-	{
-		if( (*(m_AniEventMgrIter))->GetID() == id)
-		{
-			return (*(m_AniEventMgrIter));
-		}
-	}
-	return NULL;
+	for (auto& e : AniEventMgr)
+		if (ID == e.ID)
+			return &e;
+	return nullptr;
 }
 
-bool RAniEventMgr::ReadXml(MZFileSystem* pFileSystem, const char* szFileName)
+bool RAniEventMgr::ReadXml(MZFileSystem* FileSystem, const char* Filename)
 {
 	MXmlDocument xmlIniData;
-	if (!xmlIniData.LoadFromFile(szFileName, pFileSystem))
+	if (!xmlIniData.LoadFromFile(Filename, FileSystem))
 		return false;
 
-	MXmlElement rootElement, chrElement, attrElement;
-	char szTagName[256];
+	for (auto&& NPC : xmlIniData.GetDocumentElement().Children())
+	{
+		if (!iequals(NPC.GetTagName(), "NPC"))
+			return false;
 
-	rootElement = xmlIniData.GetDocumentElement();
-	int iCount = rootElement.GetChildNodeCount();
+		auto& IDSet = emplace_back(AniEventMgr);
+		if (!NPC.GetAttribute(&IDSet.ID, "id"))
+			return false;
 
-	for (int i = 0; i < iCount; i++) {
+		for (auto&& Animation : NPC.Children())
+		{
+			if (!iequals(Animation.GetTagName(), "Animation"))
+				return false;
 
-		chrElement = rootElement.GetChildNode(i);
-		chrElement.GetTagName(szTagName);
+			auto& NameSet = emplace_back(IDSet.AniIDEventSet);
+			if (!Animation.GetAttribute(NameSet.AnimationName, "name"))
+				return false;
 
-		if (szTagName[0] == '#') continue;
+			for (auto&& AddAnimEvent : Animation.Children())
+			{
+				if (!iequals(AddAnimEvent.GetNodeName(), "AddAnimEvent") ||
+					!iequals(AddAnimEvent.GetAttribute("eventtype").value_or(""), "sound"))
+					return false;
 
-		if (!stricmp(szTagName, "NPC")) {
-			char ID[256];
-
-			chrElement.GetAttribute(ID, "id");
-			RAniIDEventSet * pAniIDEventSet = new RAniIDEventSet();
-			pAniIDEventSet->SetID(atoi(ID));
-			ParseAniEvent(&chrElement, pAniIDEventSet);
-			m_AniEventMgr.push_back(pAniIDEventSet);
+				auto& Info = emplace_back(NameSet.AniNameEventSet);
+				if (!AddAnimEvent.GetAttribute(Info.Filename, "filename") ||
+					!AddAnimEvent.GetAttribute(&Info.BeginFrame, "beginframe"))
+					return false;
+			}
 		}
 	}
 
 	return true;
-}
-
-void RAniEventMgr::ParseAniEvent(MXmlElement* PNode, RAniIDEventSet* pAnimIdEventSet)
-{
-	char NodeName[256];
-	char cAnimationName[256];
-
-	int nCnt = PNode->GetChildNodeCount();
-
-	MXmlElement Node;
-
-	for (int i=0; i<nCnt; i++) 
-	{
-		Node = PNode->GetChildNode(i);
-
-		Node.GetTagName(NodeName);
-
-		if (NodeName[0] == '#') continue;
-
-		if (strcmp(NodeName, "Animation")==0) 
-		{
-			Node.GetAttribute(cAnimationName, "name");
-			//애니메이션 이름 이벤트 셋 생성
-			RAniNameEventSet* pAniNameEventSet = new RAniNameEventSet();
-			pAniNameEventSet->SetAnimationName(cAnimationName);
-
-			MXmlElement ChildNode;
-			int nEventChiledCnt = Node.GetChildNodeCount();	//차일드 노드 개수 읽어와서
-			for(int i=0; i<nEventChiledCnt; i++)			//파싱하기
-			{
-				char ChildNodeName[256];
-				char ChildEventType[256];
-				char ChildEventFileName[256];
-				char ChildEventBeginFrame[256];
-				
-				ChildNode = Node.GetChildNode(i);
-				ChildNode.GetNodeName(ChildNodeName);
-				if(strcmp(ChildNodeName, "AddAnimEvent")==0)
-				{
-					ChildNode.GetAttribute(ChildEventType, "eventtype");
-					ChildNode.GetAttribute(ChildEventFileName, "filename");
-					ChildNode.GetAttribute(ChildEventBeginFrame, "beginframe");
-
-					//애니메이션 이벤트 생성
-					RAniEventInfo* AniEventInfo = new RAniEventInfo();
-
-					AniEventInfo->SetBeginFrame(atoi(ChildEventBeginFrame));
-					AniEventInfo->SetEventType(ChildEventType);
-					AniEventInfo->SetFileName(ChildEventFileName);
-					//애니메이션 이벤트를 애니메이션 이름 이벤트 셋에 추가
-					pAniNameEventSet->m_AniNameEventSet.push_back(AniEventInfo);
-				}
-			}
-			//애니메이션 이름 이벤트 셋을 애니메이션 아이디 이벤트 셋에 추가
-			pAnimIdEventSet->m_AniIDEventSet.push_back(pAniNameEventSet);
-		}
-	}
 }

@@ -67,7 +67,9 @@ float RGetWidthScreen() { return float(g_nScreenHeight) / float(g_nScreenWidth);
 
 int RGetPicmip() { return g_nPicmip; }
 RPIXELFORMAT RGetPixelFormat() { return g_PixelFormat; }
+
 LPDIRECT3DDEVICE9	RGetDevice() { return g_pd3dDevice; }
+
 bool CheckVideoAdapterSupported();
 
 unsigned long g_rsnRenderFlags = RRENDER_CLEAR_BACKBUFFER;
@@ -144,8 +146,6 @@ BOOL IsCompressedTextureFormatOk(D3DFORMAT TextureFormat)
 }
 
 void RSetFileSystem(MZFileSystem* pFileSystem) { g_pFileSystem = pFileSystem; }
-
-RParticleSystem* RGetParticleSystem() { return &g_ParticleSystem; }
 
 bool QueryFeature(RQUERYFEATURETYPE feature)
 {
@@ -482,6 +482,7 @@ void RResetDevice(const RMODEPARAMS* params)
 	g_d3dpp.BackBufferWidth = g_nScreenWidth;
 	g_d3dpp.BackBufferHeight = g_nScreenHeight;
 	g_d3dpp.BackBufferFormat = g_PixelFormat;
+
 	if (nSettingAA == 0)
 	{
 		if (SUCCEEDED(g_pD3D->CheckDeviceMultiSampleType(D3DADAPTER_DEFAULT, D3DDEVTYPE_HAL, g_PixelFormat, params->bFullScreen, D3DMULTISAMPLE_4_SAMPLES, NULL))) {
@@ -547,8 +548,11 @@ RRESULT RIsReadyToRender()
 	}
 	return R_OK;
 }
+#if OLDFPS
 
 #define FPS_INTERVAL	1000
+
+#endif
 
 static DWORD g_clear_color = 0x00000000;
 
@@ -581,9 +585,10 @@ void RFlip()
 		g_pd3dDevice->Clear(0, NULL, D3DCLEAR_TARGET | D3DCLEAR_ZBUFFER, g_clear_color, 1.0f, 0L);
 	}
 	else
-		g_pd3dDevice->Clear(0, NULL, D3DCLEAR_ZBUFFER, g_clear_color, 1.0f, 0);
+		g_pd3dDevice->Clear(0, NULL, D3DCLEAR_ZBUFFER, g_clear_color, 1.0f, 0L);
 
 	RBeginScene();
+#if OLDFPS
 
 	{
 		g_nFrameCount++;
@@ -608,7 +613,8 @@ void RFlip()
 			g_dwLastFPSTime = currentTime;
 			g_nLastFrameCount = g_nFrameCount;
 		}
-	}
+}
+#endif
 }
 
 void RDrawLine(rvector& v1, rvector& v2, DWORD dwColor)
@@ -913,6 +919,7 @@ void RSetFrameLimitPerSeceond(unsigned short nFrameLimit)
 	case 1: {	g_nFrameLimitValue = 60;	}	break;
 	case 2: {	g_nFrameLimitValue = 120;	}	break;
 	case 3: {	g_nFrameLimitValue = 240;	}	break;
+	case 4: {	g_nFrameLimitValue = 333;	}	break;
 	default: {	g_nFrameLimitValue = 0;		}	break;
 	}
 }

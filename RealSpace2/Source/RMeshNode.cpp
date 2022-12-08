@@ -270,8 +270,6 @@ bool RMeshNode::SetBVertData(RBlendVertex* pBVert, int i, int j, int pv_index, i
 	{
 		index = pPhysique->m_parent_id[k];
 
-		_ASSERT(0 <= index && index < MAX_BONE);
-
 		if (DifferenceMap[index] == -1)
 		{
 			DifferenceMap[index] = 3 * matrixIndex + ANIMATION_MATRIX_BASE;
@@ -305,18 +303,14 @@ void RMeshNode::MakeVertexBuffer(int index, bool lvert, char* pBuf, int _vsize, 
 
 bool RMeshNode::MakeVSVertexBuffer()
 {
-	_ASSERT(m_physique);
-	_ASSERT(m_pParentMesh);
-	_ASSERT((m_face_num * 3) < MAX_VERTEX);
-	_ASSERT(RIsSupportVS());
-	_ASSERT(m_physique_num == m_point_num);
-
-	if ((m_face_num * 3) > MAX_VERTEX) {
+	if ((m_face_num * 3) > MAX_VERTEX)
+	{
 		mlog("Point Number is larger than defined max vertex .. \n");
 		return false;
 	}
 
-	if (!RIsSupportVS())	return false;
+	if (!RIsSupportVS())
+		return false;
 
 	int i;
 
@@ -446,6 +440,9 @@ void RMeshNode::RenderNodeVS(RMesh* pMesh, D3DXMATRIX* pWorldMat_, ESHADER shade
 
 	RMtrl* psMtrl;
 
+	D3DPtr<IDirect3DVertexShader9> PrevShader;
+	dev->GetVertexShader(MakeWriteProxy(PrevShader));
+
 	dev->SetVertexDeclaration(RGetShaderMgr()->getShaderDecl(0));
 	dev->SetVertexShader(RGetShaderMgr()->getShader(shader_));
 
@@ -477,7 +474,7 @@ void RMeshNode::RenderNodeVS(RMesh* pMesh, D3DXMATRIX* pWorldMat_, ESHADER shade
 
 	__EP(5009);
 
-	dev->SetVertexShader(NULL);
+	dev->SetVertexShader(PrevShader.get());
 }
 
 void RMeshNode::ConnectToNameID()
@@ -725,7 +722,7 @@ void RMeshNode::ToonRenderSettingOnOld(RMtrl* pMtrl)
 		dev->SetTextureStageState(0, D3DTSS_TEXCOORDINDEX, D3DTSS_TCI_CAMERASPACENORMAL);
 
 		dev->SetTransform(D3DTS_TEXTURE0, &m_pParentMesh->m_pVisualMesh->m_ToonUVMat);
-		dev->SetTexture(0, m_pParentMesh->m_pVisualMesh->m_ToonTexture);
+		dev->SetTexture(0, m_pParentMesh->m_pVisualMesh->m_ToonTexture.get());
 
 		if (toonTexture) {
 			dev->SetTextureStageState(1, D3DTSS_COLORARG1, D3DTA_CURRENT);
@@ -748,7 +745,8 @@ void RMeshNode::ToonRenderSettingOnOld(RMtrl* pMtrl)
 
 void RMeshNode::ToonRenderSettingOn(RMtrl* pMtrl)
 {
-	if (m_pParentMesh && m_pParentMesh->m_pVisualMesh && m_pParentMesh->m_pVisualMesh->m_ToonTexture) {
+	if (m_pParentMesh && m_pParentMesh->m_pVisualMesh && m_pParentMesh->m_pVisualMesh->m_ToonTexture)
+	{
 		bool toonLighting = m_pParentMesh->m_pVisualMesh->m_bToonLighting;
 		bool toonTexture = m_pParentMesh->m_pVisualMesh->m_bToonTextureRender;
 
@@ -835,7 +833,7 @@ void RMeshNode::ToonRenderSettingOn(RMtrl* pMtrl)
 			if (pMtrl->m_pToonTexture)
 				dev->SetTexture(1, pMtrl->m_pToonTexture->GetTexture());
 			else
-				dev->SetTexture(1, m_pParentMesh->m_pVisualMesh->m_ToonTexture);
+				dev->SetTexture(1, m_pParentMesh->m_pVisualMesh->m_ToonTexture.get());
 		}
 		else {
 			dev->SetTextureStageState(1, D3DTSS_COLOROP, D3DTOP_DISABLE);
@@ -870,29 +868,27 @@ void RMeshNode::ToonRenderSettingOff()
 
 void RMeshNode::ToonRenderSilhouetteSettingOn()
 {
-	{
-		LPDIRECT3DDEVICE9 dev = RGetDevice();
+	LPDIRECT3DDEVICE9 dev = RGetDevice();
 
-		DWORD color = 0xff111111;
-		rmatrix m, s;
+	DWORD color = 0xff111111;
+	rmatrix m, s;
 
-		dev->SetRenderState(D3DRS_ALPHABLENDENABLE, FALSE);
-		dev->SetRenderState(D3DRS_CULLMODE, D3DCULL_CW);
-		dev->SetRenderState(D3DRS_LIGHTING, FALSE);
+	dev->SetRenderState(D3DRS_ALPHABLENDENABLE, FALSE);
+	dev->SetRenderState(D3DRS_CULLMODE, D3DCULL_CW);
+	dev->SetRenderState(D3DRS_LIGHTING, FALSE);
 
-		dev->SetTextureStageState(0, D3DTSS_COLOROP, D3DTOP_SELECTARG1);
-		dev->SetTextureStageState(0, D3DTSS_COLORARG1, D3DTA_TFACTOR);
-		dev->SetTextureStageState(0, D3DTSS_ALPHAOP, D3DTOP_DISABLE);
+	dev->SetTextureStageState(0, D3DTSS_COLOROP, D3DTOP_SELECTARG1);
+	dev->SetTextureStageState(0, D3DTSS_COLORARG1, D3DTA_TFACTOR);
+	dev->SetTextureStageState(0, D3DTSS_ALPHAOP, D3DTOP_DISABLE);
 
-		dev->SetRenderState(D3DRS_TEXTUREFACTOR, color);
-		dev->SetRenderState(D3DRS_SHADEMODE, D3DSHADE_FLAT);
+	dev->SetRenderState(D3DRS_TEXTUREFACTOR, color);
+	dev->SetRenderState(D3DRS_SHADEMODE, D3DSHADE_FLAT);
 
-		dev->SetSamplerState(0, D3DSAMP_MAGFILTER, D3DTEXF_POINT);
-		dev->SetSamplerState(0, D3DSAMP_MINFILTER, D3DTEXF_POINT);
+	dev->SetSamplerState(0, D3DSAMP_MAGFILTER, D3DTEXF_POINT);
+	dev->SetSamplerState(0, D3DSAMP_MINFILTER, D3DTEXF_POINT);
 
-		dev->SetTexture(0, NULL);
-		dev->SetTexture(1, NULL);
-	}
+	dev->SetTexture(0, NULL);
+	dev->SetTexture(1, NULL);
 }
 
 void RMeshNode::ToonRenderSilhouetteSettingOff()
@@ -978,7 +974,7 @@ void RMeshNode::Render(D3DXMATRIX* pWorldMatrix)
 			m_vb->ReConvertSilhouetteBuffer(fLen);
 
 			ToonRenderSilhouetteSettingOff();
-		}
+	}
 
 		ToonRenderSettingOff();
 
@@ -989,7 +985,7 @@ void RMeshNode::Render(D3DXMATRIX* pWorldMatrix)
 		pMesh->SetCharacterMtrl_OFF(pMtrl, pMesh->GetMeshNodeVis(this));
 
 		__EP(411);
-	}
+}
 }
 
 void RMeshNode::CheckAlignMapObject(rmatrix& hr_mat)

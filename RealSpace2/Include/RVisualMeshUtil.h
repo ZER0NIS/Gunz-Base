@@ -10,7 +10,6 @@ class RMesh;
 class RMeshNode;
 class RBspObject;
 
-
 enum AnimationPlayState {
 	APState_Stop = 0,
 	APState_Play,
@@ -18,7 +17,6 @@ enum AnimationPlayState {
 };
 
 enum REnchantType {
-
 	REnchantType_None = 0,
 	REnchantType_Fire,
 	REnchantType_Cold,
@@ -30,13 +28,12 @@ enum REnchantType {
 class PartsInfo {
 public:
 	PartsInfo() {
-		m_PartsType	= eq_parts_etc;
+		m_PartsType = eq_parts_etc;
 		m_PartsName[0] = NULL;
 		m_PartsFileName[0] = NULL;
 	}
 
 	~PartsInfo() {
-
 	}
 
 public:
@@ -48,7 +45,7 @@ public:
 
 enum RAniMode {
 	ani_mode_lower = 0,
-	ani_mode_upper ,
+	ani_mode_upper,
 	ani_mode_blend_lower,
 	ani_mode_blend_upper,
 	ani_mode_end,
@@ -72,11 +69,11 @@ public:
 	}
 
 	bool SetName(char* pName) {
-		strcpy(Name,pName);
+		strcpy(Name, pName);
 		return true;
 	}
 
-	void SetPos(float x,float y,float z) {
+	void SetPos(float x, float y, float z) {
 		Pos.x = x;
 		Pos.y = y;
 		Pos.z = z;
@@ -94,8 +91,8 @@ class RWeaponSNode
 {
 public:
 	RWeaponSNode() {
-		up = rvector(0.f,0.f,0.f);
-		down = rvector(0.f,0.f,0.f);
+		up = rvector(0.f, 0.f, 0.f);
+		down = rvector(0.f, 0.f, 0.f);
 		len = 0.0f;
 		color[0] = 0xff888888;
 		color[1] = 0xff888888;
@@ -104,7 +101,7 @@ public:
 	DWORD	color[2];
 	rvector up;
 	rvector down;
-	float	len;		//이전노드부터의 거리
+	float	len;
 };
 
 class RWeaponTracks {
@@ -121,20 +118,13 @@ public:
 	void Update();
 	void CheckShift();
 
-	void AddVertex(RLVertex* pVert );
-//	void AddVertexSpline(RLVertex* pVert);
-	void SetVertexSpline(rvector& p, DWORD c );
+	void AddVertex(RLVertex* pVert);
+	void SetVertexSpline(rvector& p, DWORD c);
 
 	void Clear();
 
 	int  GetLastAddVertex(rvector* pOutVec);
 
-/*
-	RWeaponTracksNode** m_pNodeTable;
-
-	int	m_max_node_size;
-	int m_current_node_size;
-*/
 private:
 	bool IsTimeToAddVertex();
 
@@ -181,27 +171,28 @@ public:
 
 	void Init();
 
-	HRESULT Create(LPDIRECT3DDEVICE9 dev,int w,int h);
+	HRESULT Create(LPDIRECT3DDEVICE9 dev, int w, int h);
 	void	Destroy();
 
 	HRESULT UpdateTexture();
 	void	ProcessFire(int coolamount);
 
-	LPDIRECT3DTEXTURE9 GetTexture() { return m_pTexture; }
+	LPDIRECT3DTEXTURE9 GetTexture() { return m_pTexture.get(); }
 
 public:
 
-	unsigned char*	m_pData;  
-	unsigned char*	m_pData2; 
-	unsigned char*	m_pFireActive;   
-	unsigned char*	m_pFireScratch;  
+	unsigned char* m_pData;
+	unsigned char* m_pData2;
+	unsigned char* m_pFireActive;
+	unsigned char* m_pFireScratch;
 
-	int					m_w;
-	int					m_h;
-	LPDIRECT3DTEXTURE9	m_pTexture;
+	int m_w;
+	int m_h;
+
+	D3DPtr<IDirect3DTexture9> m_pTexture;
 	PALETTEENTRY		m_Palette[256];
 };
 
 _NAMESPACE_REALSPACE2_END
 
-#endif//_RVisualMeshUtil_h
+#endif

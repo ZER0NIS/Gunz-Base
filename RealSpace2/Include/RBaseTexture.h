@@ -10,7 +10,7 @@
 #include "MHash.h"
 #include "RTypes.h"
 
-typedef struct IDirect3DTexture9 *LPDIRECT3DTEXTURE9;
+typedef struct IDirect3DTexture9* LPDIRECT3DTEXTURE9;
 
 _NAMESPACE_REALSPACE2_BEGIN
 
@@ -49,7 +49,6 @@ public:
 	auto& GetFileName() const { return filename; }
 
 	LPDIRECT3DTEXTURE9 GetTexture();
-
 private:
 	friend RTextureManager;
 
@@ -78,11 +77,11 @@ public:
 
 	void Destroy();
 
-	RBaseTexture *CreateBaseTexture(const StringView& filename, RTextureType tex_type,
+	RBaseTexture* CreateBaseTexture(const StringView& filename, RTextureType tex_type,
 		bool bUseMipmap = false, bool bUseFileSystem = true);
-	RBaseTexture *CreateBaseTextureMg(const StringView& filename, RTextureType tex_type,
+	RBaseTexture* CreateBaseTextureMg(const StringView& filename, RTextureType tex_type,
 		bool bUseMipmap = false, bool bUseFileSystem = true);
-	RBaseTexture *CreateBaseTextureFromMemory(const void* data, size_t size, RTextureType texlevel,
+	RBaseTexture* CreateBaseTextureFromMemory(const void* data, size_t size, RTextureType texlevel,
 		bool bUseMipmap = false, bool bUseFileSystem = true);
 
 	void DestroyBaseTexture(RBaseTexture*);
@@ -96,7 +95,7 @@ public:
 	int CalcUsedCount();
 
 private:
-	RBaseTexture *CreateBaseTextureSub(bool Managed, const StringView& filename, RTextureType tex_type,
+	RBaseTexture* CreateBaseTextureSub(bool Managed, const StringView& filename, RTextureType tex_type,
 		bool bUseMipmap = false, bool bUseFileSystem = true);
 
 	std::list<RBaseTexture> Textures;

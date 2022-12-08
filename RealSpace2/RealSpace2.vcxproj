@@ -279,11 +279,8 @@
     </ResourceCompile>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <None Include="Doc\맵 디자인 규칙 문서.txt" />
-    <None Include="doc\캐릭터 디자인 규칙 문서.txt" />
-  </ItemGroup>
-  <ItemGroup>
     <ClCompile Include="Source\MeshManager.cpp" />
+    <ClCompile Include="Source\RCollisionDetection.cpp" />
     <ClCompile Include="Source\RealSpace2.cpp" />
     <ClCompile Include="Source\RHalfEdgeMesh.cpp" />
     <ClCompile Include="Source\RMath.cpp" />
@@ -314,7 +311,6 @@
     <ClCompile Include="Source\RCylinder.cpp" />
     <ClCompile Include="Source\RSphere.cpp" />
     <ClCompile Include="Source\RBspObject.cpp" />
-    <ClCompile Include="Source\RCollisionDetection.cpp" />
     <ClCompile Include="Source\RDummyList.cpp" />
     <ClCompile Include="Source\RDynamicLight.cpp" />
     <ClCompile Include="Source\RLenzFlare.cpp" />
@@ -348,6 +344,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Include\MeshManager.h" />
+    <ClInclude Include="Include\RCollisionDetection.h" />
     <ClInclude Include="Include\RHalfEdgeMesh.h" />
     <ClInclude Include="Include\RMath.h" />
     <ClInclude Include="Include\RMesh.h" />
@@ -374,7 +371,6 @@
     <ClInclude Include="Include\RCylinder.h" />
     <ClInclude Include="Include\RSphere.h" />
     <ClInclude Include="Include\RBspObject.h" />
-    <ClInclude Include="Include\RCollisionDetection.h" />
     <ClInclude Include="Include\RDummyList.h" />
     <ClInclude Include="Include\RDynamicLight.h" />
     <ClInclude Include="Include\RLenzFlare.h" />

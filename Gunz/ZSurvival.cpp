@@ -44,8 +44,6 @@ ZSurvival::~ZSurvival()
 	OnDestroyOnce();
 }
 
-#ifdef _QUEST
-
 bool ZSurvival::OnCreate()
 {
 	memset(&m_Cheet, 0, sizeof(m_Cheet));
@@ -85,9 +83,6 @@ bool ZSurvival::Load()
 	if (m_bLoaded) return true;
 
 	string strFileDropTable(FILENAME_DROPTABLE);
-#ifndef _DEBUG
-	strFileDropTable += "";
-#endif
 	if (!m_DropTable.ReadXml(ZApplication::GetFileSystem(), strFileDropTable.c_str()))
 	{
 		mlog("Error while Read m_DropTable %s", strFileDropTable.c_str());
@@ -95,9 +90,6 @@ bool ZSurvival::Load()
 	}
 
 	string strFileNameZNPC(FILENAME_ZNPC_DESC);
-#ifndef _DEBUG
-	strFileNameZNPC += "";
-#endif
 	if (!m_NPCCatalogue.ReadXml(ZApplication::GetFileSystem(), strFileNameZNPC.c_str()))
 	{
 		mlog("Error while Read Item Descriptor %s", strFileNameZNPC.c_str());
@@ -107,21 +99,22 @@ bool ZSurvival::Load()
 	ProcessNPCDropTableMatching();
 
 	string strFileNameSurvivalMap(FILENAME_SURVIVALMAP);
-#ifndef _DEBUG
-	strFileNameSurvivalMap += "";
-#endif
 	if (!m_MapCatalogue.ReadXml(ZApplication::GetFileSystem(), strFileNameSurvivalMap.c_str()))
 	{
-		mlog("Read Survivalmap Catalogue Failed");
+		mlog("Error while Read Survivalmap Catalogue %s", strFileNameSurvivalMap.c_str());
 		return false;
 	}
 
-	RAniEventMgr* AniEventMgr = ZGetAniEventMgr();
-	if (!AniEventMgr->ReadXml(ZApplication::GetFileSystem(), "System/AnimationEvent.xml"))
+	if (!ZGetAniEventMgr()->ReadXml(ZApplication::GetFileSystem(), "System/AnimationEvent.xml"))
 	{
 		mlog("Read Animation Event Failed");
 		return false;
 	}
+
+	AniFrameInfo::m_pEventFunc = [](const RAniEventInfo& Info, rvector Pos) {
+		ZGetSoundEngine()->PlaySound(Info.Filename, Pos, false);
+	};
+
 	m_bLoaded = true;
 	return true;
 }
@@ -130,17 +123,9 @@ void ZSurvival::Reload()
 {
 	m_bLoaded = false;
 
-#ifdef _DEBUG
-	ZApplication::GetSkillManager()->Destroy();
-	ZApplication::GetSkillManager()->Create();
-#endif
-
 	m_NPCCatalogue.Clear();
 	m_MapCatalogue.Clear();
 	m_DropTable.Clear();
-
-	RAniEventMgr* AniEventMgr = ZGetAniEventMgr();
-	AniEventMgr->Destroy();
 
 	Load();
 }
@@ -184,23 +169,10 @@ void ZSurvival::OnGameUpdate(float fElapsed)
 	UpdateNavMeshWeight(fElapsed);
 }
 
-#else
-
-void ZSurvival::OnGameCreate() {}
-void ZSurvival::OnGameDestroy() {}
-void ZSurvival::OnGameUpdate(float fElapsed) {}
-bool ZSurvival::OnCreate() { return true; }
-void ZSurvival::OnDestroy() {}
-#endif
-
 void ZSurvival::UpdateNavMeshWeight(float fDelta)
 {
 	if ((ZGetGame()->GetTime() - m_fLastWeightTime) >= 1.0f)
 	{
-#ifdef _DEBUG
-		unsigned long int nLastTime = timeGetTime();
-#endif
-
 		RNavigationMesh* pNavMesh = ZGetGame()->GetWorld()->GetBsp()->GetNavigationMesh();
 		if (pNavMesh != NULL)
 		{

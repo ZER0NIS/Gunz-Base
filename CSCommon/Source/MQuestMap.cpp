@@ -6,10 +6,9 @@
 /////////////////////////////////////////////////
 MQuestMapCatalogue::MQuestMapCatalogue()
 {
-
 }
 
-MQuestMapCatalogue::~MQuestMapCatalogue() 
+MQuestMapCatalogue::~MQuestMapCatalogue()
 {
 	Clear();
 }
@@ -34,7 +33,7 @@ MQuestMapSectorInfo* MQuestMapCatalogue::GetSectorInfo(int nSector)
 		return (*itor).second;
 	}
 
- 	//_ASSERT(0);
+	//_ASSERT(0);
 	return NULL;
 }
 
@@ -63,7 +62,6 @@ void MQuestMapCatalogue::Clear()
 
 	m_MapsetInfo.clear();
 
-
 	// sector
 	for (MQuestMapSectorMap::iterator itor = m_SectorInfo.begin(); itor != m_SectorInfo.end(); ++itor)
 	{
@@ -72,8 +70,6 @@ void MQuestMapCatalogue::Clear()
 
 	m_SectorInfo.clear();
 }
-
-
 
 void MQuestMapCatalogue::InsertMapset(MQuestMapsetInfo* pMapset)
 {
@@ -102,7 +98,6 @@ void MQuestMapCatalogue::InsertSector(MQuestMapSectorInfo* pSector)
 		return;
 	}
 
-
 	m_SectorInfo.insert(MQuestMapSectorMap::value_type(nID, pSector));
 }
 
@@ -120,15 +115,13 @@ void MQuestMapCatalogue::InsertSector(MQuestMapSectorInfo* pSector)
 #define MTOK_QUESTMAP_ATTR_RANGE_SPAWN				"range_spawn"
 #define MTOK_QUESTMAP_ATTR_BOSS_SPAWN				"boss_spawn"
 
-
 void MQuestMapCatalogue::ParseMapset(MXmlElement& element)
 {
-	char szTemp[256]="";
+	char szTemp[256] = "";
 	int n = 0;
 	char szAttrValue[256];
 	char szAttrName[64];
 	char szTagName[128];
-
 
 	MQuestMapsetInfo* pMapsetInfo = new MQuestMapsetInfo();
 	int nAttrCount = element.GetAttributeCount();
@@ -147,7 +140,6 @@ void MQuestMapCatalogue::ParseMapset(MXmlElement& element)
 
 	// sector 목록을 미리 읽는다.
 	ParseMapsetSector1Pass(element, pMapsetInfo);
-
 
 	int nChildCount = element.GetChildNodeCount();
 	MXmlElement chrElement;
@@ -177,20 +169,18 @@ void MQuestMapCatalogue::ParseMapset(MXmlElement& element)
 				ParseSector(chrElement, pSector);
 			}
 		}
-	}	
-
+	}
 
 	InsertMapset(pMapsetInfo);
 }
 
 void MQuestMapCatalogue::ParseSector(MXmlElement& element, MQuestMapSectorInfo* pSector)
 {
-	char szTemp[256]="";
+	char szTemp[256] = "";
 	int n = 0;
 	char szAttrValue[256];
 	char szAttrName[64];
 	char szTagName[128];
-
 
 	int nChildCount = element.GetChildNodeCount();
 
@@ -214,7 +204,6 @@ void MQuestMapCatalogue::ParseSector(MXmlElement& element, MQuestMapSectorInfo* 
 					strcpy(pSector->Links[nLinkIndex].szName, szAttrValue);
 				}
 			}
-
 
 			int nLinkChildCount = chrElement.GetChildNodeCount();
 			MXmlElement elementTarget;
@@ -242,18 +231,16 @@ void MQuestMapCatalogue::ParseSector(MXmlElement& element, MQuestMapSectorInfo* 
 			// 링크수가 10개가 넘으면 안된다.
 			//_ASSERT(pSector->nLinkCount <= MAX_SECTOR_LINK);
 		}
-	}	
-
+	}
 }
 
 void MQuestMapCatalogue::ParseMapsetSector1Pass(MXmlElement& elementMapset, MQuestMapsetInfo* pMapset)
 {
-	char szTemp[256]="";
+	char szTemp[256] = "";
 	int n = 0;
 	char szAttrValue[256];
 	char szAttrName[64];
 	char szTagName[128];
-
 
 	int nChildCount = elementMapset.GetChildNodeCount();
 
@@ -293,14 +280,13 @@ void MQuestMapCatalogue::ParseMapsetSector1Pass(MXmlElement& elementMapset, MQue
 					pSectorInfo->nSpawnPointCount[MNST_BOSS] = atoi(szAttrValue);
 					if (pSectorInfo->nSpawnPointCount[MNST_BOSS] > 0) pSectorInfo->bBoss = true;
 				}
-
 			}
 
 			InsertSector(pSectorInfo);
 
 			pMapset->vecSectors.push_back(pSectorInfo->nID);
 		}
-	}	
+	}
 }
 
 bool MQuestMapCatalogue::ReadXml(const char* szFileName)
@@ -323,7 +309,6 @@ bool MQuestMapCatalogue::ReadXml(const char* szFileName)
 	int iCount = rootElement.GetChildNodeCount();
 
 	for (int i = 0; i < iCount; i++) {
-
 		chrElement = rootElement.GetChildNode(i);
 		chrElement.GetTagName(szTagName);
 
@@ -339,11 +324,10 @@ bool MQuestMapCatalogue::ReadXml(const char* szFileName)
 
 	InitBackLinks();
 
-
 	return true;
 }
 
-bool MQuestMapCatalogue::ReadXml(MZFileSystem* pFileSystem,const char* szFileName)
+bool MQuestMapCatalogue::ReadXml(MZFileSystem* pFileSystem, const char* szFileName)
 {
 	MXmlDocument xmlIniData;
 	if (!xmlIniData.LoadFromFile(szFileName, pFileSystem))
@@ -358,7 +342,6 @@ bool MQuestMapCatalogue::ReadXml(MZFileSystem* pFileSystem,const char* szFileNam
 	int iCount = rootElement.GetChildNodeCount();
 
 	for (int i = 0; i < iCount; i++) {
-
 		chrElement = rootElement.GetChildNode(i);
 		chrElement.GetTagName(szTagName);
 
@@ -375,7 +358,6 @@ bool MQuestMapCatalogue::ReadXml(MZFileSystem* pFileSystem,const char* szFileNam
 
 	return true;
 }
-
 
 void MQuestMapCatalogue::DebugReport()
 {
@@ -400,7 +382,7 @@ void MQuestMapCatalogue::DebugReport()
 
 					for (int k = 0; k < (int)pSector->Links[j].vecTargetSectors.size(); k++)
 					{
-						MQuestMapSectorInfo* pTargetSector = 
+						MQuestMapSectorInfo* pTargetSector =
 							GetSectorInfo(pSector->Links[j].vecTargetSectors[k]);
 						if (pTargetSector)
 						{
@@ -415,7 +397,6 @@ void MQuestMapCatalogue::DebugReport()
 
 	fclose(fp);
 }
-
 
 void MQuestMapCatalogue::InitBackLinks()
 {
@@ -443,12 +424,7 @@ void MQuestMapCatalogue::InitBackLinks()
 				}
 			}
 		}
-
 	}
-	
-
-
-
 }
 
 bool MQuestMapCatalogue::IsHacked()
@@ -460,7 +436,7 @@ bool MQuestMapCatalogue::IsHacked()
 	set<string> setTitle;
 
 	MQuestMapSectorMap::iterator itSector;
-	for (itSector=m_SectorInfo.begin(); itSector!=m_SectorInfo.end(); ++itSector)
+	for (itSector = m_SectorInfo.begin(); itSector != m_SectorInfo.end(); ++itSector)
 	{
 		const char* szTitle = itSector->second->szTitle;
 
@@ -472,24 +448,3 @@ bool MQuestMapCatalogue::IsHacked()
 
 	return false;
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

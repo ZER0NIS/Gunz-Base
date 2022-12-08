@@ -195,6 +195,7 @@ bool RCharCloth::initialize()
 	memset(m_pForce, 0, sizeof(rvector) * m_nCntP);
 
 	int* iTemp = new int[mpMeshNode->m_face_num * 3];
+
 	for (i = 0; i < mpMeshNode->m_face_num; ++i)
 		for (j = 0; j < 3; ++j)
 			iTemp[3 * i + j] = mpMeshNode->m_face_list[i].m_point_index[j];
@@ -262,7 +263,9 @@ void RCharCloth::valet()
 	{
 		return;
 	}
+
 	rvector* swapTemp;
+
 	for (int i = 0; i < m_nCntP; ++i)
 	{
 		if (CLOTH_VALET_ONLY == m_pHolds[i])
@@ -274,6 +277,7 @@ void RCharCloth::valet()
 			m_pOldX[i] = m_pX[i] + m_AccelationRatio * (m_pX[i] - m_pOldX[i]) + m_pForce[i] * m_fTimeStep * m_fTimeStep;
 		}
 	}
+
 	swapTemp = m_pX;
 	m_pX = m_pOldX;
 	m_pOldX = swapTemp;
@@ -360,6 +364,7 @@ void RCharCloth::update(bool bGame, rmatrix* pWorldMat_, float fDist_)
 	{
 		return;
 	}
+
 	mTime = currTime;
 
 	if (mUpdateStatus == CHARACTER_DIE_STATE)
@@ -467,6 +472,7 @@ bool RCharCloth::create(RMesh* pMesh_, RMeshNode* pMeshNode_)
 	UpdateNormal();
 
 	m_nNumVertices = 3 * mpMeshNode->m_face_num;
+
 	if (!initialize())
 		return false;
 
@@ -630,20 +636,13 @@ void RCharCloth::UpdateNormal()
 	rplane planeTemp;
 	rvector Point[3];
 
-	_ASSERT(m_pNormal);
-
 	memset(m_pNormal, 0, sizeof(rvector) * m_nCntP);
-
-	_ASSERT(mpMeshNode);
 
 	for (i = 0; i < mpMeshNode->m_face_num; ++i)
 	{
 		for (j = 0; j < 3; ++j)
 		{
 			index = mpMeshNode->m_face_list[i].m_point_index[j];
-
-			_ASSERT(index < m_nCntP);
-			_ASSERT(index >= 0);
 
 			Point[j] = m_pX[index];
 			indexTemp[j] = index;
@@ -654,9 +653,6 @@ void RCharCloth::UpdateNormal()
 		for (j = 0; j < 3; ++j)
 		{
 			index = indexTemp[j];
-
-			_ASSERT(index < m_nCntP);
-			_ASSERT(index >= 0);
 
 			m_pNormal[index] += n;
 		}

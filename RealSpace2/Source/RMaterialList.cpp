@@ -36,17 +36,19 @@ bool RMaterialList::Open(MXmlElement* pElement)
 				aChild.GetTagName(szTagName);
 				aChild.GetContents(szContents);
 
-#define READVECTOR(v) sscanf(szContents,"%f %f %f",&v.x,&v.y,&v.z)
+				auto ReadVector = [&](auto& v) {
+					sscanf(szContents, "%f %f %f", &v.x, &v.y, &v.z);
+				};
 
-				if (stricmp(szTagName, RTOK_AMBIENT) == 0)		READVECTOR(pMaterial->Ambient);
-				else if (stricmp(szTagName, RTOK_DIFFUSE) == 0)		READVECTOR(pMaterial->Diffuse);
-				else if (stricmp(szTagName, RTOK_SPECULAR) == 0)		READVECTOR(pMaterial->Specular);
+				if (stricmp(szTagName, RTOK_AMBIENT) == 0)		    ReadVector(pMaterial->Ambient);
+				else if (stricmp(szTagName, RTOK_DIFFUSE) == 0)		ReadVector(pMaterial->Diffuse);
+				else if (stricmp(szTagName, RTOK_SPECULAR) == 0)	ReadVector(pMaterial->Specular);
 				else if (stricmp(szTagName, RTOK_DIFFUSEMAP) == 0)	pMaterial->DiffuseMap = szContents;
-				else if (stricmp(szTagName, RTOK_POWER) == 0)		sscanf(szContents, "%f", &pMaterial->Power);
-				else if (stricmp(szTagName, RTOK_ADDITIVE) == 0)		pMaterial->dwFlags |= RM_FLAG_ADDITIVE;
+				else if (stricmp(szTagName, RTOK_POWER) == 0)		pMaterial->Power = float(atof(szContents));
+				else if (stricmp(szTagName, RTOK_ADDITIVE) == 0)	pMaterial->dwFlags |= RM_FLAG_ADDITIVE;
 				else if (stricmp(szTagName, RTOK_USEOPACITY) == 0)	pMaterial->dwFlags |= RM_FLAG_USEOPACITY;
-				else if (stricmp(szTagName, RTOK_TWOSIDED) == 0)		pMaterial->dwFlags |= RM_FLAG_TWOSIDED;
-				else if (stricmp(szTagName, RTOK_USEALPHATEST) == 0)	pMaterial->dwFlags |= RM_FLAG_USEALPHATEST;
+				else if (stricmp(szTagName, RTOK_TWOSIDED) == 0)	pMaterial->dwFlags |= RM_FLAG_TWOSIDED;
+				else if (stricmp(szTagName, RTOK_USEALPHATEST) == 0)pMaterial->dwFlags |= RM_FLAG_USEALPHATEST;
 			}
 
 			push_back(pMaterial);

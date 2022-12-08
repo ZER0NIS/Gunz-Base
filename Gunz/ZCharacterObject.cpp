@@ -3,7 +3,6 @@
 #include "ZMyCharacter.h"
 #include "ZNetCharacter.h"
 #include "ZActor.h"
-#include "RCollisionDetection.h"
 #include "ZModule_HPAP.h"
 #include "ZGame.h"
 #include "ZEffectStaticMesh.h"

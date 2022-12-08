@@ -60,7 +60,8 @@ void RFrame_Init()
 
 void RFrame_Restore()
 {
-	RParticleSystem::Restore();
+	RGetParticleSystem()->Restore();
+
 	if (g_pFunctions[RF_RESTORE])
 		g_pFunctions[RF_RESTORE](NULL);
 }
@@ -80,7 +81,8 @@ void RFrame_Destroy()
 
 void RFrame_Invalidate()
 {
-	RParticleSystem::Invalidate();
+	RGetParticleSystem()->Invalidate();
+
 	if (g_pFunctions[RF_INVALIDATE])
 		g_pFunctions[RF_INVALIDATE](NULL);
 }
@@ -98,13 +100,12 @@ void RFrame_Render()
 	RRESULT isOK = RIsReadyToRender();
 	if (isOK == R_NOTREADY)
 		return;
-	else
-		if (isOK == R_RESTORED)
-		{
-			RMODEPARAMS ModeParams = { RGetScreenWidth(),RGetScreenHeight(),RIsFullScreen(),RGetPixelFormat() };
-			RResetDevice(&ModeParams);
-			mlog("devices Restored. \n");
-		}
+	else if (isOK == R_RESTORED)
+	{
+		RMODEPARAMS ModeParams = { RGetScreenWidth(),RGetScreenHeight(),RIsFullScreen(),RGetPixelFormat() };
+		RResetDevice(&ModeParams);
+		mlog("devices Restored. \n");
+	}
 
 	if (timeGetTime() > g_last_mouse_move_time + RTOOLTIP_GAP)
 		g_tool_tip = true;
@@ -259,7 +260,7 @@ void RFrame_UpdateRender()
 
 	__EP(5006);
 }
-
+#if FPSOLD
 int RRun()
 {
 	if (g_pFunctions[RF_CREATE])
@@ -297,6 +298,46 @@ int RRun()
 	return (INT)msg.wParam;
 }
 
+#else
+int RRun()
+{
+	if (g_pFunctions[RF_CREATE])
+	{
+		if (g_pFunctions[RF_CREATE](NULL) != R_OK)
+		{
+			RFrame_Destroy();
+			return -1;
+		}
+	}
+
+	RFrame_Init();
+
+	BOOL bGotMsg;
+	MSG  msg;
+	do
+	{
+		bGotMsg = PeekMessage(&msg, NULL, 0U, 0U, PM_REMOVE);
+		if (bGotMsg)
+		{
+			if (msg.message <= WM_USER + 25)
+			{
+				TranslateMessage(&msg);
+				DispatchMessage(&msg);
+			}
+		}
+		else
+		{
+			RFrame_UpdateRender();
+		}
+
+		if (!g_bActive)
+			Sleep(10);
+	} while (WM_QUIT != msg.message);
+	return (INT)msg.wParam;
+}
+
+#endif
+
 int RInitD3D(RMODEPARAMS* pModeParams)
 {
 	RFrame_Create();
@@ -314,4 +355,73 @@ int RInitD3D(RMODEPARAMS* pModeParams)
 	return 0;
 }
 
+#if !FPSOLD
+namespace GlobalTimeFPS
+{
+	u32 MaxGameFPS = RGetFrameLimitPerSeceond() != 0 ? 1000 : RGetFrameLimitPerSeceond();
+	u32 MaxBackgroundFPS = RGetFrameLimitPerSeceond() != 0 ? 1000 : RGetFrameLimitPerSeceond();
+
+	double MinimumFPSTime = (1000.0 / static_cast<double>(MaxGameFPS));
+	double MinimumBackgroundFPSTime = (1000.0 / static_cast<double>(MaxBackgroundFPS));
+
+	std::chrono::steady_clock::time_point BaseTime = std::chrono::steady_clock::now();
+	std::chrono::steady_clock::time_point LastTime = std::chrono::steady_clock::now();
+	double ElapsedTime = 0.0;
+	double WorkTime = 0.0;
+	bool LimitFPS = true;
+
+	void Wait()
+	{
+		std::chrono::steady_clock::time_point lastTime = LastTime;
+		LastTime = std::chrono::steady_clock::now();
+
+		std::chrono::duration<double, std::milli> work_time = LastTime - lastTime;
+		WorkTime = work_time.count();
+
+		const bool active = true;
+#if GZ_OPERATING_SYSTEM_TYPE == GZ_OSTYPE_MOBILE
+		if (LimitFPS == true ||
+			active == false)
+#else
+		if ((GetVerticalSync() == false && LimitFPS == true) ||
+			active == false)
+#endif
+		{
+			const double fpsTime = active == false ? MinimumBackgroundFPSTime : MinimumFPSTime;
+			if (work_time.count() < fpsTime)
+			{
+				std::chrono::duration<double, std::milli> delta_ms(fpsTime - work_time.count());
+				auto delta_ms_duration = std::chrono::duration_cast<std::chrono::milliseconds>(delta_ms);
+				//std::this_thread::sleep_for(delta_ms_duration);
+				LastTime = std::chrono::steady_clock::now();
+			}
+		}
+
+		ElapsedTime = std::chrono::duration<double, std::milli>(LastTime - lastTime).count();
+	}
+
+	const double GetWorkFrametime()
+	{
+		return WorkTime;
+	}
+
+	const double GetElapsedFrametime()
+	{
+		return ElapsedTime;
+	}
+
+	const double GetFrametime()
+	{
+		return std::chrono::duration<double, std::milli>(LastTime - BaseTime).count();
+	}
+
+	const double GetRealtime()
+	{
+		const auto currentTime = std::chrono::steady_clock::now();
+		const auto timeSinceStart = std::chrono::duration_cast<std::chrono::nanoseconds>(currentTime - BaseTime);
+		return double(timeSinceStart.count() / 1000000.0);
+	}
+};
+
+#endif // FPSOLD
 _NAMESPACE_REALSPACE2_END

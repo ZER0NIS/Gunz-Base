@@ -1405,7 +1405,6 @@
     <ClInclude Include="ZActorController.h" />
     <ClInclude Include="ZActorSound.h" />
     <ClInclude Include="ZAI_Base.h" />
-    <ClInclude Include="ZAniEventHandler.h" />
     <ClInclude Include="ZApplication.h" />
     <ClInclude Include="ZBandiCapturer.h" />
     <ClInclude Include="ZBaseAuthInfo.h" />
@@ -1659,7 +1658,6 @@
     <ClCompile Include="ZActorAnimation.cpp" />
     <ClCompile Include="ZActorController.cpp" />
     <ClCompile Include="ZActorSound.cpp" />
-    <ClCompile Include="ZAniEventHandler.cpp" />
     <ClCompile Include="ZApplication.cpp" />
     <ClCompile Include="ZBandiCapturer.cpp" />
     <ClCompile Include="ZBaseAuthInfo.cpp" />

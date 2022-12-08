@@ -150,7 +150,7 @@ int RTextureManager::CalcUsedCount()
 {
 	return std::accumulate(Textures.begin(), Textures.end(), 0,
 		[&](auto counter, auto&& tex) {
-		return counter + static_cast<int>(tex.m_pTex != nullptr); });
+			return counter + static_cast<int>(tex.m_pTex != nullptr); });
 }
 
 int RTextureManager::CalcUsedSize()
@@ -172,14 +172,13 @@ int RTextureManager::CalcUsedSize()
 				(g_nTextureFormat == 0 ? 2 : 4);
 
 			return_size += add_size;
-
 		}
 	}
 
 	return return_size;
 }
 
-RBaseTexture *RTextureManager::CreateBaseTexture(const StringView& filename,
+RBaseTexture* RTextureManager::CreateBaseTexture(const StringView& filename,
 	RTextureType tex_type,
 	bool bUseMipmap,
 	bool bUseFileSystem)
@@ -187,7 +186,7 @@ RBaseTexture *RTextureManager::CreateBaseTexture(const StringView& filename,
 	return CreateBaseTextureSub(false, filename, tex_type, bUseMipmap, bUseFileSystem);
 }
 
-RBaseTexture *RTextureManager::CreateBaseTextureMg(const StringView& filename,
+RBaseTexture* RTextureManager::CreateBaseTextureMg(const StringView& filename,
 	RTextureType tex_type,
 	bool bUseMipmap,
 	bool bUseFileSystem)
@@ -195,7 +194,7 @@ RBaseTexture *RTextureManager::CreateBaseTextureMg(const StringView& filename,
 	return CreateBaseTextureSub(true, filename, tex_type, bUseMipmap, bUseFileSystem);
 }
 
-RBaseTexture * RTextureManager::CreateBaseTextureFromMemory(const void * data, size_t size,
+RBaseTexture* RTextureManager::CreateBaseTextureFromMemory(const void* data, size_t size,
 	RTextureType tex_type, bool bUseMipmap, bool bUseFileSystem)
 {
 	Textures.emplace_back();
@@ -214,7 +213,7 @@ RBaseTexture * RTextureManager::CreateBaseTextureFromMemory(const void * data, s
 	return &new_tex;
 }
 
-RBaseTexture *RTextureManager::CreateBaseTextureSub(bool Managed, const StringView& _filename,
+RBaseTexture* RTextureManager::CreateBaseTextureSub(bool Managed, const StringView& _filename,
 	RTextureType tex_type, bool UseMipmap, bool UseFileSystem)
 {
 	if (_filename.empty())
@@ -263,7 +262,7 @@ RBaseTexture *RTextureManager::CreateBaseTextureSub(bool Managed, const StringVi
 
 	// The filename string memory is stored within the texture.
 	new_tex->filename = std::move(filename_str);
-	
+
 	StringView filename_view = new_tex->filename;
 	FilenameToTexture.insert({ filename_view, new_tex });
 
@@ -301,13 +300,13 @@ RBaseTexture* RCreateBaseTextureMg(const StringView& filename, RTextureType tex_
 	return g_pTextureManager->CreateBaseTextureMg(filename, tex_type, bUseMipmap, bUseFileSystem);
 }
 
-RBaseTexture * RCreateBaseTextureFromMemory(const void * data, size_t size,
+RBaseTexture* RCreateBaseTextureFromMemory(const void* data, size_t size,
 	RTextureType TexType, bool UseMipmap)
 {
 	return g_pTextureManager->CreateBaseTextureFromMemory(data, size, TexType, UseMipmap);
 }
 
-void RDestroyBaseTexture(RBaseTexture *pTex)
+void RDestroyBaseTexture(RBaseTexture* pTex)
 {
 	if (g_pTextureManager == NULL || pTex == NULL) return;
 	g_pTextureManager->DestroyBaseTexture(pTex);

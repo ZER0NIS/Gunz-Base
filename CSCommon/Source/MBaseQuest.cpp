@@ -1,12 +1,8 @@
 #include "stdafx.h"
 #include "MBaseQuest.h"
 
-
-
-
 MBaseQuest::MBaseQuest() : m_bCreated(false)
 {
-
 }
 
 MBaseQuest::~MBaseQuest()
@@ -32,8 +28,6 @@ void MBaseQuest::Destroy()
 
 bool MBaseQuest::OnCreate()
 {
-	// 각각의 xml 로딩은 Client, Server 각각의 상속받은 클래스가 담당하도록 한다.
-
 #ifdef _QUEST_ITEM
 	return true;
 #endif
@@ -43,7 +37,6 @@ bool MBaseQuest::OnCreate()
 void MBaseQuest::OnDestroy()
 {
 }
-
 
 void MBaseQuest::ProcessNPCDropTableMatching()
 {

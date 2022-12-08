@@ -529,7 +529,7 @@ bool ZSoundEngine::isPlayAbleMtrl(char* name)
 	return false;
 }
 
-int ZSoundEngine::PlaySound(char* Name, const rvector& pos, bool bHero, bool bLoop, DWORD dwDelay)
+int ZSoundEngine::PlaySound(const char* Name, const rvector& pos, bool bHero, bool bLoop, DWORD dwDelay)
 {
 	if (!m_bSoundEnable)	return 0;
 	if (!m_b3DSoundUpdate) return 0;
@@ -572,7 +572,7 @@ int ZSoundEngine::PlaySound(char* Name, const rvector& pos, bool bHero, bool bLo
 	return PlaySE(pFS, pos, priority, bHero, bLoop);
 }
 
-void ZSoundEngine::PlaySoundElseDefault(char* Name, char* NameDefault, rvector& pos, bool bHero, bool bLoop, DWORD dwDelay)
+void ZSoundEngine::PlaySoundElseDefault(const char* Name, const char* NameDefault, const rvector& pos, bool bHero, bool bLoop, DWORD dwDelay)
 {
 	if (!m_bSoundEnable)	return;
 	if (!m_b3DSoundUpdate) return;
@@ -620,7 +620,7 @@ void ZSoundEngine::PlaySoundElseDefault(char* Name, char* NameDefault, rvector& 
 	PlaySE(pFS, pos, priority, bHero, bLoop);
 }
 
-int ZSoundEngine::PlaySound(char* Name, bool bLoop, DWORD dwDelay)
+int ZSoundEngine::PlaySound(const char* Name, bool bLoop, DWORD dwDelay)
 {
 	if (!m_bSoundEnable)	return 0;
 
@@ -1208,7 +1208,7 @@ void ZSoundEngine::PlayNPCSound(MQUEST_NPC nNPC, MQUEST_NPC_SOUND nSound, rvecto
 	}
 }
 
-bool ZSoundEngine::CheckCulling(char* szName, SoundSource* pSS, const rvector& vSoundPos, bool bHero, int* pnoutPriority)
+bool ZSoundEngine::CheckCulling(const char* szName, SoundSource* pSS, const rvector& vSoundPos, bool bHero, int* pnoutPriority)
 {
 	float fDistSq = D3DXVec3LengthSq(&(vSoundPos - m_ListenerPos));
 	if (!bHero)
@@ -1219,8 +1219,8 @@ bool ZSoundEngine::CheckCulling(char* szName, SoundSource* pSS, const rvector& v
 			mlog("Cull by Distance[%s]\n", szName);
 #endif
 			return false;
+		}
 	}
-}
 
 	unsigned long int nNowTime = timeGetTime();
 

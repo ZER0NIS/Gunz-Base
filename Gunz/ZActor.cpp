@@ -323,8 +323,7 @@ void ZActor::InitMesh(char* szMeshName, MQUEST_NPC nNPCType)
 
 	m_Animation.Set(ZA_ANIM_RUN);
 
-	RAniIDEventSet* pAniIdEventSet = ZGetAniEventMgr()->GetAniIDEventSet((int)nNPCType);
-	pVMesh->m_FrameInfo[0].SetAniIdEventSet(pAniIdEventSet);
+	pVMesh->m_FrameInfo[0].m_pAniIdEventSet = ZGetAniEventMgr()->GetAniIDEventSet((int)nNPCType);
 }
 
 void ZActor::UpdateHeight(float fDelta)

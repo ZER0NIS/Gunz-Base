@@ -43,8 +43,6 @@ ZQuest::~ZQuest()
 	OnDestroyOnce();
 }
 
-#ifdef _QUEST
-
 bool ZQuest::OnCreate()
 {
 	memset(&m_Cheet, 0, sizeof(m_Cheet));
@@ -55,7 +53,9 @@ bool ZQuest::OnCreate()
 	LoadNPCMeshes();
 	LoadNPCSounds();
 
-	return ZGetScreenEffectManager()->CreateQuestRes();
+	ZGetScreenEffectManager()->CreateQuestRes();
+
+	return true;
 }
 
 void ZQuest::OnDestroy()
@@ -83,44 +83,35 @@ bool ZQuest::Load()
 {
 	if (m_bLoaded) return true;
 
-	string strFileDropTable(FILENAME_DROPTABLE);
-#ifndef _DEBUG
-	strFileDropTable += "";
-#endif
-	if (!m_DropTable.ReadXml(ZApplication::GetFileSystem(), strFileDropTable.c_str()))
+	if (!m_DropTable.ReadXml(ZApplication::GetFileSystem(), FILENAME_DROPTABLE))
 	{
-		mlog("Error while Read m_DropTable %s", FILENAME_DROPTABLE);
+		mlog("Error while Read m_DropTable.");
 		return false;
 	}
 
-	string strFileNameZNPC(FILENAME_ZNPC_DESC);
-#ifndef _DEBUG
-	strFileNameZNPC += "";
-#endif
-	if (!m_NPCCatalogue.ReadXml(ZApplication::GetFileSystem(), strFileNameZNPC.c_str()))
+	if (!m_NPCCatalogue.ReadXml(ZApplication::GetFileSystem(), FILENAME_ZNPC_DESC))
 	{
-		mlog("Error while Read Item Descriptor %s", strFileNameZNPC);
+		mlog("Error while Read Item Descriptor.");
 		return false;
 	}
 
 	ProcessNPCDropTableMatching();
 
-	string strFileQuestMap(FILENAME_QUESTMAP);
-#ifndef _DEBUG
-	strFileQuestMap += "";
-#endif
-	if (!m_MapCatalogue.ReadXml(ZApplication::GetFileSystem(), strFileQuestMap.c_str()))
+	if (!m_MapCatalogue.ReadXml(ZApplication::GetFileSystem(), FILENAME_QUESTMAP))
 	{
 		mlog("Read Questmap Catalogue Failed");
 		return false;
 	}
 
-	RAniEventMgr* AniEventMgr = ZGetAniEventMgr();
-	if (!AniEventMgr->ReadXml(ZApplication::GetFileSystem(), "System/AnimationEvent.xml"))
+	if (!ZGetAniEventMgr()->ReadXml(ZApplication::GetFileSystem(), "System/AnimationEvent.xml"))
 	{
 		mlog("Read Animation Event Failed");
 		return false;
 	}
+
+	AniFrameInfo::m_pEventFunc = [](const RAniEventInfo& Info, rvector Pos) {
+		ZGetSoundEngine()->PlaySound(Info.Filename, Pos, false);
+	};
 
 	m_bLoaded = true;
 	return true;
@@ -133,9 +124,6 @@ void ZQuest::Reload()
 	m_NPCCatalogue.Clear();
 	m_MapCatalogue.Clear();
 	m_DropTable.Clear();
-
-	RAniEventMgr* AniEventMgr = ZGetAniEventMgr();
-	AniEventMgr->Destroy();
 
 	Load();
 }
@@ -161,15 +149,6 @@ void ZQuest::OnGameUpdate(float fElapsed)
 
 	UpdateNavMeshWeight(fElapsed);
 }
-
-#else
-
-void ZQuest::OnGameCreate() {}
-void ZQuest::OnGameDestroy() {}
-void ZQuest::OnGameUpdate(float fElapsed) {}
-bool ZQuest::OnCreate() { return true; }
-void ZQuest::OnDestroy() {}
-#endif
 
 void ZQuest::UpdateNavMeshWeight(float fDelta)
 {
@@ -249,7 +228,6 @@ bool ZQuest::OnGameCommand(MCommand* pCommand)
 		HANDLE_COMMAND(MC_MATCH_NEW_MONSTER_INFO, OnNewMonsterInfo);
 #endif
 
-		///Custom: latejoin
 	case MC_MATCH_LATEJOIN_QUEST:
 	{
 		MUID targetPlayer;
@@ -308,13 +286,15 @@ bool ZQuest::OnNPCSpawn(MCommand* pCommand)
 		NPCDir = pSpawnData->m_Dir;
 	}
 
-	RMesh* pNPCMesh = ZGetNpcMeshMgr()->Get(pNPCInfo->szMeshName);
-	if (pNPCMesh)
 	{
-		if (!pNPCMesh->m_isMeshLoaded)
+		RMesh* pNPCMesh = ZGetNpcMeshMgr()->Get(pNPCInfo->szMeshName);
+		if (pNPCMesh)
 		{
-			ZGetNpcMeshMgr()->Load(pNPCInfo->szMeshName);
-			ZGetNpcMeshMgr()->ReloadAllAnimation();
+			if (!pNPCMesh->m_isMeshLoaded)
+			{
+				ZGetNpcMeshMgr()->Load(pNPCInfo->szMeshName);
+				ZGetNpcMeshMgr()->ReloadAllAnimation();
+			}
 		}
 	}
 
@@ -821,17 +801,6 @@ bool ZQuest::OnObtainZItem(MCommand* pCommand)
 
 void ZQuest::LoadNPCMeshes()
 {
-#ifdef _DEBUG
-	if ((ZApplication::GetInstance()->GetLaunchMode() == ZApplication::ZLAUNCH_MODE_STANDALONE_QUEST) ||
-		(ZApplication::GetInstance()->GetLaunchMode() == ZApplication::ZLAUNCH_MODE_STANDALONE_AI))
-	{
-		ZGetNpcMeshMgr()->LoadAll();
-
-		ZGetNpcMeshMgr()->ReloadAllAnimation();
-		return;
-	}
-#endif
-
 	if (!m_GameInfo.IsInited())
 	{
 		mlog("not inialized Quest Game Info\n");

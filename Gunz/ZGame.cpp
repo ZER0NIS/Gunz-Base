@@ -372,7 +372,6 @@ ZGame::~ZGame()
 
 bool ZGame::Create(MZFileSystem* pfs, ZLoadingProgress* pLoading)
 {
-	mlog("CastStageBridgePeer È£Ãâ in Zgame::Create\n");
 	ZGetGameClient()->CastStageBridgePeer(ZGetGameClient()->GetPlayerUID(), ZGetGameClient()->GetStageUID());
 
 	mlog("game create begin , type = %d\n", ZGetGameClient()->GetMatchStageSetting()->GetGameType());
@@ -390,16 +389,7 @@ bool ZGame::Create(MZFileSystem* pfs, ZLoadingProgress* pLoading)
 		for (int i = 0; i < ZGetQuest()->GetGameInfo()->GetMapSectorCount(); i++)
 		{
 			MQuestMapSectorInfo* pSecInfo = ZGetQuest()->GetSectorInfo(ZGetQuest()->GetGameInfo()->GetMapSectorID(i));
-			if (pSecInfo == NULL)
-			{
-				char strBuf[256];
-				sprintf(strBuf, "[MQuestMapSectorInfo] m_MapSectorVector[index]:%d, GetMapSectorID:%d\n", i, ZGetQuest()->GetGameInfo()->GetMapSectorID(i));
-				ASSERT(0 && strBuf);
-			}
 			ZGetWorldManager()->AddWorld(pSecInfo->szTitle);
-#ifdef _DEBUG
-			mlog("map(%s)\n", pSecInfo ? pSecInfo->szTitle : "null");
-#endif
 		}
 	}
 	else {
@@ -407,12 +397,16 @@ bool ZGame::Create(MZFileSystem* pfs, ZLoadingProgress* pLoading)
 	}
 
 	if (!ZGetWorldManager()->LoadAll(pLoading))
+	{
+		ZGetWorldManager()->Clear();
 		return false;
+	}
 
 	ZGetWorldManager()->SetCurrent(0);
 
+	mlog("ZGame::Create() :: ReloadAllAnimation Begin \n");
 	ZGetMeshMgr()->ReloadAllAnimation();
-	mlog("Reload all animation end \n");
+	mlog("ZGame::Create() :: ReloadAllAnimation End \n");
 
 	if (ZGetGameClient()->IsForcedEntry())
 	{

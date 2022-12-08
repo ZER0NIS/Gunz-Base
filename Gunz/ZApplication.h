@@ -2,7 +2,6 @@
 #define _ZAPPLICATION_H
 
 #include "MZFileSystem.h"
-//#include "ZGameInterface.h"
 #include "ZSoundEngine.h"
 #include "ZDirectInput.h"
 #include "MDataChecker.h"
@@ -22,7 +21,7 @@ class ZLoadingProgress;
 class ZProfiler;
 class ZOptionInterface;
 
-enum GunzState{
+enum GunzState {
 	GUNZ_NA = 0,
 	GUNZ_GAME = 1,
 	GUNZ_LOGIN = 2,
@@ -37,7 +36,7 @@ enum GunzState{
 	GUNZ_BIRDTEST
 };
 
-class ZApplication 
+class ZApplication
 {
 public:
 	enum ZLAUNCH_MODE {
@@ -55,10 +54,10 @@ public:
 	};
 
 private:
-	ZGameInterface*			m_pGameInterface;
+	ZGameInterface* m_pGameInterface;
 	GunzState				m_nInitialState;
-	ZStageInterface*		m_pStageInterface;
-	ZOptionInterface*		m_pOptionInterface;
+	ZStageInterface* m_pStageInterface;
+	ZOptionInterface* m_pOptionInterface;
 	ZLAUNCH_MODE			m_nLaunchMode;
 	std::string				m_szFileName;
 	std::string				m_szCmdLine;
@@ -72,7 +71,7 @@ private:
 
 	void ParseStandAloneArguments(const char* pszArgs);
 protected:
-	static ZApplication*	m_pInstance;
+	static ZApplication* m_pInstance;
 	static MZFileSystem		m_FileSystem;
 	static ZSoundEngine		m_SoundEngine;
 	static RMeshMgr			m_NPCMeshMgr;
@@ -80,7 +79,7 @@ protected:
 	static RMeshMgr			m_WeaponMeshMgr;
 	static ZTimer			m_Timer;
 	static ZEmblemInterface	m_EmblemInterface;
-	static ZSkillManager	m_SkillManager;	
+	static ZSkillManager	m_SkillManager;
 	static RAniEventMgr		m_AniEventMgr;
 	ZWorldManager			m_WorldManager;
 
@@ -106,36 +105,31 @@ public:
 
 	void InitFileSystem();
 
-	bool OnCreate(ZLoadingProgress *pLoadingProgress);
+	bool OnCreate(ZLoadingProgress* pLoadingProgress);
 	void OnDestroy();
 	bool OnDraw();
 	void OnUpdate();
 	void OnInvalidate();
 	void OnRestore();
 
-	static void ResetTimer();	// 첫 update 를 부르기 전에 불러준다.
+	static void ResetTimer();
 	static void Exit();
-	/// Singleton Instance
-	__forceinline static ZApplication*		GetInstance(void);
-	/// Singleton Current Interface
-	__forceinline static ZGameInterface*	GetGameInterface(void);
-	__forceinline static ZStageInterface*	GetStageInterface(void);
-	__forceinline static ZOptionInterface*	GetOptionInterface(void);
-	/// Singleton Zip File System
-	__forceinline static MZFileSystem*		GetFileSystem(void);
-	/// Singleton ZGameClient
-	__forceinline static ZTimer*			GetTimer(void);
-	static ZSoundEngine*		GetSoundEngine(void);
-	static RMeshMgr*			GetNpcMeshMgr()			{ return &m_NPCMeshMgr;}
-	static RMeshMgr*			GetMeshMgr()			{ return &m_MeshMgr; }
-	static RMeshMgr*			GetWeaponMeshMgr()		{ return &m_WeaponMeshMgr; }
-	static ZEmblemInterface*	GetEmblemInterface()	{ return &m_EmblemInterface; }
-	static ZSkillManager*		GetSkillManager()		{ return &m_SkillManager; }
+	__forceinline static ZApplication* GetInstance(void);
+	__forceinline static ZGameInterface* GetGameInterface(void);
+	__forceinline static ZStageInterface* GetStageInterface(void);
+	__forceinline static ZOptionInterface* GetOptionInterface(void);
+	__forceinline static MZFileSystem* GetFileSystem(void);
+	__forceinline static ZTimer* GetTimer(void);
+	static ZSoundEngine* GetSoundEngine(void);
+	static RMeshMgr* GetNpcMeshMgr() { return &m_NPCMeshMgr; }
+	static RMeshMgr* GetMeshMgr() { return &m_MeshMgr; }
+	static RMeshMgr* GetWeaponMeshMgr() { return &m_WeaponMeshMgr; }
+	static ZEmblemInterface* GetEmblemInterface() { return &m_EmblemInterface; }
+	static ZSkillManager* GetSkillManager() { return &m_SkillManager; }
 
-	//애니메이션 이벤트 메니저 얻어오는 부분
-	static RAniEventMgr*		GetAniEventMgr()		{ return &m_AniEventMgr;}
+	static RAniEventMgr* GetAniEventMgr() { return &m_AniEventMgr; }
 
-	__forceinline ZWorldManager* GetWorldManager()		{ return &m_WorldManager; }
+	__forceinline ZWorldManager* GetWorldManager() { return &m_WorldManager; }
 
 	ZLAUNCH_MODE GetLaunchMode() const { return m_nLaunchMode; }
 	void SetLaunchMode(ZLAUNCH_MODE nMode) { m_nLaunchMode = nMode; }
@@ -160,19 +154,19 @@ __forceinline ZApplication* ZApplication::GetInstance(void)
 __forceinline ZGameInterface* ZApplication::GetGameInterface(void)
 {
 	ZApplication* pApp = GetInstance();
-	if(pApp==NULL) return NULL;
-	return pApp->m_pGameInterface;		// 현재인터페이스가 ZGameInterface라고 가정한다. 세이프코드가 필요하다.
+	if (pApp == NULL) return NULL;
+	return pApp->m_pGameInterface;
 }
 __forceinline ZStageInterface* ZApplication::GetStageInterface(void)
 {
 	ZApplication* pApp = GetInstance();
-	if(pApp==NULL) return NULL;
+	if (pApp == NULL) return NULL;
 	return pApp->m_pStageInterface;
 }
 __forceinline ZOptionInterface* ZApplication::GetOptionInterface(void)
 {
 	ZApplication* pApp = GetInstance();
-	if(pApp==NULL) return NULL;
+	if (pApp == NULL) return NULL;
 	return pApp->m_pOptionInterface;
 }
 __forceinline MZFileSystem* ZApplication::GetFileSystem(void)

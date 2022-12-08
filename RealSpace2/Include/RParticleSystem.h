@@ -1,15 +1,12 @@
-#ifndef _RPARTICLESYSTEM_H
-#define _RPARTICLESYSTEM_H
-
-//#pragma once
+#pragma once
 
 #include "RTypes.h"
 #include "RBaseTexture.h"
 
-_NAMESPACE_REALSPACE2_BEGIN
-
 #define DISCARD_COUNT	2048
 #define FLUSH_COUNT		512
+
+_NAMESPACE_REALSPACE2_BEGIN
 
 struct RParticle {
 	rvector position;
@@ -23,13 +20,14 @@ struct RParticle {
 struct POINTVERTEX
 {
 	D3DXVECTOR3 v;
-	D3DCOLOR    color;
+	D3DCOLOR color;
 
-	static const DWORD FVF;
+	static const u32 FVF;
 };
 
-class RParticles : public list<RParticle*> {
+class RParticleSystem;
 
+class RParticles : public std::list<RParticle*> {
 protected:
 	rvector mInitialPos;
 
@@ -37,7 +35,7 @@ public:
 	RParticles();
 	virtual ~RParticles();
 
-	bool Create(const char *szTextureName,float fSize);
+	bool Create(const char* szTextureName, float fSize);
 	void Destroy();
 	void Clear();
 
@@ -48,32 +46,33 @@ protected:
 	float	m_fSize;
 
 	RBaseTexture* m_Texture;
-
+	RParticleSystem* m_RPSystem;
 };
 
-class RParticleSystem : public list<RParticles*> {
+class RParticleSystem : public std::list<RParticles*> {
 public:
 	RParticleSystem();
 	virtual ~RParticleSystem();
 
 	void Destroy();
 
-	bool Draw();
-	bool Update(float fTime);
+	virtual bool Draw();
+	virtual bool Update(float fTime);
 
-	RParticles *AddParticles(const char *szTextureName,float fSize);
+	RParticles* AddParticles(const char* szTextureName, float fSize);
 
-	static void BeginState();
-	static void EndState();
+	void BeginState();
+	void EndState();
 
-	static bool Restore();
-	static bool Invalidate();
+	bool Restore();
+	bool Invalidate();
 
-	static LPDIRECT3DVERTEXBUFFER9 m_pVB;
-	static DWORD m_dwBase;
+	D3DPtr<IDirect3DVertexBuffer9> m_pVB;
+	DWORD m_dwBase;
+
+	static RParticleSystem* GetInstance();
 };
 
+inline RParticleSystem* RGetParticleSystem() { return RParticleSystem::GetInstance(); }
 
 _NAMESPACE_REALSPACE2_END
-
-#endif

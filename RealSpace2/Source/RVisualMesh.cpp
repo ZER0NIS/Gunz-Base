@@ -15,6 +15,8 @@ _NAMESPACE_REALSPACE2_BEGIN
 #define __BP(i,n) ;
 #define __EP(i) ;
 
+void (*AniFrameInfo::m_pEventFunc)(const RAniEventInfo&, rvector);
+
 AniFrameInfo::AniFrameInfo()
 {
 	m_isOncePlayDone = false;
@@ -60,7 +62,7 @@ void AniFrameInfo::Frame(RAniMode amode, RVisualMesh* pVMesh)
 
 	if (m_pAniSet == NULL) return;
 
-	DWORD cur = timeGetTime();
+	auto cur = timeGetTime();
 
 	if (m_bChangeAnimation) {
 		m_bChangeAnimation = false;
@@ -68,16 +70,14 @@ void AniFrameInfo::Frame(RAniMode amode, RVisualMesh* pVMesh)
 		m_1frame_time = cur;
 		m_isPlayDone = false;
 		m_isOncePlayDone = false;
-		if (m_pAniIdEventSet != NULL)
-			m_pAniNameEventSet = m_pAniIdEventSet->GetAniNameEventSet(m_pAniSet->GetName());
-		if (m_pAniNameEventSet != NULL)
+
+		if (m_pAniIdEventSet)
 		{
-			m_vecCheckAniEvent.clear();
-			m_pAniNameEventSet->m_AniNameEventSetIter = m_pAniNameEventSet->m_AniNameEventSet.begin();
-			while (m_pAniNameEventSet->m_AniNameEventSetIter != m_pAniNameEventSet->m_AniNameEventSet.end())
+			m_pAniNameEventSet = m_pAniIdEventSet->GetAniNameEventSet(m_pAniSet->GetName());
+			if (m_pAniNameEventSet)
 			{
-				m_vecCheckAniEvent.push_back(false);
-				m_pAniNameEventSet->m_AniNameEventSetIter++;
+				AniEventFired.clear();
+				AniEventFired.resize(m_pAniNameEventSet->AniNameEventSet.size(), false);
 			}
 		}
 
@@ -100,18 +100,6 @@ void AniFrameInfo::Frame(RAniMode amode, RVisualMesh* pVMesh)
 
 	if (m_isPlayDone) {
 		if (m_pAniSet->GetAnimationLoopType() == RAniLoopType_Loop)
-		{
-			if (m_pAniNameEventSet != NULL)
-			{
-				m_vecCheckAniEvent.clear();
-				m_pAniNameEventSet->m_AniNameEventSetIter = m_pAniNameEventSet->m_AniNameEventSet.begin();
-				while (m_pAniNameEventSet->m_AniNameEventSetIter != m_pAniNameEventSet->m_AniNameEventSet.end())
-				{
-					m_vecCheckAniEvent.push_back(false);
-					m_pAniNameEventSet->m_AniNameEventSetIter++;
-				}
-			}
-
 			if (m_pAniSet->IsHaveSoundFile()) {
 				RAniSoundInfo* pSInfo = &m_SoundInfo;
 				pSInfo->isPlay = true;
@@ -120,36 +108,35 @@ void AniFrameInfo::Frame(RAniMode amode, RVisualMesh* pVMesh)
 				pSInfo->SetPos(pVMesh->m_WorldMat._41, pVMesh->m_WorldMat._42, pVMesh->m_WorldMat._43);
 			}
 
-			m_isPlayDone = false;
+		m_isPlayDone = false;
 
-			if (m_pAniSetNext) {
-				pVMesh->SetAnimation(amode, m_pAniSetNext);
-				m_pAniSetNext = NULL;
+		if (m_pAniSetNext) {
+			pVMesh->SetAnimation(amode, m_pAniSetNext);
+			m_pAniSetNext = NULL;
+		}
+		else {
+			if (looptype == RAniLoopType_OnceIdle) {
+				m_nFrame = max_frame - 1;
+				m_save_time = cur;
+				m_1frame_time = cur;
+				return;
 			}
-			else {
-				if (looptype == RAniLoopType_OnceIdle) {
-					m_nFrame = max_frame - 1;
-					m_save_time = cur;
-					m_1frame_time = cur;
-					return;
-				}
-				else if (looptype == RAniLoopType_HoldLastFrame) {
-					m_nFrame = max_frame - 1;
-					m_isPlayDone = true;
-					m_save_time = cur;
-					m_1frame_time = cur;
-					return;
-				}
-				else if (looptype == RAniLoopType_OnceLowerBody) {
-					m_nFrame = max_frame - 1;
-					m_pAniSet = NULL;
-					m_save_time = cur;
-					return;
-				}
-				else if (looptype == RAniLoopType_Normal) {
-				}
-				else if (looptype == RAniLoopType_Loop) {
-				}
+			else if (looptype == RAniLoopType_HoldLastFrame) {
+				m_nFrame = max_frame - 1;
+				m_isPlayDone = true;
+				m_save_time = cur;
+				m_1frame_time = cur;
+				return;
+			}
+			else if (looptype == RAniLoopType_OnceLowerBody) {
+				m_nFrame = max_frame - 1;
+				m_pAniSet = NULL;
+				m_save_time = cur;
+				return;
+			}
+			else if (looptype == RAniLoopType_Normal) {//loop
+			}
+			else if (looptype == RAniLoopType_Loop) {
 			}
 		}
 	}
@@ -167,7 +154,7 @@ void AniFrameInfo::Frame(RAniMode amode, RVisualMesh* pVMesh)
 	int bf = 0;
 	int ef = max_frame;
 
-	DWORD delta;
+	u64 delta;
 
 	if (m_save_time == 0) {
 		delta = 0;
@@ -176,7 +163,9 @@ void AniFrameInfo::Frame(RAniMode amode, RVisualMesh* pVMesh)
 	else
 		delta = cur - m_1frame_time;
 
-	m_nFrame += (int)(delta * m_fSpeed);
+	int FrameAdvance = int(delta * m_fSpeed);
+
+	m_nFrame += FrameAdvance;
 
 	if (bf != 0) {
 		m_nFrame += bf;
@@ -203,25 +192,19 @@ void AniFrameInfo::Frame(RAniMode amode, RVisualMesh* pVMesh)
 	}
 
 	m_1frame_time = cur;
-	if (m_pAniNameEventSet != NULL)
+
+	if (m_pAniNameEventSet)
 	{
-		m_pAniNameEventSet->m_AniNameEventSetIter = m_pAniNameEventSet->m_AniNameEventSet.begin();
-		m_iterCheckAniEvent = m_vecCheckAniEvent.begin();
-		while (m_pAniNameEventSet->m_AniNameEventSetIter != m_pAniNameEventSet->m_AniNameEventSet.end())
+		auto e = m_pAniNameEventSet->AniNameEventSet.size();
+		for (size_t i = 0; i < e; ++i)
 		{
-			if (!(*m_iterCheckAniEvent))
-			{
-				if ((*(m_pAniNameEventSet->m_AniNameEventSetIter))->GetBeginFrame() <= m_nFrame)
-				{
-					(*(m_pAniNameEventSet->m_AniNameEventSetIter))->m_vPos.x = pVMesh->m_WorldMat._41;
-					(*(m_pAniNameEventSet->m_AniNameEventSetIter))->m_vPos.y = pVMesh->m_WorldMat._42;
-					(*(m_pAniNameEventSet->m_AniNameEventSetIter))->m_vPos.z = pVMesh->m_WorldMat._43;
-					m_pEventFunc((*m_pAniNameEventSet->m_AniNameEventSetIter));
-					(*m_iterCheckAniEvent) = true;
-				}
-			}
-			m_pAniNameEventSet->m_AniNameEventSetIter++;
-			m_iterCheckAniEvent++;
+			auto& Fired = AniEventFired[i];
+			auto& Info = m_pAniNameEventSet->AniNameEventSet[i];
+			if (Fired || Info.BeginFrame > m_nFrame)
+				continue;
+
+			m_pEventFunc(Info, GetTransPos(pVMesh->m_WorldMat));
+			Fired = true;
 		}
 	}
 }
@@ -270,19 +253,15 @@ void RFrameTime::Update() {
 
 RVisualLightMgr::RVisualLightMgr()
 {
-	for (int i = 0; i < VISUAL_LIGHT_MAX; i++) {
-		m_LightEnable[i] = 0;
-	}
+	std::fill(std::begin(m_LightEnable), std::end(m_LightEnable), LightActivationType::Off);
 }
 
 int RVisualLightMgr::GetLightCount()
 {
-	int nCnt = 0;
-
-	for (int i = 0; i < VISUAL_LIGHT_MAX; i++) {
-		if (m_LightEnable[i]) nCnt++;
-	}
-	return nCnt;
+	return std::accumulate(std::begin(m_LightEnable), std::end(m_LightEnable), 0,
+		[&](auto Acc, auto& Light) {
+			return Acc + static_cast<int>(Light == LightActivationType::On);
+		});
 }
 
 void RVisualLightMgr::Clone(RVisualMesh* pVMesh)
@@ -291,6 +270,7 @@ void RVisualLightMgr::Clone(RVisualMesh* pVMesh)
 
 	for (int i = 0; i < VISUAL_LIGHT_MAX; i++)
 	{
+		m_LightEnable[i] = LightActivationType::Off;
 		pVMesh->m_LightMgr.m_Light[i] = m_Light[i];
 		pVMesh->m_LightMgr.m_LightEnable[i] = m_LightEnable[i];
 	}
@@ -301,40 +281,45 @@ void RVisualLightMgr::SetLight(int index, D3DLIGHT9* light, bool ShaderOnly)
 	if (light) {
 		m_Light[index] = *light;
 		if (ShaderOnly)
-			m_LightEnable[index] = 2;
+			m_LightEnable[index] = LightActivationType::ShaderOnly;
 		else
-			m_LightEnable[index] = 1;
+			m_LightEnable[index] = LightActivationType::On;
 	}
 	else {
-		m_LightEnable[index] = 0;
+		m_LightEnable[index] = LightActivationType::Off;
 	}
 }
 
 void RVisualLightMgr::UpdateLight()
 {
-	for (int i = 0; i < VISUAL_LIGHT_MAX; i++) {
-		if (m_LightEnable[i] == 1) {
+	for (int i = 0; i < VISUAL_LIGHT_MAX; i++)
+	{
+		if (m_LightEnable[i] == LightActivationType::On)
+		{
 			RGetDevice()->SetLight(i, &m_Light[i]);
 			RGetDevice()->LightEnable(i, TRUE);
 
 			if (RShaderMgr::mbUsingShader)
 			{
 				RGetShaderMgr()->setLight(i, &m_Light[i]);
-				RGetShaderMgr()->LightEnable(i, TRUE);
+				RGetShaderMgr()->LightEnable(i, true);
 			}
 		}
-		else if (m_LightEnable[i] == 2)
+		else if (m_LightEnable[i] == LightActivationType::ShaderOnly)
 		{
 			RGetDevice()->LightEnable(i, FALSE);
 
 			if (RShaderMgr::mbUsingShader)
 			{
 				RGetShaderMgr()->setLight(i, &m_Light[i]);
-				RGetShaderMgr()->LightEnable(i, TRUE);
+				RGetShaderMgr()->LightEnable(i, true);
 			}
 		}
-		else {
+		else
+		{
 			RGetDevice()->LightEnable(i, FALSE);
+			if (RShaderMgr::mbUsingShader)
+				RGetShaderMgr()->LightEnable(i, false);
 		}
 	}
 }
@@ -1742,7 +1727,8 @@ void RVisualMesh::UpdateMotionTable()
 
 	int pid = -1;
 
-	if (pAL) {
+	if (pAL)
+	{
 		int node_cnt = pAL->GetAniNodeCount();
 
 		for (int i = 0; i < node_cnt; i++) {
@@ -2219,7 +2205,7 @@ bool RVisualMesh::IsClothModel()
 
 bool RVisualMesh::GetWeaponDummyMatrix(WeaponDummyType type, rmatrix* mat, bool bLeft)
 {
-	if (type > weapon_dummy_etc&& type < weapon_dummy_end)
+	if (type > weapon_dummy_etc && type < weapon_dummy_end)
 	{
 		rmatrix m;
 

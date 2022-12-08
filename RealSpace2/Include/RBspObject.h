@@ -83,7 +83,7 @@ struct RBSPPICKINFO {
 	RPOLYGONINFO* pInfo;
 };
 
-class RMapObjectList : public list<ROBJECTINFO*> {
+class RMapObjectList : public std::list<ROBJECTINFO*> {
 public:
 	virtual ~RMapObjectList();
 
@@ -143,7 +143,8 @@ public:
 	void DrawBoundingBox(DWORD color);
 };
 
-typedef list<POINT> RFREEBLOCKLIST;
+typedef std::list<POINT> RFREEBLOCKLIST;
+
 struct RLIGHTMAPTEXTURE {
 	int nSize;
 	DWORD* data;

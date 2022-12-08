@@ -11,9 +11,9 @@ public:
 	RAnimation();
 	~RAnimation();
 
-	bool LoadAni(char* filename);
+	bool LoadAni(const char* filename);
 
-	void  SetFileName(char* name);
+	void  SetFileName(const char* name);
 	char* GetFileName();
 
 	AnimationType GetAnimationType();
@@ -29,13 +29,13 @@ public:
 
 	bool CheckWeaponMotionType(int wtype);
 
-	RAnimationNode* GetNode(char* name);
+	RAnimationNode* GetNode(const char* name);
 
 	void SetLoadDone(bool b);
 	bool IsLoadDone();
 
 	void  ClearSoundFile(void);
-	bool  SetSoundFileName(char* pSoundName);
+	bool  SetSoundFileName(const char* pSoundName);
 	char* GetSoundFileName();
 	bool  IsHaveSoundFile();
 
@@ -47,21 +47,21 @@ public:
 
 public:
 
-	RAnimationFile* m_pAniData;
+	RAnimationFile* m_pAniData{};
 
 	char				m_filename[256];
 	char				m_sound_name[256];
 
-	bool				m_bIsHaveSound;
-	bool				m_bSoundRelatedToMap;
+	bool				m_bIsHaveSound{};
+	bool				m_bSoundRelatedToMap{};
 	int					m_sID;
 
 	int					m_NameID;
 
 	int					m_weapon_motion_type;
 
-	bool				m_isConnected;
-	bool				m_isLoadDone;
+	bool				m_isConnected{};
+	bool				m_isLoadDone{};
 
 private:
 

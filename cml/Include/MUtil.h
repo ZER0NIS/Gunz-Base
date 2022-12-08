@@ -132,9 +132,9 @@ template <typename T>
 struct Range
 {
 	using value_type = std::decay_t<decltype(*std::declval<T>())>;
-	using reference = value_type & ;
+	using reference = value_type&;
 	using const_reference = const value_type&;
-	using pointer = value_type * ;
+	using pointer = value_type*;
 	using const_pointer = const value_type*;
 	using iterator = T;
 	using const_iterator = const T;
@@ -192,7 +192,7 @@ public:
 	ValueIterator operator++(int)
 	{
 		auto temp(*this);
-		++*this;
+		++* this;
 		return temp;
 	}
 
@@ -267,7 +267,7 @@ namespace detail
 	template <typename T>
 	struct CounterType
 	{
-		using type = std::conditional_t < sizeof(T) * CHAR_BIT < 32, u32, std::make_unsigned_t<T>>;
+		using type = std::conditional_t < sizeof(T)* CHAR_BIT < 32, u32, std::make_unsigned_t<T>>;
 	};
 
 	template <> struct CounterType<bool> { using type = u32; };
@@ -399,7 +399,7 @@ class WriteProxy
 public:
 	~WriteProxy() { ptr = T{ temp }; }
 
-	operator StoredType**() && { return &temp; }
+	operator StoredType** ()&& { return &temp; }
 
 private:
 	WriteProxy(T& ptr) : ptr(ptr), temp(ptr.get()) {}
@@ -481,8 +481,8 @@ struct IteratorBase
 
 	using difference_type = ptrdiff_t;
 	using value_type = ValueType;
-	using pointer = value_type * ;
-	using reference = value_type & ;
+	using pointer = value_type*;
+	using reference = value_type&;
 	using iterator_category = CategoryType;
 
 private:
@@ -523,7 +523,5 @@ constexpr decltype(auto) emplace_back(ContainerType& Container, ArgsType&&... Ar
 	Container.emplace_back(std::forward<ArgsType>(Args)...);
 	return Container.back();
 }
-
-
 
 bool SplitStrIP(const std::string& strIP, std::vector<BYTE>& vIP);

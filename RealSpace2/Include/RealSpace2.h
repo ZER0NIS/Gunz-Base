@@ -41,10 +41,25 @@ bool IsDynamicResourceLoad();
 int RGetAdapterModeCount(D3DFORMAT Format, UINT Adapter = D3DADAPTER_DEFAULT);
 bool REnumAdapterMode(UINT Adapter, D3DFORMAT Format, UINT Mode, D3DDISPLAYMODE* pMode);
 
-RParticleSystem* RGetParticleSystem();
-
+#if FPSOLD
 extern int g_nFrameCount, g_nLastFrameCount;
 extern float g_fFPS;
+#else
+extern double fpsCounterLastValue;
+extern u32 fpsCounterLastCount;
+
+namespace GlobalTimeFPS
+{
+	void Wait();
+
+	const double GetWorkFrametime();
+	const double GetElapsedFrametime();
+	const double GetFrametime();
+	const double GetRealtime();
+};
+
+#endif
+
 extern int g_nFrameLimitValue;
 extern HWND	g_hWnd;
 extern MZFileSystem* g_pFileSystem;
@@ -117,6 +132,8 @@ LPDIRECT3DSURFACE9 RCreateImageSurface(const char* filename);
 
 void RSetGammaRamp(unsigned short nGammaValue = 255);
 void RSetFrameLimitPerSeceond(unsigned short nFrameLimit = 0);
+int RSetFrameLimitPerSeceond() { return g_nFrameLimitValue; }
+
 void RSetWBuffer(bool bEnable);
 
 enum RFUNCTIONTYPE {

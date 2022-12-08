@@ -1,5 +1,4 @@
-#ifndef _RAnimationFile_h
-#define _RAnimationFile_h
+#pragma once
 
 #include "RAnimationNode.h"
 
@@ -11,26 +10,24 @@ public:
 	RAnimationFile();
 	~RAnimationFile();
 
-	bool LoadAni(char* filename);
+	bool LoadAni(const char* filename);
 
-	RAnimationNode* GetNode(char* name);
+	RAnimationNode* GetNode(const char* name);
 
 	void AddRef();
 	void DecRef();
 
 public:
 
-	RAnimationNode**	m_ani_node;
+	RAnimationNode** m_ani_node;
 	int					m_ani_node_cnt;
 	AnimationType		m_ani_type;
 	AnimationFileType	m_ani_file_type;
 
-	RAnimationNode*		m_pBipRootNode;
+	RAnimationNode* m_pBipRootNode;
 
 	int		m_max_frame;
 	int		m_nRefCount;
 };
 
 _NAMESPACE_REALSPACE2_END
-
-#endif//_RAnimationFile_h
