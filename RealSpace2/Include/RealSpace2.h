@@ -74,7 +74,7 @@ LPDIRECT3DDEVICE9	RGetDevice();
 void ChangeAA(int AALevel);
 void RResetDevice(const RMODEPARAMS* params);
 RRESULT RIsReadyToRender();
-void RFlip();
+bool RFlip();
 bool REndScene();
 bool RBeginScene();
 
@@ -132,7 +132,7 @@ LPDIRECT3DSURFACE9 RCreateImageSurface(const char* filename);
 
 void RSetGammaRamp(unsigned short nGammaValue = 255);
 void RSetFrameLimitPerSeceond(unsigned short nFrameLimit = 0);
-int RGetFrameLimitPerSeceond() { return g_nFrameLimitValue; }
+inline int RGetFrameLimitPerSeceond() { return g_nFrameLimitValue; }
 
 void RSetWBuffer(bool bEnable);
 

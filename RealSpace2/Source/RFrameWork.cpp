@@ -302,7 +302,7 @@ int RenderLoop()
 #else
 double fpsCounterLastValue = 0.0;
 u32 fpsCounterLastCount = 0;
-static int RenderLoop()
+int RenderLoop()
 {
 	if (g_pFunctions[RF_CREATE])
 	{
@@ -361,6 +361,11 @@ static int RenderLoop()
 
 			RFrame_Update();
 			RFrame_Render();
+
+			if (!RFlip())
+			{
+				RIsReadyToRender();
+			}
 
 			GlobalTimeFPS::Wait();
 			elapsedTime = GlobalTimeFPS::GetElapsedFrametime();

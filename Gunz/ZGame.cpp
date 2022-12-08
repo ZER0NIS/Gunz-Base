@@ -5298,9 +5298,11 @@ void ZGame::EndReplay()
 
 	DWORD dwReplayEndTime = timeGetTime();
 
+#if FPSOLD
 	mlog("replay end. profile saved. playtime = %3.3f seconds , average fps = %3.3f \n",
 		float(dwReplayEndTime - dwReplayStartTime) / 1000.f,
 		1000.f * g_nFrameCount / float(dwReplayEndTime - dwReplayStartTime));
+#endif
 
 	ZChangeGameState(GUNZ_LOBBY);
 }

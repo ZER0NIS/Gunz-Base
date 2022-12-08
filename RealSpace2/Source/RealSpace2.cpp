@@ -572,7 +572,7 @@ bool RBeginScene()
 	return true;
 }
 
-void RFlip()
+bool RFlip()
 {
 	REndScene();
 
@@ -614,8 +614,10 @@ void RFlip()
 			g_dwLastFPSTime = currentTime;
 			g_nLastFrameCount = g_nFrameCount;
 		}
-}
+	}
 #endif
+
+	return true;
 }
 
 void RDrawLine(rvector& v1, rvector& v2, DWORD dwColor)
