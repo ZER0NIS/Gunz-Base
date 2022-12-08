@@ -132,7 +132,7 @@ LPDIRECT3DSURFACE9 RCreateImageSurface(const char* filename);
 
 void RSetGammaRamp(unsigned short nGammaValue = 255);
 void RSetFrameLimitPerSeceond(unsigned short nFrameLimit = 0);
-int RSetFrameLimitPerSeceond() { return g_nFrameLimitValue; }
+int RGetFrameLimitPerSeceond() { return g_nFrameLimitValue; }
 
 void RSetWBuffer(bool bEnable);
 

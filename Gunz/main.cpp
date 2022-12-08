@@ -57,6 +57,8 @@
 #include "RGMain.h"
 #include "RGGlobal.h"
 
+#include <fmt/format.h>
+
 RMODEPARAMS	g_ModeParams = { 800,600,true,D3DFMT_R5G6B5 };
 
 #ifndef _DEBUG
@@ -80,19 +82,12 @@ HRESULT GetDirectXVersionViaDxDiag(DWORD* pdwDirectXVersionMajor, DWORD* pdwDire
 
 void zexit(int returnCode)
 {
-#ifdef _GAMEGUARD
-	GetZGameguard().Release();
-#endif
 	exit(returnCode);
 }
 
-void CrcFailExitApp() {
-#ifdef _PUBLISH
+void CrcFailExitApp()
+{
 	PostMessage(g_hWnd, WM_CLOSE, 0, 0);
-#else
-	int* crash = NULL;
-	*crash = 0;
-#endif
 }
 
 void _ZChangeGameState(int nIndex)
@@ -345,7 +340,21 @@ RRESULT OnRender(void* pParam)
 		return R_NOTREADY;
 
 	g_App.OnDraw();
+	if (g_pDefFont && (!ZGetGame() || ZGetGame()->IsShowReplayInfo() || !ZGetGame()->IsReplay())) {
+		char buf[512];
+		size_t y_offset{};
+		auto PrintText = [&](const char* Format, ...)
+		{
+			va_list va;
+			va_start(va, Format);
+			vsprintf_safe(buf, Format, va);
+			va_end(va);
+			g_pDefFont->m_Font.DrawText(MGetWorkspaceWidth() - 200, y_offset, buf);
+			y_offset += 20;
+		};
 
+		PrintText(fmt::format("FPS : {} ({}ms)", fpsCounterLastCount, static_cast<u32>(fpsCounterLastValue)).c_str());
+	}
 	MEndProfile(mainOnRender);
 
 	return R_OK;
@@ -433,11 +442,6 @@ void SetModeParams()
 
 void ResetAppResource()
 {
-#ifdef LOCALE_NHNUSAA
-	ZNHN_USAAuthInfo* pUSAAuthInfo = (ZNHN_USAAuthInfo*)ZGetLocale()->GetAuthInfo();
-	string strUserID = pUSAAuthInfo->GetUserID();
-#endif
-
 	ZGetGameInterface()->m_sbRemainClientConnectionForResetApp = true;
 	ZGetGameInterface()->GetGameClient()->Destroy();
 
@@ -552,7 +556,7 @@ long FAR PASCAL WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 			RFrame_ToggleFullScreen();
 #endif
 			return 0;
-	}
+		}
 		break;
 
 	case WM_CREATE:
@@ -580,7 +584,7 @@ long FAR PASCAL WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 	{
 		bool b = false;
 	}
-}
+	}
 
 	if (Mint::GetInstance()->ProcessEvent(hWnd, message, wParam, lParam) == true)
 	{
@@ -803,7 +807,7 @@ int PASCAL WinMain(HINSTANCE this_inst, HINSTANCE prev_inst, LPSTR cmdline, int 
 		return 0;
 	}
 
-	const int nRRunReturn = RRun();
+	const int nRRunReturn = RenderLoop();
 
 	ShowWindow(g_hWnd, SW_MINIMIZE);
 

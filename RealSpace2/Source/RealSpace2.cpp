@@ -588,6 +588,7 @@ void RFlip()
 		g_pd3dDevice->Clear(0, NULL, D3DCLEAR_ZBUFFER, g_clear_color, 1.0f, 0L);
 
 	RBeginScene();
+
 #if OLDFPS
 
 	{

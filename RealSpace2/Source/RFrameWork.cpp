@@ -260,8 +260,9 @@ void RFrame_UpdateRender()
 
 	__EP(5006);
 }
+
 #if FPSOLD
-int RRun()
+int RenderLoop()
 {
 	if (g_pFunctions[RF_CREATE])
 	{
@@ -299,7 +300,9 @@ int RRun()
 }
 
 #else
-int RRun()
+double fpsCounterLastValue = 0.0;
+u32 fpsCounterLastCount = 0;
+static int RenderLoop()
 {
 	if (g_pFunctions[RF_CREATE])
 	{
@@ -310,10 +313,17 @@ int RRun()
 		}
 	}
 
-	RFrame_Init();
-
 	BOOL bGotMsg;
 	MSG  msg;
+
+	static double fpsCounterTime = 0.0;
+	static u32 fpsCounterCount = 0;
+
+	GlobalTimeFPS::Wait();
+	double elapsedTime = 0.0;
+	double currentTime = 0.0;
+	static double accumulatedTime = 0.0;
+
 	do
 	{
 		bGotMsg = PeekMessage(&msg, NULL, 0U, 0U, PM_REMOVE);
@@ -327,7 +337,38 @@ int RRun()
 		}
 		else
 		{
-			RFrame_UpdateRender();
+			__BP(5006, "RMain::Run");
+
+			accumulatedTime += elapsedTime;
+			const u32 updateCount = static_cast<u32>(accumulatedTime / 17.0); // Calculate update count using fixed update time from (58 FPS)
+			accumulatedTime -= static_cast<u32>(updateCount) * 17.0; // Remove acummulated time
+
+			fpsCounterTime += elapsedTime;
+			++fpsCounterCount;
+
+			if (fpsCounterTime >= 1000.0)
+			{
+				fpsCounterLastValue = (fpsCounterTime / (double)fpsCounterCount);
+				fpsCounterLastCount = fpsCounterCount;
+				fpsCounterCount = 0;
+				fpsCounterTime = 0.0;
+			}
+			if (updateCount > 0)
+			{
+				// Force Input 58FPS Fix
+				//RFrame_UpdateInput();
+			}
+
+			RFrame_Update();
+			RFrame_Render();
+
+			GlobalTimeFPS::Wait();
+			elapsedTime = GlobalTimeFPS::GetElapsedFrametime();
+			currentTime = GlobalTimeFPS::GetFrametime();
+
+			__EP(5006);
+
+			MCheckProfileCount();
 		}
 
 		if (!g_bActive)
