@@ -28,10 +28,7 @@ void MBaseQuest::Destroy()
 
 bool MBaseQuest::OnCreate()
 {
-#ifdef _QUEST_ITEM
 	return true;
-#endif
-	return false;
 }
 
 void MBaseQuest::OnDestroy()

@@ -227,7 +227,7 @@ void RFrameTime::Stop() {
 void RFrameTime::Update() {
 	if (!m_bActive) return;
 
-	DWORD dwThisTime = timeGetTime();
+	u64 dwThisTime = GetGlobalTimeMS();
 
 	if (dwThisTime > m_dwEndTime) {
 		if (m_bReturn || (m_dwReturnMaxTime == 0)) {

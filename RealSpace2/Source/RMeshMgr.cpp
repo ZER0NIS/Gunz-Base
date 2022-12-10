@@ -489,7 +489,8 @@ void RMeshMgr::LoadAll()
 
 	int cnt = (int)t_vec.size();
 
-	for (int i = 0; i < cnt; i++) {
+	for (int i = 0; i < cnt; i++)
+	{
 		Load((char*)t_vec[i].c_str());
 	}
 }

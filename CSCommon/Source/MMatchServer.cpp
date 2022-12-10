@@ -718,15 +718,9 @@ void MMatchServer::Destroy(void)
 
 	GetQuest()->Destroy();
 
-	for (MMatchObjectList::iterator ObjItor = m_Objects.begin();
-		ObjItor != m_Objects.end(); ++ObjItor)
-	{
-		MMatchObject* pObj = (*ObjItor).second;
-		if (pObj)
-		{
-			CharFinalize(pObj->GetUID());
-		}
-	}
+	for (auto* Obj : MakePairValueAdapter(m_Objects))
+		if (Obj)
+			CharFinalize(Obj->GetUID());
 
 	m_ClanMap.Destroy();
 
@@ -2095,7 +2089,7 @@ bool StageFinish(MMatchServer* pServer, const MUID& uidPlayer, char* pszChat)
 				pStage->GetRule()->DebugTest();
 				bResult = true;
 			}
-}
+		}
 	}
 
 	lex.Destroy();
@@ -2349,7 +2343,7 @@ void MMatchServer::UpdateCharItemDBCachingData(MMatchObject* pObject)
 			pItem->GetItemCount() <= 0) {
 			vecRemoveItemUIDList.push_back(pItem->GetUID());
 		}
-}
+	}
 
 	pObject->m_DBJobQ.DBJobQ.push_back(pJob);
 
@@ -2381,7 +2375,7 @@ void MMatchServer::UpdateCharItemDBCachingData(MMatchObject* pObject)
 
 		ResponseCharacterItemList(pObject->GetUID());
 	}
-	}
+}
 
 bool MMatchServer::CheckItemXMLFromDatabase()
 {
@@ -3538,7 +3532,7 @@ void MMatchServer::OnAsyncResponse_RewardCharBR(MAsyncJob* pJobResult)
 	}
 
 	ResponseCharacterItemList(pJob->GetOwnerUID());
-	}
+}
 
 void MMatchServer::RouteCmdBattleTimeReward(const MUID& uidPlayer, MUID& uidStage, const char* pszName, const char* pszResetDesc, int nItemID, int nItemCnt, int nRentHourPeriod, int nRemainRewardCnt)
 {

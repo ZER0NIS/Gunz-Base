@@ -860,17 +860,6 @@ bool ZSurvival::OnObtainZItem(MCommand* pCommand)
 
 void ZSurvival::LoadNPCMeshes()
 {
-#ifdef _DEBUG
-	if ((ZApplication::GetInstance()->GetLaunchMode() == ZApplication::ZLAUNCH_MODE_STANDALONE_QUEST) ||
-		(ZApplication::GetInstance()->GetLaunchMode() == ZApplication::ZLAUNCH_MODE_STANDALONE_AI))
-	{
-		ZGetNpcMeshMgr()->LoadAll();
-
-		ZGetNpcMeshMgr()->ReloadAllAnimation();
-		return;
-	}
-#endif
-
 	if (!m_GameInfo.IsInited())
 	{
 		mlog("not inialized Quest Game Info\n");

@@ -300,8 +300,12 @@ int RenderLoop()
 }
 
 #else
+
 double fpsCounterLastValue = 0.0;
 u32 fpsCounterLastCount = 0;
+
+constexpr double GameCycleTime = 1000.0 / 16.6; // 60 FPS
+
 int RenderLoop()
 {
 	if (g_pFunctions[RF_CREATE])
@@ -340,8 +344,9 @@ int RenderLoop()
 			__BP(5006, "RMain::Run");
 
 			accumulatedTime += elapsedTime;
-			const u32 updateCount = static_cast<u32>(accumulatedTime / 17.0); // Calculate update count using fixed update time from (58 FPS)
-			accumulatedTime -= static_cast<u32>(updateCount) * 17.0; // Remove acummulated time
+			const float updateTime = static_cast<float>(elapsedTime / GameCycleTime);
+			const u32 updateCount = static_cast<u32>(updateTime); // Calculate update count using fixed update time from MU (25 FPS)
+			accumulatedTime -= static_cast<double>(updateCount) * GameCycleTime; // Remove acummulated time
 
 			fpsCounterTime += elapsedTime;
 			++fpsCounterCount;
