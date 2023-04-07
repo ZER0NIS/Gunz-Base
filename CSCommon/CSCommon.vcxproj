@@ -192,7 +192,7 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='_Encrypt_USA_Release_publish|Win32'" Label="Configuration">
     <ConfigurationType>StaticLibrary</ConfigurationType>
     <CharacterSet>MultiByte</CharacterSet>
-    <PlatformToolset>v142</PlatformToolset>
+    <PlatformToolset>v143</PlatformToolset>
     <PreferredToolArchitecture>x64</PreferredToolArchitecture>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='_Encrypt_USA_Release_publish|x64'" Label="Configuration">

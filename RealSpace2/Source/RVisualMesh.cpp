@@ -50,7 +50,7 @@ AniFrameInfo::AniFrameInfo()
 void AniFrameInfo::ClearFrame()
 {
 	m_nFrame = 0;
-	m_save_time = timeGetTime();
+	m_save_time = GetGlobalTimeMS();
 	m_pAniSetNext = NULL;
 	m_pAniSetReserve = NULL;
 	m_nReserveTime = 0;
@@ -62,7 +62,7 @@ void AniFrameInfo::Frame(RAniMode amode, RVisualMesh* pVMesh)
 
 	if (m_pAniSet == NULL) return;
 
-	auto cur = timeGetTime();
+	auto cur = GetGlobalTimeMS();
 
 	if (m_bChangeAnimation) {
 		m_bChangeAnimation = false;
@@ -209,9 +209,9 @@ void AniFrameInfo::Frame(RAniMode amode, RVisualMesh* pVMesh)
 	}
 }
 
-void RFrameTime::Start(float fMax, DWORD MaxTime, DWORD ReturnMaxTime) {
+void RFrameTime::Start(float fMax, u64 MaxTime, u64 ReturnMaxTime) {
 	m_fMaxValue = fMax;
-	m_dwStartTime = timeGetTime();
+	m_dwStartTime = GetGlobalTimeMS();
 	m_dwEndTime = m_dwStartTime + MaxTime;
 	m_dwReturnMaxTime = ReturnMaxTime;
 	m_bActive = true;
@@ -611,7 +611,7 @@ void RVisualMesh::Play(RAniMode amode) {
 
 	pInfo->m_isPlayDone = false;
 	pInfo->m_isOncePlayDone = false;
-	pInfo->m_save_time = timeGetTime();
+	pInfo->m_save_time = GetGlobalTimeMS();
 }
 
 void RVisualMesh::Stop(RAniMode amode) {
@@ -795,7 +795,7 @@ bool RVisualMesh::UpdateSpWeaponFire()
 	}
 
 	if (m_bGrenadeFire) {
-		if (m_GrenadeFireTime + 70 < timeGetTime()) {
+		if (m_GrenadeFireTime + 70 < GetGlobalTimeMS()) {
 			m_bGrenadeRenderOnoff = false;
 			m_bGrenadeFire = false;
 			m_bAddGrenade = true;
@@ -1024,7 +1024,8 @@ void RVisualMesh::DrawEnchantFire(RVisualMesh* pVWMesh, int mode, rmatrix& m)
 
 		add[0] = rvector(0, 0, 0);
 		add[1] = add[0];
-		DWORD color = 0xaf9f9f9f;
+
+		u32 color = 0xaf9f9f9f;
 
 		pVert[0].p = vpos[0];
 		pVert[0].color = color;
@@ -1878,7 +1879,7 @@ bool RVisualMesh::SetReserveAnimation(RAniMode animode, RAnimation* pAniSet, int
 
 	if (pInfo == NULL) return false;
 
-	pInfo->m_nReserveTime = timeGetTime() + tick;
+	pInfo->m_nReserveTime = GetGlobalTimeMS() + tick;
 	pInfo->m_pAniSetReserve = pAniSet;
 
 	Play(animode);

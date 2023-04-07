@@ -65,10 +65,10 @@ public:
 		m_dwReturnMaxTime = 0;
 	}
 
-	~RFrameTime() = default;
-
+	~RFrameTime() {
+	}
 public:
-	void Start(float fMax, DWORD MaxTime, DWORD ReturnMaxTime);
+	void Start(float fMax, u64 MaxTime, u64 ReturnMaxTime);
 	void Stop();
 	void Update();
 	float GetValue() { return m_fCurValue; }
@@ -79,9 +79,9 @@ public:
 	bool  m_bReturn;
 	float m_fMaxValue;
 	float m_fCurValue;
-	DWORD m_dwStartTime;
-	DWORD m_dwEndTime;
-	DWORD m_dwReturnMaxTime;
+	u64 m_dwStartTime;
+	u64 m_dwEndTime;
+	u64 m_dwReturnMaxTime;
 };
 
 #define VISUAL_LIGHT_MAX 3
