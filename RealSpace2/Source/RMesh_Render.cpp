@@ -83,20 +83,11 @@ void RMesh::Render(D3DXMATRIX* world_mat, bool NoPartsChange)
 
 RMeshNode* RMesh::FindNode(RMeshPartsPosInfoType type)
 {
-	RMeshNode* pNode = NULL;
-
-	RMeshNodeHashList_Iter it_obj = m_list.begin();
-
-	while (it_obj != m_list.end()) {
-		pNode = (*it_obj);
-
-		if (pNode->m_PartsPosInfoType == type)
-			return pNode;
-
-		it_obj++;
-	}
-
-	return NULL;
+	auto it_obj = std::find_if(m_list.cbegin(), m_list.cend(),
+		[type](const RMeshNode* pNode) {
+			return pNode->m_PartsPosInfoType == type;
+		});
+	return (it_obj != m_list.cend()) ? *it_obj : NULL;
 }
 
 bool RMesh::CalcParts(RMeshNode* pPartsMeshNode, RMeshNode* pMeshNode, bool NoPartsChange)
@@ -119,15 +110,11 @@ void RMesh::RenderSub(D3DXMATRIX* world_mat, bool NoPartsChange, bool bRenderBuf
 	m_vBBMaxNodeMatrix = m_vBBMax;
 	m_vBBMinNodeMatrix = m_vBBMin;
 
-	DWORD _color = 0;
-
 	__BP(202, "RMesh::RenderSub::RenderFrame");
 	RenderFrame();
 	__EP(202);
 
 	__BP(199, "RMesh::RenderSub::State b");
-
-	RMeshNodeHashList_Iter it_obj = m_list.begin();
 
 	RMeshNode* pMeshNode = NULL;
 	RMeshNode* pPartsMeshNode = NULL;
@@ -158,9 +145,8 @@ void RMesh::RenderSub(D3DXMATRIX* world_mat, bool NoPartsChange, bool bRenderBuf
 	if (m_pVisualMesh && m_pVisualMesh->m_bIsCharacter)
 		m_pVisualMesh->ClearPartInfo();
 
-	while (it_obj != m_list.end()) {
-		pMeshNode = (*it_obj);
-
+	for (auto* pMeshNode : m_list)
+	{
 		pMeshNode->CheckAlign(world_mat);
 
 		CalcNodeMatrixBBox(pMeshNode);
@@ -170,7 +156,6 @@ void RMesh::RenderSub(D3DXMATRIX* world_mat, bool NoPartsChange, bool bRenderBuf
 		if (GetToolMesh()) {
 			if (m_OnlyRenderPartsType != eq_parts_end &&
 				m_OnlyRenderPartsType != pPartsMeshNode->m_PartsType) {
-				it_obj++;
 				continue;
 			}
 
@@ -180,10 +165,7 @@ void RMesh::RenderSub(D3DXMATRIX* world_mat, bool NoPartsChange, bool bRenderBuf
 
 		if (m_pVisualMesh) {
 			if (pMeshNode->m_PartsType == eq_parts_face && m_pVisualMesh->SkipRenderFaceParts())
-			{
-				it_obj++;
 				continue;
-			}
 
 			if (NoPartsChange)	pPartsMeshNode = NULL;
 			else				pPartsMeshNode = m_pVisualMesh->GetParts(pMeshNode->m_PartsType);
@@ -192,8 +174,6 @@ void RMesh::RenderSub(D3DXMATRIX* world_mat, bool NoPartsChange, bool bRenderBuf
 
 			if (pMeshNode->m_isWeaponMesh) {
 				m_pVisualMesh->UpdateWeaponPartInfo(pMeshNode);
-
-				it_obj++;
 				continue;
 			}
 			else {
@@ -216,10 +196,8 @@ void RMesh::RenderSub(D3DXMATRIX* world_mat, bool NoPartsChange, bool bRenderBuf
 			}
 		}
 
-		if (pPartsMeshNode->m_WeaponDummyType != weapon_dummy_etc) {
-			it_obj++;
+		if (pPartsMeshNode->m_WeaponDummyType != weapon_dummy_etc)
 			continue;
-		}
 
 		if (pPartsMeshNode->m_isDummyMesh) {
 			if (m_pVisualMesh) {
@@ -229,7 +207,6 @@ void RMesh::RenderSub(D3DXMATRIX* world_mat, bool NoPartsChange, bool bRenderBuf
 					}
 				}
 			}
-			it_obj++;
 			continue;
 		}
 
@@ -245,7 +222,6 @@ void RMesh::RenderSub(D3DXMATRIX* world_mat, bool NoPartsChange, bool bRenderBuf
 
 				__EP(405);
 
-				++it_obj;
 				continue;
 			}
 		}
@@ -259,8 +235,6 @@ void RMesh::RenderSub(D3DXMATRIX* world_mat, bool NoPartsChange, bool bRenderBuf
 				mlog("%s 오브젝트의 Last 노드가 100개가 넘는다..\n", GetFileName());
 				nLastNodeCnt--;
 			}
-
-			it_obj++;
 			continue;
 		}
 
@@ -273,28 +247,25 @@ void RMesh::RenderSub(D3DXMATRIX* world_mat, bool NoPartsChange, bool bRenderBuf
 
 				if (nAlphaNodeCnt > _SORT_ALPHA_NODE_TABLE - 1) {
 					nAlphaNodeCnt = _SORT_ALPHA_NODE_TABLE - 1;
-					mlog("%s 오브젝트의 알파 노드가 100개가 넘는다..\n", GetFileName());
+					mlog("nAlphaNodeCnt > %d, filename = %s\n", _SORT_ALPHA_NODE_TABLE - 1, GetFileName());
 					nAlphaNodeCnt--;
 				}
 			}
 
-			it_obj++;
 			continue;
 		}
 
 		RenderNode(pPartsMeshNode, world_mat);
-
-		it_obj++;
 	}
 
-	RMeshNode* pATMNode = NULL;
-	RMeshNode* pTNodeHead = NULL;
-	RMeshNode* pTLastModel = NULL;
+	RMeshNode* pATMNode{};
+	RMeshNode* pTNodeHead{};
+	RMeshNode* pTLastModel{};
 
 	for (int n = 0; n < nAlphaNodeCnt; n++) {
 		pATMNode = pAlphaNode[n];
 
-		if (pATMNode == NULL) continue;
+		if (!pATMNode) continue;
 
 		if (pATMNode->m_PartsType == eq_parts_head) {
 			pTNodeHead = pATMNode;
@@ -308,15 +279,12 @@ void RMesh::RenderSub(D3DXMATRIX* world_mat, bool NoPartsChange, bool bRenderBuf
 		RenderNode(pTNodeHead, world_mat);
 	}
 
-	qsort(pLastNode, nLastNodeCnt, 4, _SortLastName);
+	std::sort(pLastNode, pLastNode + nLastNodeCnt,
+		[&](auto* a, auto* b) { return a->m_Name < b->m_Name; });
 
-	for (int n = 0; n < nLastNodeCnt; n++) {
-		pATMNode = pLastNode[n];
-
-		if (pATMNode == NULL) continue;
-
-		RenderNode(pATMNode, world_mat);
-	}
+	for (int n = 0; n < nLastNodeCnt; n++)
+		if (auto* pATMNode = pLastNode[n])
+			RenderNode(pATMNode, world_mat);
 
 	static D3DXMATRIX _init_mat = GetIdentityMatrix();
 
@@ -494,43 +462,34 @@ inline bool find_intersects_triangle_sub(rvector* vec, rvector* vPoint, float* t
 
 bool RMesh::CalcIntersectsTriangle(rvector* vInVec, RPickInfo* pInfo, D3DXMATRIX* world_mat, bool fastmode)
 {
-	RMeshNodeHashList_Iter it_obj = m_list.begin();
-
 	D3DXVECTOR3 _v;
-
-	float best_t = 9999.f;
-
 	RMeshNode* pFindMeshNode = NULL;
 	RMeshNode* pPartsMeshNode = NULL;
 
 	rvector		vFindVec[3];
 
+	float best_t = std::numeric_limits<float>::infinity();
+
 	bool  bFind = false;
 
 	rmatrix result_mat;
 
-	while (it_obj != m_list.end()) {
-		RMeshNode* pMeshNode = (*it_obj);
-
+	for (const auto& pMeshNode : m_list) {
 		pPartsMeshNode = UpdateNodeAniMatrix(pMeshNode);
 
 		if (m_PickingType == pick_collision_mesh) {
 			if (!pPartsMeshNode->m_isCollisionMesh) {
-				it_obj++;
 				continue;
 			}
 		}
 		else if (m_PickingType == pick_real_mesh) {
 			if (pPartsMeshNode->m_isDummyMesh) {
-				it_obj++;
 				continue;
 			}
 		}
 
-		if (pPartsMeshNode->m_face_num == 0) {
-			it_obj++;
+		if (pPartsMeshNode->m_face_num == 0)
 			continue;
-		}
 
 		static D3DXVECTOR3 pVecPick[10000];
 
@@ -562,7 +521,6 @@ bool RMesh::CalcIntersectsTriangle(rvector* vInVec, RPickInfo* pInfo, D3DXMATRIX
 				bFind = true;
 			}
 		}
-		it_obj++;
 	}
 
 	if (bFind && pFindMeshNode) {

@@ -264,6 +264,7 @@ int RVisualLightMgr::GetLightCount()
 		});
 }
 
+#if 0
 void RVisualLightMgr::Clone(RVisualMesh* pVMesh)
 {
 	if (!pVMesh) return;
@@ -274,6 +275,16 @@ void RVisualLightMgr::Clone(RVisualMesh* pVMesh)
 		pVMesh->m_LightMgr.m_Light[i] = m_Light[i];
 		pVMesh->m_LightMgr.m_LightEnable[i] = m_LightEnable[i];
 	}
+}
+#endif
+
+void RVisualLightMgr::Clone(RVisualMesh* pVMesh)
+{
+	if (!pVMesh) return;
+
+	std::fill_n(m_LightEnable, VISUAL_LIGHT_MAX, LightActivationType::Off);
+	std::copy(std::begin(m_Light), std::end(m_Light), std::begin(pVMesh->m_LightMgr.m_Light));
+	std::copy(std::begin(m_LightEnable), std::end(m_LightEnable), std::begin(pVMesh->m_LightMgr.m_LightEnable));
 }
 
 void RVisualLightMgr::SetLight(int index, D3DLIGHT9* light, bool ShaderOnly)
@@ -475,7 +486,8 @@ void RVisualMesh::Destroy()
 	delete[] m_FrameInfo;
 }
 
-bool RVisualMesh::Create(RMesh* pMesh) {
+bool RVisualMesh::Create(RMesh* pMesh)
+{
 	m_pMesh = pMesh;
 
 	if (m_pMesh) {

@@ -14,49 +14,23 @@ class MXmlElement;
 #include "RNameSpace.h"
 _NAMESPACE_REALSPACE2_BEGIN
 
-
-
-// 더미, 더미 리스트
 struct RDummy {
 	string	szName;
 	rvector Position;
 	rvector Direction;
 };
 
-class RDummyList : public list<RDummy*> 
+class RDummyList : public list<RDummy*>
 {
 private:
 	void Clear();
 public:
 	virtual ~RDummyList();
 
-	bool Open(MXmlElement *pElement);
-	bool Save(MXmlElement *pElement);
+	bool Open(MXmlElement* pElement);
+	bool Save(MXmlElement* pElement);
 };
 
-
-
-
-
-
-
-
-
-
-
-
 _NAMESPACE_REALSPACE2_END
-
-
-
-
-
-
-
-
-
-
-
-
 
 #endif
