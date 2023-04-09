@@ -10,6 +10,8 @@
 #include "MTime.h"
 #include "SafeString.h"
 
+#include <SDL.h>
+
 #include <algorithm>
 using std::min;
 using std::max;

@@ -167,9 +167,7 @@ RMeshNode::~RMeshNode()
 bool RMeshNode::ConnectMtrl()
 {
 	if (m_face_num == 0)
-	{
 		return false;
-	}
 
 	RMtrlMgr* pMtrlList = NULL;
 
@@ -527,8 +525,8 @@ void RMeshNode::UpdateNodeBuffer()
 	if (!m_vb->m_pVert)
 		_ASSERT(0);
 
-	RVertex* pV = (RVertex*)m_vb->m_pVert;
-	RLVertex* pLV = (RLVertex*)m_vb->m_pVert;
+	RVertex* pV = (RVertex*)m_vb->m_pVert.get();
+	RLVertex* pLV = (RLVertex*)m_vb->m_pVert.get();
 
 	int w, p0, p1, p2;
 
@@ -974,7 +972,7 @@ void RMeshNode::Render(D3DXMATRIX* pWorldMatrix)
 			m_vb->ReConvertSilhouetteBuffer(fLen);
 
 			ToonRenderSilhouetteSettingOff();
-	}
+		}
 
 		ToonRenderSettingOff();
 
@@ -985,7 +983,7 @@ void RMeshNode::Render(D3DXMATRIX* pWorldMatrix)
 		pMesh->SetCharacterMtrl_OFF(pMtrl, pMesh->GetMeshNodeVis(this));
 
 		__EP(411);
-}
+	}
 }
 
 void RMeshNode::CheckAlignMapObject(rmatrix& hr_mat)

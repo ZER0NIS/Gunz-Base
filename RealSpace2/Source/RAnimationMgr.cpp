@@ -89,7 +89,7 @@ RAnimation* RAnimationMgr::AddAnimationFile(const char* name, const char* filena
 	m_id_last++;
 
 	if (m_id_last > MAX_ANIMATION_NODE)
-		mlog("에니메이션 노드 예약 사이즈를 늘리는것이 좋겠음..\n", filename);
+		mlog("It would be better to increase the animation node reservation size..\n", filename);
 
 	m_list.PushBack(node);
 
@@ -154,7 +154,7 @@ void RAnimationMgr::MakeListMap(int size)
 		return;
 
 	if (size > 100) {
-		mlog("RAnimationMgr::MakeListMap %d 는 너무과한거 아닌가?\n", size);
+		mlog("RAnimationMgr::MakeListMap %d is not too much?\n", size);
 	}
 
 	m_list_map = new RAnimationHashList[size];

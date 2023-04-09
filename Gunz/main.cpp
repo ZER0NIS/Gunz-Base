@@ -231,8 +231,11 @@ RRESULT OnCreate(void* pParam)
 
 	mlog("main : OnCreate() done\n");
 
+#if RSDL2
+	SDL_RaiseWindow(g_pWindow);
+#else
 	SetFocus(g_hWnd);
-
+#endif
 	return R_OK;
 }
 
@@ -545,6 +548,74 @@ bool FindCrashFunc(char* pName)
 	return true;
 }
 
+#if RSDL2
+// Declaración de la función de callback para eventos de ventana
+extern "C" {
+	void __declspec(dllexport) SDLCALL WndProc(SDL_Window* window, SDL_Event* event);
+}
+
+// Implementación de la función de callback
+void WndProc(SDL_Window* window, SDL_Event* event)
+{
+	switch (event->type)
+	{
+	case SDL_SYSWMEVENT:
+	{
+		if (event->syswm.msg->msg.win.msg == WM_SYSCHAR && event->syswm.msg->msg.win.wParam == VK_RETURN)
+		{
+#ifndef _PUBLISH
+			RFrame_ToggleFullScreen();
+#endif
+			break;
+		}
+		break;
+	}
+	case SDL_WINDOWEVENT:
+	{
+		switch (event->window.event)
+		{
+		case SDL_WINDOWEVENT_ENTER:
+		{
+			RFrame_UpdateRender();
+			break;
+		}
+		case SDL_WINDOWEVENT_FOCUS_GAINED:
+		{
+			if (ZApplication::GetGameInterface())
+			{
+				ZApplication::GetGameInterface()->OnResetCursor();
+			}
+			break;
+		}
+		}
+		break;
+	}
+	case SDL_KEYDOWN:
+	{
+		bool b = false;
+		break;
+	}
+	case SDL_USEREVENT:
+	{
+		if (Mint::GetInstance()->ProcessEvent(*event) == true)
+		{
+			if (ZGetGameInterface() && ZGetGameInterface()->IsReservedResetApp())
+			{
+				ZGetGameInterface()->ReserveResetApp(false);
+				ResetAppResource();
+			}
+			break;
+		}
+		else if (event->user.code == WM_CHANGE_GAMESTATE)
+		{
+			_ZChangeGameState((int)event->user.data1);
+			break;
+		}
+		break;
+	}
+	}
+}
+#else
 long FAR PASCAL WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
 	switch (message)
@@ -604,6 +675,8 @@ long FAR PASCAL WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 
 	return DefWindowProc(hWnd, message, wParam, lParam);
 }
+
+#endif
 
 enum RBASE_FONT {
 	RBASE_FONT_GULIM = 0,
@@ -796,7 +869,7 @@ int PASCAL WinMain(HINSTANCE this_inst, HINSTANCE prev_inst, LPSTR cmdline, int 
 
 	SetModeParams();
 
-	const int nRMainReturn = RMain(APPLICATION_NAME, this_inst, prev_inst, cmdline, cmdshow, &g_ModeParams, WndProc, IDI_ICON1);
+	const int nRMainReturn = RMain(APPLICATION_NAME, this_inst, prev_inst, cmdline, cmdshow, &g_ModeParams, NULL, IDI_ICON1);
 	if (0 != nRMainReturn)
 		return nRMainReturn;
 
@@ -809,7 +882,7 @@ int PASCAL WinMain(HINSTANCE this_inst, HINSTANCE prev_inst, LPSTR cmdline, int 
 
 	const int nRRunReturn = RenderLoop();
 
-	ShowWindow(g_hWnd, SW_MINIMIZE);
+	//ShowWindow(g_hWnd, SW_MINIMIZE);
 
 	ZStringResManager::FreeInstance();
 

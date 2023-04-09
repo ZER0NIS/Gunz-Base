@@ -1,4 +1,6 @@
 #include "stdafx.h"
+
+#include "RFrameWork.h"
 #include <windows.h>
 #include "MDebug.h"
 #include "RealSpace2.h"
@@ -18,12 +20,21 @@ bool IsToolTipEnable() {
 
 _NAMESPACE_REALSPACE2_BEGIN
 
+#if RSDL2
+SDL_Window* g_pWindow = nullptr;
+//SDL_Renderer* g_pRenderer = nullptr;
+SDL_Event  g_pEvent;
+
+bool  Quit = false;
+#endif
+
 extern HWND g_hWnd;
 
 bool g_bActive;
 extern bool g_bFixedResolution;
 
 RECT g_rcWindowBounds;
+
 WNDPROC	g_WinProc = NULL;
 RFFUNCTION g_pFunctions[RF_ENDOFRFUNCTIONTYPE] = { NULL, };
 extern int gNumTrisRendered;
@@ -43,7 +54,11 @@ void RSetFunction(RFUNCTIONTYPE ft, RFFUNCTION pfunc)
 
 bool RIsActive()
 {
+#if RSDL2
+	return SDL_GetWindowFlags(g_pWindow) & SDL_WINDOW_INPUT_FOCUS;
+#else
 	return GetActiveWindow() == g_hWnd;
+#endif
 }
 
 void RFrame_Create()
@@ -51,7 +66,13 @@ void RFrame_Create()
 #ifdef _USE_GDIPLUS
 	Gdiplus::GdiplusStartup(&g_gdiplusToken, &g_gdiplusStartupInput, NULL);
 #endif
+
+#if RSDL2
+	SDL_GetWindowPosition(g_pWindow, reinterpret_cast<int*>(&g_rcWindowBounds.left), reinterpret_cast<int*>(&g_rcWindowBounds.top));
+	SDL_GetWindowSize(g_pWindow, reinterpret_cast<int*>(&g_rcWindowBounds.right), reinterpret_cast<int*>(&g_rcWindowBounds.bottom));
+#else
 	GetWindowRect(g_hWnd, &g_rcWindowBounds);
+#endif
 }
 
 void RFrame_Init()
@@ -77,6 +98,12 @@ void RFrame_Destroy()
 #ifdef _USE_GDIPLUS
 	Gdiplus::GdiplusShutdown(g_gdiplusToken);
 #endif
+
+#if RSDL2
+	//	SDL_DestroyRenderer(g_pRenderer);
+	SDL_DestroyWindow(g_pWindow);
+	SDL_Quit();
+#endif
 }
 
 void RFrame_Invalidate()
@@ -100,6 +127,7 @@ void RFrame_Render()
 	RRESULT isOK = RIsReadyToRender();
 	if (isOK == R_NOTREADY)
 		return;
+
 	else if (isOK == R_RESTORED)
 	{
 		RMODEPARAMS ModeParams = { RGetScreenWidth(),RGetScreenHeight(),RIsFullScreen(),RGetPixelFormat() };
@@ -107,16 +135,25 @@ void RFrame_Render()
 		mlog("devices Restored. \n");
 	}
 
+#if RSDL2
+	if (SDL_GetTicks() > g_last_mouse_move_time + RTOOLTIP_GAP)
+		g_tool_tip = true;
+#else
 	if (timeGetTime() > g_last_mouse_move_time + RTOOLTIP_GAP)
 		g_tool_tip = true;
+#endif
 
 	if (g_pFunctions[RF_RENDER])
 		g_pFunctions[RF_RENDER](NULL);
 
+#if RSDL2
+	//SDL_RenderPresent(g_pRenderer);
+#else
 	RGetDevice()->SetStreamSource(0, NULL, 0, 0);
 	RGetDevice()->SetIndices(0);
 	RGetDevice()->SetTexture(0, NULL);
 	RGetDevice()->SetTexture(1, NULL);
+#endif
 }
 
 void RFrame_ToggleFullScreen()
@@ -124,18 +161,28 @@ void RFrame_ToggleFullScreen()
 	RMODEPARAMS ModeParams = { RGetScreenWidth(),RGetScreenHeight(),RIsFullScreen(),RGetPixelFormat() };
 
 	if (!ModeParams.bFullScreen)
+#if RSDL2
+		SDL_GetWindowPosition(g_pWindow, reinterpret_cast<int*>(&g_rcWindowBounds.left), reinterpret_cast<int*>(&g_rcWindowBounds.top));
+#else
 		GetWindowRect(g_hWnd, &g_rcWindowBounds);
+#endif
 
 	ModeParams.bFullScreen = !ModeParams.bFullScreen;
 	RResetDevice(&ModeParams);
 
 	if (!ModeParams.bFullScreen)
 	{
+#if RSDL2
+		SDL_SetWindowFullscreen(g_pWindow, 0);
+		SDL_SetWindowSize(g_pWindow, g_rcWindowBounds.right - g_rcWindowBounds.left, g_rcWindowBounds.bottom - g_rcWindowBounds.top);
+		SDL_SetWindowPosition(g_pWindow, g_rcWindowBounds.left, g_rcWindowBounds.top);
+#else
 		SetWindowPos(g_hWnd, HWND_NOTOPMOST,
 			g_rcWindowBounds.left, g_rcWindowBounds.top,
 			(g_rcWindowBounds.right - g_rcWindowBounds.left),
 			(g_rcWindowBounds.bottom - g_rcWindowBounds.top),
 			SWP_SHOWWINDOW);
+#endif
 	}
 }
 
@@ -176,8 +223,12 @@ long FAR PASCAL WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 				g_pFunctions[RF_DEACTIVATE](NULL);
 
 			if (RIsFullScreen()) {
+#if RSDL2
+				SDL_MinimizeWindow(g_pWindow);
+#else
 				ShowWindow(hWnd, SW_MINIMIZE);
 				UpdateWindow(hWnd);
+#endif
 			}
 			g_bActive = FALSE;
 		}
@@ -216,33 +267,50 @@ long FAR PASCAL WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 
 int RMain(const char* AppName, HINSTANCE this_inst, HINSTANCE prev_inst, LPSTR cmdline, int cmdshow, RMODEPARAMS* pModeParams, WNDPROC winproc, WORD nIconResID)
 {
-	g_WinProc = winproc ? winproc : DefWindowProc;
+	if (SDL_Init(SDL_INIT_VIDEO) != 0)
+	{
+		MLog("SDL_Init failed: %s\n", SDL_GetError());
+		return -1;
+	}
 
-	WNDCLASS    wc;
-	wc.style = CS_HREDRAW | CS_VREDRAW | CS_DBLCLKS;
-	wc.lpfnWndProc = WndProc;
-	wc.cbClsExtra = 0;
-	wc.cbWndExtra = sizeof(DWORD);
-	wc.hInstance = this_inst;
-	wc.hIcon = LoadIcon(this_inst, MAKEINTRESOURCE(nIconResID));
-	wc.hCursor = 0;
-	wc.hbrBackground = NULL;
-	wc.lpszMenuName = NULL;
-	wc.lpszClassName = "RealSpace2";
-	if (!RegisterClass(&wc)) return FALSE;
+	constexpr u32 extraWindowFlags = 0;
 
-	DWORD dwStyle;
-	if (pModeParams->bFullScreen) // Fullscreen
-		dwStyle = WS_VISIBLE | WS_POPUP;
-	else//windowed
-		dwStyle = WS_VISIBLE | WS_OVERLAPPED | WS_BORDER | WS_CAPTION | WS_SYSMENU | WS_MAXIMIZEBOX | WS_MINIMIZEBOX;
+	g_pWindow = SDL_CreateWindow(AppName, SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, pModeParams->nWidth, pModeParams->nHeight, SDL_WINDOW_SHOWN | extraWindowFlags);
+	if (!g_pWindow) {
+		MLog("SDL_CreateWindow failed: %s\n", SDL_GetError());
+		SDL_Quit();
+		return -1;
+	}
+	/*
+g_pRenderer = SDL_CreateRenderer(g_pWindow, -1, 0);
+if (!g_pRenderer) {
+	MLog("SDL_CreateRenderer failed: %s\n", SDL_GetError());
+	SDL_DestroyWindow(g_pWindow);
+	SDL_Quit();
+	return -1;
+}									  */
 
-	g_hWnd = CreateWindowA("RealSpace2", AppName, dwStyle, CW_USEDEFAULT, CW_USEDEFAULT,
-		pModeParams->nWidth, pModeParams->nHeight, NULL, NULL, this_inst, NULL);
+	SDL_SysWMinfo info;
+	SDL_VERSION(&info.version);
+	if (SDL_GetWindowWMInfo(g_pWindow, &info) != SDL_TRUE) {
+		MLog("SDL_GetWindowWMInfo failed: %s\n", SDL_GetError());
+		//SDL_DestroyRenderer(g_pRenderer);
+		SDL_DestroyWindow(g_pWindow);
+		SDL_Quit();
+		return false;
+	}
+	HWND hWnd = info.info.win.window;
+	g_hWnd = hWnd;
 
 	RAdjustWindow(pModeParams);
 
+#if RSDL2
+	//while (SDL_ShowCursor(FALSE) > 0);
+
+	SDL_ShowCursor(true);
+#else
 	while (ShowCursor(FALSE) > 0);
+#endif
 
 	return 0;
 }
@@ -259,6 +327,45 @@ void RFrame_UpdateRender()
 	__EP(5007);
 
 	__EP(5006);
+}
+
+void OnEvent(const SDL_Event* event)
+{
+	switch (event->type)
+	{
+	case SDL_SYSWMEVENT:
+		if (event->syswm.msg->msg.win.msg == WM_SYSCHAR)
+		{
+			if (event->syswm.msg->msg.win.wParam == VK_RETURN)
+			{
+				RFrame_ToggleFullScreen();
+			}
+		}
+		break;
+	case SDL_APP_DIDENTERFOREGROUND:
+		if (g_pFunctions[RF_ACTIVATE])
+			g_pFunctions[RF_ACTIVATE](NULL);
+		g_bActive = true;
+		break;
+	case SDL_APP_DIDENTERBACKGROUND:
+		if (g_pFunctions[RF_DEACTIVATE])
+			g_pFunctions[RF_DEACTIVATE](NULL);
+		if (RIsFullScreen()) {
+			SDL_MinimizeWindow(g_pWindow);
+		}
+		g_bActive = false;
+		break;
+	case SDL_MOUSEMOTION:
+		g_last_mouse_move_time = SDL_GetTicks();
+		g_tool_tip = false;
+		break;
+	case SDL_QUIT:
+	{
+		RFrame_Destroy();
+		Quit = true;
+	}
+	break;
+	}
 }
 
 #if FPSOLD
@@ -371,6 +478,11 @@ int RenderLoop()
 			{
 				RIsReadyToRender();
 			}
+			SDL_Event event;
+			while (SDL_PollEvent(&event))
+			{
+				OnEvent(&event);
+			}
 
 			GlobalTimeFPS::Wait();
 			elapsedTime = GlobalTimeFPS::GetElapsedFrametime();
@@ -386,6 +498,68 @@ int RenderLoop()
 	} while (WM_QUIT != msg.message);
 	return (INT)msg.wParam;
 }
+/*
+int RenderLoop()
+{
+	static double fpsCounterTime = 0.0;
+	static u32 fpsCounterCount = 0;
+
+	GlobalTimeFPS::Wait();
+	double elapsedTime = 0.0;
+	double currentTime = 0.0;
+	static double accumulatedTime = 0.0;
+
+	while (!Quit)
+	{
+		__BP(5006, "RMain::Run");
+
+		accumulatedTime += elapsedTime;
+		const float updateTime = static_cast<float>(elapsedTime / GameCycleTime);
+		const u32 updateCount = static_cast<u32>(updateTime); // Calculate update count using fixed update time from MU (25 FPS)
+		accumulatedTime -= static_cast<double>(updateCount) * GameCycleTime; // Remove acummulated time
+
+		fpsCounterTime += elapsedTime;
+		++fpsCounterCount;
+
+		if (fpsCounterTime >= 1000.0)
+		{
+			fpsCounterLastValue = (fpsCounterTime / (double)fpsCounterCount);
+			fpsCounterLastCount = fpsCounterCount;
+			fpsCounterCount = 0;
+			fpsCounterTime = 0.0;
+		}
+		if (updateCount > 0)
+		{
+			// Force Input 58FPS Fix
+			//RFrame_UpdateInput();
+		}
+
+		RFrame_Update();
+		RFrame_Render();
+
+		if (!RFlip())
+		{
+			RIsReadyToRender();
+		}
+
+		SDL_Event event;
+		while (SDL_PollEvent(&event))
+		{
+			OnEvent(&event);
+		}
+
+		GlobalTimeFPS::Wait();
+		elapsedTime = GlobalTimeFPS::GetElapsedFrametime();
+		currentTime = GlobalTimeFPS::GetFrametime();
+
+		__EP(5006);
+
+		MCheckProfileCount();
+	}
+
+	return true;
+}
+		 */
 
 #endif
 
@@ -393,14 +567,19 @@ int RInitD3D(RMODEPARAMS* pModeParams)
 {
 	RFrame_Create();
 
+#if RSDL2
+	SDL_ShowWindow(g_pWindow);
+#else
 	ShowWindow(g_hWnd, SW_SHOW);
+#endif
+
 	if (!RInitDisplay(g_hWnd, pModeParams))
 	{
 		mlog("can't init display\n");
 		return -1;
 	}
 
-	RGetDevice()->Clear(0, NULL, D3DCLEAR_TARGET, 0x00000000, 1.0f, 0);
+	//RGetDevice()->Clear(0, NULL, D3DCLEAR_TARGET, 0x00000000, 1.0f, 0);
 	RFlip();
 
 	return 0;

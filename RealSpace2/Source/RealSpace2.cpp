@@ -414,6 +414,7 @@ bool RInitDisplay(HWND hWnd, const RMODEPARAMS* params)
 	InitDevice();
 	RFrame_Restore();
 	RBaseTexture_Create();
+
 	if (!RFontCreate())
 	{
 		RCloseDisplay();
@@ -445,6 +446,18 @@ bool RCloseDisplay()
 
 void RAdjustWindow(const RMODEPARAMS* pModeParams)
 {
+#if RSDL2
+	if (pModeParams->bFullScreen)
+	{
+		SDL_SetWindowFullscreen(g_pWindow, SDL_WINDOW_FULLSCREEN_DESKTOP);
+	}
+	else
+	{
+		SDL_SetWindowFullscreen(g_pWindow, 0);
+		SDL_SetWindowSize(g_pWindow, pModeParams->nWidth, pModeParams->nHeight);
+		SDL_SetWindowPosition(g_pWindow, SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED);
+	}
+#else
 	if ((GetWindowLong(g_hWnd, GWL_STYLE) & WS_CHILD) != 0)
 		return;
 
@@ -464,6 +477,7 @@ void RAdjustWindow(const RMODEPARAMS* pModeParams)
 	MoveWindow(g_hWnd, winrt.left, winrt.top,
 		winrt.right - winrt.left + (pModeParams->nWidth - (rt.right - rt.left)),
 		winrt.bottom - winrt.top + (pModeParams->nHeight - (rt.bottom - rt.top)), FALSE);
+#endif
 }
 
 void RResetDevice(const RMODEPARAMS* params)

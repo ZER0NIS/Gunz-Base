@@ -99,13 +99,16 @@ RVertexBuffer::~RVertexBuffer()
 }
 
 void RVertexBuffer::Init() {
+	m_vb = nullptr;
+	m_v = nullptr;
+	m_pVert = nullptr;
+
 	m_is_init = false;
-	m_vb = NULL;
+
 	m_nVertexSize = 0;
 	m_nVertexCnt = 0;
 	m_nBufferSize = 0;
 	m_nRealBufferSize = 0;
-	m_v = NULL;
 	m_dwFVF = 0;
 
 	m_dwUsage = D3DUSAGE_WRITEONLY;
@@ -115,7 +118,6 @@ void RVertexBuffer::Init() {
 	m_PrimitiveType = D3DPT_TRIANGLELIST;
 
 	m_nRenderCnt = 0;
-	m_pVert = NULL;
 
 	m_bUseSWVertex = false;
 	m_bUseHWVertex = false;
@@ -124,7 +126,7 @@ void RVertexBuffer::Init() {
 void RVertexBuffer::Clear()
 {
 	SAFE_RELEASE(m_vb);
-	SAFE_DELETE(m_pVert);
+	m_pVert.reset();
 
 	Init();
 }
@@ -155,7 +157,7 @@ bool RVertexBuffer::Create(char* pVertex, DWORD fvf, int VertexSize, int VertexC
 	}
 
 	if (m_bUseSWVertex) {
-		m_pVert = new char[m_nBufferSize];
+		m_pVert = std::make_unique<char[]>(m_nBufferSize);
 	}
 
 	m_is_init = true;
@@ -169,7 +171,7 @@ bool RVertexBuffer::Create(char* pVertex, DWORD fvf, int VertexSize, int VertexC
 bool RVertexBuffer::UpdateDataSW(char* pVertex)
 {
 	if (m_bUseSWVertex && m_pVert) {
-		memcpy(m_pVert, pVertex, m_nBufferSize);
+		memcpy(m_pVert.get(), pVertex, m_nBufferSize);
 	}
 
 	return true;
@@ -179,9 +181,7 @@ bool RVertexBuffer::UpdateDataHW(char* pVertex)
 {
 	if (m_bUseHWVertex && m_vb) {
 		Lock();
-
-		memcpy(m_v, pVertex, m_nBufferSize);
-
+		memcpy(m_v.get(), pVertex, m_nBufferSize);
 		Unlock();
 	}
 
@@ -227,15 +227,15 @@ bool RVertexBuffer::UpdateData(D3DXVECTOR3* pVec)
 	if (m_vb) {
 		Lock();
 
-		if (nVertType)	UpdateDataVert((RVertex*)m_v, pVec, m_nVertexCnt);
-		else			UpdateDataLVert((RLVertex*)m_v, pVec, m_nVertexCnt);
+		if (nVertType)	UpdateDataVert((RVertex*)m_v.get(), pVec, m_nVertexCnt);
+		else			UpdateDataLVert((RLVertex*)m_v.get(), pVec, m_nVertexCnt);
 
 		Unlock();
 	}
 
 	if (m_bUseSWVertex && m_pVert) {
-		if (nVertType)	UpdateDataVert((RVertex*)m_pVert, pVec, m_nVertexCnt);
-		else			UpdateDataLVert((RLVertex*)m_pVert, pVec, m_nVertexCnt);
+		if (nVertType)	UpdateDataVert((RVertex*)m_pVert.get(), pVec, m_nVertexCnt);
+		else			UpdateDataLVert((RLVertex*)m_pVert.get(), pVec, m_nVertexCnt);
 	}
 
 	return true;
@@ -307,7 +307,7 @@ void RVertexBuffer::RenderSoft()
 	if (dev == NULL) return;
 
 	dev->SetFVF(m_dwFVF);
-	dev->DrawPrimitiveUP(m_PrimitiveType, m_nVertexCnt / 3, (LPVOID)m_pVert, m_nVertexSize);
+	dev->DrawPrimitiveUP(m_PrimitiveType, m_nVertexCnt / 3, (LPVOID)m_pVert.get(), m_nVertexSize);
 }
 
 void RVertexBuffer::ConvertSilhouetteBuffer(float fLineWidth)
@@ -315,14 +315,14 @@ void RVertexBuffer::ConvertSilhouetteBuffer(float fLineWidth)
 	if (!m_pVert) return;
 
 	if (m_nVertexSize == sizeof(RVertex)) {
-		RVertex* pV = (RVertex*)m_pVert;
+		RVertex* pV = (RVertex*)m_pVert.get();
 
 		for (int i = 0; i < m_nVertexCnt; i++) {
 			pV[i].p = pV[i].p + pV[i].n * fLineWidth;
 		}
 	}
 	else if (m_nVertexSize == sizeof(RBlendVertex)) {
-		RBlendVertex* pV = (RBlendVertex*)m_pVert;
+		RBlendVertex* pV = (RBlendVertex*)m_pVert.get();
 
 		for (int i = 0; i < m_nVertexCnt; i++) {
 			pV[i].p = pV[i].p + pV[i].normal * fLineWidth;
@@ -335,14 +335,14 @@ void RVertexBuffer::ReConvertSilhouetteBuffer(float fLineWidth)
 	if (!m_pVert) return;
 
 	if (m_nVertexSize == sizeof(RVertex)) {
-		RVertex* pV = (RVertex*)m_pVert;
+		RVertex* pV = (RVertex*)m_pVert.get();
 
 		for (int i = 0; i < m_nVertexCnt; i++) {
 			pV[i].p = pV[i].p - pV[i].n * fLineWidth;
 		}
 	}
 	else if (m_nVertexSize == sizeof(RBlendVertex)) {
-		RBlendVertex* pV = (RBlendVertex*)m_pVert;
+		RBlendVertex* pV = (RBlendVertex*)m_pVert.get();
 
 		for (int i = 0; i < m_nVertexCnt; i++) {
 			pV[i].p = pV[i].p - pV[i].normal * fLineWidth;
@@ -365,7 +365,7 @@ void RVertexBuffer::RenderIndexSoft(RIndexBuffer* ib)
 		ib->GetFaceCnt(),
 		ib->m_pIndex,
 		D3DFMT_INDEX16,
-		(LPVOID)m_pVert, m_nVertexSize);
+		(LPVOID)m_pVert.get(), m_nVertexSize);
 }
 
 void RVertexBuffer::Render(RIndexBuffer* ib)

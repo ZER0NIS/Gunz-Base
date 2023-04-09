@@ -224,7 +224,8 @@ void RFrameTime::Stop() {
 	m_bReturn = false;
 }
 
-void RFrameTime::Update() {
+void RFrameTime::Update()
+{
 	if (!m_bActive) return;
 
 	u64 dwThisTime = GetGlobalTimeMS();
@@ -268,12 +269,15 @@ void RVisualLightMgr::Clone(RVisualMesh* pVMesh)
 {
 	if (!pVMesh) return;
 
+	// Reinicializa el arreglo m_LightEnable
 	for (int i = 0; i < VISUAL_LIGHT_MAX; i++)
 	{
 		m_LightEnable[i] = LightActivationType::Off;
-		pVMesh->m_LightMgr.m_Light[i] = m_Light[i];
-		pVMesh->m_LightMgr.m_LightEnable[i] = m_LightEnable[i];
 	}
+
+	// Copia el arreglo de luces y el arreglo de estados de activación
+	std::copy(std::begin(m_Light), std::end(m_Light), std::begin(pVMesh->m_LightMgr.m_Light));
+	std::copy(std::begin(m_LightEnable), std::end(m_LightEnable), std::begin(pVMesh->m_LightMgr.m_LightEnable));
 }
 
 void RVisualLightMgr::SetLight(int index, D3DLIGHT9* light, bool ShaderOnly)
@@ -324,9 +328,9 @@ void RVisualLightMgr::UpdateLight()
 	}
 }
 
-RVisualMesh::RVisualMesh() {
+RVisualMesh::RVisualMesh()
+{
 	m_FrameInfo = new AniFrameInfo[ani_mode_end];
-
 	m_pMesh = NULL;
 	m_pLowPolyMesh = NULL;
 

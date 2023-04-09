@@ -1278,7 +1278,7 @@
       <IntrinsicFunctions>false</IntrinsicFunctions>
       <FavorSizeOrSpeed>Neither</FavorSizeOrSpeed>
       <OmitFramePointers>false</OmitFramePointers>
-      <AdditionalIncludeDirectories>../CSCommon/Include;../SafeUDP/Include;../CML/Include;../RealSpace2/Include;../Mint2/Include;../RealSound/Include;../sdk/rapidxml/include;../sdk/dx9/include;../sdk/fmt/include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>../CSCommon/Include;../SafeUDP/Include;../CML/Include;../RealSpace2/Include;../Mint2/Include;../RealSound/Include;../sdk/rapidxml/include;../sdk/dx9/include;../sdk/fmt/include;../SDK/SDL2/include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>LOCALE_NHNUSA;WIN32;NDEBUG;_WINDOWS;_WINSOCK_DEPRECATED_NO_WARNINGS;_CRT_SECURE_NO_WARNINGS;_PUBLISH;_LOCATOR;_USING_CXR;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <StringPooling>
       </StringPooling>

@@ -389,8 +389,8 @@ public:
 	bool  m_is_init;
 	bool  m_bUseSWVertex;
 	bool  m_bUseHWVertex;
-	char* m_pVert;
-	char* m_v;
+	std::unique_ptr<char[]> m_pVert;
+	std::unique_ptr<char[]> m_v;
 
 	DWORD	m_dwFVF;
 	DWORD	m_dwUsage;

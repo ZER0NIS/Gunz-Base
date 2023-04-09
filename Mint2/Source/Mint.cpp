@@ -201,6 +201,55 @@ bool Mint::ProcessEvent(HWND hwnd, UINT message, WPARAM wparam, LPARAM lparam)
 	return false;
 }
 
+bool Mint::ProcessEvent(SDL_Event& event)
+{
+	if (!m_pMainFrame) return false;
+
+	MEvent e;
+	int nResult = e.TranslateEvent(event);
+	if (nResult & EVENT_MINT_TRANSLATED) {
+		if (m_pDragSourceObject != NULL) {
+#define DRAm_VISIBLE_LENGTH    2
+			if (event.type == SDL_MOUSEMOTION) {
+				MPOINT p = { event.motion.x, event.motion.y };
+				int px = m_GrabPoint.x - p.x;
+				if (px < 0)  px *= -1;
+				int py = m_GrabPoint.y - p.y;
+				if (py < 0)  py *= -1;
+
+				if (m_bVisibleDragObject == false &&
+					((px > DRAm_VISIBLE_LENGTH) || (py > DRAm_VISIBLE_LENGTH)))
+					m_bVisibleDragObject = true;
+				MWidget* pFind = FindWidget(p);
+				if (pFind != NULL && pFind->IsDropable(m_pDragSourceObject) == true)
+					m_pDropableObject = pFind;
+				else
+					m_pDropableObject = NULL;
+			}
+			if (event.type == SDL_MOUSEBUTTONUP && event.button.button == SDL_BUTTON_LEFT) {
+				MPOINT p = { event.button.x, event.button.y };
+				MWidget* pFind = FindWidgetDropAble(p);
+				if (pFind != NULL && pFind->IsDropable(m_pDragSourceObject) == true)
+					pFind->Drop(m_pDragSourceObject, m_pDragObjectBitmap, m_szDragObjectString, m_szDragObjectItemString);
+				m_pDragSourceObject = NULL;
+				m_pMainFrame->ReleaseCapture();
+				return true;
+			}
+		}
+
+		if (m_fnGlobalEventCallBack) {
+			if (m_fnGlobalEventCallBack(&e) == true) return true;
+		}
+
+		if (m_pMainFrame->Event(&e) == true) return true;
+		if (m_pMainFrame->EventAccelerator(&e) == true) return true;
+		if (m_pMainFrame->EventDefaultKey(&e) == true) return true;
+	}
+	if (nResult & EVENT_PROCESSED) return true;
+
+	return false;
+}
+
 void Mint::Run(void)
 {
 	if (!m_pMainFrame) return;

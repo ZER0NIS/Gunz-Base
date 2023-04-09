@@ -1,5 +1,4 @@
-#ifndef __REALSPACE2_H
-#define __REALSPACE2_H
+#pragma once
 
 #include "GlobalTypes.h"
 #include "RMath.h"
@@ -11,6 +10,7 @@
 #pragma comment(lib,"d3dx9.lib")
 
 #include "RNameSpace.h"
+
 _NAMESPACE_REALSPACE2_BEGIN
 
 class RParticleSystem;
@@ -160,7 +160,6 @@ inline rplane* RGetViewFrustum()
 
 bool			QueryFeature(RQUERYFEATURETYPE feature);
 HRESULT        CheckResourceFormat(D3DFORMAT fmt, D3DRESOURCETYPE resType, DWORD dwUsage);
+void RSetFunction(RFUNCTIONTYPE ft, RFFUNCTION pfunc);
 
 _NAMESPACE_REALSPACE2_END
-
-#endif
