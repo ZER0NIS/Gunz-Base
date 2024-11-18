@@ -46,8 +46,7 @@ void MSysInfoLog_CPU()
 		- ulStartCounter.QuadPart;
 	int nCPUClock = int(ulResult.QuadPart / 1000000);
 
-
-	DWORD nCPUFamily,nCPUModel,nCPUStepping;
+	DWORD nCPUFamily, nCPUModel, nCPUStepping;
 	static char pszCPUType[13];
 	memset(pszCPUType, 0, 13);
 	_asm
@@ -82,28 +81,27 @@ void MSysInfoLog_CPU()
 		mov nCPUFamily, eax
 		mov nCPUModel, eax
 		mov nCPUStepping, eax
-
 	}
 	pszCPUType[12] = '\0';
 
 	nCPUFamily = (nCPUFamily >> 8);
-	nCPUModel =  ((nCPUModel >> 4 ) & 0x0000000f);
+	nCPUModel = ((nCPUModel >> 4) & 0x0000000f);
 	nCPUStepping = (nCPUStepping & 0x0000000f);
 
-	char szDesc[512]="";
+	char szDesc[512] = "";
 	sprintf(szDesc, "CPU ID = %s ( family = %d , model = %d , stepping = %d ) @ %d MHz\n",
-		pszCPUType,nCPUFamily,nCPUModel,nCPUStepping,nCPUClock);
+		pszCPUType, nCPUFamily, nCPUModel, nCPUStepping, nCPUClock);
 	mlog(szDesc);
 }
 
 void MSysInfoLog_Display()
 {
-	HMODULE					hD3DLibrary=NULL;
-	LPDIRECT3D9				pD3D=NULL;
-	LPDIRECT3DDEVICE9		pd3dDevice=NULL;
+	HMODULE					hD3DLibrary = NULL;
+	LPDIRECT3D9				pD3D = NULL;
+	LPDIRECT3DDEVICE9		pd3dDevice = NULL;
 	D3DADAPTER_IDENTIFIER9	deviceID;
 
-	hD3DLibrary = LoadLibrary( "d3d9.dll" );
+	hD3DLibrary = LoadLibrary("d3d9.dll");
 
 	if (!hD3DLibrary)
 	{
@@ -111,8 +109,8 @@ void MSysInfoLog_Display()
 		return;
 	}
 
-	typedef IDirect3D9 * (__stdcall *D3DCREATETYPE)(UINT);
-	D3DCREATETYPE d3dCreate = (D3DCREATETYPE) GetProcAddress(hD3DLibrary, "Direct3DCreate9");
+	typedef IDirect3D9* (__stdcall* D3DCREATETYPE)(UINT);
+	D3DCREATETYPE d3dCreate = (D3DCREATETYPE)GetProcAddress(hD3DLibrary, "Direct3DCreate9");
 
 	if (!d3dCreate)
 	{
@@ -130,7 +128,7 @@ void MSysInfoLog_Display()
 		return;
 	}
 
-	pD3D->GetAdapterIdentifier(0,0,&deviceID);
+	pD3D->GetAdapterIdentifier(0, 0, &deviceID);
 	pD3D->Release();
 	FreeLibrary(hD3DLibrary);
 
@@ -138,13 +136,13 @@ void MSysInfoLog_Display()
 	mlog("D3D_SDK_VERSION = %d \n", D3D_SDK_VERSION);
 #endif
 
-	mlog("Display Device = %s ( vendor=%x device=%x subsys=%x revision=%x )\n", 
-		deviceID.Description,deviceID.VendorId,deviceID.
-		DeviceId,deviceID.SubSysId,deviceID.Revision);
+	mlog("Display Device = %s ( vendor=%x device=%x subsys=%x revision=%x )\n",
+		deviceID.Description, deviceID.VendorId, deviceID.
+		DeviceId, deviceID.SubSysId, deviceID.Revision);
 
 	mlog("Display Driver Version = %d.%d.%04d.%04d\n",
-		deviceID.DriverVersion.HighPart >> 16 , deviceID.DriverVersion.HighPart & 0xffff,
-		deviceID.DriverVersion.LowPart >> 16 , deviceID.DriverVersion.LowPart & 0xffff );
+		deviceID.DriverVersion.HighPart >> 16, deviceID.DriverVersion.HighPart & 0xffff,
+		deviceID.DriverVersion.LowPart >> 16, deviceID.DriverVersion.LowPart & 0xffff);
 }
 
 //BOOL CALLBACK MSysInfoLog_Audio_EnumProc(LPGUID lpGUID, LPCTSTR lpszDesc, LPCTSTR lpszDrvName, LPVOID lpContext)
@@ -187,31 +185,31 @@ void MSysInfoLog_OS()
 	ms.dwLength = sizeof(MEMORYSTATUS);
 	::GlobalMemoryStatus(&ms);
 	DWORD dwPhysicalMemory;
-	dwPhysicalMemory=ms.dwTotalPhys;
+	dwPhysicalMemory = ms.dwTotalPhys;
 
-	char szDesc[512]="";
+	char szDesc[512] = "";
 	sprintf(szDesc, "Windows = %d.%d Build %d , %s (%dKB) : ", os.dwMajorVersion, os.dwMinorVersion,
-		os.dwBuildNumber, os.szCSDVersion, (int)(dwPhysicalMemory/1024));
+		os.dwBuildNumber, os.szCSDVersion, (int)(dwPhysicalMemory / 1024));
 	mlog(szDesc);
 
-	if(os.dwMajorVersion==5) {
-		if(os.dwMinorVersion==0)		sprintf(szDesc," Windows 2000..\n");
-		else if(os.dwMinorVersion==1)	sprintf(szDesc," Windows xp..\n");
-		else if(os.dwMinorVersion==2)	sprintf(szDesc," Windows 2003..\n");
-		else							sprintf(szDesc," ..\n");
+	if (os.dwMajorVersion == 5) {
+		if (os.dwMinorVersion == 0)		sprintf(szDesc, " Windows 2000..\n");
+		else if (os.dwMinorVersion == 1)	sprintf(szDesc, " Windows xp..\n");
+		else if (os.dwMinorVersion == 2)	sprintf(szDesc, " Windows 2003..\n");
+		else							sprintf(szDesc, " ..\n");
 	}
-	else if(os.dwMajorVersion==4) {
-		if(os.dwMinorVersion==0)		sprintf(szDesc," Windows 95..\n");
-		else if(os.dwMinorVersion==10)	sprintf(szDesc," Windows 98..\n");
-		else if(os.dwMinorVersion==90)	sprintf(szDesc," Windows Me..\n");
-		else							sprintf(szDesc," ..\n");
+	else if (os.dwMajorVersion == 4) {
+		if (os.dwMinorVersion == 0)		sprintf(szDesc, " Windows 95..\n");
+		else if (os.dwMinorVersion == 10)	sprintf(szDesc, " Windows 98..\n");
+		else if (os.dwMinorVersion == 90)	sprintf(szDesc, " Windows Me..\n");
+		else							sprintf(szDesc, " ..\n");
 	}
-	else if(os.dwMajorVersion==3) {
-		if(os.dwMinorVersion==51)		sprintf(szDesc," Windows NT 3.51..\n");
-		else							sprintf(szDesc," ..\n");
+	else if (os.dwMajorVersion == 3) {
+		if (os.dwMinorVersion == 51)		sprintf(szDesc, " Windows NT 3.51..\n");
+		else							sprintf(szDesc, " ..\n");
 	}
-	else	{
-		sprintf(szDesc," ..\n");
+	else {
+		sprintf(szDesc, " ..\n");
 	}
 	mlog(szDesc);
 }
@@ -220,6 +218,6 @@ void MSysInfoLog()
 {
 	MSysInfoLog_CPU();
 	MSysInfoLog_Display();
-//	MSysInfoLog_Audio();
+	//	MSysInfoLog_Audio();
 	MSysInfoLog_OS();
 }

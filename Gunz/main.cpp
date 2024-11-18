@@ -344,14 +344,14 @@ RRESULT OnRender(void* pParam)
 		char buf[512];
 		size_t y_offset{};
 		auto PrintText = [&](const char* Format, ...)
-		{
-			va_list va;
-			va_start(va, Format);
-			vsprintf_safe(buf, Format, va);
-			va_end(va);
-			g_pDefFont->m_Font.DrawText(MGetWorkspaceWidth() - 200, y_offset, buf);
-			y_offset += 20;
-		};
+			{
+				va_list va;
+				va_start(va, Format);
+				vsprintf_safe(buf, Format, va);
+				va_end(va);
+				g_pDefFont->m_Font.DrawText(MGetWorkspaceWidth() - 200, y_offset, buf);
+				y_offset += 20;
+			};
 
 		PrintText(fmt::format("FPS : {} ({}ms)", fpsCounterLastCount, static_cast<u32>(fpsCounterLastValue)).c_str());
 	}
