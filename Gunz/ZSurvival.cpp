@@ -113,7 +113,7 @@ bool ZSurvival::Load()
 
 	AniFrameInfo::m_pEventFunc = [](const RAniEventInfo& Info, rvector Pos) {
 		ZGetSoundEngine()->PlaySound(Info.Filename, Pos, false);
-	};
+		};
 
 	m_bLoaded = true;
 	return true;

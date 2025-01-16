@@ -25,6 +25,7 @@ bool RLightList::Open(MXmlElement* pElement)
 		if (stricmp(szTagName, RTOK_LIGHT) == 0)
 		{
 			RLIGHT* plight = new RLIGHT;
+			
 			aLightNode.GetAttribute(szContents, RTOK_NAME);
 			plight->Name = szContents;
 			plight->dwFlags = 0;
@@ -62,11 +63,11 @@ bool RLightList::Save(MXmlElement* pElement)
 {
 	MXmlElement	aLightListElement = pElement->CreateChildElement(RTOK_LIGHTLIST);
 
-	for (RLightList::iterator i = begin(); i != end(); i++)
-	{
+	for (auto& plight : *this)
+    {
 		aLightListElement.AppendText("\n\t\t");
 
-		RLIGHT* plight = *i;
+		//RLIGHT* plight = *i;
 		char buffer[256];
 
 		MXmlElement aElement, aChild;

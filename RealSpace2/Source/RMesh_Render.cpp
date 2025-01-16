@@ -232,7 +232,7 @@ void RMesh::RenderSub(D3DXMATRIX* world_mat, bool NoPartsChange, bool bRenderBuf
 
 			if (nLastNodeCnt > _SORT_LAST_NODE_TABLE) {
 				nLastNodeCnt = _SORT_LAST_NODE_TABLE;
-				mlog("%s ¿ÀºêÁ§Æ®ÀÇ Last ³ëµå°¡ 100°³°¡ ³Ñ´Â´Ù..\n", GetFileName());
+				mlog("%s ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ®ï¿½ï¿½ Last ï¿½ï¿½å°¡ 100ï¿½ï¿½ï¿½ï¿½ ï¿½Ñ´Â´ï¿½..\n", GetFileName());
 				nLastNodeCnt--;
 			}
 			continue;
@@ -651,7 +651,7 @@ void RMeshRenderS(bool lit, int Rmode, rmatrix m, RMeshNode* pMNode, RMtrl* pMtr
 bool RMeshRenderSBegin()
 {
 	if (g_rmesh_render_start_begin) {
-		mlog("RMeshRenderSEnd() À» ¸ÕÀú ÇÑ ÈÄ »ç¿ë\n");
+		mlog("RMeshRenderSEnd() ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½\n");
 		return false;
 	}
 
