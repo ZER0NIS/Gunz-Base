@@ -229,13 +229,15 @@ int RMain(const char* AppName, HINSTANCE this_inst, HINSTANCE prev_inst, LPSTR c
 	wc.hbrBackground = NULL;
 	wc.lpszMenuName = NULL;
 	wc.lpszClassName = "RealSpace2";
-	if (!RegisterClass(&wc)) return FALSE;
+
+	if (!RegisterClass(&wc))
+		return FALSE;
 
 	DWORD dwStyle;
 	if (pModeParams->bFullScreen) // Fullscreen
 		dwStyle = WS_VISIBLE | WS_POPUP;
 	else//windowed
-		dwStyle = WS_VISIBLE | WS_OVERLAPPED | WS_BORDER | WS_CAPTION | WS_SYSMENU | WS_MAXIMIZEBOX | WS_MINIMIZEBOX;
+		dwStyle = WS_VISIBLE | WS_OVERLAPPED | WS_POPUP | WS_CAPTION | WS_SYSMENU;
 
 	g_hWnd = CreateWindowA("RealSpace2", AppName, dwStyle, CW_USEDEFAULT, CW_USEDEFAULT,
 		pModeParams->nWidth, pModeParams->nHeight, NULL, NULL, this_inst, NULL);

@@ -20,7 +20,7 @@
 //#include "ZMyBotCharacter.h"
 //#include "FunctionalListener.h"
 
-static optional<RGMain> g_RGMain;
+static cml::optional<RGMain> g_RGMain;
 
 RGMain& GetRGMain() { return g_RGMain.value(); }
 void CreateRGMain() { g_RGMain.emplace(); }
@@ -29,7 +29,7 @@ bool IsRGMainAlive() { return g_RGMain.has_value(); }
 
 void RGMain::OnAppCreate()
 {
-//	ZRuleSkillmap::CourseMgr.Init();
+	//	ZRuleSkillmap::CourseMgr.Init();
 
 #ifdef PORTAL
 	g_pPortal = std::make_unique<Portal>();
@@ -38,19 +38,19 @@ void RGMain::OnAppCreate()
 
 void RGMain::OnCreateDevice()
 {
-/*	auto&& Cfg = *ZGetConfiguration();
-	auto&& c = *Cfg.GetChat();
-	m_Chat.emplace(c.Font, c.BoldFont, c.FontSize);
-	GetChat().SetBackgroundColor(c.BackgroundColor);
+	/*	auto&& Cfg = *ZGetConfiguration();
+		auto&& c = *Cfg.GetChat();
+		m_Chat.emplace(c.Font, c.BoldFont, c.FontSize);
+		GetChat().SetBackgroundColor(c.BackgroundColor);
 
-	GetRenderer().PostProcess.EnableEffect("ColorInvert", Cfg.GetColorInvert());
-	GetRenderer().PostProcess.EnableEffect("Monochrome", Cfg.GetMonochrome());
+		GetRenderer().PostProcess.EnableEffect("ColorInvert", Cfg.GetColorInvert());
+		GetRenderer().PostProcess.EnableEffect("Monochrome", Cfg.GetMonochrome());
 
-#ifdef VOICECHAT
-	m_VoiceChat.OnCreateDevice();
-#endif
+	#ifdef VOICECHAT
+		m_VoiceChat.OnCreateDevice();
+	#endif
 
-	m_HitboxManager.Create();*/
+		m_HitboxManager.Create();*/
 }
 
 void RGMain::OnDrawGame()
@@ -65,16 +65,16 @@ void RGMain::OnDrawGame()
 	RGetDevice()->SetTextureStageState(0, D3DTSS_ALPHAOP, D3DTOP_SELECTARG1);
 	RGetDevice()->SetTextureStageState(0, D3DTSS_ALPHAARG1, D3DTA_DIFFUSE);*/
 
-/*	for (auto&& Line : Lines)
-	{
-		RDrawLine(Line.v1, Line.v2, Line.Color);
-	}
+	/*	for (auto&& Line : Lines)
+		{
+			RDrawLine(Line.v1, Line.v2, Line.Color);
+		}
 
-	if (ZGetGame()->GetMatch()->GetMatchType() == MMATCH_GAMETYPE_SKILLMAP)
-		((ZRuleSkillmap *)ZGetGame()->GetMatch()->GetRule())->Draw();
+		if (ZGetGame()->GetMatch()->GetMatchType() == MMATCH_GAMETYPE_SKILLMAP)
+			((ZRuleSkillmap *)ZGetGame()->GetMatch()->GetRule())->Draw();
 
-	if (ZGetConfiguration()->GetShowHitboxes())
-		m_HitboxManager.Draw();*/
+		if (ZGetConfiguration()->GetShowHitboxes())
+			m_HitboxManager.Draw();*/
 }
 
 void RGMain::OnPreDrawGame()
@@ -91,12 +91,12 @@ void RGMain::OnDrawGameInterface(MDrawContext* pDC)
 #ifdef VOICECHAT
 	m_VoiceChat.OnDraw(pDC);
 #endif
-/*
-	if (NewChatEnabled)
-		GetChat().OnDraw(pDC);
+	/*
+		if (NewChatEnabled)
+			GetChat().OnDraw(pDC);
 
-	if (ZGetGame()->IsReplay())
-		g_ReplayControl.OnDraw(pDC);*/
+		if (ZGetGame()->IsReplay())
+			g_ReplayControl.OnDraw(pDC);*/
 }
 
 /*
@@ -110,7 +110,7 @@ void RGMain::Resize(int w, int h)
 	//GetChat().Resize(w, h);
 }
 
-HRESULT GenerateTexture(IDirect3DDevice9 *pD3Ddev, IDirect3DTexture9 **ppD3Dtex, DWORD colour32){
+HRESULT GenerateTexture(IDirect3DDevice9* pD3Ddev, IDirect3DTexture9** ppD3Dtex, DWORD colour32) {
 	if (pD3Ddev->CreateTexture(8, 8, 1, 0, D3DFMT_A4R4G4B4, D3DPOOL_MANAGED, ppD3Dtex, NULL))
 		return E_FAIL;
 
@@ -118,7 +118,7 @@ HRESULT GenerateTexture(IDirect3DDevice9 *pD3Ddev, IDirect3DTexture9 **ppD3Dtex,
 
 	D3DLOCKED_RECT d3dlr;
 	(*ppD3Dtex)->LockRect(0, &d3dlr, 0, 0);
-	WORD *pDst16 = (WORD*)d3dlr.pBits;
+	WORD* pDst16 = (WORD*)d3dlr.pBits;
 
 	for (int xy = 0; xy < 8 * 8; xy++)
 		*pDst16++ = colour16;
@@ -128,7 +128,7 @@ HRESULT GenerateTexture(IDirect3DDevice9 *pD3Ddev, IDirect3DTexture9 **ppD3Dtex,
 	return S_OK;
 }
 
-std::pair<bool, std::vector<unsigned char>> ReadMZFile(const char *szPath)
+std::pair<bool, std::vector<unsigned char>> ReadMZFile(const char* szPath)
 {
 	MZFile File;
 
@@ -152,7 +152,7 @@ std::pair<bool, std::vector<unsigned char>> ReadMZFile(const char *szPath)
 	return { true, InflatedFile };
 }
 
-std::pair<bool, std::vector<unsigned char>> ReadZFile(const char *szPath)
+std::pair<bool, std::vector<unsigned char>> ReadZFile(const char* szPath)
 {
 	ZFile File;
 
@@ -180,7 +180,7 @@ std::pair<bool, std::vector<unsigned char>> ReadZFile(const char *szPath)
 	return{ true, InflatedFile };
 }
 
-std::pair<PlayerFoundStatus, ZCharacter*> FindSinglePlayer(const char * NameSubstring)
+std::pair<PlayerFoundStatus, ZCharacter*> FindSinglePlayer(const char* NameSubstring)
 {
 	bool Found = false;
 	ZCharacter* FoundChar = nullptr;
@@ -400,7 +400,7 @@ void RGMain::OnReplaySelected(MListBox* ReplayFileListWidget)
 		if (!Loader.LoadFile(Path))
 			return;
 		SelectedReplayInfo.Version = Loader.GetVersion();
-		
+
 		if (SelectedReplayInfo.Version.Server == ServerType::None)
 		{
 			MLog("Unknown replay version selected\n");
@@ -430,7 +430,7 @@ void RGMain::OnReplaySelected(MListBox* ReplayFileListWidget)
 		}
 
 		uint32_t WantedCommands[] = { MC_MATCH_RESPONSE_PEERLIST, MC_PEER_DIE };
-		
+
 		auto Array = ArrayView<u32>(WantedCommands);
 		Loader.GetCommands(PerCommand, false, &Array);
 

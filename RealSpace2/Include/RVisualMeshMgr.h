@@ -5,10 +5,10 @@
 
 _NAMESPACE_REALSPACE2_BEGIN
 
-typedef std::list<RVisualMesh*>		r_vmesh_list;
-typedef r_vmesh_list::iterator	r_vmesh_node;
+using r_vmesh_list = std::list<std::unique_ptr<RVisualMesh>>;
+using r_vmesh_node = r_vmesh_list::iterator;
 
-#define MAX_VMESH_TABLE 1000
+constexpr int MAX_VMESH_TABLE = 1000;
 
 class RVisualMeshMgr {
 public:
@@ -17,7 +17,7 @@ public:
 	~RVisualMeshMgr();
 
 	int		Add(RMesh* pMesh);
-	int		Add(RVisualMesh* pMesh);
+    int Add(std::unique_ptr<RVisualMesh> pMesh);
 
 	void	Del(int id);
 	void	Del(RVisualMesh* pMesh);

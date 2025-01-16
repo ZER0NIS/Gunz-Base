@@ -58,7 +58,7 @@ struct MXmlAttributeIterator : IteratorBase<MXmlAttributeIterator, MXmlAttribute
 
 	MXmlAttribute operator*() const
 	{
-		return {StringView(a->name(), a->name_size()), StringView(a->value(), a->value_size())};
+		return { StringView(a->name(), a->name_size()), StringView(a->value(), a->value_size()) };
 	}
 
 	MXmlAttributeIterator& operator++() {
@@ -90,7 +90,7 @@ public:
 	void GetText(ArrayView<char> Out) { GetText(Out.data(), int(Out.size())); }
 	void GetTextUnsafe(char* Out) { GetText(Out, INT_MAX); }
 	void SetText(const char* sText);
-	
+
 	int	GetChildNodeCount();
 	MXmlDomNodeType GetNodeType();
 	bool HasChildNodes();
@@ -107,7 +107,7 @@ public:
 
 	Range<MXmlIterator<MXmlNode>> Children() const
 	{
-		return {MXmlNode{m_pDomNode->first_node()}, MXmlNode{nullptr}};
+		return { MXmlNode{m_pDomNode->first_node()}, MXmlNode{nullptr} };
 	}
 };
 
@@ -121,7 +121,7 @@ public:
 	void GetTagName(ArrayView<char> Out) { GetTagName(Out.data(), int(Out.size())); }
 	void GetTagName(char* sOutStr, int maxlen) { MXmlNode::GetNodeName(sOutStr, maxlen); }
 	StringView GetTagName() const { return MXmlNode::GetNodeName(); }
-	
+
 	void GetContents(ArrayView<char> sOutStr) { MXmlNode::GetText(sOutStr); }
 	void GetContents(int* ipOutValue);
 	void GetContents(bool* bpOutValue);
@@ -138,7 +138,7 @@ public:
 	bool GetChildContents(float* fOutValue, const char* sChildTagName);
 	bool GetChildContents(bool* bOutValue, const char* sChildTagName);
 
-	optional<StringView> GetAttribute(StringView AttrName, bool CaseSensitive = false) const;
+	cml::optional<StringView> GetAttribute(StringView AttrName, bool CaseSensitive = false) const;
 	bool GetAttribute(ArrayView<char> OutText, const char* AttrName, const char* DefaultText = "") {
 		return GetAttribute(OutText.data(), int(OutText.size()), AttrName, DefaultText);
 	}
@@ -159,7 +159,7 @@ public:
 		GetAttribute(index, OutName.data(), int(OutName.size()), OutValue.data(), int(OutValue.size()));
 	}
 	void GetAttribute(int index, char* szoutAttrName, int maxlen1, char* szoutAttrValue, int maxlen2);
-	Range<MXmlAttributeIterator> Attributes() const { return {m_pDomNode->first_attribute(), nullptr}; }
+	Range<MXmlAttributeIterator> Attributes() const { return { m_pDomNode->first_attribute(), nullptr }; }
 
 	bool AppendChild(const char* sTagName, const char* sTagText = NULL);
 	bool AppendChild(MXmlElement aChildElement);
@@ -170,7 +170,7 @@ public:
 
 	Range<MXmlIterator<MXmlElement>> Children() const
 	{
-		return {MXmlElement{m_pDomNode->first_node()}, MXmlElement{nullptr}};
+		return { MXmlElement{m_pDomNode->first_node()}, MXmlElement{nullptr} };
 	}
 };
 
@@ -187,7 +187,7 @@ public:
 
 	bool				SaveToFile(const char* m_sFileName);
 
-	bool				CreateProcessingInstruction( const char* szHeader = "version=\"1.0\"");
+	bool				CreateProcessingInstruction(const char* szHeader = "version=\"1.0\"");
 	bool				Delete(MXmlNode* pNode);
 
 	MXmlElement			CreateElement(const char* sName);

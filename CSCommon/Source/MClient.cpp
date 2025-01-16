@@ -96,7 +96,6 @@ void MClient::OnRegisterCommand(MCommandManager* pCommandManager)
 
 bool MClient::OnCommand(MCommand* pCommand)
 {
-	char szMessage[256];
 	switch (pCommand->GetID()) {
 	case MC_LOCAL_INFO:
 		OutputLocalInfo();

@@ -70,7 +70,7 @@ int	MXmlNode::GetChildNodeCount()
 		ptr = ptr->next_sibling();
 		++count;
 	}
-	
+
 	return count;
 }
 
@@ -154,7 +154,6 @@ void MXmlElement::SetContents(int iValue)
 	char szTemp[20];
 	sprintf_safe(szTemp, "%d", iValue);
 	SetContents(szTemp);
-	
 }
 
 void MXmlElement::SetContents(float fValue)
@@ -218,11 +217,11 @@ MXmlElement	MXmlElement::CreateChildElement(const char* sTagName)
 	return MXmlElement{ node };
 }
 
-optional<StringView> MXmlElement::GetAttribute(StringView AttrName, bool CaseSensitive) const
+cml::optional<StringView> MXmlElement::GetAttribute(StringView AttrName, bool CaseSensitive) const
 {
 	auto Attribute = m_pDomNode->first_attribute(AttrName.data(), AttrName.size(), CaseSensitive);
 	if (!Attribute || !Attribute->value())
-		return nullopt;
+		return cml::nullopt;
 	return StringView(Attribute->value(), Attribute->value_size());
 }
 
@@ -249,7 +248,7 @@ bool MXmlElement::GetAttribute(int* ipOutValue, const char* sAttrName, int nDefa
 	char szTemp[256];
 	memset(szTemp, 0, 256);
 
-	if (!GetAttribute(szTemp, sAttrName)) 
+	if (!GetAttribute(szTemp, sAttrName))
 	{
 		*ipOutValue = nDefaultValue;
 		return false;
@@ -259,12 +258,12 @@ bool MXmlElement::GetAttribute(int* ipOutValue, const char* sAttrName, int nDefa
 	{
 		*ipOutValue = atoi(szTemp);
 	}
-	catch(...)
+	catch (...)
 	{
 		*ipOutValue = nDefaultValue;
 		return false;
 	}
-	
+
 	return true;
 }
 
@@ -273,7 +272,7 @@ bool MXmlElement::GetAttribute(float* fpOutValue, const char* sAttrName, float f
 	char szTemp[256];
 	memset(szTemp, 0, 256);
 
-	if (!GetAttribute(szTemp, sAttrName)) 
+	if (!GetAttribute(szTemp, sAttrName))
 	{
 		*fpOutValue = fDefaultValue;
 		return false;
@@ -283,12 +282,12 @@ bool MXmlElement::GetAttribute(float* fpOutValue, const char* sAttrName, float f
 	{
 		*fpOutValue = (float)atof(szTemp);
 	}
-	catch(...)
+	catch (...)
 	{
 		*fpOutValue = fDefaultValue;
 		return false;
 	}
-	
+
 	return true;
 }
 bool MXmlElement::GetAttribute(bool* bOutValue, const char* sAttrName, bool bDefaultValue)
@@ -322,16 +321,15 @@ bool MXmlElement::GetAttribute(std::string* pstrOutValue, const char* sAttrName,
 	char szTemp[256];
 	memset(szTemp, 0, 256);
 
-	if (!GetAttribute(szTemp, sAttrName)) 
+	if (!GetAttribute(szTemp, sAttrName))
 	{
 		*pstrOutValue = sDefaultValue;
 		return false;
 	}
 
 	*pstrOutValue = szTemp;
-	
-	return true;
 
+	return true;
 }
 
 int MXmlElement::GetAttributeCount()
@@ -443,7 +441,6 @@ bool MXmlElement::GetChildContents(char* sOutStr, const char* sChildTagName, int
 	{
 		return false;
 	}
-	
 }
 
 bool MXmlElement::GetChildContents(int* iOutValue, const char* sChildTagName)
@@ -455,7 +452,7 @@ bool MXmlElement::GetChildContents(int* iOutValue, const char* sChildTagName)
 		{
 			*iOutValue = atoi(szBuf);
 		}
-		catch(...)
+		catch (...)
 		{
 			*iOutValue = 0;
 			return false;
@@ -463,7 +460,7 @@ bool MXmlElement::GetChildContents(int* iOutValue, const char* sChildTagName)
 
 		return true;
 	}
-	
+
 	return false;
 }
 
@@ -476,7 +473,7 @@ bool MXmlElement::GetChildContents(float* fOutValue, const char* sChildTagName)
 		{
 			*fOutValue = (float)atof(szBuf);
 		}
-		catch(...)
+		catch (...)
 		{
 			*fOutValue = 0;
 			return false;
@@ -484,7 +481,7 @@ bool MXmlElement::GetChildContents(float* fOutValue, const char* sChildTagName)
 
 		return true;
 	}
-	
+
 	return false;
 }
 
@@ -518,7 +515,7 @@ void MXmlElement::GetContents(int* ipOutValue)
 	{
 		*ipOutValue = atoi(sTemp);
 	}
-	catch(...)
+	catch (...)
 	{
 		*ipOutValue = 0;
 	}
@@ -551,11 +548,10 @@ void MXmlElement::GetContents(float* fpOutValue)
 	{
 		*fpOutValue = (float)atof(sTemp);
 	}
-	catch(...)
+	catch (...)
 	{
 		*fpOutValue = 0.0f;
 	}
-
 }
 
 void MXmlElement::GetContents(std::string* pstrValue)
@@ -564,7 +560,6 @@ void MXmlElement::GetContents(std::string* pstrValue)
 	memset(sTemp, 0, 256);
 	MXmlNode::GetText(sTemp);
 	*pstrValue = sTemp;
-
 }
 
 bool MXmlElement::RemoveAttribute(const char* sAttrName)
@@ -645,7 +640,7 @@ bool MXmlDocument::SaveToFile(const char* m_sFileName)
 	return true;
 }
 
-bool MXmlDocument::CreateProcessingInstruction( const char* szHeader)
+bool MXmlDocument::CreateProcessingInstruction(const char* szHeader)
 {
 	auto node = Doc.allocate_node(rapidxml::node_pi, 0, szHeader);
 	Doc.append_node(node);

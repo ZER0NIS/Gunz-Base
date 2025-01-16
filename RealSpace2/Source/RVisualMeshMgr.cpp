@@ -33,35 +33,30 @@ int RVisualMeshMgr::Add(RMesh* pMesh)
 		return -1;
 	}
 
-	RVisualMesh* node;
-	node = new RVisualMesh;
+   auto node = std::make_unique<RVisualMesh>();
 
 	if (!node->Create(pMesh)) {
 		mlog("VisualMesh Create failure !!!\n");
 		return -1;
 	}
 
-	m_node_table.push_back(node);
 	node->m_id = m_id_last;
-
-	m_list.push_back(node);
-	m_id_last++;
-	return m_id_last - 1;
+    m_node_table.push_back(node.get());
+    m_list.push_back(std::move(node));
+    return m_id_last++;
 }
 
-int RVisualMeshMgr::Add(RVisualMesh* node)
+int RVisualMeshMgr::Add(std::unique_ptr<RVisualMesh> node)
 {
 	if (!node) {
 		mlog("VisualMesh Create failure (pMesh==NULL) !!!\n");
 		return -1;
 	}
 
-	m_node_table.push_back(node);
-	node->m_id = m_id_last;
-
-	m_list.push_back(node);
-	m_id_last++;
-	return m_id_last - 1;
+    node->m_id = m_id_last;
+    m_node_table.push_back(node.get());
+    m_list.push_back(std::move(node));
+    return m_id_last++;
 }
 
 void RVisualMeshMgr::Del(int id)
@@ -69,40 +64,43 @@ void RVisualMeshMgr::Del(int id)
 	if (m_list.empty())
 		return;
 
-	r_vmesh_node node;
-
-	for (node = m_list.begin(); node != m_list.end();) {
-		if ((*node)->m_id == id) {
-			delete (*node);
-			node = m_list.erase(node);
-		}
-		else ++node;
-	}
+    for (auto it = m_list.begin(); it != m_list.end();)
+    {
+        if ((*it)->m_id == id)
+        {
+            m_node_table.erase(std::remove(m_node_table.begin(), m_node_table.end(), it->get()), m_node_table.end());
+            it = m_list.erase(it); // `erase` devuelve el siguiente iterador
+        }
+        else
+        {
+            ++it;
+        }
+    }
 }
 
 void RVisualMeshMgr::Del(RVisualMesh* pVMesh)
 {
 	if (m_list.empty())
 		return;
-
-	for (auto node = m_list.begin(); node != m_list.end();) {
-		if ((*node) == pVMesh) {
-			delete (*node);
-			node = m_list.erase(node);
-		}
-		else ++node;
-	}
+		
+    for (auto it = m_list.begin(); it != m_list.end();)
+    {
+        if (it->get() == pVMesh)
+        {
+            m_node_table.erase(std::remove(m_node_table.begin(), m_node_table.end(), pVMesh), m_node_table.end());
+            it = m_list.erase(it); // `erase` devuelve el siguiente iterador
+        }
+        else
+        {
+            ++it;
+        }
+    }
 }
 
 void RVisualMeshMgr::DelAll()
 {
 	if (m_list.empty())
 		return;
-
-	for (auto node = m_list.begin(); node != m_list.end(); ) {
-		delete (*node);
-		node = m_list.erase(node);
-	}
 
 	m_node_table.clear();
 
@@ -171,16 +169,9 @@ void RVisualMeshMgr::Frame(int id)
 RVisualMesh* RVisualMeshMgr::GetFast(int id)
 {
 	// Custom: Fix empty node table
-	if (m_node_table.empty())
-		return NULL;
-
-	if (id < 0)
-		return NULL;
-
-	if (id > m_id_last)
-		return NULL;
-
-	return m_node_table[id];
+    if (id < 0 || id >= static_cast<int>(m_node_table.size()))
+        return nullptr;
+    return m_node_table[id];
 }
 
 _NAMESPACE_REALSPACE2_END

@@ -451,19 +451,13 @@ void RAdjustWindow(const RMODEPARAMS* pModeParams)
 	if (pModeParams->bFullScreen)
 	{
 		SetWindowLong(g_hWnd, GWL_STYLE, WS_POPUP | WS_SYSMENU);
+
+		RECT rt = { 0, 0, pModeParams->nWidth, pModeParams->nHeight };
+		AdjustWindowRect(&rt, GetWindowLong(g_hWnd, GWL_STYLE), FALSE);
+		SetWindowPos(g_hWnd, HWND_NOTOPMOST, 0, 0, rt.right - rt.left, rt.bottom - rt.top, SWP_SHOWWINDOW);
 	}
 	else
-		SetWindowLong(g_hWnd, GWL_STYLE, WS_VISIBLE | WS_OVERLAPPED | WS_BORDER | WS_CAPTION | WS_SYSMENU | WS_MAXIMIZEBOX | WS_MINIMIZEBOX);
-
-	RECT rt;
-	GetClientRect(g_hWnd, &rt);
-
-	RECT winrt;
-	GetWindowRect(g_hWnd, &winrt);
-
-	MoveWindow(g_hWnd, winrt.left, winrt.top,
-		winrt.right - winrt.left + (pModeParams->nWidth - (rt.right - rt.left)),
-		winrt.bottom - winrt.top + (pModeParams->nHeight - (rt.bottom - rt.top)), FALSE);
+		SetWindowLong(g_hWnd, GWL_STYLE, WS_POPUP | WS_CAPTION | WS_SYSMENU);
 }
 
 void RResetDevice(const RMODEPARAMS* params)
@@ -918,12 +912,12 @@ void RSetFrameLimitPerSeceond(unsigned short nFrameLimit)
 {
 	switch (nFrameLimit)
 	{
-	case 0: {	g_nFrameLimitValue = 0;		}	break;
-	case 1: {	g_nFrameLimitValue = 60;	}	break;
-	case 2: {	g_nFrameLimitValue = 120;	}	break;
-	case 3: {	g_nFrameLimitValue = 240;	}	break;
-	case 4: {	g_nFrameLimitValue = 333;	}	break;
-	default: {	g_nFrameLimitValue = 0;		}	break;
+	case 0: { g_nFrameLimitValue = 0; }	break;
+	case 1: { g_nFrameLimitValue = 60; }	break;
+	case 2: { g_nFrameLimitValue = 120; }	break;
+	case 3: { g_nFrameLimitValue = 240; }	break;
+	case 4: { g_nFrameLimitValue = 333; }	break;
+	default: { g_nFrameLimitValue = 0; }	break;
 	}
 }
 

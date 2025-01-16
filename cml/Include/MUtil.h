@@ -192,7 +192,7 @@ public:
 	ValueIterator operator++(int)
 	{
 		auto temp(*this);
-		++* this;
+		++*this;
 		return temp;
 	}
 
@@ -280,7 +280,7 @@ auto Reverse(T&& Container)
 }
 
 template <typename T = int, int Radix = 0, bool Wrap = false>
-optional<T> StringToInt(StringView Str)
+cml::optional<T> StringToInt(StringView Str)
 {
 	static_assert(Radix >= 0 && Radix != 1 && Radix <= 36, "Invalid radix");
 
@@ -331,7 +331,7 @@ optional<T> StringToInt(StringView Str)
 		}
 
 		return Accumulator;
-	}();
+		}();
 
 	if (!MAbsVal)
 		return nullopt;
